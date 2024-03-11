@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpLinterTest('hurl', 'hurlfmt')
+  call ale#test#SetFilename('dummy.hurl')
+
+  let g:ale_ruby_hurlfmt_executable = 'hurlfmt'
+  let g:ale_ruby_hurlfmt_options = ''
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Executable should default to hurlfmt):
+  AssertLinter 'hurlfmt', ale#Escape('hurlfmt')
+  \   . ' --check --no-color '
+
+Execute(Should be able to set a custom executable):
+  let g:ale_hurl_hurlfmt_executable = 'bin/hurlfmt'
+
+  AssertLinter 'bin/hurlfmt' , ale#Escape('bin/hurlfmt')
+  \   . ' --check --no-color '

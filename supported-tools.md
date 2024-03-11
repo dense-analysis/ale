@@ -283,6 +283,8 @@ formatting.
   * [rustywind](https://github.com/avencera/rustywind)
   * [tidy](http://www.html-tidy.org/)
   * [write-good](https://github.com/btford/write-good)
+* Hurl
+  * [hurlfmt](https://hurl.dev)
 * Idris
   * [idris](http://www.idris-lang.org/)
 * Ink
