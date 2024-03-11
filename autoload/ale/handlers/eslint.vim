@@ -19,6 +19,7 @@ function! ale#handlers#eslint#FindConfig(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         for l:basename in [
         \   '.eslintrc.js',
+        \   '.eslintrc.cjs',
         \   '.eslintrc.yaml',
         \   '.eslintrc.yml',
         \   '.eslintrc.json',
