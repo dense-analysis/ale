@@ -14,20 +14,19 @@ function! ale_linters#hurl#hurlfmt#HandleOutput(buffer, lines) abort
     " error: Parsing space
     " --> test.hurl:11:48
     " |
- 8  " | header "Content-Type"= "application/json; charset=utf-8"
+    " 8   | header "Content-Type"= "application/json; charset=utf-8"
     " |                      ^ expecting a space
     " |
     "
     " error: Parsing URL
     " --> test.hurl:11:48
     " |
-11  " | PUT https://jsonplaceholder.typicode.com/posts/{post_id}}
+    " 11  | PUT https://jsonplaceholder.typicode.com/posts/{post_id}}
     " |                                                ^ illegal character <{>
     " |
     "
     " Note: hurlfmt seems to report always the first error only so we assume
     " there is only one error to make parsing easier.
-    " let l:pattern = '/\(error\|warning\): \(.\+\) --> \(.\+\):\(\d\+\):\(\d\+\) .\+ ^ \(.\+\) |'
     let l:output = []
 
     if empty(a:lines)
