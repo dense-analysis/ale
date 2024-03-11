@@ -293,6 +293,16 @@ Plugin 'dense-analysis/ale'
 git clone https://github.com/dense-analysis/ale ~/.vim/bundle/ale
 ```
 
+#### [lazy.nvim](https://github.com/folke/lazy.nvim)
+```lua
+{
+    'desnse-analysis/ale',
+    config = function()
+        -- Configuration goes here.
+    end
+}
+```
+
 ## Contributing
 
 If you would like to see support for more languages and tools, please
