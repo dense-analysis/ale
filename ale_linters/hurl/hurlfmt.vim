@@ -41,6 +41,7 @@ function! ale_linters#hurl#hurlfmt#HandleOutput(buffer, lines) abort
         \ 'bufnr': a:buffer,
         \ 'lnum': match[4] + 0,
         \ 'col': match[5] + 0,
+        \ 'end_col': match[5] + 0,
         \ 'text': match[2] . ' : ' . match[6],
         \ 'type': (match[1] is# 'error') ? 'E' : 'W'
         \})
