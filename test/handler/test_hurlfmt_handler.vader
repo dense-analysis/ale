@@ -11,6 +11,7 @@ Execute(The hurlfmt handler should parse lines correctly):
   \     'lnum': 11,
   \     'bufnr': 345,
   \     'col': 48,
+  \     'end_col': 48,
   \     'text': 'Parsing space : expecting a space ',
   \     'type': 'E',
   \   },
