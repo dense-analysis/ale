@@ -24,7 +24,6 @@ Execute(cppcheck for C should detect compile_commands.json files):
   \   . ' -q --language=c'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape('compile_commands.json')
-  \   . ' --file-filter=' . ale#Escape(ale#test#GetFilename(b:rel_file_path))
   \   . ' --enable=style %t'
 
 Execute(cppcheck for C should detect compile_commands.json files in build directories):
@@ -36,7 +35,6 @@ Execute(cppcheck for C should detect compile_commands.json files in build direct
   \   . ' -q --language=c'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
-  \   . ' --file-filter=' . ale#Escape(ale#test#GetFilename(b:rel_file_path))
   \   . ' --enable=style %t'
 
 Execute(cppcheck for C should include file dir if compile_commands.json file is not found):
