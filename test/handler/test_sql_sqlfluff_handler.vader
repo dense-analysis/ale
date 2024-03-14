@@ -4,7 +4,7 @@ Before:
 After:
   call ale#linter#Reset()
 
-Execute(The sqlfluff handler should handle basic warnings):
+Execute(The sqlfluff handler should handle basic warnings with version older than 3.0.0):
   AssertEqual
   \ [
   \   {
@@ -32,6 +32,44 @@ Execute(The sqlfluff handler should handle basic warnings):
   \     'text': 'Files must end with a single trailing newline.',
   \   },
   \ ],
-  \ ale_linters#sql#sqlfluff#Handle(1, [
+  \ ale_linters#sql#sqlfluff#Handle(bufnr(''), [2, 3, 5], [
   \    '[{"filepath": "schema.sql", "violations": [{"line_no": 1, "line_pos": 8, "code": "L010", "description": "Keywords must be consistently upper case."}, {"line_no": 13, "line_pos": 2, "code": "L003", "description": "Expected 1 indentation, found 0 [compared to line 12]"}, {"line_no": 16, "line_pos": 1, "code": "L009", "description": "Files must end with a single trailing newline."}]}]',
+  \ ])
+
+Execute(The sqlfluff handler should handle basic warnings with version newer than 3.0.0):
+  AssertEqual
+  \ [
+  \   {
+  \     'filename': 'schema.sql',
+  \     'lnum': 1,
+  \     'end_lnum': 1,
+  \     'col': 8,
+  \     'end_col': 12,
+  \     'type': 'W',
+  \     'code': 'L010',
+  \     'text': 'Keywords must be consistently upper case.',
+  \   },
+  \   {
+  \     'filename': 'schema.sql',
+  \     'lnum': 13,
+  \     'end_lnum': 13,
+  \     'col': 2,
+  \     'end_col': 20,
+  \     'type': 'W',
+  \     'code': 'L003',
+  \     'text': 'Expected 1 indentation, found 0 [compared to line 12]',
+  \   },
+  \   {
+  \     'filename': 'schema.sql',
+  \     'lnum': 16,
+  \     'end_lnum': 16,
+  \     'col': 1,
+  \     'end_col': 5,
+  \     'type': 'W',
+  \     'code': 'L009',
+  \     'text': 'Files must end with a single trailing newline.',
+  \   },
+  \ ],
+  \ ale_linters#sql#sqlfluff#Handle(bufnr(''), [3, 0, 0], [
+  \    '[{"filepath": "schema.sql", "violations": [{"start_line_no": 1, "end_line_no":1, "start_line_pos": 8, "end_line_pos":12, "code": "L010", "description": "Keywords must be consistently upper case."}, {"start_line_no": 13, "end_line_no":13, "start_line_pos": 2, "end_line_pos":20, "code": "L003", "description": "Expected 1 indentation, found 0 [compared to line 12]"}, {"start_line_no": 16, "end_line_no":16, "start_line_pos": 1, "end_line_pos":5, "code": "L009", "description": "Files must end with a single trailing newline."}]}]',
   \ ])
