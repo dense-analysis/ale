@@ -186,11 +186,11 @@ script like so. >
   exec docker run -i --rm -v "$(pwd):/data" cytopia/pylint "$@"
 <
 
-You will run to run Docker commands with `-i` in order to read from stdin.
+You will want to run Docker commands with `-i` in order to read from stdin.
 
 With the above script in mind, you might configure ALE to lint your Python
 project with `pylint` by providing the path to the script to execute, and
-mappings which describe how to between the two file systems in your
+mappings which describe how to change between the two file systems in your
 `python.vim` |ftplugin| file, like so: >
 
   if expand('%:p') =~# '^/home/w0rp/git/test-pylint/'
