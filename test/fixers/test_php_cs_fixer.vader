@@ -1,8 +1,10 @@
 Before:
   Save g:ale_php_cs_fixer_executable
   Save g:ale_php_cs_fixer_options
+  Save g:ale_php_cs_fixer_fix_options
   let g:ale_php_cs_fixer_executable = 'php-cs-fixer'
   let g:ale_php_cs_fixer_options = ''
+  let g:ale_php_cs_fixer_fix_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
@@ -45,18 +47,20 @@ Execute(The php-cs-fixer callback should return the correct default values):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('php-cs-fixer')
   \      . ' ' . g:ale_php_cs_fixer_options
-  \      . ' fix %t'
+  \      . ' fix ' . g:ale_php_cs_fixer_fix_options
+  \      . ' %t'
   \ },
   \ ale#fixers#php_cs_fixer#Fix(bufnr(''))
 
 Execute(The php-cs-fixer callback should include custom php-cs-fixer options):
-  let g:ale_php_cs_fixer_options = '--config="$HOME/.php_cs"'
+  let g:ale_php_cs_fixer_options = '-nq'
+  let g:ale_php_cs_fixer_fix_options = '--config="$HOME/.php_cs"'
   call ale#test#SetFilename('../test-files/php/project-without-php-cs-fixer/test.php')
 
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_php_cs_fixer_executable)
-  \     . ' --config="$HOME/.php_cs" fix %t',
+  \     . ' -nq fix --config="$HOME/.php_cs" %t',
   \   'read_temporary_file': 1,
   \ },
   \ ale#fixers#php_cs_fixer#Fix(bufnr(''))
