@@ -182,6 +182,7 @@ Notes:
   * `erblint`
   * `erubi`
   * `erubis`
+  * `htmlbeautifier`
   * `ruumba`
 * Erlang
   * `SyntaxErl`

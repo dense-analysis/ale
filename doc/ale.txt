@@ -3020,6 +3020,7 @@ documented in additional help files.
   eruby...................................|ale-eruby-options|
     erb-formatter.........................|ale-eruby-erbformatter|
     erblint...............................|ale-eruby-erblint|
+    htmlbeautifier........................|ale-eruby-htmlbeautifier|
     ruumba................................|ale-eruby-ruumba|
   fish....................................|ale-fish-options|
     fish_indent...........................|ale-fish-fish_indent|
