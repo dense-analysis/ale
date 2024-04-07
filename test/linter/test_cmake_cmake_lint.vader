@@ -5,9 +5,9 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertLinter 'cmake-lint', ale#Escape('cmake-lint') . '  %t'
+  AssertLinter 'cmake-lint', ale#Escape('cmake-lint') . '  %s'
 
 Execute(The executable should be configurable):
   let g:ale_cmake_cmake_lint_executable = 'foobar'
 
-  AssertLinter 'foobar', ale#Escape('foobar') . '  %t'
+  AssertLinter 'foobar', ale#Escape('foobar') . '  %s'
