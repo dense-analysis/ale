@@ -85,6 +85,7 @@ function! ale#definition#HandleTSServerResponse(conn_id, response) abort
                     call setqflist(l:item_list, 'a')
                     call ale#util#Execute('cc 1')
                 else
+                    call ale#definition#UpdateTagStack()
                     call ale#preview#ShowSelection(l:item_list, l:options)
                 endif
             endif
