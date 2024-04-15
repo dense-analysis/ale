@@ -38,16 +38,16 @@ endfunction
 function! ale#definition#FormatTSServerResponse(response_item, options) abort
     if get(a:options, 'open_in') is# 'quickfix'
         return {
-            \ 'filename': a:response_item.file,
-            \ 'lnum': a:response_item.start.line,
-            \ 'col': a:response_item.start.offset,
-            \}
+        \ 'filename': a:response_item.file,
+        \ 'lnum': a:response_item.start.line,
+        \ 'col': a:response_item.start.offset,
+        \}
     else
         return {
-            \ 'filename': a:response_item.file,
-            \ 'line': a:response_item.start.line,
-            \ 'column': a:response_item.start.offset,
-            \}
+        \ 'filename': a:response_item.file,
+        \ 'line': a:response_item.start.line,
+        \ 'column': a:response_item.start.offset,
+        \}
     endif
 endfunction
 
@@ -59,16 +59,18 @@ function! ale#definition#HandleTSServerResponse(conn_id, response) abort
         if get(a:response, 'success', v:false) is v:true && !empty(a:response.body)
             let l:item_list = []
 
-            for l:response_item in a:response.body.refs
-                call add(l:item_list,
-                            \ ale#definition#FormatTSServerResponse(l:response_item, l:options)
-                            \)
+            for l:response_item in a:response.body
+                call add(
+                \ l:item_list,
+                \ ale#definition#FormatTSServerResponse(l:response_item, l:options)
+                \)
             endfor
 
             if empty(l:item_list)
                 call ale#util#Execute('echom ''No definitions found''')
             elseif len(l:item_list) == 1
                 let l:filename = l:item_list[0].filename
+
                 if get(l:options, 'open_in') is# 'quickfix'
                     let l:line = l:item_list[0].lnum
                     let l:column = l:item_list[0].col
@@ -108,16 +110,16 @@ function! ale#definition#FormatLSPResponse(response_item, options) abort
 
     if get(a:options, 'open_in') is# 'quickfix'
         return {
-            \ 'filename': ale#util#ToResource(l:uri),
-            \ 'lnum': l:line,
-            \ 'col': l:column,
-            \}
+        \ 'filename': ale#util#ToResource(l:uri),
+        \ 'lnum': l:line,
+        \ 'col': l:column,
+        \}
     else
         return {
-            \ 'filename': ale#util#ToResource(l:uri),
-            \ 'line': l:line,
-            \ 'column': l:column,
-            \}
+        \ 'filename': ale#util#ToResource(l:uri),
+        \ 'line': l:line,
+        \ 'column': l:column,
+        \}
     endif
 endfunction
 
@@ -139,8 +141,8 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
 
         for l:response_item in l:result
             call add(l:item_list,
-                        \ ale#definition#FormatLSPResponse(l:response_item, l:options)
-                        \)
+            \ ale#definition#FormatLSPResponse(l:response_item, l:options)
+            \)
         endfor
 
         if empty(l:item_list)
@@ -149,6 +151,7 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
             call ale#definition#UpdateTagStack()
 
             let l:uri = ale#util#ToURI(l:item_list[0].filename)
+
             if get(l:options, 'open_in') is# 'quickfix'
                 let l:line = l:item_list[0].lnum
                 let l:column = l:item_list[0].col

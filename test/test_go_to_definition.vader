@@ -458,19 +458,15 @@ Execute(Definition responses with lists should be handled):
   \ }
   \)
 
-  AssertEqual
-  \ [
-  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
-  \ ],
-  \ g:expr_list
-  AssertEqual [3, 8], getpos('.')[1:2]
+  " Multiple results should either open the ALEPreview or go to quickfix
+  AssertEqual [1, 1], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Definition responses with null response should be handled):
   call ale#definition#SetMap({3: {'open_in': 'current-buffer'}})
   call ale#definition#HandleLSPResponse(1, {'id': 3, 'result': v:null})
 
-  AssertEqual [], g:expr_list
+  AssertEqual ['echom ''No definitions found'''], g:expr_list
 
 Execute(LSP definition requests should be sent):
   runtime ale_linters/python/pylsp.vim
