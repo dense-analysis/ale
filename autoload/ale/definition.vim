@@ -68,6 +68,15 @@ function! ale#definition#HandleTSServerResponse(conn_id, response) abort
             if empty(l:item_list)
                 call ale#util#Execute('echom ''No definitions found''')
             elseif len(l:item_list) == 1
+                let l:filename = l:item_list[0].filename
+                if get(l:options, 'open_in') is# 'quickfix'
+                    let l:line = l:item_list[0].lnum
+                    let l:column = l:item_list[0].col
+                else
+                    let l:line = l:item_list[0].line
+                    let l:column = l:item_list[0].column
+                endif
+
                 call ale#definition#UpdateTagStack()
                 call ale#util#Open(l:filename, l:line, l:column, l:options)
             else
@@ -138,6 +147,15 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
         elseif len(l:item_list) == 1
             call ale#definition#UpdateTagStack()
 
+            let l:uri = ale#util#ToURI(l:item_list[0].filename)
+            if get(l:options, 'open_in') is# 'quickfix'
+                let l:line = l:item_list[0].lnum
+                let l:column = l:item_list[0].col
+            else
+                let l:line = l:item_list[0].line
+                let l:column = l:item_list[0].column
+            endif
+
             let l:uri_handler = ale#uri#GetURIHandler(l:uri)
 
             if l:uri_handler is# v:null
@@ -152,6 +170,7 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
                 call setqflist(l:item_list, 'a')
                 call ale#util#Execute('cc 1')
             else
+                call ale#definition#UpdateTagStack()
                 call ale#preview#ShowSelection(l:item_list, l:options)
             endif
         endif
