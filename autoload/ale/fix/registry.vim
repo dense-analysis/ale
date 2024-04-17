@@ -561,6 +561,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['html', 'htmldjango'],
 \       'description': 'Fix HTML files with html-beautify from js-beautify.',
 \   },
+\   'htmlbeautifier': {
+\       'function': 'ale#fixers#htmlbeautifier#Fix',
+\       'suggested_filetypes': ['eruby'],
+\       'description': 'Fix ERB files with htmlbeautifier gem.',
+\   },
 \   'lua-format': {
 \       'function': 'ale#fixers#lua_format#Fix',
 \       'suggested_filetypes': ['lua'],
