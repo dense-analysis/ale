@@ -15,9 +15,7 @@ function! ale_linters#dart#analysis_server#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'dart_analysis_server_executable')
     let l:dart = resolve(exepath(l:executable))
 
-    return '%e '
-    \   . fnamemodify(l:dart, ':h') . '/snapshots/analysis_server.dart.snapshot'
-    \   . ' --lsp'
+    return '%e language-server --protocol=lsp'
 endfunction
 
 call ale#linter#Define('dart', {
