@@ -6,10 +6,16 @@ After:
 
 Execute(The default command should be correct):
   AssertLinter 'dart', ale#Escape('dart')
-  \   . ' language-server --protocol=lsp'
+  \   . ' ./snapshots/analysis_server.dart.snapshot --lsp'
 
 Execute(The executable should be configurable):
   let g:ale_dart_analysis_server_executable = 'foobar'
 
   AssertLinter 'foobar', ale#Escape('foobar')
+  \   . ' ./snapshots/analysis_server.dart.snapshot --lsp'
+
+Execute(Should be able to enable new language-server command):
+  let g:ale_dart_analysis_server_enable_language_server = 1
+
+  AssertLinter 'dart', ale#Escape('dart')
   \   . ' language-server --protocol=lsp'
