@@ -1,7 +1,7 @@
 " Author: Nelson Yeung <nelsyeung@gmail.com>
 " Description: Check Dart files with dart analysis server LSP
 
-call ale#Set('dart_analysis_server_enable_language_server', 0)
+call ale#Set('dart_analysis_server_enable_language_server', 1)
 call ale#Set('dart_analysis_server_executable', 'dart')
 
 function! ale_linters#dart#analysis_server#GetProjectRoot(buffer) abort
