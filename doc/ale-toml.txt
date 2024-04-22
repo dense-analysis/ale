@@ -9,7 +9,7 @@ See |ale-dprint-options| and https://dprint.dev/plugins/toml
 
 
 ===============================================================================
-taplo                                                        *ale-toml-taplo*
+taplo                                                         *ale-toml-taplo*
 
 See https://taplo.tamasfe.dev/
 
