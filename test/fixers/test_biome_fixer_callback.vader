@@ -1,4 +1,10 @@
 Before:
+  Save g:ale_biome_options
+  Save g:ale_biome_fixer_apply_unsafe
+
+  let g:ale_biome_options = ''
+  let g:ale_biome_fixer_apply_unsafe = 0
+
   call ale#assert#SetUpFixerTest('typescript', 'biome')
 
 After:
@@ -11,6 +17,16 @@ Execute(The default biome command should be correct):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('biome')
-  \     . ' format %t'
+  \     . ' check --apply %t'
   \ }
 
+Execute(Unsafe fixes can be applied via an option):
+  call ale#test#SetFilename('../test-files/typescript/test.ts')
+  let g:ale_biome_fixer_apply_unsafe = 1
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('biome')
+  \     . ' check --apply-unsafe %t'
+  \ }
