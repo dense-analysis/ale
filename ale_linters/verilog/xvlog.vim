@@ -11,13 +11,16 @@ endfunction
 function! ale_linters#verilog#xvlog#Handle(buffer, lines) abort
     "Matches patterns like the following:
     " ERROR: [VRFC 10-1412] syntax error near output [/path/to/file.v:5]
-    let l:pattern = '^ERROR:\s\+\(\[.*\)\[.*:\([0-9]\+\)\]'
+    let l:pattern = '^ERROR:\s\+\(\[.*\)\[\(.*\):\([0-9]\+\)\]'
     let l:output = []
+    let l:dir = expand('#' . a:buffer . ':p:h')
 
     " NOTE: `xvlog` only prints 'INFO' and 'ERROR' messages
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        let l:fname = ale#path#GetAbsPath(l:dir, l:match[2])
         call add(l:output, {
-        \   'lnum': l:match[2] + 0,
+        \   'filename': l:fname,
+        \   'lnum': l:match[3] + 0,
         \   'type': 'E',
         \   'text': l:match[1],
         \})
