@@ -6,7 +6,7 @@ Before:
   call ale#assert#SetUpLinterTest('python', 'ruff')
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
-  let b:command_head = ale#Escape('ruff') . ' -q'
+  let b:command_head = ale#Escape('ruff') . ' -q --no-fix'
   let b:command_tail = ' --format json-lines --stdin-filename %s -'
 
   GivenCommandOutput ['ruff 0.0.83']
@@ -46,7 +46,7 @@ Execute(ruff should run with the check subcmd in versions >= 0.3.0):
   GivenCommandOutput ['ruff 0.3.0']
 
   AssertLinterCwd expand('%:p:h')
-  let b:cmd_head = ale#Escape('ruff') . ' check -q'
+  let b:cmd_head = ale#Escape('ruff') . ' check -q --no-fix'
   AssertLinter 'ruff', b:cmd_head . ' --output-format json-lines --stdin-filename %s -'
 
 Execute(The option for disabling changing directories should work):
@@ -58,7 +58,7 @@ Execute(The option for disabling changing directories should work):
 Execute(The ruff executable should be configurable, and escaped properly):
   let g:ale_python_ruff_executable = 'executable with spaces'
 
-  AssertLinter 'executable with spaces', ale#Escape('executable with spaces') . ' -q' . b:command_tail
+  AssertLinter 'executable with spaces', ale#Escape('executable with spaces') . ' -q --no-fix' . b:command_tail
 
 Execute(The ruff command callback should let you set options):
   let g:ale_python_ruff_options = '--some-flag'
@@ -79,7 +79,7 @@ Execute(The ruff callbacks should detect virtualenv directories):
   \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff'
   \)
   AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir')
-  AssertLinter b:executable, ale#Escape(b:executable) . ' -q' . b:command_tail
+  AssertLinter b:executable, ale#Escape(b:executable) . ' -q --no-fix' . b:command_tail
 
 Execute(You should able able to use the global ruff instead):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
@@ -92,7 +92,7 @@ Execute(Setting executable to 'pipenv' appends 'run ruff'):
   let g:ale_python_ruff_executable = 'path/to/pipenv'
   let g:ale_python_ruff_use_global = 1
 
-  AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run ruff -q'
+  AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run ruff -q --no-fix'
   \   . b:command_tail
 
 Execute(Pipenv is detected when python_ruff_auto_pipenv is set):
@@ -100,14 +100,14 @@ Execute(Pipenv is detected when python_ruff_auto_pipenv is set):
   call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
 
   AssertLinterCwd expand('%:p:h')
-  AssertLinter 'pipenv', ale#Escape('pipenv') . ' run ruff -q'
+  AssertLinter 'pipenv', ale#Escape('pipenv') . ' run ruff -q --no-fix'
   \   . b:command_tail
 
 Execute(Setting executable to 'poetry' appends 'run ruff'):
   let g:ale_python_ruff_executable = 'path/to/poetry'
   let g:ale_python_ruff_use_global = 1
 
-  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run ruff -q'
+  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run ruff -q --no-fix'
   \   . b:command_tail
 
 Execute(poetry is detected when python_ruff_auto_poetry is set):
@@ -115,5 +115,5 @@ Execute(poetry is detected when python_ruff_auto_poetry is set):
   call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
 
   AssertLinterCwd expand('%:p:h')
-  AssertLinter 'poetry', ale#Escape('poetry') . ' run ruff -q'
+  AssertLinter 'poetry', ale#Escape('poetry') . ' run ruff -q --no-fix'
   \   . b:command_tail
