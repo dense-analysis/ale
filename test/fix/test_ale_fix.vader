@@ -126,10 +126,12 @@ Before:
       let l:ProcessWith = {buffer, output -> JSONPostProcessor(buffer, output)}
     endif
 
-    " Escaping needs to be handled specially for CMD on Windows.
-    let l:json_string = has('win32')
-    \ ? '{"output":["x","y","z"]}'
-    \ : ale#Escape('{"output": ["x", "y", "z"]}')
+    " " Escaping needs to be handled specially for CMD on Windows.
+    " let l:json_string = has('win32')
+    " \ ? '{"output":["x","y","z"]}'
+    " \ : ale#Escape('{"output": ["x", "y", "z"]}')
+
+    let l:json_string = ale#Escape('{"output": ["x", "y", "z"]}')
 
     return {
     \ 'command': 'echo ' . l:json_string,
