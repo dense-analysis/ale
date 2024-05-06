@@ -35,7 +35,7 @@ Execute(Command formatting should be applied correctly for LSP linters):
 
   if has('win32')
     AssertEqual
-    \ ['cmd', 'cmd /s/c "cmd --foo"'],
+    \ ['cmd', ['cmd', '/s/c', '"cmd --foo"']],
     \ g:args
   else
     AssertEqual
