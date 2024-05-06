@@ -64,7 +64,7 @@ Execute(cmd /s/c as a default commandline should be used on Windows):
     let &shell = 'who cares'
     let &shellcmdflag = 'whatever'
 
-    AssertEqual ['cmd', '/s/c', '"foobar"'], ale#job#PrepareCommand(bufnr(''), 'foobar')
+    AssertEqual ['cmd', '/s/c', 'foobar'], ale#job#PrepareCommand(bufnr(''), 'foobar')
   endif
 
 Execute(Setting g:ale_shell should cause ale#job#PrepareCommand to use set shell):
