@@ -200,7 +200,7 @@ function! ale#job#PrepareCommand(buffer, command) abort
     endif
 
     if has('win32')
-        return ['cmd', '/s/c', l:command]
+        return join(['cmd /s/c "', l:command, '"'], '')
     endif
 
     if &shell =~? 'fish$\|pwsh$'
