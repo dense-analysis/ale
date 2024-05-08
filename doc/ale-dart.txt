@@ -33,9 +33,11 @@ g:ale_dart_analysis_server_enable_language_server
   Type: |Number|
   Default: `1`
 
-  When set to `1`, ALE will use the new `dart language-server` command to
-  launch the language server. When set to `0`, ALE will use the original
-  `./snapshots/analysis_server.dart.snapshot --lsp` command.
+  When set to `1`, ALE will use the new `dart language-server` command,
+  available from Dart version 2.16.0, to launch the language server. When set
+  to `0`, ALE will instead use the deprecated
+  `./snapshots/analysis_server.dart.snapshot --lsp` command used by older
+  versions of Dart.
 
 
 ===============================================================================
