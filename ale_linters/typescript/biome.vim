@@ -6,6 +6,6 @@ call ale#linter#Define('typescript', {
 \   'lsp': 'stdio',
 \   'language': function('ale#handlers#biome#GetLanguage'),
 \   'executable': function('ale#handlers#biome#GetExecutable'),
-\   'command': function('ale#handlers#biome#GetCommand'),
+\   'command': '%e lsp-proxy',
 \   'project_root': function('ale#handlers#biome#GetProjectRoot'),
 \})

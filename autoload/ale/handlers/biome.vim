@@ -19,13 +19,6 @@ function! ale#handlers#biome#GetExecutable(buffer) abort
     \])
 endfunction
 
-function! ale#handlers#biome#GetCommand(buffer) abort
-    let l:options = ale#Var(a:buffer, 'biome_options')
-
-    return '%e lsp-proxy'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
-endfunction
-
 function! ale#handlers#biome#GetLanguage(buffer) abort
     return getbufvar(a:buffer, '&filetype')
 endfunction
