@@ -25,6 +25,10 @@ function! ale#handlers#biome#GetCommand(buffer) abort
     \   . (!empty(l:options) ? ' ' . l:options : '')
 endfunction
 
+function! ale#handlers#biome#GetLanguage(buffer) abort
+    return getbufvar(a:buffer, '&filetype')
+endfunction
+
 function! ale#handlers#biome#GetProjectRoot(buffer) abort
     let l:biome_file = ale#path#FindNearestFile(a:buffer, 'biome.json')
 
