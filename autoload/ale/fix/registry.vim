@@ -137,7 +137,7 @@ let s:default_registry = {
 \   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'astro'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
 \   'mix_format': {
