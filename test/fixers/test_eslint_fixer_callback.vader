@@ -167,7 +167,7 @@ Execute(The lower priority configuration file in a nested directory should be pr
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app'),
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/subdir-with-config'),
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/subdir-with-config/.eslintrc'))
@@ -182,7 +182,7 @@ Execute(--config in options should override configuration file detection for old
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app'),
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/subdir-with-config'),
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --config /foo.cfg'
@@ -194,7 +194,7 @@ Execute(--config in options should override configuration file detection for old
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app'),
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/subdir-with-config'),
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c /foo.cfg'
@@ -235,7 +235,7 @@ Execute(The version check should be correct):
   \   . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/eslint/bin/eslint.js'))
   \   . ' --version',
   \ {
-  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app'),
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/subdir-with-config'),
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
@@ -245,7 +245,7 @@ Execute(The version check should be correct):
 
   AssertFixer [
   \ {
-  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app'),
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/subdir-with-config'),
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
