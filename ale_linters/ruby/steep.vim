@@ -63,6 +63,7 @@ function! ale_linters#ruby#steep#HandleOutput(buffer, lines) abort
 
     let l:in = 0
     let l:item = {}
+
     for l:line in a:lines
         " Look for first line of a message block
         " If not in-message (l:in == 0) that's expected
