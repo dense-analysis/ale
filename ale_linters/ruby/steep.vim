@@ -79,6 +79,7 @@ function! ale_linters#ruby#steep#HandleOutput(buffer, lines) abort
 
             let l:filename = l:match[1]
 
+            " Steep's reported column is offset by 1 (zero-indexed?)
             let l:item = {
             \   'lnum': l:match[2],
             \   'col': l:match[3] + 1,
