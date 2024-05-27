@@ -19,7 +19,9 @@ endfunction
 
 " Rename path relative to root
 function! ale_linters#ruby#steep#RelativeToRoot(buffer, path) abort
-    return substitute(a:path, ale_linters#ruby#steep#FindRoot(a:buffer) . '/', '', '')
+    let l:separator = has('win32') ? '\' : '/'
+
+    return substitute(a:path, ale_linters#ruby#steep#FindRoot(a:buffer) . l:separator, '', '')
 endfunction
 
 function! ale_linters#ruby#steep#GetCommand(buffer) abort
