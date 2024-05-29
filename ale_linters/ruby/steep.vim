@@ -27,6 +27,11 @@ function! ale_linters#ruby#steep#RelativeToRoot(buffer, path) abort
         let l:steep_root = substitute(l:steep_root, '\\', '\\\\', 'g')
     endif
 
+    " path isn't under root
+    if stridx(a:path, l:steep_root) != 0
+        return ''
+    endif
+
     return substitute(a:path, l:steep_root, '', '')
 endfunction
 
@@ -48,6 +53,14 @@ function! ale_linters#ruby#steep#GetCommand(buffer) abort
 
     let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
     let l:buffer_filename = fnameescape(l:buffer_filename)
+
+    let l:relative = ale_linters#ruby#steep#RelativeToRoot(a:buffer, l:buffer_filename)
+
+    " if file is not under steep root, steep can't type check
+    if l:relative == ''
+        " don't execute
+        return ''
+    endif
 
     return ale#ruby#EscapeExecutable(l:executable, 'steep')
     \   . ' check '
