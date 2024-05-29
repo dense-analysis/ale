@@ -20,19 +20,23 @@ endfunction
 " Rename path relative to root
 function! ale_linters#ruby#steep#RelativeToRoot(buffer, path) abort
     let l:separator = has('win32') ? '\' : '/'
-    let l:steep_root = ale_linters#ruby#steep#FindRoot(a:buffer) . l:separator
-
-    " win32 path separators get interpreted by substitute, escape them
-    if has('win32')
-        let l:steep_root = substitute(l:steep_root, '\\', '\\\\', 'g')
-    endif
+    let l:steep_root = ale_linters#ruby#steep#FindRoot(a:buffer)
 
     " path isn't under root
-    if stridx(a:path, l:steep_root) != 0
+    if l:steep_root == ''
         return ''
     endif
 
-    return substitute(a:path, l:steep_root, '', '')
+    let l:steep_root_prefix = l:steep_root . l:separator
+
+    " win32 path separators get interpreted by substitute, escape them
+    if has('win32')
+        let l:steep_root_pat = substitute(l:steep_root_prefix, '\\', '\\\\', 'g')
+    else
+        let l:steep_root_pat = l:steep_root_prefix
+    endif
+
+    return substitute(a:path, l:steep_root_pat, '', '')
 endfunction
 
 function! ale_linters#ruby#steep#GetCommand(buffer) abort
@@ -64,7 +68,6 @@ function! ale_linters#ruby#steep#GetCommand(buffer) abort
 
     return ale#ruby#EscapeExecutable(l:executable, 'steep')
     \   . ' check '
-    \   . ' --severity-level=hint '
     \   . ale#Var(a:buffer, 'ruby_steep_options')
     \   . ' ' . fnameescape(l:relative)
 endfunction

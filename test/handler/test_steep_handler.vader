@@ -29,7 +29,7 @@ Execute(The steep handler should parse lines correctly):
   \     'end_col': 17,
   \     'text': 'Cannot find implementation of method `::Frobz::FooBarBaz#method_name`',
   \     'code': 'Ruby::MethodDefinitionMissing',
-  \     'type': 'W',
+  \     'type': 'I',
   \   },
   \   {
   \     'lnum': 40,
@@ -37,7 +37,7 @@ Execute(The steep handler should parse lines correctly):
   \     'end_col': 17,
   \     'text': 'Cannot find implementation of method `::Frobz::FooBarBaz#method_name`',
   \     'code': 'Ruby::MethodDefinitionMissing',
-  \     'type': 'W',
+  \     'type': 'I',
   \   },
   \ ],
   \ ale_linters#ruby#steep#HandleOutput(347, [
