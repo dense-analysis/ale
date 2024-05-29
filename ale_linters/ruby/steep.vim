@@ -51,14 +51,18 @@ function! ale_linters#ruby#steep#GetCommand(buffer) abort
 
     return ale#ruby#EscapeExecutable(l:executable, 'steep')
     \   . ' check '
+    \   . ' --severity-level=hint '
     \   . ale#Var(a:buffer, 'ruby_steep_options')
     \   . ' ''' . ale_linters#ruby#steep#RelativeToRoot(a:buffer, l:buffer_filename) . ''''
 endfunction
 
 function! ale_linters#ruby#steep#GetType(severity) abort
-    if a:severity is? 'warning'
-    \|| a:severity is? 'information'
+    if a:severity is? 'information'
     \|| a:severity is? 'hint'
+        return 'I'
+    endif
+
+    if a:severity is? 'warning'
         return 'W'
     endif
 
