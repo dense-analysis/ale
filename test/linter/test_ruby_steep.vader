@@ -54,7 +54,7 @@ Execute(Should lint files below top steep root):
   call ale#test#SetFilename('../test-files/ruby/nested/foo/one/dummy.rb')
   AssertLinter 'steep', ale#Escape('steep')
   \   . ' check '
-  \   . ' one/dummy.rb'
+  \   . ' one' . (has('win32') ? '\' : '/') . 'dummy.rb'
 
 Execute(Should lint files at nested steep root):
   call ale#test#SetFilename('../test-files/ruby/nested/foo/two/dummy.rb')
@@ -66,4 +66,4 @@ Execute(Should lint files below nested steep root):
   call ale#test#SetFilename('../test-files/ruby/nested/foo/two/three/dummy.rb')
   AssertLinter 'steep', ale#Escape('steep')
   \   . ' check '
-  \   . ' three/dummy.rb'
+  \   . ' three' . (has('win32') ? '\' : '/') . 'dummy.rb'
