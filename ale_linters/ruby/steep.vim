@@ -53,7 +53,7 @@ function! ale_linters#ruby#steep#GetCommand(buffer) abort
     \   . ' check '
     \   . ' --severity-level=hint '
     \   . ale#Var(a:buffer, 'ruby_steep_options')
-    \   . ' ''' . ale_linters#ruby#steep#RelativeToRoot(a:buffer, l:buffer_filename) . ''''
+    \   . ' ' . fnameescape(l:relative)
 endfunction
 
 function! ale_linters#ruby#steep#GetType(severity) abort
