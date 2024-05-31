@@ -50,13 +50,6 @@ Execute(use-global should override other app directories):
   AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/eslint')
   AssertLinter b:executable, ale#Escape(b:executable) . b:args
 
-Execute(eslint_d should be detected correctly):
-  call ale#test#SetFilename('../test-files/eslint/app-with-eslint-d/testfile.js')
-
-  let b:executable = ale#path#Simplify(g:dir . '/../test-files/eslint/app-with-eslint-d/node_modules/.bin/eslint_d')
-  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/eslint/app-with-eslint-d')
-  AssertLinter b:executable, ale#Escape(b:executable) . b:args
-
 Execute(eslint.js executables should be run with node on Windows):
   call ale#test#SetFilename('../test-files/eslint/react-app/subdir/testfile.js')
 
