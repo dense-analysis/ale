@@ -135,3 +135,6 @@ Execute(The defaults for the vader filetype should be correct):
 Execute(Default aliases for React should be defined):
   AssertEqual ['javascript', 'jsx'], ale#linter#ResolveFiletype('javascriptreact')
   AssertEqual ['typescript', 'tsx'], ale#linter#ResolveFiletype('typescriptreact')
+
+Execute(The defaults for the yaml filetype should be correct):
+  AssertEqual ['actionlint', 'spectral', 'yaml-language-server', 'yamllint'], GetLinterNames('yaml')

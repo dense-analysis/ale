@@ -1670,7 +1670,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'vue': ['eslint', 'vls'],
   \   'zsh': ['shell'],
   \   'v': ['v'],
-  \   'yaml': ['spectral', 'yaml-language-server', 'yamllint'],
+  \   'yaml': ['actionlint', 'spectral', 'yaml-language-server', 'yamllint'],
   \}
 <
   This option can be used to enable only a particular set of linters for a

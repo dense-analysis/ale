@@ -5,6 +5,11 @@ call ale#Set('yaml_actionlint_executable', 'actionlint')
 call ale#Set('yaml_actionlint_options', '')
 
 function! ale_linters#yaml#actionlint#GetCommand(buffer) abort
+    " Only execute actionlint on YAML files in /.github/ paths.
+    if expand('#' . a:buffer . ':p') !~# '\v[/\\]\.github[/\\]'
+        return ''
+    endif
+
     let l:options = ale#Var(a:buffer, 'yaml_actionlint_options')
 
     if l:options !~# '-no-color'
