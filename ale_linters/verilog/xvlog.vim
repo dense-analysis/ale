@@ -2,7 +2,11 @@
 " Description: Adds support for Xilinx Vivado `xvlog` Verilog compiler/checker
 
 call ale#Set('verilog_xvlog_executable', 'xvlog')
-call ale#Set('verilog_xvlog_options', '')
+
+if &filetype == 'systemverilog'
+    call ale#Set('verilog_xvlog_options', '-sv')
+else
+    call ale#Set('verilog_xvlog_options', '')
 
 function! ale_linters#verilog#xvlog#GetCommand(buffer) abort
     return '%e ' . ale#Pad(ale#Var(a:buffer, 'verilog_xvlog_options')) . ' %t'
