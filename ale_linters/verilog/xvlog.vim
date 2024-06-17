@@ -7,6 +7,7 @@ if &filetype == 'systemverilog'
     call ale#Set('verilog_xvlog_options', '-sv')
 else
     call ale#Set('verilog_xvlog_options', '')
+endif
 
 function! ale_linters#verilog#xvlog#GetCommand(buffer) abort
     return '%e ' . ale#Pad(ale#Var(a:buffer, 'verilog_xvlog_options')) . ' %t'
