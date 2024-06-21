@@ -23,7 +23,7 @@ function! ale_linters#ruby#steep#RelativeToRoot(buffer, path) abort
     let l:steep_root = ale_linters#ruby#steep#FindRoot(a:buffer)
 
     " path isn't under root
-    if l:steep_root == ''
+    if l:steep_root ==# ''
         return ''
     endif
 
@@ -61,7 +61,7 @@ function! ale_linters#ruby#steep#GetCommand(buffer) abort
     let l:relative = ale_linters#ruby#steep#RelativeToRoot(a:buffer, l:buffer_filename)
 
     " if file is not under steep root, steep can't type check
-    if l:relative == ''
+    if l:relative ==# ''
         " don't execute
         return ''
     endif
