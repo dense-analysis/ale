@@ -623,7 +623,7 @@ interested in writing an integration, see `:help ale-lint-other-sources`.
 
 If you're running ALE in Neovim with
 [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) for configuring
-particular language servers. ALE will automatically disable its LSP
+particular language servers, ALE will automatically disable its LSP
 functionality for any language servers configured with nvim-lspconfig by
 default. The following setting is applied by default:
 
