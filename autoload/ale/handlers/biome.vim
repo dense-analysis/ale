@@ -4,6 +4,7 @@
 call ale#Set('biome_executable', 'biome')
 call ale#Set('biome_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('biome_options', '')
+call ale#Set('biome_fixer_apply_unsafe', 0)
 
 function! ale#handlers#biome#GetExecutable(buffer) abort
     return ale#path#FindExecutable(a:buffer, 'biome', [
