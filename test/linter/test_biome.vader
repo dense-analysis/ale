@@ -16,3 +16,20 @@ Execute(The biome command should accept options):
   let g:ale_biome_options = '--foobar'
 
   AssertLinter 'biome', ale#Escape('biome') . ' lsp-proxy --foobar'
+
+Execute(Uses the filetype as the language):
+  call ale#test#SetFilename('test.ts')
+  set filetype=typescript
+  AssertLSPLanguage 'typescript'
+
+  call ale#test#SetFilename('test.tsx')
+  set filetype=typescriptreact
+  AssertLSPLanguage 'typescriptreact'
+
+  call ale#test#SetFilename('test.js')
+  set filetype=javascript
+  AssertLSPLanguage 'javascript'
+
+  call ale#test#SetFilename('test.jsx')
+  set filetype=javascriptreact
+  AssertLSPLanguage 'javascriptreact'
