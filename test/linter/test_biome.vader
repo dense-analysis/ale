@@ -1,7 +1,9 @@
 Before:
   Save g:ale_biome_options
+  Save g:ale_biome_lsp_project_root
 
   let g:ale_biome_options = ''
+  let g:ale_biome_lsp_project_root = ''
 
   call ale#assert#SetUpLinterTest('typescript', 'biome')
   call ale#test#SetFilename('test.ts')
@@ -33,3 +35,20 @@ Execute(Uses the filetype as the language):
   call ale#test#SetFilename('test.jsx')
   set filetype=javascriptreact
   AssertLSPLanguage 'javascriptreact'
+
+Execute(Should find project root containing biome.json):
+  call ale#test#SetFilename('../test-files/biome/json/src/test.ts')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/biome/json')
+
+Execute(Should find project root containing biome.jsonc):
+  call ale#test#SetFilename('../test-files/biome/jsonc/src/test.ts')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/biome/jsonc')
+
+Execute(Should use user-specified project root):
+  let g:ale_biome_lsp_project_root = '/'
+
+  call ale#test#SetFilename('../test-files/biome/jsonc/src/test.ts')
+
+  AssertLSPProject '/'
