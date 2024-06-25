@@ -1,0 +1,100 @@
+Before:
+  runtime ale_linters/ruby/steep.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The steep handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 400,
+  \     'col': 18,
+  \     'end_col': 45,
+  \     'text': 'Method parameters are incompatible with declaration `(untyped, untyped, *untyped, **untyped) { () -> untyped } -> untyped`',
+  \     'code': 'Ruby::MethodArityMismatch',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 20,
+  \     'col': 9,
+  \     'end_col': 17,
+  \     'text': 'Cannot find implementation of method `::Frobz::FooBarBaz#method_name`',
+  \     'code': 'Ruby::MethodDefinitionMissing',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 30,
+  \     'col': 9,
+  \     'end_col': 17,
+  \     'text': 'Cannot find implementation of method `::Frobz::FooBarBaz#method_name`',
+  \     'code': 'Ruby::MethodDefinitionMissing',
+  \     'type': 'I',
+  \   },
+  \   {
+  \     'lnum': 40,
+  \     'col': 9,
+  \     'end_col': 17,
+  \     'text': 'Cannot find implementation of method `::Frobz::FooBarBaz#method_name`',
+  \     'code': 'Ruby::MethodDefinitionMissing',
+  \     'type': 'I',
+  \   },
+  \ ],
+  \ ale_linters#ruby#steep#HandleOutput(347, [
+  \     '# Type checking files:',
+  \     '',
+  \     '...............................................................................................................................F..........F.F...F.',
+  \     '',
+  \     'lib/frobz/foobar_baz.rb:400:17: [error] Method parameters are incompatible with declaration `(untyped, untyped, *untyped, **untyped) { () -> untyped } -> untyped`',
+  \     '│ Diagnostic ID: Ruby::MethodArityMismatch',
+  \     '│',
+  \     '└         def frobz(obj, suffix, *args, &block)',
+  \     '                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
+  \     '',
+  \     'lib/frobz/foobar_baz.rb:20:8: [warning] Cannot find implementation of method `::Frobz::FooBarBaz#method_name`',
+  \     '│ Diagnostic ID: Ruby::MethodDefinitionMissing',
+  \     '│',
+  \     '└   class FooBarBaz',
+  \     '          ~~~~~~~~~',
+  \     '',
+  \     'lib/frobz/foobar_baz.rb:30:8: [information] Cannot find implementation of method `::Frobz::FooBarBaz#method_name`',
+  \     '│ Diagnostic ID: Ruby::MethodDefinitionMissing',
+  \     '│',
+  \     '└   class FooBarBaz',
+  \     '          ~~~~~~~~~',
+  \     '',
+  \     'lib/frobz/foobar_baz.rb:40:8: [hint] Cannot find implementation of method `::Frobz::FooBarBaz#method_name`',
+  \     '│ Diagnostic ID: Ruby::MethodDefinitionMissing',
+  \     '│',
+  \     '└   class FooBarBaz',
+  \     '          ~~~~~~~~~',
+  \     '',
+  \     'Detected 4 problems from 1 file',
+  \ ])
+
+Execute(The steep handler should handle when files are checked and no offenses are found):
+  AssertEqual
+  \ [],
+  \ ale_linters#ruby#steep#HandleOutput(347, [
+  \     '# Type checking files:',
+  \     '',
+  \     '.............................................................................................................................................',
+  \     '',
+  \     'No type error detected. 🧉',
+  \ ])
+
+Execute(The steep handler should handle when no files are checked):
+  AssertEqual
+  \ [],
+  \ ale_linters#ruby#steep#HandleOutput(347, [
+  \     '# Type checking files:',
+  \     '',
+  \     '',
+  \     '',
+  \     'No type error detected. 🧉',
+  \ ])
+
+Execute(The steep handler should handle empty output):
+  AssertEqual [], ale_linters#ruby#steep#HandleOutput(347, [''])
+  AssertEqual [], ale_linters#ruby#steep#HandleOutput(347, [])
+
