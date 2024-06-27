@@ -16,7 +16,8 @@ g:ale_biome_options                                       *g:ale_biome_options*
   Type: |String|
   Default: `''`
 
-  This variable can be set to pass additional options to biome.
+  This variable can be set to pass additional options to `biome check` when
+  applying fixes.
 
 
 g:ale_biome_use_global                                 *g:ale_biome_use_global*
