@@ -73,6 +73,20 @@ Execute(The ruff callback should respect custom options):
   \     . ' --ignore F401 -q --stdin-filename '. fname . ' --fix -',
   \ }
 
+Execute(The ruff callback should use ruff check for 0.5.0):
+  let file_path = g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py'
+
+  silent execute 'file ' . fnameescape(file_path)
+
+  let fname = ale#Escape(ale#path#Simplify(file_path))
+
+  GivenCommandOutput ['ruff 0.5.0']
+  AssertFixer
+  \ {
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir'),
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff')) . ' check --stdin-filename ' . fname  . ' --fix -',
+  \ }
+
 Execute(Pipenv is detected when python_ruff_auto_pipenv is set):
   let g:ale_python_ruff_auto_pipenv = 1
   let g:ale_python_ruff_change_directory = 0

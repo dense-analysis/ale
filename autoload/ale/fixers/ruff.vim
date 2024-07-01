@@ -50,6 +50,11 @@ function! ale#fixers#ruff#FixForVersion(buffer, version) abort
         call extend(l:cmd, ['run', 'ruff'])
     endif
 
+    " NOTE: ruff 0.5.0 removes `ruff <path>` in favor of `ruff check <path>`
+    if ale#semver#GTE(a:version, [0, 5, 0])
+        call extend(l:cmd, ['check'])
+    endif
+
     let l:options = ale#Var(a:buffer, 'python_ruff_options')
 
     if !empty(l:options)
