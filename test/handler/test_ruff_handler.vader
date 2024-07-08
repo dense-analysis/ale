@@ -1,0 +1,43 @@
+Before:
+  runtime ale_linters/python/ruff.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(We should handle basic output of ruff correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'code': 'F821',
+  \     'type': 'W',
+  \     'end_col': 7,
+  \     'end_lnum': 2,
+  \     'text': 'Undefined name example',
+  \   },
+  \ ],
+  \ ale_linters#python#ruff#Handle(bufnr(''), [
+  \   '{"cell":null,"code":"F821","end_location":{"column":8,"row":2},"filename":"/home/eduardo/Code/Python/test.py","fix":null,"location":{"column":1,"row":2},"message":"Undefined name example","noqa_row":2,"url":"https://docs.astral.sh/ruff/rules/undefined-name"}',
+  \ ])
+
+Execute(We should handle totally broken output from ruff):
+  AssertEqual [], ale_linters#python#ruff#Handle(bufnr(''), ['ERROR: oh noes!'])
+
+Execute(We should handle mixed error lines and JSON output from ruff):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'code': 'F821',
+  \     'type': 'W',
+  \     'end_col': 7,
+  \     'end_lnum': 2,
+  \     'text': 'Undefined name example',
+  \   },
+  \ ],
+  \ ale_linters#python#ruff#Handle(bufnr(''), [
+  \   'ERROR: oh noes!',
+  \   '{"cell":null,"code":"F821","end_location":{"column":8,"row":2},"filename":"/home/eduardo/Code/Python/test.py","fix":null,"location":{"column":1,"row":2},"message":"Undefined name example","noqa_row":2,"url":"https://docs.astral.sh/ruff/rules/undefined-name"}',
+  \ ])

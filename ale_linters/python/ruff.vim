@@ -61,17 +61,25 @@ endfunction
 function! ale_linters#python#ruff#Handle(buffer, lines) abort
     let l:output = []
 
+    " Read all lines of ruff output and parse use all the valid JSONL lines.
     for l:line in a:lines
-        let l:item = json_decode(l:line)
-        call add(l:output, {
-        \   'lnum': l:item.location.row,
-        \   'col': l:item.location.column,
-        \   'end_lnum': l:item.end_location.row,
-        \   'end_col': l:item.end_location.column - 1,
-        \   'code': l:item.code,
-        \   'text': l:item.message,
-        \   'type': l:item.code =~? '\vE\d+' ? 'E' : 'W',
-        \})
+        try
+            let l:item = json_decode(l:line)
+        catch
+            let l:item = v:null
+        endtry
+
+        if !empty(l:item)
+            call add(l:output, {
+            \   'lnum': l:item.location.row,
+            \   'col': l:item.location.column,
+            \   'end_lnum': l:item.end_location.row,
+            \   'end_col': l:item.end_location.column - 1,
+            \   'code': l:item.code,
+            \   'text': l:item.message,
+            \   'type': l:item.code =~? '\vE\d+' ? 'E' : 'W',
+            \})
+        endif
     endfor
 
     return l:output
