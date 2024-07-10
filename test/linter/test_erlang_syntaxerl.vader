@@ -11,11 +11,11 @@ Execute (The default commands should be correct):
   \]
 
 Execute (The executable should be configurable):
-  let b:ale_erlang_syntaxerl_executable = 'foobar'
+  let b:ale_erlang_syntaxerl_executable = '/path/to/syntaxerl'
 
-  AssertLinter 'foobar', [
-  \ ale#Escape('foobar') . ' -h',
-  \ ale#Escape('foobar') . ' %t',
+  AssertLinter '/path/to/syntaxerl', [
+  \ ale#Escape('/path/to/syntaxerl') . ' -h',
+  \ ale#Escape('/path/to/syntaxerl') . ' %t',
   \]
 
 Execute (The -b option should be used when available):
