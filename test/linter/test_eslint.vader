@@ -76,3 +76,12 @@ Execute(eslint.js should be run from a containing project with .yarn/sdks):
   AssertLinter b:executable,
   \ (has('win32') ? ale#Escape('node.exe') . ' ' : '')
   \ . ale#Escape(b:executable) . b:args
+
+Execute(astro directories should be detected correctly):
+  call ale#test#SetFilename('../test-files/eslint/astro-app/src/pages/index.astro')
+
+  let b:executable = ale#path#Simplify(g:dir . '/../test-files/eslint/astro-app/node_modules/eslint/bin/eslint.js')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/eslint/astro-app')
+  AssertLinter b:executable,
+  \ (has('win32') ? ale#Escape('node.exe') . ' ' : '')
+  \ . ale#Escape(b:executable) . b:args

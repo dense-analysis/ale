@@ -2899,6 +2899,9 @@ documented in additional help files.
   asm.....................................|ale-asm-options|
     gcc...................................|ale-asm-gcc|
     llvm_mc...............................|ale-asm-llvm_mc|
+  astro...................................|ale-astro-options|
+    eslint................................|ale-astro-eslint|
+    prettier..............................|ale-astro-prettier|
   avra....................................|ale-avra-options|
     avra..................................|ale-avra-avra|
   awk.....................................|ale-awk-options|
