@@ -1,0 +1,20 @@
+Begin:
+  Save g:ale_openscad_scadformat_executable
+  Save g:ale_openscad_scadformat_options
+  
+  let g:ale_openscad_scadformat_executable = 'xxx'
+  let g:ale_openscad_scadformat_options = ''
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(scadformat - defaults OK):
+  call ale#test#SetFilename('../test-files/openscad/dummy.scad')
+
+  AssertEqual
+  \ {
+  \    'command': ale#Escape('xxx')
+  \ },
+  \ ale#fixer#scadformat#Fix(bufnr(''))

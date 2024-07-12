@@ -666,6 +666,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ruby'],
 \       'description': 'A formatter for Ruby source code',
 \   },
+\   'scadformat': {
+\       'function': 'ale#fixers#scadformat#Fix',
+\       'suggested_filetypes': ['openscad'],
+\       'description': 'Formatter for scad files',
+\   },
 \}
 
 " Reset the function registry to the default entries.

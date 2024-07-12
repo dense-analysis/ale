@@ -435,6 +435,7 @@ Notes:
   * `yamllint`
 * OpenSCAD
   * `SCA2D`
+  * `scadformat`
 * Packer
   * `packer-fmt-fixer`
 * Pascal
