@@ -3237,6 +3237,7 @@ documented in additional help files.
     yamllint..............................|ale-openapi-yamllint|
   openscad................................|ale-openscad-options|
     sca2d.................................|ale-openscad-sca2d|
+    scadformat............................|ale-openscad-scadformat|
   packer..................................|ale-packer-options|
     packer-fmt-fixer......................|ale-packer-fmt-fixer|
   pascal..................................|ale-pascal-options|

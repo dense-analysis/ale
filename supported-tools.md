@@ -444,6 +444,7 @@ formatting.
   * [yamllint](https://yamllint.readthedocs.io/)
 * OpenSCAD
   * [SCA2D](https://gitlab.com/bath_open_instrumentation_group/sca2d) :floppy_disk:
+  * [scadformat](https://github.com/hugheaves/scadformat)
 * Packer (HCL)
   * [packer-fmt-fixer](https://github.com/hashicorp/packer)
 * Pascal
