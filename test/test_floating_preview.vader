@@ -12,6 +12,7 @@ Before:
   function! ale#floating_preview#Show(lines, ...) abort
     let g:floating_preview_show_called = 1
     let g:floated_lines = a:lines
+    return win_getid()
   endfunction
 
   let g:ale_buffer_info = {
