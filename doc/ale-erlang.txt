@@ -2,6 +2,22 @@
 ALE Erlang Integration                                     *ale-erlang-options*
 
 
+g:ale_erlang_rebar_executable                   *g:ale_erlang_rebar_executable*
+                                                *b:ale_erlang_rebar_executable*
+  Type: |String|
+  Default: `rebar3`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_erlang_rebar_use_global                   *g:ale_erlang_rebar_use_global*
+                                                *b:ale_erlang_rebar_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
 ===============================================================================
 dialyzer                                                  *ale-erlang-dialyzer*
 
@@ -114,6 +130,16 @@ g:ale_erlang_erlfmt_options                       *g:ale_erlang_erlfmt_options*
 
   This variable controls additional parameters passed to `erlfmt`, such as
   `--insert-pragma` or `--print-width`.
+
+
+g:ale_erlang_erlfmt_use_rebar
+                                                *g:ale_erlang_erlfmt_use_rebar*
+                                                *b:ale_erlang_erlfmt_use_rebar*
+  Type: |Number|
+  Default: 0
+
+  Whether to use `erlfmt` as a rebar plugin by invoking `rebar3 fmt` or
+  as a standalone `erlfmt` command.
 
 
 -------------------------------------------------------------------------------

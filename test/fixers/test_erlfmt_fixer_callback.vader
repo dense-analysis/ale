@@ -1,9 +1,7 @@
 Before:
-  Save b:ale_elm_format_executable
-  Save b:ale_elm_format_options
-
-  let b:ale_elm_format_executable = 'erlfmt'
-  let b:ale_elm_format_options = ''
+  Save b:ale_erlang_erlfmt_options
+  Save b:ale_erlang_erlfmt_use_rebar
+  Save b:ale_erlang_rebar_executable
 
 After:
   Restore
@@ -11,7 +9,8 @@ After:
 Execute(The erlfmt command should handle empty options):
   AssertEqual
   \ {
-  \   'command': ale#Escape('erlfmt') . ' %s'
+  \   'command': ale#Escape('erlfmt') . ' -',
+  \   'read_temporary_file': 0,
   \ },
   \ ale#fixers#erlfmt#Fix(bufnr(''))
 
@@ -20,6 +19,39 @@ Execute(The erlfmt command should handle custom options):
 
   AssertEqual
   \ {
-  \   'command': ale#Escape('erlfmt') . ' --insert-pragma %s'
+  \   'command': ale#Escape('erlfmt') . ' --insert-pragma -',
+  \   'read_temporary_file': 0,
+  \ },
+  \ ale#fixers#erlfmt#Fix(bufnr(''))
+
+Execute(The erlfmt command should be able to be invoked by rebar3):
+  let b:ale_erlang_erlfmt_use_rebar = 1
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('rebar3') . ' fmt --write %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#erlfmt#Fix(bufnr(''))
+
+Execute(The erlfmt command should be able to be invoked by rebar3 with custom options):
+  let b:ale_erlang_erlfmt_options = '--insert-pragma'
+  let b:ale_erlang_erlfmt_use_rebar = 1
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('rebar3') . ' fmt --insert-pragma --write %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#erlfmt#Fix(bufnr(''))
+
+Execute(The rebar executable path should be configurable):
+  let b:ale_erlang_rebar_executable = '/path/to/rebar3'
+  let b:ale_erlang_erlfmt_use_rebar = 1
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/rebar3') . ' fmt --write %t',
+  \   'read_temporary_file': 1,
   \ },
   \ ale#fixers#erlfmt#Fix(bufnr(''))
