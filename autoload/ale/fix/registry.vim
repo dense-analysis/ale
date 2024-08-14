@@ -137,7 +137,7 @@ let s:default_registry = {
 \   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'astro'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
 \   'mix_format': {
@@ -152,7 +152,7 @@ let s:default_registry = {
 \   },
 \   'prettier': {
 \       'function': 'ale#fixers#prettier#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue', 'svelte', 'html', 'yaml', 'openapi', 'ruby'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue', 'svelte', 'html', 'yaml', 'openapi', 'ruby', 'astro'],
 \       'description': 'Apply prettier to a file.',
 \   },
 \   'prettier_eslint': {

@@ -46,6 +46,9 @@ formatting.
 * ASM
   * [gcc](https://gcc.gnu.org)
   * [llvm-mc](https://llvm.org)
+* Astro
+  * [eslint](http://eslint.org/)
+  * [prettier](https://github.com/prettier/prettier)
 * AVRA
   * [avra](https://github.com/Ro5bert/avra)
 * Awk

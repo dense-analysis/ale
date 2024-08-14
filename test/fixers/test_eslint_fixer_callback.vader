@@ -304,3 +304,18 @@ Execute(The eslint_d post-processor should handle failing to connect properly):
   \ ale#fixers#eslint#ProcessEslintDOutput(bufnr(''), [
   \   'Could not connect',
   \ ])
+
+Execute(The executable path should be correct for astro app):
+  call ale#test#SetFilename('../test-files/eslint/astro-app/src/pages/index.astro')
+
+  " eslint_d output with an older eslint version is used here.
+  GivenCommandOutput ['v4.4.1 (eslint_d v5.1.0)']
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/eslint/astro-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/astro-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/astro-app/.eslintrc.js'))
+  \     . ' --fix %t',
+  \ }

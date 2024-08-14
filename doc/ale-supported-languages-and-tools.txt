@@ -37,6 +37,9 @@ Notes:
 * ASM
   * `gcc`
   * `llvm-mc`
+* Astro
+  * `eslint`
+  * `prettier`
 * AVRA
   * `avra`
 * Awk
