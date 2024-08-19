@@ -715,7 +715,7 @@ for a full list of options.
 ALE supports renaming symbols in code such as variables or class names with
 the |ALERename| command.
 
-`ALEFileRename` will rename file and fix import paths (tsserver only).
+`:ALEFileRename` will rename file and fix import paths (tsserver only).
 
 |ALECodeAction| will execute actions on the cursor or applied to a visual
 range selection, such as automatically fixing errors.
@@ -778,8 +778,8 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
 
   ALE uses the following highlight groups for highlighting the sign column:
 
-  `ALESignColumnWithErrors`    -  Links to `error` by default.
-  `ALESignColumnWithoutErrors` -  Uses the value for `SignColumn` by default.
+  `:ALESignColumnWithErrors`    -  Links to `error` by default.
+  `:ALESignColumnWithoutErrors` -  Uses the value for `SignColumn` by default.
 
   The sign column color can only be changed globally in Vim. The sign column
   might produce unexpected results if editing different files in split
@@ -3803,11 +3803,11 @@ documented in additional help files.
   the errors or warnings it generated, even if both |g:ale_set_quickfix|
   and |g:ale_set_loclist| are set to `0`.
 
-  `ALEPrevious` and `ALENext` will stop at the top and bottom of a file, while
-  `ALEPreviousWrap` and `ALENextWrap` will wrap around the file to find
+  `:ALEPrevious` and `:ALENext` will stop at the top and bottom of a file, while
+  `:ALEPreviousWrap` and `:ALENextWrap` will wrap around the file to find
   the last or first warning or error in the file, respectively.
 
-  `ALEPrevious` and `ALENext` take optional flags arguments to custom their
+  `:ALEPrevious` and `:ALENext` take optional flags arguments to custom their
   behavior :
   `-wrap` enable wrapping around the file
   `-error`, `-warning` and `-info` enable jumping to errors, warnings or infos
@@ -3821,7 +3821,7 @@ documented in additional help files.
   ":ALENext -wrap -error -nosyle" to jump to the next error which is not a
   style error while going back to the beginning of the file if needed.
 
-  `ALEFirst` goes to the first error or warning in the buffer, while `ALELast`
+  `:ALEFirst` goes to the first error or warning in the buffer, while `:ALELast`
   goes to the last one.
 
   The following |<Plug>| mappings are defined for the commands: >
@@ -3858,16 +3858,16 @@ documented in additional help files.
 :ALEEnableBuffer                                             *:ALEEnableBuffer*
 :ALEDisableBuffer                                           *:ALEDisableBuffer*
 
-  `ALEToggle`, `ALEEnable`, and `ALEDisable` enable or disable ALE linting,
+  `:ALEToggle`, `:ALEEnable`, and `:ALEDisable` enable or disable ALE linting,
   including all of its autocmd events, loclist items, quickfix items, signs,
   current jobs, etc., globally. Executing any of these commands will change
   the |g:ale_enabled| variable.
 
   ALE can be disabled or enabled for only a single buffer with
-  `ALEToggleBuffer`, `ALEEnableBuffer`, and `ALEDisableBuffer`. Disabling ALE
+  `:ALEToggleBuffer`, `:ALEEnableBuffer`, and `:ALEDisableBuffer`. Disabling ALE
   for a buffer will not remove autocmd events, but will prevent ALE from
   checking for problems and reporting problems for whatever buffer the
-  `ALEDisableBuffer` or `ALEToggleBuffer` command is executed from. These
+  `:ALEDisableBuffer` or `:ALEToggleBuffer` command is executed from. These
   commands can be used for temporarily disabling ALE for a buffer. These
   commands will modify the |b:ale_enabled| variable.
 
@@ -3933,8 +3933,8 @@ documented in additional help files.
 :ALEReset                                                           *:ALEReset*
 :ALEResetBuffer                                               *:ALEResetBuffer*
 
-  `ALEReset` will remove all problems reported by ALE for all buffers.
-  `ALEResetBuffer` will remove all problems reported for a single buffer.
+  `:ALEReset` will remove all problems reported by ALE for all buffers.
+  `:ALEResetBuffer` will remove all problems reported for a single buffer.
 
   Either command will leave ALE linting enabled, so ALE will report problems
   when linting is performed again. See |ale-lint| for more information.
@@ -3950,7 +3950,7 @@ documented in additional help files.
 
 :ALEStopAllLSPs                                               *:ALEStopAllLSPs*
 
-  `ALEStopAllLSPs` will close and stop all channels and jobs for all LSP-like
+  `:ALEStopAllLSPs` will close and stop all channels and jobs for all LSP-like
   clients, including tsserver, remove all of the data stored for them, and
   delete all of the problems found for them, updating every linted buffer.
 
@@ -3959,7 +3959,7 @@ documented in additional help files.
 
 :ALEStopLSP `linter_name`                                         *:ALEStopLSP*
 
-  `ALEStopLSP` will stop a specific language server with a given linter name.
+  `:ALEStopLSP` will stop a specific language server with a given linter name.
   Completion is supported for currently running language servers. All language
   servers with the given name will be stopped across all buffers for all
   projects.
