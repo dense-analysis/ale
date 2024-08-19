@@ -3519,7 +3519,7 @@ documented in additional help files.
 ===============================================================================
 8. Commands/Keybinds                                             *ale-commands*
 
-ALEComplete                                                       *ALEComplete*
+:ALEComplete                                                     *:ALEComplete*
 
   Manually trigger LSP autocomplete and show the menu. Works only when called
   from insert mode. >
@@ -3530,7 +3530,7 @@ ALEComplete                                                       *ALEComplete*
 
     imap <C-Space> <Plug>(ale_complete)
 <
-ALEDocumentation                                             *ALEDocumentation*
+:ALEDocumentation                                           *:ALEDocumentation*
 
   Similar to the |ALEHover| command, retrieve documentation information for
   the symbol at the cursor. Documentation data will always be shown in a
@@ -3541,7 +3541,7 @@ ALEDocumentation                                             *ALEDocumentation*
   A plug mapping `<Plug>(ale_documentation)` is defined for this command.
 
 
-ALEFindReferences                                           *ALEFindReferences*
+:ALEFindReferences                                         *:ALEFindReferences*
 
   Find references in the codebase for the symbol under the cursor using the
   enabled LSP linters for the buffer. ALE will display a preview window
@@ -3576,7 +3576,7 @@ ALEFindReferences                                           *ALEFindReferences*
   nnoremap <silent> <Plug>(my_mapping) :ALEFindReferences -relative<Return>
 <
 
-ALEFix                                                                 *ALEFix*
+:ALEFix                                                               *:ALEFix*
 
   Fix problems with the current buffer. See |ale-fix| for more information.
 
@@ -3587,14 +3587,14 @@ ALEFix                                                                 *ALEFix*
   A plug mapping `<Plug>(ale_fix)` is defined for this command.
 
 
-ALEFixSuggest                                                   *ALEFixSuggest*
+:ALEFixSuggest                                                 *:ALEFixSuggest*
 
   Suggest tools that can be used to fix problems in the current buffer.
 
   See |ale-fix| for more information.
 
 
-ALEGoToDefinition `<options>`                               *ALEGoToDefinition*
+:ALEGoToDefinition `<options>`                             *:ALEGoToDefinition*
 
   Jump to the definition of a symbol under the cursor using the enabled LSP
   linters for the buffer. ALE will jump to a definition if an LSP server
@@ -3625,7 +3625,7 @@ ALEGoToDefinition `<options>`                               *ALEGoToDefinition*
   `<Plug>(ale_go_to_definition_in_vsplit)` - `:ALEGoToDefinition -vsplit`
 
 
-ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
+:ALEGoToTypeDefinition                                 *:ALEGoToTypeDefinition*
 
   This works similar to |ALEGoToDefinition| but instead jumps to the
   definition of a type of a symbol under the cursor. ALE will jump to a
@@ -3653,7 +3653,7 @@ ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
   `<Plug>(ale_go_to_type_definition_in_vsplit)` - `:ALEGoToTypeDefinition -vsplit`
 
 
-ALEGoToImplementation                                   *ALEGoToImplementation*
+:ALEGoToImplementation                                 *:ALEGoToImplementation*
 
   This works similar to |ALEGoToDefinition| but instead jumps to the
   implementation of symbol under the cursor. ALE will jump to a definition if
@@ -3680,7 +3680,7 @@ ALEGoToImplementation                                   *ALEGoToImplementation*
   `<Plug>(ale_go_to_implementation_in_vsplit)` - `:ALEGoToImplementation -vsplit`
 
 
-ALEHover                                                             *ALEHover*
+:ALEHover                                                           *:ALEHover*
 
   Print brief information about the symbol under the cursor, taken from any
   available LSP linters. There may be a small non-blocking delay before
@@ -3693,7 +3693,7 @@ ALEHover                                                             *ALEHover*
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
 
 
-ALEImport                                                           *ALEImport*
+:ALEImport                                                         *:ALEImport*
 
   Try to import a symbol using `tsserver` or a Language Server.
 
@@ -3710,12 +3710,12 @@ ALEImport                                                           *ALEImport*
   mapping should only be bound for normal mode.
 
 
-ALEOrganizeImports                                         *ALEOrganizeImports*
+:ALEOrganizeImports                                       *:ALEOrganizeImports*
 
   Organize imports using tsserver. Currently not implemented for LSPs.
 
 
-ALERename                                                           *ALERename*
+:ALERename                                                         *:ALERename*
 
   Rename a symbol using `tsserver` or a Language Server.
 
@@ -3726,12 +3726,12 @@ ALERename                                                           *ALERename*
   unless |g:ale_save_hidden| is `1`.
 
 
-ALEFileRename                                                   *ALEFileRename*
+:ALEFileRename                                                 *:ALEFileRename*
 
   Rename a file and fix imports using `tsserver`.
 
 
-ALECodeAction                                                   *ALECodeAction*
+:ALECodeAction                                                 *:ALECodeAction*
 
   Apply a code action via LSP servers or `tsserver`.
 
@@ -3743,12 +3743,12 @@ ALECodeAction                                                   *ALECodeAction*
   refactors. A menu will be shown to select code action to apply.
 
 
-ALERepeatSelection                                         *ALERepeatSelection*
+:ALERepeatSelection                                       *:ALERepeatSelection*
 
   Repeat the last selection displayed in the preview window.
 
 
-ALESymbolSearch `<query>`                                     *ALESymbolSearch*
+:ALESymbolSearch `<query>`                                   *:ALESymbolSearch*
 
   Search for symbols in the workspace, taken from any available LSP linters.
 
@@ -3758,8 +3758,8 @@ ALESymbolSearch `<query>`                                     *ALESymbolSearch*
   You can add `-relative` to the command to view results with relatives paths,
   instead of absolute paths.
 
-                                                                     *:ALELint*
-ALELint                                                               *ALELint*
+
+:ALELint                                                             *:ALELint*
 
   Run ALE once for the current buffer. This command can be used to run ALE
   manually, instead of automatically, if desired.
@@ -3770,15 +3770,15 @@ ALELint                                                               *ALELint*
   A plug mapping `<Plug>(ale_lint)` is defined for this command.
 
 
-ALELintStop                                                       *ALELintStop*
+:ALELintStop                                                 *:ALELintStop*
 
   Stop any currently running jobs for checking the current buffer.
 
   Any problems from previous linter results will continue to be shown.
 
 
-ALEPopulateQuickfix                                       *ALEPopulateQuickfix*
-ALEPopulateLocList                                         *ALEPopulateLocList*
+:ALEPopulateQuickfix                                     *:ALEPopulateQuickfix*
+:ALEPopulateLocList                                       *:ALEPopulateLocList*
 
   Manually populate the |quickfix| or |location-list| and show the
   corresponding list. Useful when you have other uses for both the |quickfix|
@@ -3791,12 +3791,12 @@ ALEPopulateLocList                                         *ALEPopulateLocList*
   With these settings, ALE will still run checking and display it with signs,
   highlighting, and other output described in |ale-lint-file-linters|.
 
-ALEPrevious                                                       *ALEPrevious*
-ALEPreviousWrap                                               *ALEPreviousWrap*
-ALENext                                                               *ALENext*
-ALENextWrap                                                       *ALENextWrap*
-ALEFirst                                                             *ALEFirst*
-ALELast                                                               *ALELast*
+:ALEPrevious                                                     *:ALEPrevious*
+:ALEPreviousWrap                                             *:ALEPreviousWrap*
+:ALENext                                                             *:ALENext*
+:ALENextWrap                                                     *:ALENextWrap*
+:ALEFirst                                                           *:ALEFirst*
+:ALELast                                                             *:ALELast*
                                                       *ale-navigation-commands*
 
   Move between warnings or errors in a buffer. ALE will only navigate between
@@ -3851,12 +3851,12 @@ ALELast                                                               *ALELast*
   nmap <silent> <C-j> <Plug>(ale_next_wrap)
 <
 
-ALEToggle                                                           *ALEToggle*
-ALEEnable                                                           *ALEEnable*
-ALEDisable                                                         *ALEDisable*
-ALEToggleBuffer                                               *ALEToggleBuffer*
-ALEEnableBuffer                                               *ALEEnableBuffer*
-ALEDisableBuffer                                             *ALEDisableBuffer*
+:ALEToggle                                                         *:ALEToggle*
+:ALEEnable                                                         *:ALEEnable*
+:ALEDisable                                                       *:ALEDisable*
+:ALEToggleBuffer                                             *:ALEToggleBuffer*
+:ALEEnableBuffer                                             *:ALEEnableBuffer*
+:ALEDisableBuffer                                           *:ALEDisableBuffer*
 
   `ALEToggle`, `ALEEnable`, and `ALEDisable` enable or disable ALE linting,
   including all of its autocmd events, loclist items, quickfix items, signs,
@@ -3887,8 +3887,8 @@ ALEDisableBuffer                                             *ALEDisableBuffer*
   For removing problems reported by ALE, but leaving ALE enabled, see
   |ALEReset| and |ALEResetBuffer|.
 
-                                                                   *:ALEDetail*
-ALEDetail                                                           *ALEDetail*
+
+:ALEDetail                                                         *:ALEDetail*
 
   Show the full linter message for the problem nearest to the cursor on the
   given line in the preview window. The preview window can be easily closed
@@ -3901,9 +3901,8 @@ ALEDetail                                                           *ALEDetail*
   A plug mapping `<Plug>(ale_detail)` is defined for this command.
 
 
-                                                                     *:ALEInfo*
-ALEInfo                                                               *ALEInfo*
-                                                                *ALEInfoToFile*
+:ALEInfo                                                             *:ALEInfo*
+                                                               *:ALEInfoToFile*
 
   Print runtime information about ALE, including the values of global and
   buffer-local settings for ALE, the linters that are enabled, the commands
@@ -3931,8 +3930,8 @@ ALEInfo                                                               *ALEInfo*
   The filename works just like |:w|.
 
 
-ALEReset                                                             *ALEReset*
-ALEResetBuffer                                                 *ALEResetBuffer*
+:ALEReset                                                           *:ALEReset*
+:ALEResetBuffer                                               *:ALEResetBuffer*
 
   `ALEReset` will remove all problems reported by ALE for all buffers.
   `ALEResetBuffer` will remove all problems reported for a single buffer.
@@ -3949,7 +3948,7 @@ ALEResetBuffer                                                 *ALEResetBuffer*
   |ALEDisableBuffer|.
 
 
-ALEStopAllLSPs                                                 *ALEStopAllLSPs*
+:ALEStopAllLSPs                                               *:ALEStopAllLSPs*
 
   `ALEStopAllLSPs` will close and stop all channels and jobs for all LSP-like
   clients, including tsserver, remove all of the data stored for them, and
@@ -3958,7 +3957,7 @@ ALEStopAllLSPs                                                 *ALEStopAllLSPs*
   This command can be used when LSP clients mess up and need to be restarted.
 
 
-ALEStopLSP `linter_name`                                           *ALEStopLSP*
+:ALEStopLSP `linter_name`                                         *:ALEStopLSP*
 
   `ALEStopLSP` will stop a specific language server with a given linter name.
   Completion is supported for currently running language servers. All language
