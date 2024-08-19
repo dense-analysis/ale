@@ -2055,7 +2055,7 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
 
   |ALEError|        - Items with `'type': 'E'`
   |ALEWarning|      - Items with `'type': 'W'`
-  |ALEInfo.|        - Items with `'type': 'I'`
+  |ALEInfo|         - Items with `'type': 'I'`
   |ALEStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
   |ALEStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
 
@@ -2549,7 +2549,7 @@ ALEErrorSignLineNr                                         *ALEErrorSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEInfo                                                              *ALEInfo.*
+ALEInfo                                                              *ALEInfo*
                                                             *ALEInfo-highlight*
   Default: `highlight link ALEInfo ALEWarning`
 
