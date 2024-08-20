@@ -149,7 +149,7 @@ ALE offers several options for controlling which linters are run.
 * Aliasing filetypes for linters       - |g:ale_linter_aliases|
 * Only running linters you asked for.  - |g:ale_linters_explicit|
 * Disabling only a subset of linters.  - |g:ale_linters_ignore|
-* Disabling LSP linters and `tsserver`.  - |g:ale_disable_lsp|
+* Disabling LSP linters and |tsserver|.  - |g:ale_disable_lsp|
 
 You can stop ALE any currently running linters with the `:ALELintStop` command.
 Any existing problems will be kept.
@@ -449,7 +449,7 @@ server, etc. See |ale-lint-other-machines|.
 ALE offers some support for integrating with Language Server Protocol (LSP)
 servers. LSP linters can be used in combination with any other linter, and
 will automatically connect to LSP servers when needed. ALE also supports
-`tsserver` for TypeScript, which uses a different but very similar protocol.
+|tsserver| for TypeScript, which uses a different but very similar protocol.
 
 If you want to use another plugin for LSP features and tsserver, you can use
 the |g:ale_disable_lsp| setting to disable ALE's own LSP integrations, or
@@ -700,7 +700,7 @@ settings. For example: >
 <
 
 Documentation for symbols at the cursor can be retrieved using the
-`:ALEDocumentation` command. This command is only available for `tsserver`.
+`:ALEDocumentation` command. This command is only available for |tsserver|.
 
 -------------------------------------------------------------------------------
 5.7 Symbol Search                                           *ale-symbol-search*
@@ -1013,7 +1013,7 @@ g:ale_disable_lsp                                           *g:ale_disable_lsp*
   When this option is set to `'auto'`, ALE will automatically disable linters
   that it detects as having already been configured with the nvim-lspconfig
   plugin. When this option is set to `1`, ALE ignores all linters powered by
-  LSP, and also `tsserver`.
+  LSP, and also |tsserver|.
 
   Any linters that are disabled will also not be usable for LSP functionality
   other than just linting.
@@ -2030,7 +2030,7 @@ g:ale_set_balloons_legacy_echo                 *g:ale_set_balloons_legacy_echo*
   Default: not set
 
   If set to `1`, moving your mouse over documents in Vim will make ALE ask
-  `tsserver` or `LSP` servers for information about the symbol where the mouse
+  |tsserver| or `LSP` servers for information about the symbol where the mouse
   cursor is, and print that information into Vim's echo line. This is an
   option for supporting older versions of Vim which do not properly support
   balloons in an asynchronous manner.
@@ -3536,7 +3536,7 @@ documented in additional help files.
   the symbol at the cursor. Documentation data will always be shown in a
   preview window, no matter how small the documentation content is.
 
-  NOTE: This command is only available for `tsserver`.
+  NOTE: This command is only available for |tsserver|.
 
   A plug mapping `<Plug>(ale_documentation)` is defined for this command.
 
@@ -3576,7 +3576,7 @@ documented in additional help files.
   nnoremap <silent> <Plug>(my_mapping) :ALEFindReferences -relative<Return>
 <
 
-:ALEFix                                                               *:ALEFix*
+:ALEFix [linter]                                                      *:ALEFix*
 
   Fix problems with the current buffer. See |ale-fix| for more information.
 
@@ -3695,7 +3695,7 @@ documented in additional help files.
 
 :ALEImport                                                         *:ALEImport*
 
-  Try to import a symbol using `tsserver` or a Language Server.
+  Try to import a symbol using |tsserver| or a Language Server.
 
   ALE will look for completions for the word at the cursor which contain
   additional text edits that possible insert lines to import the symbol. The
@@ -3728,12 +3728,12 @@ documented in additional help files.
 
 :ALEFileRename                                                 *:ALEFileRename*
 
-  Rename a file and fix imports using `tsserver`.
+  Rename a file and fix imports using |tsserver|.
 
 
 :ALECodeAction                                                 *:ALECodeAction*
 
-  Apply a code action via LSP servers or `tsserver`.
+  Apply a code action via LSP servers or |tsserver|.
 
   If there is an error present on a line that can be fixed, ALE will
   automatically fix a line, unless there are multiple possible code fixes to
@@ -3748,7 +3748,7 @@ documented in additional help files.
   Repeat the last selection displayed in the preview window.
 
 
-:ALESymbolSearch <query>                                   *:ALESymbolSearch*
+:ALESymbolSearch [query]                                   *:ALESymbolSearch*
 
   Search for symbols in the workspace, taken from any available LSP linters.
 
@@ -3957,7 +3957,7 @@ documented in additional help files.
   This command can be used when LSP clients mess up and need to be restarted.
 
 
-:ALEStopLSP <linter_name>                                         *:ALEStopLSP*
+:ALEStopLSP [linter]                                         *:ALEStopLSP*
 
   `:ALEStopLSP` will stop a specific language server with a given linter name.
   Completion is supported for currently running language servers. All language
