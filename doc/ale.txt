@@ -54,9 +54,9 @@ ALE supports the following key features for linting:
 6. Using |echo| to show error messages when the cursor moves.
 7. Setting syntax highlights for errors.
 
-ALE can fix problems with files with the |ALEFix| command, using the same job
+ALE can fix problems with files with the `:ALEFix` command, using the same job
 control functionality used for checking for problems. Try using the
-|ALEFixSuggest| command for browsing tools that can be used to fix problems
+`:ALEFixSuggest` command for browsing tools that can be used to fix problems
 for the current buffer.
 
 If you are interested in contributing to the development of ALE, read the
@@ -81,7 +81,7 @@ for |ale#linter#Define()|.
 
 Without any configuration, ALE will attempt to check all of the code for every
 file you open in Vim with all available tools by default. To see what ALE
-is doing, and what options have been set, try using the |:ALEInfo| command.
+is doing, and what options have been set, try using the `:ALEInfo` command.
 
 Most of the linters ALE runs will check the Vim buffer you are editing instead
 of the file on disk. This allows you to check your code for errors before you
@@ -93,7 +93,7 @@ circumstances, which can be configured with the associated options.
 * When you open a new or modified buffer.  - |g:ale_lint_on_enter|
 * When you save a buffer.                  - |g:ale_lint_on_save|
 * When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
-* If ALE is used to check code manually.   - |:ALELint|
+* If ALE is used to check code manually.   - `:ALELint`
 
                                                  *ale-lint-settings-on-startup*
 
@@ -116,7 +116,7 @@ circumstances.
 * When you open a new or modified buffer.  - |g:ale_lint_on_enter|
 * When you save a buffer.                  - |g:ale_lint_on_save|
 * When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
-* If ALE is used to check code manually.   - |:ALELint|
+* If ALE is used to check code manually.   - `:ALELint`
 
 ALE will report problems with your code in the following ways, listed with
 their relevant options.
@@ -151,7 +151,7 @@ ALE offers several options for controlling which linters are run.
 * Disabling only a subset of linters.  - |g:ale_linters_ignore|
 * Disabling LSP linters and `tsserver`.  - |g:ale_disable_lsp|
 
-You can stop ALE any currently running linters with the |ALELintStop| command.
+You can stop ALE any currently running linters with the `:ALELintStop` command.
 Any existing problems will be kept.
 
 -------------------------------------------------------------------------------
@@ -323,14 +323,14 @@ A plugin might integrate its own checks with ALE like so: >
 ===============================================================================
 4. Fixing Problems                                                    *ale-fix*
 
-ALE can fix problems with files with the |ALEFix| command. |ALEFix|
+ALE can fix problems with files with the `:ALEFix` command. `:ALEFix`
 accepts names of fixers to be applied as arguments. Alternatively,
 when no arguments are provided, the variable |g:ale_fixers| will be
 read for getting a |List| of commands for filetypes, split on `.`, and
 the functions named in |g:ale_fixers| will be executed for fixing the
 errors.
 
-The |ALEFixSuggest| command can be used to suggest tools that be used to
+The `:ALEFixSuggest` command can be used to suggest tools that be used to
 fix problems for the current buffer.
 
 The values for `g:ale_fixers` can be a list of |String|, |Funcref|, or
@@ -348,7 +348,7 @@ argument `lines`. Functions should name two arguments if the `lines` argument
 is desired. This is required to avoid unnecessary copying of the lines of
 the buffers being checked.
 
-When a |Dictionary| is returned for an |ALEFix| callback, the following keys
+When a |Dictionary| is returned for an `:ALEFix` callback, the following keys
 are supported for running the commands.
 
   `cwd`                 An optional |String| for setting the working directory
@@ -424,7 +424,7 @@ files, a |List| may be used for configuring the fixers instead.
 
   ALEFix
 <
-For convenience, a plug mapping is defined for |ALEFix|, so you can set up a
+For convenience, a plug mapping is defined for `:ALEFix`, so you can set up a
 keybind easily for fixing files. >
 
   " Bind F8 to fixing problems with ALE
@@ -436,7 +436,7 @@ by default.
 |g:ale_fix_on_save| - Fix files when they are saved.
 
 Fixers can be disabled on save with |g:ale_fix_on_save_ignore|. They will
-still be run when you manually run |ALEFix|.
+still be run when you manually run `:ALEFix`.
 
 Fixers can be run on another machines, just like linters, such as fixers run
 from a Docker container, running in a virtual machine, running a remote
@@ -457,8 +457,8 @@ ignore particular linters with |g:ale_linters_ignore|.
 
 If for any reason you want to stop a language server ALE starts, such as when
 a project configuration has significantly changed, or new files have been
-added the language server isn't aware of, use either |ALEStopLSP| or
-|ALEStopAllLSPs| to stop the server until ALE automatically starts it again.
+added the language server isn't aware of, use either `:ALEStopLSP` or
+`:ALEStopAllLSPs` to stop the server until ALE automatically starts it again.
 
 -------------------------------------------------------------------------------
 5.1 Completion                                                 *ale-completion*
@@ -549,7 +549,7 @@ number of items can be controlled with |g:ale_completion_max_suggestions|.
 If you don't like some of the suggestions you see, you can filter them out
 with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
 
-The |ALEComplete| command can be used to show completion suggestions manually,
+The `:ALEComplete` command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
 
@@ -559,7 +559,7 @@ Disabling automatic imports can drop some or all completion items from
 some LSP servers (e.g. eclipselsp).
 
 You can manually request imports for symbols at the cursor with the
-|ALEImport| command. The word at the cursor must be an exact match for some
+`:ALEImport` command. The word at the cursor must be an exact match for some
 potential completion result which includes additional text to insert into the
 current buffer, which ALE will assume is code for an import line. This command
 can be useful when your code already contains something you need to import.
@@ -626,7 +626,7 @@ would like to use. An example here shows the available options for symbols  >
 
 ALE supports jumping to the files and locations where symbols are defined
 through any enabled LSP linters. The locations ALE will jump to depend on the
-information returned by LSP servers. The |ALEGoToDefinition| command will jump
+information returned by LSP servers. The `:ALEGoToDefinition` command will jump
 to the definition of symbols under the cursor. See the documentation for the
 command for configuring how the location will be displayed.
 
@@ -638,7 +638,7 @@ set to `0`.
 
 ALE supports jumping to the files and locations where symbols' types are
 defined through any enabled LSP linters. The locations ALE will jump to depend
-on the information returned by LSP servers. The |ALEGoToTypeDefinition|
+on the information returned by LSP servers. The `:ALEGoToTypeDefinition`
 command will jump to the definition of symbols under the cursor. See the
 documentation for the command for configuring how the location will be
 displayed.
@@ -648,7 +648,7 @@ displayed.
 
 ALE supports jumping to the files and locations where symbols are implemented
 through any enabled LSP linters. The locations ALE will jump to depend on the
-information returned by LSP servers. The |ALEGoToImplementation| command will
+information returned by LSP servers. The `:ALEGoToImplementation` command will
 jump to the implementation of symbols under the cursor. See the documentation
 for the command for configuring how the location will be displayed.
 
@@ -656,7 +656,7 @@ for the command for configuring how the location will be displayed.
 5.5 Find References                                       *ale-find-references*
 
 ALE supports finding references for symbols though any enabled LSP linters
-with the |ALEFindReferences| command. See the documentation for the command
+with the `:ALEFindReferences` command. See the documentation for the command
 for a full list of options.
 
 -------------------------------------------------------------------------------
@@ -665,7 +665,7 @@ for a full list of options.
 ALE supports "hover" information for printing brief information about symbols
 at the cursor taken from LSP linters. The following commands are supported:
 
-|ALEHover| - Print information about the symbol at the cursor.
+`:ALEHover` - Print information about the symbol at the cursor.
 
 Truncated information will be displayed when the cursor rests on a symbol by
 default, as long as there are no problems on the same line. You can disable
@@ -700,24 +700,24 @@ settings. For example: >
 <
 
 Documentation for symbols at the cursor can be retrieved using the
-|ALEDocumentation| command. This command is only available for `tsserver`.
+`:ALEDocumentation` command. This command is only available for `tsserver`.
 
 -------------------------------------------------------------------------------
 5.7 Symbol Search                                           *ale-symbol-search*
 
 ALE supports searching for workspace symbols via LSP linters with the
-|ALESymbolSearch| command. See the documentation for the command
+`:ALESymbolSearch` command. See the documentation for the command
 for a full list of options.
 
 -------------------------------------------------------------------------------
 5.8 Refactoring: Rename, Actions                                 *ale-refactor*
 
 ALE supports renaming symbols in code such as variables or class names with
-the |ALERename| command.
+the `:ALERename` command.
 
 `:ALEFileRename` will rename file and fix import paths (tsserver only).
 
-|ALECodeAction| will execute actions on the cursor or applied to a visual
+`:ALECodeAction` will execute actions on the cursor or applied to a visual
 range selection, such as automatically fixing errors.
 
 Actions will appear in the right click mouse menu by default for GUI versions
@@ -813,7 +813,7 @@ g:ale_command_wrapper                                   *g:ale_command_wrapper*
     " Prefix all commands with nice.
     let g:ale_command_wrapper = 'nice -n5'
 <
-  Use the |ALEInfo| command to view the commands that are run. All of the
+  Use the `:ALEInfo` command to view the commands that are run. All of the
   arguments for commands will be put on the end of the wrapped command by
   default. A `%*` marker can be used to spread the arguments in the wrapped
   command. >
@@ -993,7 +993,7 @@ g:ale_default_navigation                             *g:ale_default_navigation*
   Default: `'buffer'`
 
   The default method for navigating away from the current buffer to another
-  buffer, such as for |ALEFindReferences|, or |ALEGoToDefinition|.
+  buffer, such as for `:ALEFindReferences` or `:ALEGoToDefinition`.
 
 
 g:ale_detail_to_floating_preview             *g:ale_detail_to_floating_preview*
@@ -1125,7 +1125,7 @@ g:ale_enabled                                                   *g:ale_enabled*
 
   When set to `0`, this option will completely disable ALE, such that no
   error checking will be performed, etc. ALE can be toggled on and off with
-  the |ALEToggle| command, which changes this option.
+  the `:ALEToggle` command, which changes this option.
 
   ALE can be disabled in each buffer by setting `let b:ale_enabled = 0`
   Disabling ALE based on filename patterns can be accomplished by setting
@@ -1289,7 +1289,7 @@ g:ale_history_enabled                                   *g:ale_history_enabled*
 
   When set to `1`, ALE will remember the last few commands which were run
   for every buffer which is open. This information can be viewed with the
-  |ALEInfo| command. The size of the buffer can be controlled with the
+  `:ALEInfo` command. The size of the buffer can be controlled with the
   |g:ale_max_buffer_history_size| option.
 
   This option can be disabled if storing a command history is not desired.
@@ -1302,7 +1302,7 @@ g:ale_history_log_output                             *g:ale_history_log_output*
 
   When set to `1`, ALE will store the output of commands which have completed
   successfully in the command history, and the output will be displayed when
-  using |ALEInfo|.
+  using `:ALEInfo`.
 
   |g:ale_history_enabled| must be set to `1` for this output to be stored or
   printed.
@@ -1354,7 +1354,7 @@ g:ale_info_default_mode                               *g:ale_info_default_mode*
   Type: |String|
   Default: `'preview'`
 
-  Changes the default mode used for |ALEInfo|. See documentation for |ALEInfo|
+  Changes the default mode used for `:ALEInfo`. See documentation for `:ALEInfo`
   for more information.
 
 
@@ -1560,7 +1560,7 @@ g:ale_filename_mappings                               *g:ale_filename_mappings*
   Default: `{}`
 
   Either a |Dictionary| mapping a linter or fixer name, as displayed in
-  |:ALEInfo|, to a |List| of two-item |List|s for filename mappings, or just a
+  `:ALEInfo`, to a |List| of two-item |List|s for filename mappings, or just a
   |List| of two-item |List|s. When given some paths to files, the value of
   this setting will be used to convert filenames on a local file system to
   filenames on some remote file system, such as paths in a Docker image,
@@ -1822,7 +1822,7 @@ g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
   Default: `20`
 
   This setting controls the maximum number of commands which will be stored in
-  the command history used for |ALEInfo|. Command history will be rotated in
+  the command history used for `:ALEInfo`. Command history will be rotated in
   a FIFO manner. If set to a number <= 0, then the history will be
   continuously set to an empty |List|.
 
@@ -1950,7 +1950,7 @@ g:ale_rename_tsserver_find_in_comments *g:ale_rename_tsserver_find_in_comments*
   Default: `0`
 
   If enabled, this option will tell tsserver to find and replace text in
-  comments when calling |ALERename|. It can be enabled by settings the value
+  comments when calling `:ALERename`. It can be enabled by settings the value
   to `1`.
 
 
@@ -1960,7 +1960,7 @@ g:ale_rename_tsserver_find_in_strings   *g:ale_rename_tsserver_find_in_strings*
   Default: `0`
 
   If enabled, this option will tell tsserver to find and replace text in
-  strings when calling |ALERename|. It can be enabled by settings the value to
+  strings when calling `:ALERename`. It can be enabled by settings the value to
   `1`.
 
 
@@ -1988,8 +1988,8 @@ g:ale_save_hidden                                           *g:ale_save_hidden*
   Default: `0`
 
   When set to `1`, save buffers when 'hidden' is set when applying code
-  actions or rename operations, such as through |ALERename| or
-  |ALEOrganizeImports|.
+  actions or rename operations, such as through `:ALERename` or
+  `:ALEOrganizeImports`.
 
 
 g:ale_set_balloons                                         *g:ale_set_balloons*
@@ -2098,7 +2098,7 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   This feature should not be used in combination with tools for searching for
   matches and commands like |:cfdo|, as ALE will replace the quickfix list
   pretty frequently. If you wish to use such tools, you should populate the
-  loclist or use |ALEPopulateQuickfix| instead.
+  loclist or use `:ALEPopulateQuickfix` instead.
 
 
 g:ale_set_signs                                               *g:ale_set_signs*
@@ -3532,7 +3532,7 @@ documented in additional help files.
 <
 :ALEDocumentation                                           *:ALEDocumentation*
 
-  Similar to the |ALEHover| command, retrieve documentation information for
+  Similar to the `:ALEHover` command, retrieve documentation information for
   the symbol at the cursor. Documentation data will always be shown in a
   preview window, no matter how small the documentation content is.
 
@@ -3564,7 +3564,7 @@ documented in additional help files.
   You can add `-relative` to the command to view results with relatives paths,
   instead of absolute paths. This option has no effect if `-quickfix` is used.
 
-  The selection can be opened again with the |ALERepeatSelection| command.
+  The selection can be opened again with the `:ALERepeatSelection` command.
 
   You can jump back to the position you were at before going to a reference of
   something with jump motions like CTRL-O. See |jump-motions|.
@@ -3594,7 +3594,7 @@ documented in additional help files.
   See |ale-fix| for more information.
 
 
-:ALEGoToDefinition <options>                             *:ALEGoToDefinition*
+:ALEGoToDefinition [options]                             *:ALEGoToDefinition*
 
   Jump to the definition of a symbol under the cursor using the enabled LSP
   linters for the buffer. ALE will jump to a definition if an LSP server
@@ -3625,9 +3625,9 @@ documented in additional help files.
   `<Plug>(ale_go_to_definition_in_vsplit)` - `:ALEGoToDefinition -vsplit`
 
 
-:ALEGoToTypeDefinition                                 *:ALEGoToTypeDefinition*
+:ALEGoToTypeDefinition [options]                       *:ALEGoToTypeDefinition*
 
-  This works similar to |ALEGoToDefinition| but instead jumps to the
+  This works similar to `:ALEGoToDefinition` but instead jumps to the
   definition of a type of a symbol under the cursor. ALE will jump to a
   definition if an LSP server provides a location to jump to. Otherwise, ALE
   will do nothing.
@@ -3653,9 +3653,9 @@ documented in additional help files.
   `<Plug>(ale_go_to_type_definition_in_vsplit)` - `:ALEGoToTypeDefinition -vsplit`
 
 
-:ALEGoToImplementation                                 *:ALEGoToImplementation*
+:ALEGoToImplementation [options]                       *:ALEGoToImplementation*
 
-  This works similar to |ALEGoToDefinition| but instead jumps to the
+  This works similar to `:ALEGoToDefinition` but instead jumps to the
   implementation of symbol under the cursor. ALE will jump to a definition if
   an LSP server provides a location to jump to. Otherwise, ALE will do nothing.
 
@@ -3717,13 +3717,13 @@ documented in additional help files.
 
 :ALERename                                                         *:ALERename*
 
-  Rename a symbol using `tsserver` or a Language Server.
+  Rename a symbol using |tsserver| or a Language Server.
 
   The symbol where the cursor is resting will be the symbol renamed, and a
   prompt will open to request a new name.
 
   The rename operation will not save modified buffers when 'hidden' is on
-  unless |g:ale_save_hidden| is `1`.
+  unless |g:ale_save_hidden| is 1.
 
 
 :ALEFileRename                                                 *:ALEFileRename*
@@ -3877,15 +3877,15 @@ documented in additional help files.
 
   The following plug mappings are defined, for conveniently defining keybinds:
 
-  |ALEToggle|        - `<Plug>(ale_toggle)`
-  |ALEEnable|        - `<Plug>(ale_enable)`
-  |ALEDisable|       - `<Plug>(ale_disable)`
-  |ALEToggleBuffer|  - `<Plug>(ale_toggle_buffer)`
-  |ALEEnableBuffer|  - `<Plug>(ale_enable_buffer)`
-  |ALEDisableBuffer| - `<Plug>(ale_disable_buffer)`
+  `:ALEToggle`        - `<Plug>(ale_toggle)`
+  `:ALEEnable`        - `<Plug>(ale_enable)`
+  `:ALEDisable`       - `<Plug>(ale_disable)`
+  `:ALEToggleBuffer`  - `<Plug>(ale_toggle_buffer)`
+  `:ALEEnableBuffer`  - `<Plug>(ale_enable_buffer)`
+  `:ALEDisableBuffer` - `<Plug>(ale_disable_buffer)`
 
   For removing problems reported by ALE, but leaving ALE enabled, see
-  |ALEReset| and |ALEResetBuffer|.
+  `:ALEReset` and `:ALEResetBuffer`.
 
 
 :ALEDetail                                                         *:ALEDetail*
@@ -3941,11 +3941,11 @@ documented in additional help files.
 
   The following plug mappings are defined, for conveniently defining keybinds:
 
-  |ALEReset|       - `<Plug>(ale_reset)`
-  |ALEResetBuffer| - `<Plug>(ale_reset_buffer)`
+  `:ALEReset`       - `<Plug>(ale_reset)`
+  `:ALEResetBuffer` - `<Plug>(ale_reset_buffer)`
 
-  ALE can be disabled globally or for a buffer with |ALEDisable| or
-  |ALEDisableBuffer|.
+  ALE can be disabled globally or for a buffer with `:ALEDisable` or
+  `:ALEDisableBuffer`.
 
 
 :ALEStopAllLSPs                                               *:ALEStopAllLSPs*
@@ -4279,7 +4279,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                                                            *ale-loclist-format*
                          `text` - This error message is required.
                          `detail` - An optional, more descriptive message.
-                           This message can be displayed with the |ALEDetail|
+                           This message can be displayed with the `:ALEDetail`
                            command instead of the message for `text`, if set.
                          `lnum` - The line number is required. Any strings
                            will be automatically converted to numbers by
@@ -4417,7 +4417,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          run only when events occur against the file on disk,
                          including |g:ale_lint_on_enter| and
                          |g:ale_lint_on_save|. Linters where this option
-                         evaluates to `1` will also be run when the |ALELint|
+                         evaluates to `1` will also be run when the `:ALELint`
                          command is run.
 
                          When this option is evaluates to `1`, ALE will behave
@@ -4727,7 +4727,7 @@ ALECompletePost                                       *ALECompletePost-autocmd*
 
   This |User| autocmd is triggered after ALE inserts an item on
   |CompleteDone|. This event can be used to run commands after a buffer
-  is changed by ALE as the result of completion. For example, |ALEFix| can
+  is changed by ALE as the result of completion. For example, `:ALEFix` can
   be configured to run automatically when completion is done: >
 
   augroup FixAfterComplete
