@@ -41,7 +41,7 @@ CONTENTS                                                         *ale-contents*
 ALE provides the means to run linters asynchronously in Vim in a variety of
 languages and tools. ALE sends the contents of buffers to linter programs
 using the |job-control| features available in Vim 8 and NeoVim. For Vim 8,
-Vim must be compiled with the |job| and |channel| and |timers| features
+Vim must be compiled with the |+job| and |+channel| and |+timers| features
 as a minimum.
 
 ALE supports the following key features for linting:
@@ -49,9 +49,9 @@ ALE supports the following key features for linting:
 1. Running linters when text is changed.
 2. Running linters when files are opened.
 3. Running linters when files are saved. (When a global flag is set.)
-4. Populating the |loclist| with warning and errors.
+4. Populating the |location-list| with warning and errors.
 5. Setting |signs| with warnings and errors for error markers.
-6. Using |echo| to show error messages when the cursor moves.
+6. Using `:echo` to show error messages when the cursor moves.
 7. Setting syntax highlights for errors.
 
 ALE can fix problems with files with the `:ALEFix` command, using the same job
@@ -2078,9 +2078,9 @@ g:ale_set_loclist                                           *g:ale_set_loclist*
   Type: |Number|
   Default: `1`
 
-  When this option is set to `1`, the |loclist| will be populated with any
-  warnings and errors which are found by ALE. This feature can be used to
-  implement jumping between errors through typical use of |lnext| and |lprev|.
+  When this option is set to `1`, the |location-list| will be populated with
+  any warnings and errors which are found by ALE. This feature can be used to
+  implement jumping between errors through typical use of `:lnext` and `:lprev`.
 
 
 g:ale_set_quickfix                                         *g:ale_set_quickfix*
@@ -2089,8 +2089,8 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   Default: `0`
 
   When this option is set to `1`, the |quickfix| list will be populated with
-  any problems which are found by ALE, instead of the |loclist|. The loclist
-  will never be populated when this option is on.
+  any problems which are found by ALE, instead of the |location-list|. The
+  loclist will never be populated when this option is on.
 
   Problems from every buffer ALE has checked will be included in the quickfix
   list, which can be checked with |:copen|. Problems will be de-duplicated.
@@ -4263,7 +4263,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          |setqflist()|. The |List| will be sorted by line and
                          then column order so it can be searched with a binary
                          search by in future before being passed on to the
-                         |loclist|, etc.
+                         |location-list|, etc.
 
                          This argument is required, unless the linter is an
                          LSP linter. In which case, this argument must not be
