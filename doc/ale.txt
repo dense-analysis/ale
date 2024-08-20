@@ -2516,14 +2516,14 @@ g:ale_windows_node_executable_path         *g:ale_windows_node_executable_path*
 -------------------------------------------------------------------------------
 6.1. Highlights                                                *ale-highlights*
 
-ALEError                                                             *ALEError*
+ALEError                                                          *hl-ALEError*
 
   Default: `highlight link ALEError SpellBad`
 
   The highlight for highlighted errors. See |g:ale_set_highlights|.
 
 
-ALEErrorLine                                                     *ALEErrorLine*
+ALEErrorLine                                                  *hl-ALEErrorLine*
 
   Default: Undefined
 
@@ -2533,14 +2533,14 @@ ALEErrorLine                                                     *ALEErrorLine*
   See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
-ALEErrorSign                                                     *ALEErrorSign*
+ALEErrorSign                                                  *hl-ALEErrorSign*
 
   Default: `highlight link ALEErrorSign error`
 
   The highlight for error signs. See |g:ale_set_signs|.
 
 
-ALEErrorSignLineNr                                         *ALEErrorSignLineNr*
+ALEErrorSignLineNr                                      *hl-ALEErrorSignLineNr*
 
   Default: `highlight link ALEErrorSignLineNr CursorLineNr`
 
@@ -2549,21 +2549,21 @@ ALEErrorSignLineNr                                         *ALEErrorSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEInfo                                                              *ALEInfo*
+ALEInfo                                                           *hl-ALEInfo*
                                                             *ALEInfo-highlight*
   Default: `highlight link ALEInfo ALEWarning`
 
   The highlight for highlighted info messages. See |g:ale_set_highlights|.
 
 
-ALEInfoSign                                                       *ALEInfoSign*
+ALEInfoSign                                                    *hl-ALEInfoSign*
 
   Default: `highlight link ALEInfoSign ALEWarningSign`
 
   The highlight for info message signs. See |g:ale_set_signs|.
 
 
-ALEInfoLine                                                       *ALEInfoLine*
+ALEInfoLine                                                    *hl-ALEInfoLine*
 
   Default: Undefined
 
@@ -2573,7 +2573,7 @@ ALEInfoLine                                                       *ALEInfoLine*
   See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
-ALEInfoSignLineNr                                           *ALEInfoSignLineNr*
+ALEInfoSignLineNr                                        *hl-ALEInfoSignLineNr*
 
   Default: `highlight link ALEInfoSignLineNr CursorLineNr`
 
@@ -2582,21 +2582,21 @@ ALEInfoSignLineNr                                           *ALEInfoSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEStyleError                                                   *ALEStyleError*
+ALEStyleError                                                *hl-ALEStyleError*
 
   Default: `highlight link ALEStyleError ALEError`
 
   The highlight for highlighted style errors. See |g:ale_set_highlights|.
 
 
-ALEStyleErrorSign                                           *ALEStyleErrorSign*
+ALEStyleErrorSign                                        *hl-ALEStyleErrorSign*
 
   Default: `highlight link ALEStyleErrorSign ALEErrorSign`
 
   The highlight for style error signs. See |g:ale_set_signs|.
 
 
-ALEStyleErrorSignLineNr                               *ALEStyleErrorSignLineNr*
+ALEStyleErrorSignLineNr                            *hl-ALEStyleErrorSignLineNr*
 
   Default: `highlight link ALEStyleErrorSignLineNr CursorLineNr`
 
@@ -2605,21 +2605,21 @@ ALEStyleErrorSignLineNr                               *ALEStyleErrorSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEStyleWarning                                               *ALEStyleWarning*
+ALEStyleWarning                                            *hl-ALEStyleWarning*
 
   Default: `highlight link ALEStyleWarning ALEError`
 
   The highlight for highlighted style warnings. See |g:ale_set_highlights|.
 
 
-ALEStyleWarningSign                                       *ALEStyleWarningSign*
+ALEStyleWarningSign                                    *hl-ALEStyleWarningSign*
 
   Default: `highlight link ALEStyleWarningSign ALEWarningSign`
 
   The highlight for style warning signs. See |g:ale_set_signs|.
 
 
-ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
+ALEStyleWarningSignLineNr                        *hl-ALEStyleWarningSignLineNr*
 
   Default: `highlight link ALEStyleWarningSignLineNr CursorLineNr`
 
@@ -2628,49 +2628,49 @@ ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEVirtualTextError                                       *ALEVirtualTextError*
+ALEVirtualTextError                                    *hl-ALEVirtualTextError*
 
   Default: `highlight link ALEVirtualTextError Comment`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
 
-ALEVirtualTextInfo                                         *ALEVirtualTextInfo*
+ALEVirtualTextInfo                                      *hl-ALEVirtualTextInfo*
 
   Default: `highlight link ALEVirtualTextInfo ALEVirtualTextWarning`
 
   The highlight for virtualtext info. See |g:ale_virtualtext_cursor|.
 
 
-ALEVirtualTextStyleError                             *ALEVirtualTextStyleError*
+ALEVirtualTextStyleError                          *hl-ALEVirtualTextStyleError*
 
   Default: `highlight link ALEVirtualTextStyleError ALEVirtualTextError`
 
   The highlight for virtualtext style errors. See |g:ale_virtualtext_cursor|.
 
 
-ALEVirtualTextStyleWarning                         *ALEVirtualTextStyleWarning*
+ALEVirtualTextStyleWarning                      *hl-ALEVirtualTextStyleWarning*
 
   Default: `highlight link ALEVirtualTextStyleWarning ALEVirtualTextWarning`
 
   The highlight for virtualtext style warnings. See |g:ale_virtualtext_cursor|.
 
 
-ALEVirtualTextWarning                                   *ALEVirtualTextWarning*
+ALEVirtualTextWarning                                *hl-ALEVirtualTextWarning*
 
   Default: `highlight link ALEVirtualTextWarning Comment`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
 
-ALEWarning                                                         *ALEWarning*
+ALEWarning                                                      *hl-ALEWarning*
 
   Default: `highlight link ALEWarning SpellCap`
 
   The highlight for highlighted warnings. See |g:ale_set_highlights|.
 
 
-ALEWarningLine                                                 *ALEWarningLine*
+ALEWarningLine                                              *hl-ALEWarningLine*
 
   Default: Undefined
 
@@ -2680,14 +2680,14 @@ ALEWarningLine                                                 *ALEWarningLine*
   See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
-ALEWarningSign                                                 *ALEWarningSign*
+ALEWarningSign                                              *hl-ALEWarningSign*
 
   Default: `highlight link ALEWarningSign todo`
 
   The highlight for warning signs. See |g:ale_set_signs|.
 
 
-ALEWarningSignLineNr                                     *ALEWarningSignLineNr*
+ALEWarningSignLineNr                                  *hl-ALEWarningSignLineNr*
 
   Default: `highlight link ALEWarningSignLineNr CursorLineNr`
 
