@@ -216,8 +216,8 @@ specific to each project, if you have a lot of projects to manage.
 
 ALE comes with many default configurations for language servers, so they can
 be detected and run automatically. ALE can connect to other language servers
-by defining a new linter for a filetype. New linters can be defined in |vimrc|,
-in plugin files, or `ale_linters` directories in |runtimepath|.
+by defining a new linter for a filetype. New linters can be defined in ||vimrc|,
+in plugin files, or `ale_linters` directories in 'runtimepath'.
 
 See |ale-linter-loading-behavior| for more information on loading linters.
 
@@ -2093,10 +2093,10 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   loclist will never be populated when this option is on.
 
   Problems from every buffer ALE has checked will be included in the quickfix
-  list, which can be checked with |:copen|. Problems will be de-duplicated.
+  list, which can be checked with `:copen`. Problems will be de-duplicated.
 
   This feature should not be used in combination with tools for searching for
-  matches and commands like |:cfdo|, as ALE will replace the quickfix list
+  matches and commands like `:cfdo`, as ALE will replace the quickfix list
   pretty frequently. If you wish to use such tools, you should populate the
   loclist or use `:ALEPopulateQuickfix` instead.
 
@@ -2404,16 +2404,16 @@ g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
 
   Prefix to be used with |g:ale_virtualtext_cursor|.
 
-  This setting can be changed in each buffer with `b:ale_virtualtext_prefix`.
+  This setting can be changed in each buffer with |b:ale_virtualtext_prefix||.
 
   All of the same format markers used for |g:ale_echo_msg_format| can be used
   for defining the prefix, including some additional sequences of characters.
 
     `%comment%` - replaced with comment characters in the current language
 
-  ALE will read the comment characters from |&commentstring|, reading only the
+  ALE will read the comment characters from 'commentstring', reading only the
   part before `%s`, with whitespace trimmed. If comment syntax cannot be
-  pulled from |&commentstring|, ALE will default to `'#'`.
+  pulled from 'commentstring', ALE will default to `'#'`.
 
 
 g:ale_virtualtext_column                             *g:ale_virtualtext_column*
@@ -2702,8 +2702,8 @@ ALEWarningSignLineNr                                  *hl-ALEWarningSignLineNr*
 Linter and fixer options are documented below and in individual help files.
 
 Every option for programs can be set globally, or individually for each
-buffer. For example, `b:ale_python_flake8_executable` will override any
-values set for `g:ale_python_flake8_executable`.
+buffer. For example, |b:ale_python_flake8_executable| will override any
+values set for |g:ale_python_flake8_executable|.
 
                                            *ale-integrations-local-executables*
 
@@ -3548,7 +3548,7 @@ documented in additional help files.
   containing the results if some references are found.
 
   The window can be navigated using the usual Vim navigation commands. The
-  Enter key (`<CR>`) can be used to jump to a referencing location, or the `t`
+  Enter key (<CR>) can be used to jump to a referencing location, or the `t`
   key can be used to jump to the location in a new tab.
 
   The locations opened in different ways using the following variations.
@@ -3840,8 +3840,8 @@ documented in additional help files.
   <Plug>(ale_first) - ALEFirst
   <Plug>(ale_last) - ALELast
 <
-  For example, these commands could be bound to the keys Ctrl + j
-  and Ctrl + k: >
+  For example, these commands could be bound to the keys CTRL-j
+  and CTRL-k: >
 
   " Map movement through errors without wrapping.
   nmap <silent> <C-k> <Plug>(ale_previous)
@@ -3927,7 +3927,7 @@ documented in additional help files.
   `ale-info` filetype.
 
   `:ALEInfoToFile` will write the ALE runtime information to a given filename.
-  The filename works just like |:w|.
+  The filename works just like `:write`.
 
 
 :ALEReset                                                           *:ALEReset*
@@ -4283,13 +4283,13 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            command instead of the message for `text`, if set.
                          `lnum` - The line number is required. Any strings
                            will be automatically converted to numbers by
-                           using `str2nr()`.
+                           using |str2nr()|.
 
                            Line 0 will be moved to line 1, and lines beyond
                            the end of the file will be moved to the end.
                          `col` - The column number is optional and will
                            default to `0`. Any strings will be automatically
-                           converted to number using `str2nr()`.
+                           converted to number using |str2nr()|.
                          `end_col` - An optional end column number.
                            This key can be set to specify the column problems
                            end on, for improved highlighting.
@@ -4313,7 +4313,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            and have been checked at least once.
 
                            Temporary files in directories used for Vim
-                           temporary files with `tempname()` will be assumed
+                           temporary files with |tempname()| will be assumed
                            to be the buffer being checked, unless the `bufnr`
                            key is also set with a valid number for some other
                            buffer.
@@ -4585,7 +4585,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
   ale_linters/<filetype>/<linter_name>.vim
 <
-  Any linters which exist anywhere in |runtimepath| with that directory
+  Any linters which exist anywhere in 'runtimepath' with that directory
   structure will be automatically loaded for the matching |filetype|. Filetypes
   containing `.` characters will be split into individual parts, and files
   will be loaded for each filetype between the `.` characters.
