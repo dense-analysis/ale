@@ -83,3 +83,10 @@ Execute(poetry is detected when python_refurb_auto_poetry is set):
 
   AssertLinterCwd expand('%:p:h')
   AssertLinter 'poetry', ale#Escape('poetry') . ' run refurb %s'
+
+Execute(uv is detected when python_refurb_auto_uv is set):
+  let g:ale_python_refurb_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'uv', ale#Escape('uv') . ' run refurb %s'

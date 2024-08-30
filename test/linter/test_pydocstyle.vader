@@ -43,3 +43,9 @@ Execute(Poetry is detected when python_pydocstyle_auto_poetry is set):
   call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
 
   AssertLinter 'poetry', ale#Escape('poetry') . ' run pydocstyle %s'
+
+Execute(uv is detected when python_pydocstyle_auto_uv is set):
+  let g:ale_python_pydocstyle_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv', ale#Escape('uv') . ' run pydocstyle %s'

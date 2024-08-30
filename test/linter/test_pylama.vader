@@ -86,3 +86,9 @@ Execute(poetry is detected when python_pylama_auto_poetry is set):
   call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
 
   AssertLinter 'poetry', ale#Escape('poetry') . ' run pylama' . b:command_tail
+
+Execute(uv is detected when python_pylama_auto_uv is set):
+  let g:ale_python_pylama_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv', ale#Escape('uv') . ' run pylama' . b:command_tail

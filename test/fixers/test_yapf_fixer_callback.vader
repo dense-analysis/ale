@@ -15,17 +15,6 @@ After:
 
   call ale#test#RestoreDirectory()
 
-Execute(The yapf callback should return the correct default values):
-  AssertEqual
-  \ 0,
-  \ ale#fixers#yapf#Fix(bufnr(''))
-
-  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
-
-  AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yapf'))},
-  \ ale#fixers#yapf#Fix(bufnr(''))
-  \
 Execute(The yapf should include the .style.yapf file if present):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/dir_with_yapf_config/foo/bar.py')
 
@@ -35,5 +24,38 @@ Execute(The yapf should include the .style.yapf file if present):
   \     ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yapf'))
   \     . ' --no-local-style'
   \     . ' --style ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/dir_with_yapf_config/.style.yapf')),
+  \ },
+  \ ale#fixers#yapf#Fix(bufnr(''))
+
+Execute(pipenv is detected when python_yapf_auto_pipenv is set):
+  let g:ale_python_yapf_auto_pipenv = 1
+
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('pipenv') . ' run yapf',
+  \ },
+  \ ale#fixers#yapf#Fix(bufnr(''))
+
+Execute(Poetry is detected when python_yapf_auto_poetry is set):
+  let g:ale_python_yapf_auto_poetry = 1
+
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('poetry') . ' run yapf',
+  \ },
+  \ ale#fixers#yapf#Fix(bufnr(''))
+
+Execute(uv is detected when python_yapf_auto_uv is set):
+  let g:ale_python_yapf_auto_uv = 1
+
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('uv') . ' run yapf',
   \ },
   \ ale#fixers#yapf#Fix(bufnr(''))

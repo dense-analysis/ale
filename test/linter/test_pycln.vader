@@ -97,6 +97,14 @@ Execute(poetry is detected when python_pycln_auto_poetry is set):
   AssertLinter 'poetry', ale#Escape('poetry') . ' run pycln'
   \   . b:cmd_tail
 
+Execute(uv is detected when python_pycln_auto_uv is set):
+  let g:ale_python_pycln_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'uv', ale#Escape('uv') . ' run pycln'
+  \   . b:cmd_tail
+
 Execute(configuration files set in _config should be supported):
   let g:ale_python_pycln_config_file = ale#path#Simplify(g:dir . '/../test-files/pycln/other_config.xml')
 
