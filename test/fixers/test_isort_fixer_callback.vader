@@ -58,6 +58,19 @@ Execute(Poetry is detected when python_isort_auto_poetry is set):
   \   'command': ale#Escape('poetry') . ' run isort' . ' --filename %s' . ' -'
   \ }
 
+Execute(uv is detected when python_isort_auto_uv is set):
+  let g:ale_python_isort_auto_uv = 1
+
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  GivenCommandOutput ['VERSION 5.7.0']
+  AssertFixer
+  \ {
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('uv') . ' run isort' . ' --filename %s' . ' -'
+  \ }
+
+
 Execute(The isort callback should not use --filename for older versions):
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
 

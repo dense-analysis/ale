@@ -67,6 +67,16 @@ Execute(Poetry is detected when python_bandit_auto_poetry is set):
   \ . b:bandit_flags
   \ . ' -'
 
+Execute(uv is used when python_bandit_auto_uv is set):
+  let g:ale_python_bandit_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv')
+  \ . ' run bandit'
+  \ . b:bandit_flags
+  \ . ' -'
+
 Execute(The bandit command callback should add .bandit by default):
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_bandit/namespace/foo/bar.py')
 

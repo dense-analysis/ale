@@ -104,3 +104,11 @@ Execute(Poetry is detected when python_mypy_auto_poetry is set):
   AssertLinterCwd expand('#' . bufnr('') . ':p:h')
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run mypy --show-column-numbers --shadow-file %s %t %s'
+
+Execute(uv is detected when python_mypy_auto_uv is set):
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+  let g:ale_python_mypy_auto_uv = 1
+
+  AssertLinterCwd expand('#' . bufnr('') . ':p:h')
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run mypy --show-column-numbers --shadow-file %s %t %s'

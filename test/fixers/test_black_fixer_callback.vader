@@ -65,3 +65,13 @@ Execute(Poetry is detected when python_black_auto_poetry is set):
   AssertEqual
   \ {'command': ale#Escape('poetry') . ' run black -'},
   \ ale#fixers#black#Fix(bufnr(''))
+
+Execute(uv is detected when python_black_auto_uv is set):
+  let g:ale_python_black_auto_uv = 1
+  let g:ale_python_black_change_directory = 0
+
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertEqual
+  \ {'command': ale#Escape('uv') . ' run black -'},
+  \ ale#fixers#black#Fix(bufnr(''))

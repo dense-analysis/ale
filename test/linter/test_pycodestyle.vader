@@ -44,3 +44,10 @@ Execute(Poetry is detected when python_pycodestyle_auto_poetry is set):
 
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run pycodestyle  -'
+
+Execute(uv is detected when python_pycodestyle_auto_uv is set):
+  let g:ale_python_pycodestyle_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run pycodestyle  -'

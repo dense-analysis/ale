@@ -179,3 +179,10 @@ Execute(poetry is detected when python_pyright_auto_poetry is set):
   AssertLinterCwd ale#python#FindProjectRootIni(bufnr(''))
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run pyright-langserver --stdio'
+
+Execute(uv is detected when python_pyright_auto_uv is set):
+  let g:ale_python_pyright_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run pyright-langserver --stdio'

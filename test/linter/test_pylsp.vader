@@ -85,6 +85,13 @@ Execute(poetry is detected when python_pylsp_auto_poetry is set):
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run pylsp'
 
+Execute(uv is detected when python_pylsp_auto_uv is set):
+  let g:ale_python_pylsp_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run pylsp'
+
 Execute(Should accept configuration settings):
   AssertLSPConfig {}
   let b:ale_python_pylsp_config = {'pylsp': {'plugins': {'preload': {'enabled': v:false}}}}
