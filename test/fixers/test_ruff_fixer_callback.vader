@@ -134,3 +134,17 @@ Execute(Poetry is detected when python_ruff_auto_poetry is set, and cwd respects
   \   'command': ale#Escape('poetry') . ' run ruff --stdin-filename ' . fname . ' --fix -'
   \ }
 
+Execute(uv is detected when python_ruff_auto_uv is set):
+  let g:ale_python_ruff_auto_uv = 1
+  let g:ale_python_ruff_change_directory = 0
+
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  let fname = ale#Escape(ale#path#Simplify(g:dir .'/../test-files/python/uv/whatever.py'))
+
+  GivenCommandOutput ['ruff 0.0.72']
+  AssertFixer
+  \ {
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('uv') . ' run ruff --stdin-filename ' . fname . ' --fix -'
+  \ }

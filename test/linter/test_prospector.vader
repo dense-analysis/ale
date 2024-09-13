@@ -33,3 +33,11 @@ Execute(Poetry is detected when python_prospector_auto_poetry is set):
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run prospector'
   \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s'
+
+Execute(uv is detected when python_prospector_auto_uv is set):
+  let g:ale_python_prospector_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run prospector'
+  \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s'

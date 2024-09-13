@@ -69,3 +69,10 @@ Execute(Poetry is detected when python_unimport_auto_poetry is set):
 
   AssertLinterCwd expand('#' . bufnr('') . ':p:h')
   AssertLinter 'poetry', ale#Escape('poetry') . ' run unimport --check %t'
+
+Execute(uv is detected when python_unimport_auto_uv is set):
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+  let g:ale_python_unimport_auto_uv = 1
+
+  AssertLinterCwd expand('#' . bufnr('') . ':p:h')
+  AssertLinter 'uv', ale#Escape('uv') . ' run unimport --check %t'

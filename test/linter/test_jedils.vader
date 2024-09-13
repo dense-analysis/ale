@@ -47,3 +47,17 @@ Execute(Setting executable to 'pipenv' appends 'run jedi-language-server'):
   call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run jedi-language-server'
+
+Execute(poetry is detected when python_jedils_auto_poetry is set):
+  let g:ale_python_jedils_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run jedi-language-server'
+
+Execute(uv is detected when python_jedils_auto_uv is set):
+  let g:ale_python_jedils_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run jedi-language-server'

@@ -61,6 +61,13 @@ Execute(Poetry is detected when python_pyre_auto_poetry is set):
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run pyre persistent'
 
+Execute(uv is detected when python_pyre_auto_uv is set):
+  let g:ale_python_pyre_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run pyre persistent'
+
 Execute(The FindProjectRoot should detect the project root directory for namespace package via .pyre_configuration.local):
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/pyre_configuration_dir/foo/bar.py')
 
