@@ -2053,18 +2053,20 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
 
   ALE will use the following highlight groups for problems:
 
-  |ALEError|        - Items with `'type': 'E'`
-  |ALEWarning|      - Items with `'type': 'W'`
-  |ALEInfo|         - Items with `'type': 'I'`
-  |ALEStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  |ALEStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
+  ALEError         items with `'type': 'E'`            |hl-ALEError|
+  ALEWarning       items with `'type': 'W'`            |hl-ALEWarning|
+  ALEInfo          items with `'type': 'I'`            |hl-ALEInfo|
+  ALEStyleError    items with `'type': 'E'` and
+                              `'sub_type': 'style'`    |hl-ALEStyleError|
+  ALEStyleWarning  items with `'type': 'W'` and
+                              `'sub_type': 'style'`    |hl-ALEStyleWarning|
 
   When |g:ale_set_signs| is set to `0`, the following highlights for entire
   lines will be set.
 
-  |ALEErrorLine|   - All items with `'type': 'E'`
-  |ALEWarningLine| - All items with `'type': 'W'`
-  |ALEInfoLine|    - All items with `'type': 'I'`
+  ALEErrorLine     all items with `'type': 'E'`        |hl-ALEErrorLine|
+  ALEWarningLine   all items with `'type': 'W'`        |hl-ALEWarningLine|
+  ALEInfoLine      all items with `'type': 'I'`        |hl-ALEInfoLine|
 
   Vim can only highlight the characters up to the last column in a buffer for
   match highlights, whereas the line highlights when signs are enabled will
@@ -2117,27 +2119,31 @@ g:ale_set_signs                                               *g:ale_set_signs*
 
   ALE will use the following highlight groups for problems:
 
-  |ALEErrorSign|        - Items with `'type': 'E'`
-  |ALEWarningSign|      - Items with `'type': 'W'`
-  |ALEInfoSign|         - Items with `'type': 'I'`
-  |ALEStyleErrorSign|   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  |ALEStyleWarningSign| - Items with `'type': 'W'` and `'sub_type': 'style'`
+  ALEErrorSign        items with `'type': 'E'`         |hl-ALEErrorSign|
+  ALEWarningSign      items with `'type': 'W'`         |hl-ALEWarningSign|
+  ALEInfoSign         items with `'type': 'I'`         |hl-ALEInfoSign|
+  ALEStyleErrorSign   items with `'type': 'E'` and
+                                 `'sub_type': 'style'` |hl-ALEStyleErrorSign|
+  ALEStyleWarningSign items with `'type': 'W'` and
+                                 `'sub_type': 'style'` |hl-ALEStyleWarningSign|
 
   In addition to the style of the signs, the style of lines where signs appear
   can be configured with the following highlights:
 
-  |ALEErrorLine|   - All items with `'type': 'E'`
-  |ALEWarningLine| - All items with `'type': 'W'`
-  |ALEInfoLine|    - All items with `'type': 'I'`
+  ALEErrorLine        all items with `'type': 'E'`     |hl-ALEErrorLine|
+  ALEWarningLine      all items with `'type': 'W'`     |hl-ALEWarningLine|
+  ALEInfoLine         all items with `'type': 'I'`     |hl-ALEInfoLine|
 
   With Neovim 0.3.2 or higher, ALE can use the `numhl` option to highlight the
   'number' column. It uses the following highlight groups.
 
-  |ALEErrorSignLineNr|        - Items with `'type': 'E'`
-  |ALEWarningSignLineNr|      - Items with `'type': 'W'`
-  |ALEInfoSignLineNr|         - Items with `'type': 'I'`
-  |ALEStyleErrorSignLineNr|   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  |ALEStyleWarningSignLineNr| - Items with `'type': 'W'` and `'sub_type': 'style'`
+  ALEErrorSignLineNr        items with `'type': 'E'` |hl-ALEErrorSignLineNr|
+  ALEWarningSignLineNr      items with `'type': 'W'` |hl-ALEWarningSignLineNr|
+  ALEInfoSignLineNr         items with `'type': 'I'` |hl-ALEInfoSignLineNr|
+  ALEStyleErrorSignLineNr   items with `'type': 'E'` and
+                             `'sub_type': 'style'`   |hl-ALEStyleErrorSignLineNr|
+  ALEStyleWarningSignLineNr items with `'type': 'W'` and
+                             `'sub_type': 'style'`   |hl-ALEStyleWarningSignLineNr|
 
   To enable line number highlighting |g:ale_sign_highlight_linenrs| must be
   set to `1` before ALE is loaded.
@@ -2374,11 +2380,13 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
   highlights for configuring ALE's virtualtext messages can be configured with
   custom highlight groups:
 
-  |ALEVirtualTextError|        - Items with `'type': 'E'`
-  |ALEVirtualTextWarning|      - Items with `'type': 'W'`
-  |ALEVirtualTextInfo|         - Items with `'type': 'I'`
-  |ALEVirtualTextStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  |ALEVirtualTextStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
+  ALEVirtualTextError        items with `'type': 'E'`  |hl-ALEVirtualTextError|
+  ALEVirtualTextWarning      items with `'type': 'W'`  |hl-ALEVirtualTextWarning|
+  ALEVirtualTextInfo         items with `'type': 'I'`  |hl-ALEVirtualTextInfo|
+  ALEVirtualTextStyleError   items with `'type': 'E'` and
+                             `'sub_type': 'style'`     |hl-ALEVirtualTextStyleError|
+  ALEVirtualTextStyleWarning items with `'type': 'W'` and
+                             `'sub_type': 'style'`     |hl-ALEVirtualTextStyleWarning|
 
 
 g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
