@@ -8,9 +8,9 @@ After:
 
 Execute(The default command should be correct):
   AssertLinter 'opa',
-  \ ale#Escape('opa') . ' check %s --format json '
+  \ ale#Escape('opa') . ' check %s:h --format json '
 
 Execute(The default command should be overridden):
   let b:ale_rego_opacheck_executable = '/bin/other/opa'
   AssertLinter '/bin/other/opa',
-  \ ale#Escape('/bin/other/opa') . ' check %s --format json '
+  \ ale#Escape('/bin/other/opa') . ' check %s:h --format json '
