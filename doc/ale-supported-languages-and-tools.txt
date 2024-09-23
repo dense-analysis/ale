@@ -143,6 +143,8 @@ Notes:
   * `cypher-lint`
 * Cython (pyrex filetype)
   * `cython`
+* C3
+  * `c3-lsp`
 * D
   * `dfmt`
   * `dls`

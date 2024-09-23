@@ -152,6 +152,8 @@ formatting.
   * [cypher-lint](https://github.com/cleishm/libcypher-parser)
 * Cython (pyrex filetype)
   * [cython](http://cython.org/)
+* C3
+  * [c3-lsp](https://github.com/pherrymason/c3-lsp)
 * D
   * [dfmt](https://github.com/dlang-community/dfmt)
   * [dls](https://github.com/d-language-server/dls)
