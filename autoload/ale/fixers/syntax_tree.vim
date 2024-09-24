@@ -6,7 +6,7 @@ function! ale#fixers#syntax_tree#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'ruby_syntax_tree_options')
 
     return ale#ruby#EscapeExecutable(l:executable, 'stree')
-    \   . ' write'
+    \   . ' format'
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' %t'
 endfunction
@@ -14,6 +14,5 @@ endfunction
 function! ale#fixers#syntax_tree#Fix(buffer) abort
     return {
     \   'command': ale#fixers#syntax_tree#GetCommand(a:buffer),
-    \   'read_temporary_file': 1,
     \}
 endfunction

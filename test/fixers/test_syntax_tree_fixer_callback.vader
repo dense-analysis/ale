@@ -18,9 +18,8 @@ Execute(The syntax_tree callback should return the correct default values):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_ruby_syntax_tree_executable)
-  \     . ' write %t',
+  \     . ' format %t',
   \ },
   \ ale#fixers#syntax_tree#Fix(bufnr(''))
 
@@ -30,8 +29,7 @@ Execute(The syntax_tree callback should include custom options):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_ruby_syntax_tree_executable)
-  \     . ' write --print-width=100 --plugins=plugin/trailing_comma %t',
+  \     . ' format --print-width=100 --plugins=plugin/trailing_comma %t',
   \ },
   \ ale#fixers#syntax_tree#Fix(bufnr(''))
