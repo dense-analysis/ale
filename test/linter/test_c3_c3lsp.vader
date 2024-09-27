@@ -1,0 +1,16 @@
+Before:
+  call ale#assert#SetUpLinterTest('c3', 'c3lsp')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default c3-lsp settings should be correct):
+  AssertLinter 'c3-lsp', ale#Escape('c3-lsp')
+  AssertLSPConfig {}
+
+Execute(c3-lsp should be configurable):
+  let b:ale_c3_c3lsp_executable = 'billy'
+  let b:ale_c3_c3lsp_init_options = {'x': 'y'}
+
+  AssertLinter 'billy', ale#Escape('billy')
+  AssertLSPConfig {'x': 'y'}
