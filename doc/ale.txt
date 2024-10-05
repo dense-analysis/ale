@@ -216,7 +216,7 @@ specific to each project, if you have a lot of projects to manage.
 
 ALE comes with many default configurations for language servers, so they can
 be detected and run automatically. ALE can connect to other language servers
-by defining a new linter for a filetype. New linters can be defined in ||vimrc|,
+by defining a new linter for a filetype. New linters can be defined in |vimrc|,
 in plugin files, or `ale_linters` directories in 'runtimepath'.
 
 See |ale-linter-loading-behavior| for more information on loading linters.
