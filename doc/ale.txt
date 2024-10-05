@@ -778,7 +778,7 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
 
   ALE uses the following highlight groups for highlighting the sign column:
 
-  `:ALESignColumnWithErrors`    -  Links to `error` by default.
+  `:ALESignColumnWithErrors`    -  Links to `Error` by default.
   `:ALESignColumnWithoutErrors` -  Uses the value for `SignColumn` by default.
 
   The sign column color can only be changed globally in Vim. The sign column
