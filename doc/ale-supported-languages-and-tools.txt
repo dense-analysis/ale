@@ -104,6 +104,8 @@ Notes:
   * `flawfinder`
   * `gcc` (`cc`)
   * `uncrustify`
+* C3
+  * `c3-lsp`
 * Cairo
   * `scarb`!!
   * `starknet`
@@ -143,8 +145,6 @@ Notes:
   * `cypher-lint`
 * Cython (pyrex filetype)
   * `cython`
-* C3
-  * `c3-lsp`
 * D
   * `dfmt`
   * `dls`

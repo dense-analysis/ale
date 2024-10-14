@@ -113,6 +113,8 @@ formatting.
   * [flawfinder](https://www.dwheeler.com/flawfinder/)
   * [gcc](https://gcc.gnu.org/)
   * [uncrustify](https://github.com/uncrustify/uncrustify)
+* C3
+  * [c3-lsp](https://github.com/pherrymason/c3-lsp)
 * Cairo
   * [scarb](https://docs.swmansion.com/scarb/) :floppy_disk:
   * [starknet](https://starknet.io/docs)
@@ -152,8 +154,6 @@ formatting.
   * [cypher-lint](https://github.com/cleishm/libcypher-parser)
 * Cython (pyrex filetype)
   * [cython](http://cython.org/)
-* C3
-  * [c3-lsp](https://github.com/pherrymason/c3-lsp)
 * D
   * [dfmt](https://github.com/dlang-community/dfmt)
   * [dls](https://github.com/d-language-server/dls)
