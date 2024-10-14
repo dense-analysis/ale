@@ -2557,7 +2557,7 @@ ALEErrorSignLineNr                                      *hl-ALEErrorSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEInfo                                                           *hl-ALEInfo*
+ALEInfo                                                            *hl-ALEInfo*
                                                             *ALEInfo-highlight*
   Default: `highlight link ALEInfo ALEWarning`
 
@@ -3602,7 +3602,7 @@ documented in additional help files.
   See |ale-fix| for more information.
 
 
-:ALEGoToDefinition [options]                             *:ALEGoToDefinition*
+:ALEGoToDefinition [options]                                *:ALEGoToDefinition*
 
   Jump to the definition of a symbol under the cursor using the enabled LSP
   linters for the buffer. ALE will jump to a definition if an LSP server
@@ -3756,7 +3756,7 @@ documented in additional help files.
   Repeat the last selection displayed in the preview window.
 
 
-:ALESymbolSearch [query]                                   *:ALESymbolSearch*
+:ALESymbolSearch [query]                                     *:ALESymbolSearch*
 
   Search for symbols in the workspace, taken from any available LSP linters.
 
@@ -3778,7 +3778,7 @@ documented in additional help files.
   A plug mapping `<Plug>(ale_lint)` is defined for this command.
 
 
-:ALELintStop                                                 *:ALELintStop*
+:ALELintStop                                                     *:ALELintStop*
 
   Stop any currently running jobs for checking the current buffer.
 
@@ -3965,7 +3965,7 @@ documented in additional help files.
   This command can be used when LSP clients mess up and need to be restarted.
 
 
-:ALEStopLSP [linter]                                         *:ALEStopLSP*
+:ALEStopLSP [linter]                                              *:ALEStopLSP*
 
   `:ALEStopLSP` will stop a specific language server with a given linter name.
   Completion is supported for currently running language servers. All language
