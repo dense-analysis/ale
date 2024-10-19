@@ -41,7 +41,7 @@ CONTENTS                                                         *ale-contents*
 ALE provides the means to run linters asynchronously in Vim in a variety of
 languages and tools. ALE sends the contents of buffers to linter programs
 using the |job-control| features available in Vim 8 and NeoVim. For Vim 8,
-Vim must be compiled with the |job| and |channel| and |timers| features
+Vim must be compiled with the |+job| and |+channel| and |+timers| features
 as a minimum.
 
 ALE supports the following key features for linting:
@@ -49,14 +49,14 @@ ALE supports the following key features for linting:
 1. Running linters when text is changed.
 2. Running linters when files are opened.
 3. Running linters when files are saved. (When a global flag is set.)
-4. Populating the |loclist| with warning and errors.
+4. Populating the |location-list| with warning and errors.
 5. Setting |signs| with warnings and errors for error markers.
-6. Using |echo| to show error messages when the cursor moves.
+6. Using `:echo` to show error messages when the cursor moves.
 7. Setting syntax highlights for errors.
 
-ALE can fix problems with files with the |ALEFix| command, using the same job
+ALE can fix problems with files with the `:ALEFix` command, using the same job
 control functionality used for checking for problems. Try using the
-|ALEFixSuggest| command for browsing tools that can be used to fix problems
+`:ALEFixSuggest` command for browsing tools that can be used to fix problems
 for the current buffer.
 
 If you are interested in contributing to the development of ALE, read the
@@ -81,7 +81,7 @@ for |ale#linter#Define()|.
 
 Without any configuration, ALE will attempt to check all of the code for every
 file you open in Vim with all available tools by default. To see what ALE
-is doing, and what options have been set, try using the |:ALEInfo| command.
+is doing, and what options have been set, try using the `:ALEInfo` command.
 
 Most of the linters ALE runs will check the Vim buffer you are editing instead
 of the file on disk. This allows you to check your code for errors before you
@@ -151,7 +151,7 @@ ALE offers several options for controlling which linters are run.
 * Disabling only a subset of linters.  - |g:ale_linters_ignore|
 * Disabling LSP linters and `tsserver`.  - |g:ale_disable_lsp|
 
-You can stop ALE any currently running linters with the |ALELintStop| command.
+You can stop ALE any currently running linters with the `:ALELintStop` command.
 Any existing problems will be kept.
 
 -------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ specific to each project, if you have a lot of projects to manage.
 ALE comes with many default configurations for language servers, so they can
 be detected and run automatically. ALE can connect to other language servers
 by defining a new linter for a filetype. New linters can be defined in |vimrc|,
-in plugin files, or `ale_linters` directories in |runtimepath|.
+in plugin files, or `ale_linters` directories in 'runtimepath'.
 
 See |ale-linter-loading-behavior| for more information on loading linters.
 
@@ -323,14 +323,14 @@ A plugin might integrate its own checks with ALE like so: >
 ===============================================================================
 4. Fixing Problems                                                    *ale-fix*
 
-ALE can fix problems with files with the |ALEFix| command. |ALEFix|
+ALE can fix problems with files with the `:ALEFix` command. `:ALEFix`
 accepts names of fixers to be applied as arguments. Alternatively,
 when no arguments are provided, the variable |g:ale_fixers| will be
 read for getting a |List| of commands for filetypes, split on `.`, and
 the functions named in |g:ale_fixers| will be executed for fixing the
 errors.
 
-The |ALEFixSuggest| command can be used to suggest tools that be used to
+The `:ALEFixSuggest` command can be used to suggest tools that be used to
 fix problems for the current buffer.
 
 The values for `g:ale_fixers` can be a list of |String|, |Funcref|, or
@@ -348,7 +348,7 @@ argument `lines`. Functions should name two arguments if the `lines` argument
 is desired. This is required to avoid unnecessary copying of the lines of
 the buffers being checked.
 
-When a |Dictionary| is returned for an |ALEFix| callback, the following keys
+When a |Dictionary| is returned for an `:ALEFix` callback, the following keys
 are supported for running the commands.
 
   `cwd`                 An optional |String| for setting the working directory
@@ -424,7 +424,7 @@ files, a |List| may be used for configuring the fixers instead.
 
   ALEFix
 <
-For convenience, a plug mapping is defined for |ALEFix|, so you can set up a
+For convenience, a plug mapping is defined for `:ALEFix`, so you can set up a
 keybind easily for fixing files. >
 
   " Bind F8 to fixing problems with ALE
@@ -436,7 +436,7 @@ by default.
 |g:ale_fix_on_save| - Fix files when they are saved.
 
 Fixers can be disabled on save with |g:ale_fix_on_save_ignore|. They will
-still be run when you manually run |ALEFix|.
+still be run when you manually run `:ALEFix`.
 
 Fixers can be run on another machines, just like linters, such as fixers run
 from a Docker container, running in a virtual machine, running a remote
@@ -457,8 +457,8 @@ ignore particular linters with |g:ale_linters_ignore|.
 
 If for any reason you want to stop a language server ALE starts, such as when
 a project configuration has significantly changed, or new files have been
-added the language server isn't aware of, use either |ALEStopLSP| or
-|ALEStopAllLSPs| to stop the server until ALE automatically starts it again.
+added the language server isn't aware of, use either `:ALEStopLSP` or
+`:ALEStopAllLSPs` to stop the server until ALE automatically starts it again.
 
 -------------------------------------------------------------------------------
 5.1 Completion                                                 *ale-completion*
@@ -549,7 +549,7 @@ number of items can be controlled with |g:ale_completion_max_suggestions|.
 If you don't like some of the suggestions you see, you can filter them out
 with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
 
-The |ALEComplete| command can be used to show completion suggestions manually,
+The `:ALEComplete` command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
 
@@ -559,7 +559,7 @@ Disabling automatic imports can drop some or all completion items from
 some LSP servers (e.g. eclipselsp).
 
 You can manually request imports for symbols at the cursor with the
-|ALEImport| command. The word at the cursor must be an exact match for some
+`:ALEImport` command. The word at the cursor must be an exact match for some
 potential completion result which includes additional text to insert into the
 current buffer, which ALE will assume is code for an import line. This command
 can be useful when your code already contains something you need to import.
@@ -626,7 +626,7 @@ would like to use. An example here shows the available options for symbols  >
 
 ALE supports jumping to the files and locations where symbols are defined
 through any enabled LSP linters. The locations ALE will jump to depend on the
-information returned by LSP servers. The |ALEGoToDefinition| command will jump
+information returned by LSP servers. The `:ALEGoToDefinition` command will jump
 to the definition of symbols under the cursor. See the documentation for the
 command for configuring how the location will be displayed.
 
@@ -638,7 +638,7 @@ set to `0`.
 
 ALE supports jumping to the files and locations where symbols' types are
 defined through any enabled LSP linters. The locations ALE will jump to depend
-on the information returned by LSP servers. The |ALEGoToTypeDefinition|
+on the information returned by LSP servers. The `:ALEGoToTypeDefinition`
 command will jump to the definition of symbols under the cursor. See the
 documentation for the command for configuring how the location will be
 displayed.
@@ -648,7 +648,7 @@ displayed.
 
 ALE supports jumping to the files and locations where symbols are implemented
 through any enabled LSP linters. The locations ALE will jump to depend on the
-information returned by LSP servers. The |ALEGoToImplementation| command will
+information returned by LSP servers. The `:ALEGoToImplementation` command will
 jump to the implementation of symbols under the cursor. See the documentation
 for the command for configuring how the location will be displayed.
 
@@ -656,7 +656,7 @@ for the command for configuring how the location will be displayed.
 5.5 Find References                                       *ale-find-references*
 
 ALE supports finding references for symbols though any enabled LSP linters
-with the |ALEFindReferences| command. See the documentation for the command
+with the `:ALEFindReferences` command. See the documentation for the command
 for a full list of options.
 
 -------------------------------------------------------------------------------
@@ -665,7 +665,7 @@ for a full list of options.
 ALE supports "hover" information for printing brief information about symbols
 at the cursor taken from LSP linters. The following commands are supported:
 
-|ALEHover| - Print information about the symbol at the cursor.
+`:ALEHover` - Print information about the symbol at the cursor.
 
 Truncated information will be displayed when the cursor rests on a symbol by
 default, as long as there are no problems on the same line. You can disable
@@ -700,24 +700,24 @@ settings. For example: >
 <
 
 Documentation for symbols at the cursor can be retrieved using the
-|ALEDocumentation| command. This command is only available for `tsserver`.
+`:ALEDocumentation` command. This command is only available for `tsserver`.
 
 -------------------------------------------------------------------------------
 5.7 Symbol Search                                           *ale-symbol-search*
 
 ALE supports searching for workspace symbols via LSP linters with the
-|ALESymbolSearch| command. See the documentation for the command
+`:ALESymbolSearch` command. See the documentation for the command
 for a full list of options.
 
 -------------------------------------------------------------------------------
 5.8 Refactoring: Rename, Actions                                 *ale-refactor*
 
 ALE supports renaming symbols in code such as variables or class names with
-the |ALERename| command.
+the `:ALERename` command.
 
-`ALEFileRename` will rename file and fix import paths (tsserver only).
+`:ALEFileRename` will rename file and fix import paths (tsserver only).
 
-|ALECodeAction| will execute actions on the cursor or applied to a visual
+`:ALECodeAction` will execute actions on the cursor or applied to a visual
 range selection, such as automatically fixing errors.
 
 Actions will appear in the right click mouse menu by default for GUI versions
@@ -778,8 +778,8 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
 
   ALE uses the following highlight groups for highlighting the sign column:
 
-  `ALESignColumnWithErrors`    -  Links to `error` by default.
-  `ALESignColumnWithoutErrors` -  Uses the value for `SignColumn` by default.
+  `:ALESignColumnWithErrors`    -  Links to `Error` by default.
+  `:ALESignColumnWithoutErrors` -  Uses the value for `SignColumn` by default.
 
   The sign column color can only be changed globally in Vim. The sign column
   might produce unexpected results if editing different files in split
@@ -813,7 +813,7 @@ g:ale_command_wrapper                                   *g:ale_command_wrapper*
     " Prefix all commands with nice.
     let g:ale_command_wrapper = 'nice -n5'
 <
-  Use the |ALEInfo| command to view the commands that are run. All of the
+  Use the `:ALEInfo` command to view the commands that are run. All of the
   arguments for commands will be put on the end of the wrapped command by
   default. A `%*` marker can be used to spread the arguments in the wrapped
   command. >
@@ -993,7 +993,7 @@ g:ale_default_navigation                             *g:ale_default_navigation*
   Default: `'buffer'`
 
   The default method for navigating away from the current buffer to another
-  buffer, such as for |ALEFindReferences|, or |ALEGoToDefinition|.
+  buffer, such as for `:ALEFindReferences` or `:ALEGoToDefinition`.
 
 
 g:ale_detail_to_floating_preview             *g:ale_detail_to_floating_preview*
@@ -1125,7 +1125,7 @@ g:ale_enabled                                                   *g:ale_enabled*
 
   When set to `0`, this option will completely disable ALE, such that no
   error checking will be performed, etc. ALE can be toggled on and off with
-  the |ALEToggle| command, which changes this option.
+  the `:ALEToggle` command, which changes this option.
 
   ALE can be disabled in each buffer by setting `let b:ale_enabled = 0`
   Disabling ALE based on filename patterns can be accomplished by setting
@@ -1289,7 +1289,7 @@ g:ale_history_enabled                                   *g:ale_history_enabled*
 
   When set to `1`, ALE will remember the last few commands which were run
   for every buffer which is open. This information can be viewed with the
-  |ALEInfo| command. The size of the buffer can be controlled with the
+  `:ALEInfo` command. The size of the buffer can be controlled with the
   |g:ale_max_buffer_history_size| option.
 
   This option can be disabled if storing a command history is not desired.
@@ -1302,7 +1302,7 @@ g:ale_history_log_output                             *g:ale_history_log_output*
 
   When set to `1`, ALE will store the output of commands which have completed
   successfully in the command history, and the output will be displayed when
-  using |ALEInfo|.
+  using `:ALEInfo`.
 
   |g:ale_history_enabled| must be set to `1` for this output to be stored or
   printed.
@@ -1354,7 +1354,7 @@ g:ale_info_default_mode                               *g:ale_info_default_mode*
   Type: |String|
   Default: `'preview'`
 
-  Changes the default mode used for |ALEInfo|. See documentation for |ALEInfo|
+  Changes the default mode used for `:ALEInfo`. See documentation for `:ALEInfo`
   for more information.
 
 
@@ -1560,7 +1560,7 @@ g:ale_filename_mappings                               *g:ale_filename_mappings*
   Default: `{}`
 
   Either a |Dictionary| mapping a linter or fixer name, as displayed in
-  |:ALEInfo|, to a |List| of two-item |List|s for filename mappings, or just a
+  `:ALEInfo`, to a |List| of two-item |List|s for filename mappings, or just a
   |List| of two-item |List|s. When given some paths to files, the value of
   this setting will be used to convert filenames on a local file system to
   filenames on some remote file system, such as paths in a Docker image,
@@ -1822,7 +1822,7 @@ g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
   Default: `20`
 
   This setting controls the maximum number of commands which will be stored in
-  the command history used for |ALEInfo|. Command history will be rotated in
+  the command history used for `:ALEInfo`. Command history will be rotated in
   a FIFO manner. If set to a number <= 0, then the history will be
   continuously set to an empty |List|.
 
@@ -1950,7 +1950,7 @@ g:ale_rename_tsserver_find_in_comments *g:ale_rename_tsserver_find_in_comments*
   Default: `0`
 
   If enabled, this option will tell tsserver to find and replace text in
-  comments when calling |ALERename|. It can be enabled by settings the value
+  comments when calling `:ALERename`. It can be enabled by settings the value
   to `1`.
 
 
@@ -1960,7 +1960,7 @@ g:ale_rename_tsserver_find_in_strings   *g:ale_rename_tsserver_find_in_strings*
   Default: `0`
 
   If enabled, this option will tell tsserver to find and replace text in
-  strings when calling |ALERename|. It can be enabled by settings the value to
+  strings when calling `:ALERename`. It can be enabled by settings the value to
   `1`.
 
 
@@ -1988,8 +1988,8 @@ g:ale_save_hidden                                           *g:ale_save_hidden*
   Default: `0`
 
   When set to `1`, save buffers when 'hidden' is set when applying code
-  actions or rename operations, such as through |ALERename| or
-  |ALEOrganizeImports|.
+  actions or rename operations, such as through `:ALERename` or
+  `:ALEOrganizeImports`.
 
 
 g:ale_set_balloons                                         *g:ale_set_balloons*
@@ -2053,18 +2053,20 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
 
   ALE will use the following highlight groups for problems:
 
-  |ALEError|        - Items with `'type': 'E'`
-  |ALEWarning|      - Items with `'type': 'W'`
-  |ALEInfo.|        - Items with `'type': 'I'`
-  |ALEStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  |ALEStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
+  ALEError         items with `'type': 'E'`            |hl-ALEError|
+  ALEWarning       items with `'type': 'W'`            |hl-ALEWarning|
+  ALEInfo          items with `'type': 'I'`            |hl-ALEInfo|
+  ALEStyleError    items with `'type': 'E'` and
+                              `'sub_type': 'style'`    |hl-ALEStyleError|
+  ALEStyleWarning  items with `'type': 'W'` and
+                              `'sub_type': 'style'`    |hl-ALEStyleWarning|
 
   When |g:ale_set_signs| is set to `0`, the following highlights for entire
   lines will be set.
 
-  |ALEErrorLine|   - All items with `'type': 'E'`
-  |ALEWarningLine| - All items with `'type': 'W'`
-  |ALEInfoLine|    - All items with `'type': 'I'`
+  ALEErrorLine     all items with `'type': 'E'`        |hl-ALEErrorLine|
+  ALEWarningLine   all items with `'type': 'W'`        |hl-ALEWarningLine|
+  ALEInfoLine      all items with `'type': 'I'`        |hl-ALEInfoLine|
 
   Vim can only highlight the characters up to the last column in a buffer for
   match highlights, whereas the line highlights when signs are enabled will
@@ -2078,9 +2080,9 @@ g:ale_set_loclist                                           *g:ale_set_loclist*
   Type: |Number|
   Default: `1`
 
-  When this option is set to `1`, the |loclist| will be populated with any
-  warnings and errors which are found by ALE. This feature can be used to
-  implement jumping between errors through typical use of |lnext| and |lprev|.
+  When this option is set to `1`, the |location-list| will be populated with
+  any warnings and errors which are found by ALE. This feature can be used to
+  implement jumping between errors through typical use of `:lnext` and `:lprev`.
 
 
 g:ale_set_quickfix                                         *g:ale_set_quickfix*
@@ -2089,16 +2091,16 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   Default: `0`
 
   When this option is set to `1`, the |quickfix| list will be populated with
-  any problems which are found by ALE, instead of the |loclist|. The loclist
-  will never be populated when this option is on.
+  any problems which are found by ALE, instead of the |location-list|. The
+  loclist will never be populated when this option is on.
 
   Problems from every buffer ALE has checked will be included in the quickfix
-  list, which can be checked with |:copen|. Problems will be de-duplicated.
+  list, which can be checked with `:copen`. Problems will be de-duplicated.
 
   This feature should not be used in combination with tools for searching for
-  matches and commands like |:cfdo|, as ALE will replace the quickfix list
+  matches and commands like `:cfdo`, as ALE will replace the quickfix list
   pretty frequently. If you wish to use such tools, you should populate the
-  loclist or use |ALEPopulateQuickfix| instead.
+  loclist or use `:ALEPopulateQuickfix` instead.
 
 
 g:ale_set_signs                                               *g:ale_set_signs*
@@ -2117,27 +2119,31 @@ g:ale_set_signs                                               *g:ale_set_signs*
 
   ALE will use the following highlight groups for problems:
 
-  |ALEErrorSign|        - Items with `'type': 'E'`
-  |ALEWarningSign|      - Items with `'type': 'W'`
-  |ALEInfoSign|         - Items with `'type': 'I'`
-  |ALEStyleErrorSign|   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  |ALEStyleWarningSign| - Items with `'type': 'W'` and `'sub_type': 'style'`
+  ALEErrorSign        items with `'type': 'E'`         |hl-ALEErrorSign|
+  ALEWarningSign      items with `'type': 'W'`         |hl-ALEWarningSign|
+  ALEInfoSign         items with `'type': 'I'`         |hl-ALEInfoSign|
+  ALEStyleErrorSign   items with `'type': 'E'` and
+                                 `'sub_type': 'style'` |hl-ALEStyleErrorSign|
+  ALEStyleWarningSign items with `'type': 'W'` and
+                                 `'sub_type': 'style'` |hl-ALEStyleWarningSign|
 
   In addition to the style of the signs, the style of lines where signs appear
   can be configured with the following highlights:
 
-  |ALEErrorLine|   - All items with `'type': 'E'`
-  |ALEWarningLine| - All items with `'type': 'W'`
-  |ALEInfoLine|    - All items with `'type': 'I'`
+  ALEErrorLine        all items with `'type': 'E'`     |hl-ALEErrorLine|
+  ALEWarningLine      all items with `'type': 'W'`     |hl-ALEWarningLine|
+  ALEInfoLine         all items with `'type': 'I'`     |hl-ALEInfoLine|
 
   With Neovim 0.3.2 or higher, ALE can use the `numhl` option to highlight the
   'number' column. It uses the following highlight groups.
 
-  |ALEErrorSignLineNr|        - Items with `'type': 'E'`
-  |ALEWarningSignLineNr|      - Items with `'type': 'W'`
-  |ALEInfoSignLineNr|         - Items with `'type': 'I'`
-  |ALEStyleErrorSignLineNr|   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  |ALEStyleWarningSignLineNr| - Items with `'type': 'W'` and `'sub_type': 'style'`
+  ALEErrorSignLineNr        items with `'type': 'E'` |hl-ALEErrorSignLineNr|
+  ALEWarningSignLineNr      items with `'type': 'W'` |hl-ALEWarningSignLineNr|
+  ALEInfoSignLineNr         items with `'type': 'I'` |hl-ALEInfoSignLineNr|
+  ALEStyleErrorSignLineNr   items with `'type': 'E'` and
+                             `'sub_type': 'style'`   |hl-ALEStyleErrorSignLineNr|
+  ALEStyleWarningSignLineNr items with `'type': 'W'` and
+                             `'sub_type': 'style'`   |hl-ALEStyleWarningSignLineNr|
 
   To enable line number highlighting |g:ale_sign_highlight_linenrs| must be
   set to `1` before ALE is loaded.
@@ -2374,11 +2380,13 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
   highlights for configuring ALE's virtualtext messages can be configured with
   custom highlight groups:
 
-  |ALEVirtualTextError|        - Items with `'type': 'E'`
-  |ALEVirtualTextWarning|      - Items with `'type': 'W'`
-  |ALEVirtualTextInfo|         - Items with `'type': 'I'`
-  |ALEVirtualTextStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  |ALEVirtualTextStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
+  ALEVirtualTextError        items with `'type': 'E'`  |hl-ALEVirtualTextError|
+  ALEVirtualTextWarning      items with `'type': 'W'`  |hl-ALEVirtualTextWarning|
+  ALEVirtualTextInfo         items with `'type': 'I'`  |hl-ALEVirtualTextInfo|
+  ALEVirtualTextStyleError   items with `'type': 'E'` and
+                             `'sub_type': 'style'`     |hl-ALEVirtualTextStyleError|
+  ALEVirtualTextStyleWarning items with `'type': 'W'` and
+                             `'sub_type': 'style'`     |hl-ALEVirtualTextStyleWarning|
 
 
 g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
@@ -2404,16 +2412,16 @@ g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
 
   Prefix to be used with |g:ale_virtualtext_cursor|.
 
-  This setting can be changed in each buffer with `b:ale_virtualtext_prefix`.
+  This setting can be changed in each buffer with |b:ale_virtualtext_prefix||.
 
   All of the same format markers used for |g:ale_echo_msg_format| can be used
   for defining the prefix, including some additional sequences of characters.
 
     `%comment%` - replaced with comment characters in the current language
 
-  ALE will read the comment characters from |&commentstring|, reading only the
+  ALE will read the comment characters from 'commentstring', reading only the
   part before `%s`, with whitespace trimmed. If comment syntax cannot be
-  pulled from |&commentstring|, ALE will default to `'#'`.
+  pulled from 'commentstring', ALE will default to `'#'`.
 
 
 g:ale_virtualtext_column                             *g:ale_virtualtext_column*
@@ -2516,14 +2524,14 @@ g:ale_windows_node_executable_path         *g:ale_windows_node_executable_path*
 -------------------------------------------------------------------------------
 6.1. Highlights                                                *ale-highlights*
 
-ALEError                                                             *ALEError*
+ALEError                                                          *hl-ALEError*
 
   Default: `highlight link ALEError SpellBad`
 
   The highlight for highlighted errors. See |g:ale_set_highlights|.
 
 
-ALEErrorLine                                                     *ALEErrorLine*
+ALEErrorLine                                                  *hl-ALEErrorLine*
 
   Default: Undefined
 
@@ -2533,14 +2541,14 @@ ALEErrorLine                                                     *ALEErrorLine*
   See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
-ALEErrorSign                                                     *ALEErrorSign*
+ALEErrorSign                                                  *hl-ALEErrorSign*
 
   Default: `highlight link ALEErrorSign error`
 
   The highlight for error signs. See |g:ale_set_signs|.
 
 
-ALEErrorSignLineNr                                         *ALEErrorSignLineNr*
+ALEErrorSignLineNr                                      *hl-ALEErrorSignLineNr*
 
   Default: `highlight link ALEErrorSignLineNr CursorLineNr`
 
@@ -2549,21 +2557,21 @@ ALEErrorSignLineNr                                         *ALEErrorSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEInfo                                                              *ALEInfo.*
+ALEInfo                                                            *hl-ALEInfo*
                                                             *ALEInfo-highlight*
   Default: `highlight link ALEInfo ALEWarning`
 
   The highlight for highlighted info messages. See |g:ale_set_highlights|.
 
 
-ALEInfoSign                                                       *ALEInfoSign*
+ALEInfoSign                                                    *hl-ALEInfoSign*
 
   Default: `highlight link ALEInfoSign ALEWarningSign`
 
   The highlight for info message signs. See |g:ale_set_signs|.
 
 
-ALEInfoLine                                                       *ALEInfoLine*
+ALEInfoLine                                                    *hl-ALEInfoLine*
 
   Default: Undefined
 
@@ -2573,7 +2581,7 @@ ALEInfoLine                                                       *ALEInfoLine*
   See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
-ALEInfoSignLineNr                                           *ALEInfoSignLineNr*
+ALEInfoSignLineNr                                        *hl-ALEInfoSignLineNr*
 
   Default: `highlight link ALEInfoSignLineNr CursorLineNr`
 
@@ -2582,21 +2590,21 @@ ALEInfoSignLineNr                                           *ALEInfoSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEStyleError                                                   *ALEStyleError*
+ALEStyleError                                                *hl-ALEStyleError*
 
   Default: `highlight link ALEStyleError ALEError`
 
   The highlight for highlighted style errors. See |g:ale_set_highlights|.
 
 
-ALEStyleErrorSign                                           *ALEStyleErrorSign*
+ALEStyleErrorSign                                        *hl-ALEStyleErrorSign*
 
   Default: `highlight link ALEStyleErrorSign ALEErrorSign`
 
   The highlight for style error signs. See |g:ale_set_signs|.
 
 
-ALEStyleErrorSignLineNr                               *ALEStyleErrorSignLineNr*
+ALEStyleErrorSignLineNr                            *hl-ALEStyleErrorSignLineNr*
 
   Default: `highlight link ALEStyleErrorSignLineNr CursorLineNr`
 
@@ -2605,21 +2613,21 @@ ALEStyleErrorSignLineNr                               *ALEStyleErrorSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEStyleWarning                                               *ALEStyleWarning*
+ALEStyleWarning                                            *hl-ALEStyleWarning*
 
   Default: `highlight link ALEStyleWarning ALEError`
 
   The highlight for highlighted style warnings. See |g:ale_set_highlights|.
 
 
-ALEStyleWarningSign                                       *ALEStyleWarningSign*
+ALEStyleWarningSign                                    *hl-ALEStyleWarningSign*
 
   Default: `highlight link ALEStyleWarningSign ALEWarningSign`
 
   The highlight for style warning signs. See |g:ale_set_signs|.
 
 
-ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
+ALEStyleWarningSignLineNr                        *hl-ALEStyleWarningSignLineNr*
 
   Default: `highlight link ALEStyleWarningSignLineNr CursorLineNr`
 
@@ -2628,49 +2636,49 @@ ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
   NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
-ALEVirtualTextError                                       *ALEVirtualTextError*
+ALEVirtualTextError                                    *hl-ALEVirtualTextError*
 
   Default: `highlight link ALEVirtualTextError Comment`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
 
-ALEVirtualTextInfo                                         *ALEVirtualTextInfo*
+ALEVirtualTextInfo                                      *hl-ALEVirtualTextInfo*
 
   Default: `highlight link ALEVirtualTextInfo ALEVirtualTextWarning`
 
   The highlight for virtualtext info. See |g:ale_virtualtext_cursor|.
 
 
-ALEVirtualTextStyleError                             *ALEVirtualTextStyleError*
+ALEVirtualTextStyleError                          *hl-ALEVirtualTextStyleError*
 
   Default: `highlight link ALEVirtualTextStyleError ALEVirtualTextError`
 
   The highlight for virtualtext style errors. See |g:ale_virtualtext_cursor|.
 
 
-ALEVirtualTextStyleWarning                         *ALEVirtualTextStyleWarning*
+ALEVirtualTextStyleWarning                      *hl-ALEVirtualTextStyleWarning*
 
   Default: `highlight link ALEVirtualTextStyleWarning ALEVirtualTextWarning`
 
   The highlight for virtualtext style warnings. See |g:ale_virtualtext_cursor|.
 
 
-ALEVirtualTextWarning                                   *ALEVirtualTextWarning*
+ALEVirtualTextWarning                                *hl-ALEVirtualTextWarning*
 
   Default: `highlight link ALEVirtualTextWarning Comment`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
 
-ALEWarning                                                         *ALEWarning*
+ALEWarning                                                      *hl-ALEWarning*
 
   Default: `highlight link ALEWarning SpellCap`
 
   The highlight for highlighted warnings. See |g:ale_set_highlights|.
 
 
-ALEWarningLine                                                 *ALEWarningLine*
+ALEWarningLine                                              *hl-ALEWarningLine*
 
   Default: Undefined
 
@@ -2680,14 +2688,14 @@ ALEWarningLine                                                 *ALEWarningLine*
   See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
-ALEWarningSign                                                 *ALEWarningSign*
+ALEWarningSign                                              *hl-ALEWarningSign*
 
   Default: `highlight link ALEWarningSign todo`
 
   The highlight for warning signs. See |g:ale_set_signs|.
 
 
-ALEWarningSignLineNr                                     *ALEWarningSignLineNr*
+ALEWarningSignLineNr                                  *hl-ALEWarningSignLineNr*
 
   Default: `highlight link ALEWarningSignLineNr CursorLineNr`
 
@@ -2702,8 +2710,8 @@ ALEWarningSignLineNr                                     *ALEWarningSignLineNr*
 Linter and fixer options are documented below and in individual help files.
 
 Every option for programs can be set globally, or individually for each
-buffer. For example, `b:ale_python_flake8_executable` will override any
-values set for `g:ale_python_flake8_executable`.
+buffer. For example, |b:ale_python_flake8_executable| will override any
+values set for |g:ale_python_flake8_executable|.
 
                                            *ale-integrations-local-executables*
 
@@ -3519,7 +3527,7 @@ documented in additional help files.
 ===============================================================================
 8. Commands/Keybinds                                             *ale-commands*
 
-ALEComplete                                                       *ALEComplete*
+:ALEComplete                                                     *:ALEComplete*
 
   Manually trigger LSP autocomplete and show the menu. Works only when called
   from insert mode. >
@@ -3530,9 +3538,9 @@ ALEComplete                                                       *ALEComplete*
 
     imap <C-Space> <Plug>(ale_complete)
 <
-ALEDocumentation                                             *ALEDocumentation*
+:ALEDocumentation                                           *:ALEDocumentation*
 
-  Similar to the |ALEHover| command, retrieve documentation information for
+  Similar to the `:ALEHover` command, retrieve documentation information for
   the symbol at the cursor. Documentation data will always be shown in a
   preview window, no matter how small the documentation content is.
 
@@ -3541,14 +3549,14 @@ ALEDocumentation                                             *ALEDocumentation*
   A plug mapping `<Plug>(ale_documentation)` is defined for this command.
 
 
-ALEFindReferences                                           *ALEFindReferences*
+:ALEFindReferences                                         *:ALEFindReferences*
 
   Find references in the codebase for the symbol under the cursor using the
   enabled LSP linters for the buffer. ALE will display a preview window
   containing the results if some references are found.
 
   The window can be navigated using the usual Vim navigation commands. The
-  Enter key (`<CR>`) can be used to jump to a referencing location, or the `t`
+  Enter key (<CR>) can be used to jump to a referencing location, or the `t`
   key can be used to jump to the location in a new tab.
 
   The locations opened in different ways using the following variations.
@@ -3564,7 +3572,7 @@ ALEFindReferences                                           *ALEFindReferences*
   You can add `-relative` to the command to view results with relatives paths,
   instead of absolute paths. This option has no effect if `-quickfix` is used.
 
-  The selection can be opened again with the |ALERepeatSelection| command.
+  The selection can be opened again with the `:ALERepeatSelection` command.
 
   You can jump back to the position you were at before going to a reference of
   something with jump motions like CTRL-O. See |jump-motions|.
@@ -3576,7 +3584,7 @@ ALEFindReferences                                           *ALEFindReferences*
   nnoremap <silent> <Plug>(my_mapping) :ALEFindReferences -relative<Return>
 <
 
-ALEFix                                                                 *ALEFix*
+:ALEFix [linter]                                                      *:ALEFix*
 
   Fix problems with the current buffer. See |ale-fix| for more information.
 
@@ -3587,14 +3595,14 @@ ALEFix                                                                 *ALEFix*
   A plug mapping `<Plug>(ale_fix)` is defined for this command.
 
 
-ALEFixSuggest                                                   *ALEFixSuggest*
+:ALEFixSuggest                                                 *:ALEFixSuggest*
 
   Suggest tools that can be used to fix problems in the current buffer.
 
   See |ale-fix| for more information.
 
 
-ALEGoToDefinition `<options>`                               *ALEGoToDefinition*
+:ALEGoToDefinition [options]                                *:ALEGoToDefinition*
 
   Jump to the definition of a symbol under the cursor using the enabled LSP
   linters for the buffer. ALE will jump to a definition if an LSP server
@@ -3625,9 +3633,9 @@ ALEGoToDefinition `<options>`                               *ALEGoToDefinition*
   `<Plug>(ale_go_to_definition_in_vsplit)` - `:ALEGoToDefinition -vsplit`
 
 
-ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
+:ALEGoToTypeDefinition [options]                       *:ALEGoToTypeDefinition*
 
-  This works similar to |ALEGoToDefinition| but instead jumps to the
+  This works similar to `:ALEGoToDefinition` but instead jumps to the
   definition of a type of a symbol under the cursor. ALE will jump to a
   definition if an LSP server provides a location to jump to. Otherwise, ALE
   will do nothing.
@@ -3653,9 +3661,9 @@ ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
   `<Plug>(ale_go_to_type_definition_in_vsplit)` - `:ALEGoToTypeDefinition -vsplit`
 
 
-ALEGoToImplementation                                   *ALEGoToImplementation*
+:ALEGoToImplementation [options]                       *:ALEGoToImplementation*
 
-  This works similar to |ALEGoToDefinition| but instead jumps to the
+  This works similar to `:ALEGoToDefinition` but instead jumps to the
   implementation of symbol under the cursor. ALE will jump to a definition if
   an LSP server provides a location to jump to. Otherwise, ALE will do nothing.
 
@@ -3680,7 +3688,7 @@ ALEGoToImplementation                                   *ALEGoToImplementation*
   `<Plug>(ale_go_to_implementation_in_vsplit)` - `:ALEGoToImplementation -vsplit`
 
 
-ALEHover                                                             *ALEHover*
+:ALEHover                                                           *:ALEHover*
 
   Print brief information about the symbol under the cursor, taken from any
   available LSP linters. There may be a small non-blocking delay before
@@ -3693,7 +3701,7 @@ ALEHover                                                             *ALEHover*
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
 
 
-ALEImport                                                           *ALEImport*
+:ALEImport                                                         *:ALEImport*
 
   Try to import a symbol using `tsserver` or a Language Server.
 
@@ -3710,12 +3718,12 @@ ALEImport                                                           *ALEImport*
   mapping should only be bound for normal mode.
 
 
-ALEOrganizeImports                                         *ALEOrganizeImports*
+:ALEOrganizeImports                                       *:ALEOrganizeImports*
 
   Organize imports using tsserver. Currently not implemented for LSPs.
 
 
-ALERename                                                           *ALERename*
+:ALERename                                                         *:ALERename*
 
   Rename a symbol using `tsserver` or a Language Server.
 
@@ -3723,15 +3731,15 @@ ALERename                                                           *ALERename*
   prompt will open to request a new name.
 
   The rename operation will not save modified buffers when 'hidden' is on
-  unless |g:ale_save_hidden| is `1`.
+  unless |g:ale_save_hidden| is 1.
 
 
-ALEFileRename                                                   *ALEFileRename*
+:ALEFileRename                                                 *:ALEFileRename*
 
   Rename a file and fix imports using `tsserver`.
 
 
-ALECodeAction                                                   *ALECodeAction*
+:ALECodeAction                                                 *:ALECodeAction*
 
   Apply a code action via LSP servers or `tsserver`.
 
@@ -3743,12 +3751,12 @@ ALECodeAction                                                   *ALECodeAction*
   refactors. A menu will be shown to select code action to apply.
 
 
-ALERepeatSelection                                         *ALERepeatSelection*
+:ALERepeatSelection                                       *:ALERepeatSelection*
 
   Repeat the last selection displayed in the preview window.
 
 
-ALESymbolSearch `<query>`                                     *ALESymbolSearch*
+:ALESymbolSearch [query]                                     *:ALESymbolSearch*
 
   Search for symbols in the workspace, taken from any available LSP linters.
 
@@ -3758,8 +3766,8 @@ ALESymbolSearch `<query>`                                     *ALESymbolSearch*
   You can add `-relative` to the command to view results with relatives paths,
   instead of absolute paths.
 
-                                                                     *:ALELint*
-ALELint                                                               *ALELint*
+
+:ALELint                                                             *:ALELint*
 
   Run ALE once for the current buffer. This command can be used to run ALE
   manually, instead of automatically, if desired.
@@ -3770,15 +3778,15 @@ ALELint                                                               *ALELint*
   A plug mapping `<Plug>(ale_lint)` is defined for this command.
 
 
-ALELintStop                                                       *ALELintStop*
+:ALELintStop                                                     *:ALELintStop*
 
   Stop any currently running jobs for checking the current buffer.
 
   Any problems from previous linter results will continue to be shown.
 
 
-ALEPopulateQuickfix                                       *ALEPopulateQuickfix*
-ALEPopulateLocList                                         *ALEPopulateLocList*
+:ALEPopulateQuickfix                                     *:ALEPopulateQuickfix*
+:ALEPopulateLocList                                       *:ALEPopulateLocList*
 
   Manually populate the |quickfix| or |location-list| and show the
   corresponding list. Useful when you have other uses for both the |quickfix|
@@ -3791,23 +3799,23 @@ ALEPopulateLocList                                         *ALEPopulateLocList*
   With these settings, ALE will still run checking and display it with signs,
   highlighting, and other output described in |ale-lint-file-linters|.
 
-ALEPrevious                                                       *ALEPrevious*
-ALEPreviousWrap                                               *ALEPreviousWrap*
-ALENext                                                               *ALENext*
-ALENextWrap                                                       *ALENextWrap*
-ALEFirst                                                             *ALEFirst*
-ALELast                                                               *ALELast*
+:ALEPrevious                                                     *:ALEPrevious*
+:ALEPreviousWrap                                             *:ALEPreviousWrap*
+:ALENext                                                             *:ALENext*
+:ALENextWrap                                                     *:ALENextWrap*
+:ALEFirst                                                           *:ALEFirst*
+:ALELast                                                             *:ALELast*
                                                       *ale-navigation-commands*
 
   Move between warnings or errors in a buffer. ALE will only navigate between
   the errors or warnings it generated, even if both |g:ale_set_quickfix|
   and |g:ale_set_loclist| are set to `0`.
 
-  `ALEPrevious` and `ALENext` will stop at the top and bottom of a file, while
-  `ALEPreviousWrap` and `ALENextWrap` will wrap around the file to find
+  `:ALEPrevious` and `:ALENext` will stop at the top and bottom of a file, while
+  `:ALEPreviousWrap` and `:ALENextWrap` will wrap around the file to find
   the last or first warning or error in the file, respectively.
 
-  `ALEPrevious` and `ALENext` take optional flags arguments to custom their
+  `:ALEPrevious` and `:ALENext` take optional flags arguments to custom their
   behavior :
   `-wrap` enable wrapping around the file
   `-error`, `-warning` and `-info` enable jumping to errors, warnings or infos
@@ -3821,7 +3829,7 @@ ALELast                                                               *ALELast*
   ":ALENext -wrap -error -nosyle" to jump to the next error which is not a
   style error while going back to the beginning of the file if needed.
 
-  `ALEFirst` goes to the first error or warning in the buffer, while `ALELast`
+  `:ALEFirst` goes to the first error or warning in the buffer, while `:ALELast`
   goes to the last one.
 
   The following |<Plug>| mappings are defined for the commands: >
@@ -3840,8 +3848,8 @@ ALELast                                                               *ALELast*
   <Plug>(ale_first) - ALEFirst
   <Plug>(ale_last) - ALELast
 <
-  For example, these commands could be bound to the keys Ctrl + j
-  and Ctrl + k: >
+  For example, these commands could be bound to the keys CTRL-j
+  and CTRL-k: >
 
   " Map movement through errors without wrapping.
   nmap <silent> <C-k> <Plug>(ale_previous)
@@ -3851,23 +3859,23 @@ ALELast                                                               *ALELast*
   nmap <silent> <C-j> <Plug>(ale_next_wrap)
 <
 
-ALEToggle                                                           *ALEToggle*
-ALEEnable                                                           *ALEEnable*
-ALEDisable                                                         *ALEDisable*
-ALEToggleBuffer                                               *ALEToggleBuffer*
-ALEEnableBuffer                                               *ALEEnableBuffer*
-ALEDisableBuffer                                             *ALEDisableBuffer*
+:ALEToggle                                                         *:ALEToggle*
+:ALEEnable                                                         *:ALEEnable*
+:ALEDisable                                                       *:ALEDisable*
+:ALEToggleBuffer                                             *:ALEToggleBuffer*
+:ALEEnableBuffer                                             *:ALEEnableBuffer*
+:ALEDisableBuffer                                           *:ALEDisableBuffer*
 
-  `ALEToggle`, `ALEEnable`, and `ALEDisable` enable or disable ALE linting,
+  `:ALEToggle`, `:ALEEnable`, and `:ALEDisable` enable or disable ALE linting,
   including all of its autocmd events, loclist items, quickfix items, signs,
   current jobs, etc., globally. Executing any of these commands will change
   the |g:ale_enabled| variable.
 
   ALE can be disabled or enabled for only a single buffer with
-  `ALEToggleBuffer`, `ALEEnableBuffer`, and `ALEDisableBuffer`. Disabling ALE
+  `:ALEToggleBuffer`, `:ALEEnableBuffer`, and `:ALEDisableBuffer`. Disabling ALE
   for a buffer will not remove autocmd events, but will prevent ALE from
   checking for problems and reporting problems for whatever buffer the
-  `ALEDisableBuffer` or `ALEToggleBuffer` command is executed from. These
+  `:ALEDisableBuffer` or `:ALEToggleBuffer` command is executed from. These
   commands can be used for temporarily disabling ALE for a buffer. These
   commands will modify the |b:ale_enabled| variable.
 
@@ -3877,18 +3885,18 @@ ALEDisableBuffer                                             *ALEDisableBuffer*
 
   The following plug mappings are defined, for conveniently defining keybinds:
 
-  |ALEToggle|        - `<Plug>(ale_toggle)`
-  |ALEEnable|        - `<Plug>(ale_enable)`
-  |ALEDisable|       - `<Plug>(ale_disable)`
-  |ALEToggleBuffer|  - `<Plug>(ale_toggle_buffer)`
-  |ALEEnableBuffer|  - `<Plug>(ale_enable_buffer)`
-  |ALEDisableBuffer| - `<Plug>(ale_disable_buffer)`
+  `:ALEToggle`        - `<Plug>(ale_toggle)`
+  `:ALEEnable`        - `<Plug>(ale_enable)`
+  `:ALEDisable`       - `<Plug>(ale_disable)`
+  `:ALEToggleBuffer`  - `<Plug>(ale_toggle_buffer)`
+  `:ALEEnableBuffer`  - `<Plug>(ale_enable_buffer)`
+  `:ALEDisableBuffer` - `<Plug>(ale_disable_buffer)`
 
   For removing problems reported by ALE, but leaving ALE enabled, see
-  |ALEReset| and |ALEResetBuffer|.
+  `:ALEReset` and `:ALEResetBuffer`.
 
-                                                                   *:ALEDetail*
-ALEDetail                                                           *ALEDetail*
+
+:ALEDetail                                                         *:ALEDetail*
 
   Show the full linter message for the problem nearest to the cursor on the
   given line in the preview window. The preview window can be easily closed
@@ -3901,9 +3909,8 @@ ALEDetail                                                           *ALEDetail*
   A plug mapping `<Plug>(ale_detail)` is defined for this command.
 
 
-                                                                     *:ALEInfo*
-ALEInfo                                                               *ALEInfo*
-                                                                *ALEInfoToFile*
+:ALEInfo                                                             *:ALEInfo*
+                                                               *:ALEInfoToFile*
 
   Print runtime information about ALE, including the values of global and
   buffer-local settings for ALE, the linters that are enabled, the commands
@@ -3928,39 +3935,39 @@ ALEInfo                                                               *ALEInfo*
   `ale-info` filetype.
 
   `:ALEInfoToFile` will write the ALE runtime information to a given filename.
-  The filename works just like |:w|.
+  The filename works just like `:write`.
 
 
-ALEReset                                                             *ALEReset*
-ALEResetBuffer                                                 *ALEResetBuffer*
+:ALEReset                                                           *:ALEReset*
+:ALEResetBuffer                                               *:ALEResetBuffer*
 
-  `ALEReset` will remove all problems reported by ALE for all buffers.
-  `ALEResetBuffer` will remove all problems reported for a single buffer.
+  `:ALEReset` will remove all problems reported by ALE for all buffers.
+  `:ALEResetBuffer` will remove all problems reported for a single buffer.
 
   Either command will leave ALE linting enabled, so ALE will report problems
   when linting is performed again. See |ale-lint| for more information.
 
   The following plug mappings are defined, for conveniently defining keybinds:
 
-  |ALEReset|       - `<Plug>(ale_reset)`
-  |ALEResetBuffer| - `<Plug>(ale_reset_buffer)`
+  `:ALEReset`       - `<Plug>(ale_reset)`
+  `:ALEResetBuffer` - `<Plug>(ale_reset_buffer)`
 
-  ALE can be disabled globally or for a buffer with |ALEDisable| or
-  |ALEDisableBuffer|.
+  ALE can be disabled globally or for a buffer with `:ALEDisable` or
+  `:ALEDisableBuffer`.
 
 
-ALEStopAllLSPs                                                 *ALEStopAllLSPs*
+:ALEStopAllLSPs                                               *:ALEStopAllLSPs*
 
-  `ALEStopAllLSPs` will close and stop all channels and jobs for all LSP-like
+  `:ALEStopAllLSPs` will close and stop all channels and jobs for all LSP-like
   clients, including tsserver, remove all of the data stored for them, and
   delete all of the problems found for them, updating every linted buffer.
 
   This command can be used when LSP clients mess up and need to be restarted.
 
 
-ALEStopLSP `linter_name`                                           *ALEStopLSP*
+:ALEStopLSP [linter]                                              *:ALEStopLSP*
 
-  `ALEStopLSP` will stop a specific language server with a given linter name.
+  `:ALEStopLSP` will stop a specific language server with a given linter name.
   Completion is supported for currently running language servers. All language
   servers with the given name will be stopped across all buffers for all
   projects.
@@ -4264,7 +4271,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          |setqflist()|. The |List| will be sorted by line and
                          then column order so it can be searched with a binary
                          search by in future before being passed on to the
-                         |loclist|, etc.
+                         |location-list|, etc.
 
                          This argument is required, unless the linter is an
                          LSP linter. In which case, this argument must not be
@@ -4280,17 +4287,17 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                                                            *ale-loclist-format*
                          `text` - This error message is required.
                          `detail` - An optional, more descriptive message.
-                           This message can be displayed with the |ALEDetail|
+                           This message can be displayed with the `:ALEDetail`
                            command instead of the message for `text`, if set.
                          `lnum` - The line number is required. Any strings
                            will be automatically converted to numbers by
-                           using `str2nr()`.
+                           using |str2nr()|.
 
                            Line 0 will be moved to line 1, and lines beyond
                            the end of the file will be moved to the end.
                          `col` - The column number is optional and will
                            default to `0`. Any strings will be automatically
-                           converted to number using `str2nr()`.
+                           converted to number using |str2nr()|.
                          `end_col` - An optional end column number.
                            This key can be set to specify the column problems
                            end on, for improved highlighting.
@@ -4314,7 +4321,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            and have been checked at least once.
 
                            Temporary files in directories used for Vim
-                           temporary files with `tempname()` will be assumed
+                           temporary files with |tempname()| will be assumed
                            to be the buffer being checked, unless the `bufnr`
                            key is also set with a valid number for some other
                            buffer.
@@ -4418,7 +4425,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          run only when events occur against the file on disk,
                          including |g:ale_lint_on_enter| and
                          |g:ale_lint_on_save|. Linters where this option
-                         evaluates to `1` will also be run when the |ALELint|
+                         evaluates to `1` will also be run when the `:ALELint`
                          command is run.
 
                          When this option is evaluates to `1`, ALE will behave
@@ -4586,7 +4593,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
   ale_linters/<filetype>/<linter_name>.vim
 <
-  Any linters which exist anywhere in |runtimepath| with that directory
+  Any linters which exist anywhere in 'runtimepath' with that directory
   structure will be automatically loaded for the matching |filetype|. Filetypes
   containing `.` characters will be split into individual parts, and files
   will be loaded for each filetype between the `.` characters.
@@ -4728,7 +4735,7 @@ ALECompletePost                                       *ALECompletePost-autocmd*
 
   This |User| autocmd is triggered after ALE inserts an item on
   |CompleteDone|. This event can be used to run commands after a buffer
-  is changed by ALE as the result of completion. For example, |ALEFix| can
+  is changed by ALE as the result of completion. For example, `:ALEFix` can
   be configured to run automatically when completion is done: >
 
   augroup FixAfterComplete
