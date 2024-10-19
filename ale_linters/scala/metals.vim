@@ -1,7 +1,7 @@
 " Author: Jeffrey Lau - https://github.com/zoonfafer
 " Description: Metals Language Server for Scala https://scalameta.org/metals/
 
-call ale#Set('scala_metals_executable', 'metals-vim')
+call ale#Set('scala_metals_executable', 'metals')
 call ale#Set('scala_metals_project_root', '')
 
 function! ale_linters#scala#metals#GetProjectRoot(buffer) abort
