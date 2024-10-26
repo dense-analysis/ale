@@ -1,0 +1,69 @@
+Before:
+  call ale#assert#SetUpFixerTest('erlang', 'erlang_mode')
+
+  function! Fixer(key, ...) abort
+    let l:name = get(a:, 1, 'erlang_mode')
+
+    let l:func = ale#fix#registry#GetFunc(l:name)
+    let l:dict = call(l:func, [bufnr('')])
+
+    return l:dict[a:key]
+  endfunction
+
+After:
+  delfunction Fixer
+  call ale#assert#TearDownFixerTest()
+
+Execute(Emacs should edit temporary file in batch mode):
+  AssertEqual 0, stridx(
+  \ Fixer('command'),
+  \ ale#Escape('emacs') . ' --batch --find-file=%t --eval=',
+  \)
+
+Execute(The temporary file should be read):
+  AssertEqual 1, Fixer('read_temporary_file')
+
+Execute(Fixer alias erlang-mode should be provided):
+  AssertEqual 0, stridx(
+  \ Fixer('command', 'erlang-mode'),
+  \ ale#Escape('emacs') . ' --batch --find-file=%t --eval=',
+  \)
+
+Execute(Emacs executable should be configurable):
+  let b:ale_erlang_erlang_mode_emacs_executable = '/path/to/emacs'
+  AssertEqual 0, stridx(Fixer('command'), ale#Escape('/path/to/emacs'))
+
+Execute(erlang-indent-level should be 4 by default):
+  Assert Fixer('command') =~# '\m\<erlang-indent-level 4\>'
+
+Execute(erlang-indent-level should be configurable):
+  let b:ale_erlang_erlang_mode_indent_level = 2
+  Assert Fixer('command') =~# '\m\<erlang-indent-level 2\>'
+
+Execute(erlang-icr-indent should be nil by default):
+  Assert Fixer('command') =~# '\m\<erlang-icr-indent nil\>'
+
+Execute(erlang-icr-indent should be configurable):
+  let b:ale_erlang_erlang_mode_icr_indent = 0
+  Assert Fixer('command') =~# '\m\<erlang-icr-indent 0\>'
+
+Execute(erlang-indent-guard should be 2 by default):
+  Assert Fixer('command') =~# '\m\<erlang-indent-guard 2\>'
+
+Execute(erlang-indent-guard should be configurable):
+  let b:ale_erlang_erlang_mode_indent_guard = 0
+  Assert Fixer('command') =~# '\m\<erlang-indent-guard 0\>'
+
+Execute(erlang-argument-indent should be 2 by default):
+  Assert Fixer('command') =~# '\m\<erlang-argument-indent 2\>'
+
+Execute(erlang-argument-indent should be configurable):
+  let b:ale_erlang_erlang_mode_argument_indent = 4
+  Assert Fixer('command') =~# '\m\<erlang-argument-indent 4\>'
+
+Execute(indent-tabs-mode should be nil by default):
+  Assert Fixer('command') =~# '\m\<indent-tabs-mode nil\>'
+
+Execute(indent-tabs-mode should be configurable):
+  let b:ale_erlang_erlang_mode_indent_tabs_mode = 't'
+  Assert Fixer('command') =~# '\m\<indent-tabs-mode t\>'

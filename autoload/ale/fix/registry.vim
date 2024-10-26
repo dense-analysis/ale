@@ -98,6 +98,12 @@ let s:default_registry = {
 \       'suggested_filetypes': ['dune'],
 \       'description': 'Fix dune files with dune format',
 \   },
+\   'erlang_mode': {
+\       'function': 'ale#fixers#erlang_mode#Fix',
+\       'suggested_filetypes': ['erlang'],
+\       'description': 'Indent with the Erlang mode for Emacs',
+\       'aliases': ['erlang-mode'],
+\   },
 \   'fecs': {
 \       'function': 'ale#fixers#fecs#Fix',
 \       'suggested_filetypes': ['javascript', 'css', 'html'],

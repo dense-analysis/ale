@@ -3024,6 +3024,7 @@ documented in additional help files.
   erlang..................................|ale-erlang-options|
     dialyzer..............................|ale-erlang-dialyzer|
     elvis.................................|ale-erlang-elvis|
+    erlang-mode...........................|ale-erlang-erlang-mode|
     erlang_ls.............................|ale-erlang-erlang_ls|
     erlc..................................|ale-erlang-erlc|
     erlfmt................................|ale-erlang-erlfmt|
