@@ -53,4 +53,5 @@ call ale#linter#Define('erlang', {
 \   'command': function('s:GetCommand'),
 \   'lsp': 'stdio',
 \   'project_root': function('s:FindProjectRoot'),
+\   'aliases': ['erlang-ls'],
 \})
