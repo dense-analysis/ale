@@ -24,7 +24,7 @@ function! ale_linters#go#golangci_lint#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#go#golangci_lint#GetMatches(lines) abort
-    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?:?:?:?\s\*?(.+)\s+\((.+)\)$'
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?:? (.+)$'
 
     return ale#util#GetMatches(a:lines, l:pattern)
 endfunction
