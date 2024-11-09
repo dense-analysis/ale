@@ -5,8 +5,8 @@ After:
   call ale#assert#TearDownFixerTest()
 
 Execute(The erlfmt command should handle empty options):
-  AssertFixer {'command': ale#Escape('erlfmt') . ' %s'}
+  AssertFixer {'command': ale#Escape('erlfmt') . ' -'}
 
 Execute(The erlfmt command should handle custom options):
   let b:ale_erlang_erlfmt_options = '--insert-pragma'
-  AssertFixer {'command': ale#Escape('erlfmt') . ' --insert-pragma %s'}
+  AssertFixer {'command': ale#Escape('erlfmt') . ' --insert-pragma -'}
