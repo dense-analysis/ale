@@ -16,3 +16,15 @@ Execute (Should parse error correctly):
   \ ale_linters#json#jq#Handle(0, [
   \ 'parse error: Expected another array element at line 1, column 9'
   \ ])
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col':  9,
+  \     'text': 'Expected another array element',
+  \   }
+  \ ],
+  \ ale_linters#json#jq#Handle(0, [
+  \ 'jq: parse error: Expected another array element at line 1, column 9'
+  \ ])
