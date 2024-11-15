@@ -52,16 +52,19 @@ function! ale_linters#sql#sqlfluff#Handle(buffer, version, lines) abort
 
     if ale#semver#GTE(a:version, [3, 0, 0])
         for l:violation in get(l:json, 'violations', [])
-            call add(l:output, {
+            err = {
             \   'filename': l:json.filepath,
             \   'lnum': l:violation.start_line_no,
-            \   'end_lnum': l:violation.end_line_no,
             \   'col': l:violation.start_line_pos,
-            \   'end_col': l:violation.end_line_pos,
             \   'text': l:violation.description,
             \   'code': l:violation.code,
             \   'type': 'W',
-            \})
+            \}
+            if has_key(l.violation, 'end_line_no')
+                err.end_lnum = l:violation.end_line_no
+            if has_key(l.violation, 'end_line_pos')
+                err.end_col = l:violation.end_line_pos
+            call add(l:output, err)
         endfor
     else
         for l:violation in get(l:json, 'violations', [])
