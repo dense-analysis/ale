@@ -30,7 +30,7 @@ endfunction
 function! ale#fixers#reorder_python_imports#Fix(buffer) abort
     let l:executable = ale#fixers#reorder_python_imports#GetExecutable(a:buffer)
 
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run reorder-python-imports'
     \   : ''
 

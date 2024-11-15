@@ -70,7 +70,7 @@ endfunction
 
 function! ale_linters#python#pyright#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pyright#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run pyright-langserver'
     \   : ''
     let l:env_string = ''

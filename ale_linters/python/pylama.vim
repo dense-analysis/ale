@@ -30,7 +30,7 @@ endfunction
 
 function! ale_linters#python#pylama#RunWithVersionCheck(buffer) abort
     let l:executable = ale_linters#python#pylama#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run pylama'
     \   : ''
 
@@ -59,7 +59,7 @@ endfunction
 
 function! ale_linters#python#pylama#GetCommand(buffer, version) abort
     let l:executable = ale_linters#python#pylama#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run pylama'
     \   : ''
 

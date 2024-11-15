@@ -30,7 +30,7 @@ endfunction
 function! ale_linters#python#pycodestyle#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pycodestyle#GetExecutable(a:buffer)
 
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run pycodestyle'
     \   : ''
 

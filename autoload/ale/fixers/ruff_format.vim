@@ -41,7 +41,7 @@ endfunction
 
 function! ale#fixers#ruff_format#GetCommand(buffer) abort
     let l:executable = ale#fixers#ruff_format#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run ruff'
     \   : ''
 
@@ -52,7 +52,7 @@ function! ale#fixers#ruff_format#Fix(buffer) abort
     let l:executable = ale#fixers#ruff_format#GetExecutable(a:buffer)
     let l:cmd = [ale#Escape(l:executable)]
 
-    if l:executable =~? 'pipenv\|poetry\|uv$'
+    if l:executable =~? '\(pipenv\|poetry\|uv\)$'
         call extend(l:cmd, ['run', 'ruff'])
     endif
 

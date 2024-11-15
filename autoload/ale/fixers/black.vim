@@ -32,7 +32,7 @@ function! ale#fixers#black#Fix(buffer) abort
     let l:executable = ale#fixers#black#GetExecutable(a:buffer)
     let l:cmd = [ale#Escape(l:executable)]
 
-    if l:executable =~? 'pipenv\|poetry\|uv$'
+    if l:executable =~? '\(pipenv\|poetry\|uv\)$'
         call extend(l:cmd, ['run', 'black'])
     endif
 
