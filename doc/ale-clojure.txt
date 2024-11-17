@@ -16,6 +16,18 @@ g:ale_clojure_clj_kondo_options               *g:ale_clojure_clj_kondo_options*
 
   This variable can be changed to modify options passed to clj-kondo.
 
+===============================================================================
+cljfmt                                                     *ale-clojure-cljfmt*
+
+cljfmt is a linter and fixer for Clojure code, with defaults adhering to the
+Clojure Style Guide (see https://guide.clojure.style/ )
+
+https://github.com/weavejester/cljfmt
+
+Linting options are not configurable by ale, but instead are controlled by
+Leiningen, or a cljfmt file in the current or parent directories.
+
+see https://github.com/weavejester/cljfmt#Configuration for more information.
 
 ===============================================================================
 joker                                                       *ale-clojure-joker*

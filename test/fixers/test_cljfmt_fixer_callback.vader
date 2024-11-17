@@ -1,0 +1,12 @@
+Before:
+  call ale#assert#SetUpFixerTest('clojure', 'cljfmt')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The cljfmt callback should return the correct default values):
+  AssertFixer {
+  \    'command': ale#Escape('cljfmt') . ' fix %t',
+  \    'read_temporary_file': 1,
+  \}
+

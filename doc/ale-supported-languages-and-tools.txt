@@ -112,6 +112,7 @@ Notes:
   * `foodcritic`!!
 * Clojure
   * `clj-kondo`
+  * `cljfmt`
   * `joker`
 * CloudFormation
   * `cfn-python-lint`

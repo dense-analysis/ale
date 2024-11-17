@@ -121,6 +121,7 @@ formatting.
   * [foodcritic](http://www.foodcritic.io/) :floppy_disk:
 * Clojure
   * [clj-kondo](https://github.com/borkdude/clj-kondo)
+  * [cljfmt](https://github.com/weavejester/cljfmt)
   * [joker](https://github.com/candid82/joker)
 * CloudFormation
   * [cfn-python-lint](https://github.com/awslabs/cfn-python-lint)
