@@ -47,7 +47,7 @@ endfunction
 
 function! ale_linters#python#ruff#GetCommand(buffer, version) abort
     let l:executable = ale_linters#python#ruff#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run ruff'
     \   : ''
 

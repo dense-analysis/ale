@@ -74,7 +74,7 @@ endfunction
 function! ale_linters#python#flake8#GetCommand(buffer, version) abort
     let l:executable = ale_linters#python#flake8#GetExecutable(a:buffer)
 
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run flake8'
     \   : ''
 

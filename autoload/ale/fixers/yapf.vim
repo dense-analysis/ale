@@ -29,7 +29,7 @@ endfunction
 function! ale#fixers#yapf#Fix(buffer) abort
     let l:executable = ale#fixers#yapf#GetExecutable(a:buffer)
 
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run yapf'
     \   : ''
 

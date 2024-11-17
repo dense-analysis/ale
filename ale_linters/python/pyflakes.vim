@@ -29,7 +29,7 @@ endfunction
 function! ale_linters#python#pyflakes#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pyflakes#GetExecutable(a:buffer)
 
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run pyflakes'
     \   : ''
 

@@ -45,7 +45,7 @@ function! ale_linters#python#bandit#GetCommand(buffer) abort
         endif
     endif
 
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run bandit'
     \   : ''
 
