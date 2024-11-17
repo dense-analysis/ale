@@ -33,7 +33,7 @@ function! ale#fixers#pyflyby#Fix(buffer) abort
     let l:executable = ale#fixers#pyflyby#GetExecutable(a:buffer)
     let l:cmd = [ale#Escape(l:executable)]
 
-    if l:executable =~? 'pipenv\|poetry\|uv$'
+    if l:executable =~? '\(pipenv\|poetry\|uv\)$'
         call extend(l:cmd, ['run', 'tidy-imports'])
     endif
 

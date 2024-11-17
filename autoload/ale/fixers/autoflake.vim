@@ -30,7 +30,7 @@ endfunction
 function! ale#fixers#autoflake#Fix(buffer) abort
     let l:executable = ale#fixers#autoflake#GetExecutable(a:buffer)
 
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run autoflake'
     \   : ''
 

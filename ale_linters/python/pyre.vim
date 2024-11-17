@@ -28,7 +28,7 @@ endfunction
 
 function! ale_linters#python#pyre#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pyre#GetExecutable(a:buffer)
-    let l:exec_args = (l:executable =~? 'pipenv\|poetry\|uv$' ? ' run pyre' : '') . ' persistent'
+    let l:exec_args = (l:executable =~? '\(pipenv\|poetry\|uv\)$' ? ' run pyre' : '') . ' persistent'
 
     return ale#Escape(l:executable) . l:exec_args
 endfunction

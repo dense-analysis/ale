@@ -28,7 +28,7 @@ endfunction
 
 function! ale_linters#python#unimport#GetCommand(buffer) abort
     let l:executable = ale_linters#python#unimport#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run unimport'
     \   : ''
 

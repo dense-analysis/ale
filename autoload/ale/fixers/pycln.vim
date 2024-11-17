@@ -42,7 +42,7 @@ endfunction
 
 function! ale#fixers#pycln#GetCommand(buffer) abort
     let l:executable = ale#fixers#pycln#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run pycln'
     \   : ''
 
@@ -53,7 +53,7 @@ function! ale#fixers#pycln#FixForVersion(buffer, version) abort
     let l:executable = ale#fixers#pycln#GetExecutable(a:buffer)
     let l:cmd = [ale#Escape(l:executable)]
 
-    if l:executable =~? 'pipenv\|poetry\|uv$'
+    if l:executable =~? '\(pipenv\|poetry\|uv\)$'
         call extend(l:cmd, ['run', 'pycln'])
     endif
 

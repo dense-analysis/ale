@@ -30,7 +30,7 @@ endfunction
 function! ale#fixers#autopep8#Fix(buffer) abort
     let l:executable = ale#fixers#autopep8#GetExecutable(a:buffer)
 
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run autopep8'
     \   : ''
 

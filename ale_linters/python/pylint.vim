@@ -44,7 +44,7 @@ endfunction
 
 function! ale_linters#python#pylint#GetCommand(buffer, version) abort
     let l:executable = ale_linters#python#pylint#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv\|poetry\|uv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run pylint'
     \   : ''
 
