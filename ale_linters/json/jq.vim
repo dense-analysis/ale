@@ -5,7 +5,7 @@ call ale#Set('json_jq_filters', '.')
 
 " Matches patterns like the following:
 " parse error: Expected another key-value pair at line 4, column 3
-let s:pattern = '^parse error: \(.\+\) at line \(\d\+\), column \(\d\+\)$'
+let s:pattern = 'parse error: \(.\+\) at line \(\d\+\), column \(\d\+\)$'
 
 function! ale_linters#json#jq#Handle(buffer, lines) abort
     return ale#util#MapMatches(a:lines, s:pattern, {match -> {
