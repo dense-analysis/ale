@@ -69,7 +69,15 @@ Execute(The sqlfluff handler should handle basic warnings with version newer tha
   \     'code': 'L009',
   \     'text': 'Files must end with a single trailing newline.',
   \   },
+  \   {
+  \     'filename': 'schema.sql',
+  \     'lnum': 3,
+  \     'col': 21,
+  \     'type': 'W',
+  \     'code': 'TMP',
+  \     'text': "Undefined jinja template variable: 'a_jinja_templated_table'",
+  \   },
   \ ],
   \ ale_linters#sql#sqlfluff#Handle(bufnr(''), [3, 0, 0], [
-  \    '[{"filepath": "schema.sql", "violations": [{"start_line_no": 1, "end_line_no":1, "start_line_pos": 8, "end_line_pos":12, "code": "L010", "description": "Keywords must be consistently upper case."}, {"start_line_no": 13, "end_line_no":13, "start_line_pos": 2, "end_line_pos":20, "code": "L003", "description": "Expected 1 indentation, found 0 [compared to line 12]"}, {"start_line_no": 16, "end_line_no":16, "start_line_pos": 1, "end_line_pos":5, "code": "L009", "description": "Files must end with a single trailing newline."}]}]',
+  \    '[{"filepath": "schema.sql", "violations": [{"start_line_no": 1, "end_line_no":1, "start_line_pos": 8, "end_line_pos":12, "code": "L010", "description": "Keywords must be consistently upper case."}, {"start_line_no": 13, "end_line_no":13, "start_line_pos": 2, "end_line_pos":20, "code": "L003", "description": "Expected 1 indentation, found 0 [compared to line 12]"}, {"start_line_no": 16, "end_line_no":16, "start_line_pos": 1, "end_line_pos":5, "code": "L009", "description": "Files must end with a single trailing newline."}, {"start_line_no": 3, "start_line_pos": 21, "code": "TMP", "description": "Undefined jinja template variable: ''a_jinja_templated_table''"}]}]',
   \ ])
