@@ -13,9 +13,7 @@ function! ale#fixers#erlfmt#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'erlang_erlfmt_options')
     let l:executable = ale#fixers#erlfmt#GetExecutable(a:buffer)
 
-    let l:command = ale#Escape(l:executable) . (empty(l:options) ? '' : ' ' . l:options) . ' %s'
+    let l:command = ale#Escape(l:executable) . ale#Pad(l:options) . ' -'
 
-    return {
-    \   'command': l:command
-    \}
+    return {'command': l:command}
 endfunction
