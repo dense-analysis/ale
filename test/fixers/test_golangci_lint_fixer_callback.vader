@@ -1,0 +1,48 @@
+Before:
+  Save g:ale_go_go111module
+  Save g:ale_go_golangci_lint_executable
+  Save g:ale_go_golangci_lint_options
+  Save g:ale_go_golangci_lint_package
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_go_golangci_lint_executable = 'xxxinvalid'
+  let g:ale_go_golangci_lint_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  call ale#test#SetFilename('../test-files/go/testfile.go')
+After:
+  Restore
+
+  unlet! b:ale_go_go111module
+
+  call ale#test#RestoreDirectory()
+
+Execute(The golangci-lint callback should return the correct default values):
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid') . ' run  --fix',
+  \ },
+  \ ale#fixers#golangci_lint#Fix(bufnr(''))
+
+Execute(The golangci-lint callback should include custom golangci-lint options):
+  let g:ale_go_golangci_lint_options = "--new --config /dev/null"
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' run ' . g:ale_go_golangci_lint_options . ' --fix',
+  \ },
+  \ ale#fixers#golangci_lint#Fix(bufnr(''))
+
+Execute(The golangci-lint callback should support per-file mode):
+  let g:ale_go_golangci_lint_package = 0
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' run '
+  \     . g:ale_go_golangci_lint_options
+  \     . ' --fix ' . ale#Escape('testfile.go'),
+  \ },
+  \ ale#fixers#golangci_lint#Fix(bufnr(''))
