@@ -332,6 +332,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['go'],
 \       'description': 'Fix Go files imports with goimports.',
 \   },
+\   'golangci_lint': {
+\       'function': 'ale#fixers#golangci_lint#Fix',
+\       'suggested_filetypes': ['go'],
+\       'description': 'Fix Go files with golangci-lint.',
+\   },
 \   'golines': {
 \       'function': 'ale#fixers#golines#Fix',
 \       'suggested_filetypes': ['go'],
