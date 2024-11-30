@@ -207,6 +207,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix Python files with yapf.',
 \   },
+\   'yq': {
+\       'function': 'ale#fixers#yq#Fix',
+\       'suggested_filetypes': ['yaml'],
+\       'description': 'Fix YAML files with yq.',
+\   },
 \   'rubocop': {
 \       'function': 'ale#fixers#rubocop#Fix',
 \       'suggested_filetypes': ['ruby'],
