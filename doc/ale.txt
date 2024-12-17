@@ -2898,6 +2898,7 @@ documented in additional help files.
     ansible-language-server...............|ale-ansible-language-server|
     ansible-lint..........................|ale-ansible-ansible-lint|
   apkbuild................................|ale-apkbuild-options|
+    apkbuild-fixer........................|ale-apkbuild-apkbuild-fixer|
     apkbuild-lint.........................|ale-apkbuild-apkbuild-lint|
     secfixes-check........................|ale-apkbuild-secfixes-check|
   asciidoc................................|ale-asciidoc-options|

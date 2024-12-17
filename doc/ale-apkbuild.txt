@@ -3,9 +3,40 @@ ALE APKBUILD Integration                                 *ale-apkbuild-options*
 
 
 ===============================================================================
+apkbuild-fixer                                    *ale-apkbuild-apkbuild-fixer*
+
+g:apkbuild_apkbuild_fixer_options           *g:apkbuild_apkbuild_fixer_options*
+                                            *b:apkbuild_apkbuild_fixer_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the apkbuild_fixer
+  fixer.
+
+
+g:apkbuild_apkbuild_fixer_executable     *g:apkbuild_apkbuild_fixer_executable*
+                                         *b:apkbuild_apkbuild_fixer_executable*
+  Type: |String|
+  Default: `'apkbuild-fixer'`
+
+  This variable can be modified to change the executable path for
+  `apkbuild-fixer`.
+
+
+g:apkbuild_apkbuild_fixer_lint_executable
+                                    *g:apkbuild_apkbuild_fixer_lint_executable*
+                                    *b:apkbuild_apkbuild_fixer_lint_executable*
+  Type: |String|
+  Default: `'apkbuild-fixer'`
+
+  This variable can be modified to change the executable path for
+  `apkbuild-lint`, the binary used to find violations.
+
+
+===============================================================================
 apkbuild-lint                                      *ale-apkbuild-apkbuild-lint*
 
-g:ale_apkbuild_apkbuild_lint_executable                  
+g:ale_apkbuild_apkbuild_lint_executable
                                       *g:ale_apkbuild_apkbuild_lint_executable*
                                       *b:ale_apkbuild_apkbuild_lint_executable*
 

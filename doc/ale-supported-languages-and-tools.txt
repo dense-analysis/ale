@@ -23,6 +23,7 @@ Notes:
 * API Blueprint
   * `drafter`
 * APKBUILD
+  * `apkbuild-fixer`
   * `apkbuild-lint`
   * `secfixes-check`
 * AsciiDoc

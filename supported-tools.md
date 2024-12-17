@@ -32,6 +32,7 @@ formatting.
 * API Blueprint
   * [drafter](https://github.com/apiaryio/drafter)
 * APKBUILD
+  * [apkbuild-fixer](https://gitlab.alpinelinux.org/Leo/atools)
   * [apkbuild-lint](https://gitlab.alpinelinux.org/Leo/atools)
   * [secfixes-check](https://gitlab.alpinelinux.org/Leo/atools)
 * AsciiDoc
