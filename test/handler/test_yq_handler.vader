@@ -8,23 +8,12 @@ Execute (Should parse error correctly):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 1,
-  \     'col':  9,
-  \     'text': 'Expected another array element',
+  \     'lnum': 2,
+  \     'text': "did not find expected ',' or ']'",
   \   }
   \ ],
-  \ ale_linters#yaml#yq#Handle(0, [
-  \ 'parse error: Expected another array element at line 1, column 9'
+  \ ale_linters#yaml#yq#Handle(bufnr(''), [
+  \ "Error: bad file '-': yaml: line 2: did not find expected ',' or ']'"
   \ ])
 
-  AssertEqual
-  \ [
-  \   {
-  \     'lnum': 1,
-  \     'col':  9,
-  \     'text': 'Expected another array element',
-  \   }
-  \ ],
-  \ ale_linters#yaml#yq#Handle(0, [
-  \ 'yq: parse error: Expected another array element at line 1, column 9'
-  \ ])
+
