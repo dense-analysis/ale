@@ -1,0 +1,20 @@
+Before:
+    runtime ale_linters/markdown/pymarkdown.vim
+
+After:
+    call ale#linter#Reset()
+
+Execute (Should parse error correctly):
+  AssertEqual
+  \ [
+  \   {
+        \   'lnum': 1,
+        \   'col': 1,
+        \   'type': 'M',
+        \   'text': 'Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)',
+        \   'code': 'MD022',
+  \   }
+  \ ],
+  \ ale_linters#markdown#pymarkdown#Handle(0, [
+  \ '.vim/sample.md:1:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)'
+  \ ])
