@@ -148,7 +148,7 @@ while [ "$tries" -lt 5 ]; do
     exit_code=0
     set -o pipefail
     # shellcheck disable=SC2086
-    docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
+    "$DOCKER" run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
         "/vim-build/bin/$vim" -u test/vimrc ${headless} \
         "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || exit_code=$?
     set +o pipefail
