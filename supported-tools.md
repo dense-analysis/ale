@@ -738,6 +738,7 @@ formatting.
   * [yamlfix](https://lyz-code.github.io/yamlfix)
   * [yamlfmt](https://github.com/google/yamlfmt)
   * [yamllint](https://yamllint.readthedocs.io/)
+  * [yq](https://github.com/mikefarah/yq)
 * YANG
   * [yang-lsp](https://github.com/theia-ide/yang-lsp)
 * Zeek

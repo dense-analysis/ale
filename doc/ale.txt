@@ -3517,6 +3517,7 @@ documented in additional help files.
     yamlfmt...............................|ale-yaml-yamlfmt|
     yamllint..............................|ale-yaml-yamllint|
     gitlablint............................|ale-yaml-gitlablint|
+    yq....................................|ale-yaml-yq|
   yang....................................|ale-yang-options|
     yang-lsp..............................|ale-yang-lsp|
   zeek....................................|ale-zeek-options|
