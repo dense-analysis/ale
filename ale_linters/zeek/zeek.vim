@@ -4,11 +4,12 @@
 call ale#Set('zeek_zeek_executable', 'zeek')
 
 function! ale_linters#zeek#zeek#HandleErrors(buffer, lines) abort
-    let l:pattern = 'error in \v.*, line (\d+): (.*)$'
+    let l:pattern = '\(error\|warning\) in \v.*, line (\d+): (.*)$'
 
     return map(ale#util#GetMatches(a:lines, l:pattern), "{
-    \   'lnum': str2nr(v:val[1]),
-    \   'text': v:val[2],
+    \   'lnum': str2nr(v:val[2]),
+    \   'text': v:val[3],
+    \   'type': (v:val[1] is# 'error') ? 'E': 'W',
     \}")
 endfunction
 
