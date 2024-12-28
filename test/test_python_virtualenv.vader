@@ -14,7 +14,7 @@ Execute(ale#python#FindVirtualenv falls back to $VIRTUAL_ENV when no directories
 Execute(ale#python#AutoVirtualenvEnvString should return the correct values):
   if has('win32')
     AssertEqual
-    \ 'set PATH=/opt/example/\Scripts;%PATH% && set VIRTUAL_ENV=/opt/example/ &&',
+    \ 'set PATH=/opt/example/\Scripts;%PATH% && set VIRTUAL_ENV=/opt/example/ && ',
     \ ale#python#AutoVirtualenvEnvString(bufnr(''))
   else
     AssertEqual
