@@ -4,8 +4,8 @@
 call ale#Set('yara_yls_executable', 'yls')
 
 function! ale_linters#yara#yls#FindProjectRoot(buffer) abort
-   let l:project_root = ale#path#FindNearestDirectory(a:buffer, '.git')
-   return !empty(l:project_root) ? (l:project_root) : ''
+    let l:project_root = ale#path#FindNearestDirectory(a:buffer, '.git')
+    return !empty(l:project_root) ? (l:project_root) : ''
 endfunction
 
 call ale#linter#Define('yara', {
