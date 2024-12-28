@@ -740,6 +740,8 @@ formatting.
   * [yamllint](https://yamllint.readthedocs.io/)
 * YANG
   * [yang-lsp](https://github.com/theia-ide/yang-lsp)
+* Yara
+  * [yls](https://github.com/avast/yls)
 * Zeek
   * [zeek](http://zeek.org) :floppy_disk:
 * Zig
