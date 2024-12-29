@@ -1,0 +1,5 @@
+rule dummy
+{
+    condition:
+        false
+}
