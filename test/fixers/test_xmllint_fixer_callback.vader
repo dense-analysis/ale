@@ -18,39 +18,39 @@ Execute(The xmllint callback should return the correct default command with unpe
   AssertEqual
   \ {
   \   'command': ale#Escape('/path/to/xmllint')
-  \     . ' --format %t'
+  \     . ' --format -'
   \ },
   \ ale#fixers#xmllint#Fix(bufnr(''))
 
 Execute(The xmllint callback should return the correct default command):
+  call ale#test#SetFilename('../test-files/xml/dummy.xml')
+
   AssertEqual
   \ {
   \   'command': ale#Escape('/path/to/xmllint')
-  \     . ' --format '
-  \     . ale#Escape(bufname(bufnr('')))
+  \     . ' --format -'
   \ },
   \ ale#fixers#xmllint#Fix(bufnr(''))
 
 Execute(The xmllint callback should include the XMLLINT_INDENT variable):
+  call ale#test#SetFilename('../test-files/xml/dummy.xml')
   let g:ale_xml_xmllint_indentsize = 2
 
   AssertEqual
   \ {
   \   'command': ale#Env('XMLLINT_INDENT', '  ')
   \     . ale#Escape('/path/to/xmllint')
-  \     . ' --format '
-  \     . ale#Escape(bufname(bufnr('')))
+  \     . ' --format -'
   \ },
   \ ale#fixers#xmllint#Fix(bufnr(''))
 
 Execute(The xmllint callback should include additional options):
-  let g:ale_xml_xmllint_options = '--nonet'
+  call ale#test#SetFilename('../test-files/xml/dummy.xml')
+  let g:ale_xml_xmllint_options = '--nonet --custom-opt 2'
 
   AssertEqual
   \ {
   \   'command': ale#Escape('/path/to/xmllint')
-  \     . ' --format '
-  \     . ale#Escape(bufname(bufnr('')))
-  \     . ' --nonet'
+  \     . ' --format --nonet --custom-opt 2 -'
   \ },
   \ ale#fixers#xmllint#Fix(bufnr(''))
