@@ -729,6 +729,8 @@ Notes:
   * `yamlfix`
   * `yamlfmt`
   * `yamllint`
+* Yara
+  * `yls`
 * YANG
   * `yang-lsp`
 * Zeek
