@@ -17,6 +17,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['help'],
 \       'description': 'Align help tags to the right margin',
 \   },
+\   'apkbuild-fixer': {
+\       'function': 'ale#fixers#apkbuild_fixer#Fix',
+\       'suggested_filetypes': ['apkbuild'],
+\       'description': 'Fix policy violations found by apkbuild-lint in APKBUILDs',
+\   },
 \   'autoimport': {
 \       'function': 'ale#fixers#autoimport#Fix',
 \       'suggested_filetypes': ['python'],
