@@ -109,6 +109,11 @@ let s:default_registry = {
 \       'description': 'Indent with the Erlang mode for Emacs',
 \       'aliases': ['erlang-mode'],
 \   },
+\   'erlfmt': {
+\       'function': 'ale#fixers#erlfmt#Fix',
+\       'suggested_filetypes': ['erlang'],
+\       'description': 'Format Erlang code with erlfmt',
+\   },
 \   'fecs': {
 \       'function': 'ale#fixers#fecs#Fix',
 \       'suggested_filetypes': ['javascript', 'css', 'html'],
