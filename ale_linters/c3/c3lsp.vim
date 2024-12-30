@@ -1,7 +1,7 @@
 " Author: Koni Marti <koni.marti@gmail.com>
 " Description: A Language Server implementation for C3
 
-call ale#Set('c3_c3lsp_executable', 'c3-lsp')
+call ale#Set('c3_c3lsp_executable', 'c3lsp')
 call ale#Set('c3_c3lsp_init_options', {})
 
 call ale#linter#Define('c3', {

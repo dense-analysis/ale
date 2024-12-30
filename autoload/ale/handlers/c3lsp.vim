@@ -1,6 +1,6 @@
 scriptencoding utf-8
 " Author: Koni Marti <koni.marti@gmail.com>
-" Description: Utilities for c3-lsp
+" Description: Utilities for c3lsp
 
 function! ale#handlers#c3lsp#GetProjectRoot(buffer) abort
     let l:config = ale#path#FindNearestFile(a:buffer, 'project.json')

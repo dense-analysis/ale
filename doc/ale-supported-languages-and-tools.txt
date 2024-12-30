@@ -105,7 +105,7 @@ Notes:
   * `gcc` (`cc`)
   * `uncrustify`
 * C3
-  * `c3-lsp`
+  * `c3lsp`
 * Cairo
   * `scarb`!!
   * `starknet`

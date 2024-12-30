@@ -2,14 +2,14 @@
 ALE C3 Integration                                             *ale-c3-options*
 
 ===============================================================================
-c3-lsp                                                           *ale-c3-c3lsp*
+c3lsp                                                            *ale-c3-c3lsp*
 
 g:ale_c3_c3lsp_executable                           *g:ale_c3_c3lsp_executable*
                                                     *b:ale_c3_c3lsp_executable*
   Type: |String|
-  Default: `c3-lsp`
+  Default: `c3lsp`
 
-  This variable can be changed to set the path to c3-lsp.
+  This variable can be changed to set the path to c3lsp executable.
 
 
 g:ale_c3_c3lsp_init_options                       *g:ale_c3_c3lsp_init_options*
