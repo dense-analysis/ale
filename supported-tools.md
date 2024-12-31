@@ -114,6 +114,8 @@ formatting.
   * [flawfinder](https://www.dwheeler.com/flawfinder/)
   * [gcc](https://gcc.gnu.org/)
   * [uncrustify](https://github.com/uncrustify/uncrustify)
+* C3
+  * [c3lsp](https://github.com/pherrymason/c3-lsp)
 * Cairo
   * [scarb](https://docs.swmansion.com/scarb/) :floppy_disk:
   * [starknet](https://starknet.io/docs)

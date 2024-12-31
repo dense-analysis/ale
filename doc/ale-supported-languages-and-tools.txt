@@ -105,6 +105,8 @@ Notes:
   * `flawfinder`
   * `gcc` (`cc`)
   * `uncrustify`
+* C3
+  * `c3lsp`
 * Cairo
   * `scarb`!!
   * `starknet`
