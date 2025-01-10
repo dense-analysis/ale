@@ -2989,6 +2989,8 @@ documented in additional help files.
     clang-format..........................|ale-cuda-clangformat|
     clangd................................|ale-cuda-clangd|
     nvcc..................................|ale-cuda-nvcc|
+  c3......................................|ale-c3-options|
+    c3lsp.................................|ale-c3-c3lsp|
   d.......................................|ale-d-options|
     dfmt..................................|ale-d-dfmt|
     dls...................................|ale-d-dls|
