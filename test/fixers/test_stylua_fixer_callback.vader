@@ -18,3 +18,21 @@ Execute(The stylua callback should include custom stylua options):
   \     . ' ' . g:ale_lua_stylua_options
   \     . ' --stdin-filepath %s -',
   \ }
+
+Execute(stylua should detect stylua.toml):
+  call ale#test#SetFilename('../test-files/stylua/stylua_config_dir/subdir/test.lua')
+
+  AssertFixer
+  \ {
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/stylua/stylua_config_dir'),
+  \   'command': ale#Escape('stylua') . ' --stdin-filepath %s -',
+  \ }
+
+Execute(stylua should detect .stylua.toml):
+  call ale#test#SetFilename('../test-files/stylua/stylua_dot_config_dir/subdir/test.lua')
+
+  AssertFixer
+  \ {
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/stylua/stylua_dot_config_dir'),
+  \   'command': ale#Escape('stylua') . ' --stdin-filepath %s -',
+  \ }
