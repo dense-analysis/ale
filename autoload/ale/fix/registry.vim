@@ -477,6 +477,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['json'],
 \       'description': 'Fix JSON files with jq.',
 \   },
+\   'json_pytool': {
+\       'function': 'ale#fixers#json_pytool#Fix',
+\       'suggested_filetypes': ['json'],
+\       'description': "Fix JSON files with python's built-in json.tool module.",
+\   },
 \   'protolint': {
 \       'function': 'ale#fixers#protolint#Fix',
 \       'suggested_filetypes': ['proto'],
