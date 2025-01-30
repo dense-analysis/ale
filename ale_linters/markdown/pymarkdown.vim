@@ -1,5 +1,6 @@
 
 call ale#Set('markdown_pymarkdown_executable', 'pymarkdown')
+call ale#Set('markdown_pymarkdown_options', '')
 call ale#Set('markdown_pymarkdown_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('markdown_pymarkdown_auto_pipenv', 0)
 call ale#Set('markdown_pymarkdown_auto_poetry', 0)
@@ -32,7 +33,9 @@ function! ale_linters#markdown#pymarkdown#GetCommand(buffer) abort
     \   : ''
 
     return ale#Escape(l:executable) . l:exec_args
-    \   . ' scan %s'
+    \   . ' '
+    \   . ale#Var(a:buffer, 'markdown_pymarkdown_options')
+    \   . 'scan-stdin'
 endfunction
 
 function! ale_linters#markdown#pymarkdown#Handle(buffer, lines) abort
@@ -42,6 +45,12 @@ function! ale_linters#markdown#pymarkdown#Handle(buffer, lines) abort
     " sample.md:1:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        if(l:match[4] is# 'MD009')
+        \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+            " Skip warnings for trailing whitespace if the option is off.
+            continue
+        endif
+
         let l:item = {
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
