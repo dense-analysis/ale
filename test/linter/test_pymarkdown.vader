@@ -1,0 +1,50 @@
+Before:
+  call ale#assert#SetUpLinterTest('markdown', 'pymarkdown')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The pymarkdown command callback should return default string):
+  AssertLinter 'pymarkdown', ale#Escape('pymarkdown') . ' scan-stdin'
+
+Execute(The pycodestyle command callback should allow options):
+  let g:markdown_pymarkdown_options = '--exclude=test*.py'
+
+Execute(The pymarkdown executable should be configurable):
+  let g:ale_markdown_pymarkdown_executable = '~/.local/bin/pymarkdown'
+
+  AssertLinter '~/.local/bin/pymarkdown',
+  \ ale#Escape('~/.local/bin/pymarkdown') . ' scan-stdin'
+
+Execute(Setting executable to 'pipenv' appends 'run pymarkdown'):
+  let g:ale_markdown_pymarkdown_executable = 'path/to/pipenv'
+
+  AssertLinter 'path/to/pipenv',
+  \ ale#Escape('path/to/pipenv') . ' run pymarkdown scan-stdin'
+
+Execute(Pipenv is detected when markdown_pymarkdown_auto_pipenv is set):
+  let g:ale_markdown_pymarkdown_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run pymarkdown scan-stdin'
+
+Execute(Setting executable to 'poetry' appends 'run pymarkdown'):
+  let g:ale_markdown_pymarkdown_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run pymarkdown scan-stdin'
+
+Execute(Poetry is detected when markdown_pymarkdown_auto_poetry is set):
+  let g:ale_markdown_pymarkdown_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pymarkdown scan-stdin'
+
+Execute(uv is detected when markdown_pymarkdown_auto_uv is set):
+  let g:ale_markdown_pymarkdown_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run pymarkdown scan-stdin'
