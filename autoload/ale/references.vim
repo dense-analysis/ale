@@ -18,6 +18,7 @@ endfunction
 
 function! ale#references#FormatTSResponseItem(response_item, options) abort
     let l:match = substitute(a:response_item.lineText, '^\s*\(.\{-}\)\s*$', '\1', '')
+
     if get(a:options, 'open_in') is# 'quickfix'
         return {
         \ 'filename': a:response_item.file,
