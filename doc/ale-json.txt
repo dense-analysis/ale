@@ -84,6 +84,40 @@ g:ale_json_fixjson_use_global                   *g:ale_json_fixjson_use_global*
 
 
 ===============================================================================
+pytool                                                        *ale-json-pytool*
+
+Use python's json.tool module to reformat json.
+
+g:ale_json_pytool_executable                     *g:ale_json_pytool_executable*
+                                                 *b:ale_json_pytool_executable*
+
+  Type: |String|
+  Default: `'python'`
+
+  The python executable that run to use its json.tool module. This fixer
+  requires python 3, which includes the json module.
+
+g:ale_json_pytool_options                           *g:ale_json_pytool_options*
+                                                    *b:ale_json_pytool_options*
+
+  Type: |String|
+  Default: `''`
+
+  These options are passed to the json.tool module. Example: >
+    let g:ale_json_pytool_options = '--sort-keys --indent 2'
+<  See docs for all options:
+    https://docs.python.org/3/library/json.html#module-json.tool
+
+g:ale_json_pytool_use_global                     *g:ale_json_pytool_use_global*
+                                                 *b:ale_json_pytool_use_global*
+
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 jsonlint                                                    *ale-json-jsonlint*
 
 g:ale_json_jsonlint_executable                 *g:ale_json_jsonlint_executable*

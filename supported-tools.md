@@ -338,6 +338,7 @@ formatting.
   * [eslint](http://eslint.org/) :warning:
   * [fixjson](https://github.com/rhysd/fixjson)
   * [jq](https://stedolan.github.io/jq/) :warning:
+  * [json.tool](https://docs.python.org/3/library/json.html#module-json.tool) :warning:
   * [jsonlint](https://github.com/zaach/jsonlint)
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
