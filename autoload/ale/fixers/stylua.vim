@@ -8,10 +8,12 @@ function! ale#fixers#stylua#GetCwd(buffer) abort
     for l:possible_configfile in ['stylua.toml', '.stylua.toml']
         let l:config = ale#path#FindNearestFile(a:buffer, l:possible_configfile)
 
-        return !empty(l:config) ? fnamemodify(l:config, ':h') : '%s:h'
+        if !empty(l:config)
+            return fnamemodify(l:config, ':h')
+        endif
     endfor
 
-    return ''
+    return '%s:h'
 endfunction
 
 function! ale#fixers#stylua#Fix(buffer) abort

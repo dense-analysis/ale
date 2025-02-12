@@ -44,7 +44,7 @@ let s:default_registry = {
 \   },
 \   'biome': {
 \       'function': 'ale#fixers#biome#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'jsonc'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'jsonc', 'css', 'graphql'],
 \       'description': 'Fix JavaScript and TypeScript using biome.',
 \   },
 \   'black': {

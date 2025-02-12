@@ -22,7 +22,7 @@ function! ale_linters#php#phpstan#GetCommand(buffer, version) abort
 
     let l:memory_limit = ale#Var(a:buffer, 'php_phpstan_memory_limit')
     let l:memory_limit_option = !empty(l:memory_limit)
-    \   ? ' --memory-limit ' . ale#Escape(l:memory_limit)
+    \   ? ' --memory-limit=' . ale#Escape(l:memory_limit)
     \   : ''
 
     let l:level =  ale#Var(a:buffer, 'php_phpstan_level')
