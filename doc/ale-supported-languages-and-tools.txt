@@ -385,6 +385,7 @@ Notes:
   * `pandoc`
   * `prettier`
   * `proselint`
+  * `pymarkdown`
   * `redpen`
   * `remark-lint`
   * `textlint`
