@@ -14,6 +14,7 @@ Execute(The black callback should return the correct default values):
   let file_path = g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py'
   silent execute 'file ' . fnameescape(file_path)
   let fname = ale#Escape(ale#path#Simplify(file_path))
+  
   AssertEqual
   \ {
   \   'cwd': '%s:h',
@@ -23,9 +24,11 @@ Execute(The black callback should return the correct default values):
 Execute(The black callback should include options):
   let g:ale_python_black_options = '--some-option'
   let g:ale_python_black_change_directory = 0
+  
   let file_path = g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py'
   silent execute 'file ' . fnameescape(file_path)
   let fname = ale#Escape(ale#path#Simplify(file_path))
+  
   AssertEqual
   \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option --stdin-filename ' . fname . ' -'},
   \ ale#fixers#black#Fix(bufnr(''))
@@ -59,8 +62,10 @@ Execute(Pipenv is detected when python_black_auto_pipenv is set):
 
   call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
 
+  let fname = ale#Escape(ale#path#Simplify(g:dir .'/../test-files/python/pipenv/whatever.py'))
+
   AssertEqual
-  \ {'command': ale#Escape('pipenv') . ' run black --stdin-filename ''/testplugin/test/test-files/python/pipenv/whatever.py'' -'},
+  \ {'command': ale#Escape('pipenv') . ' run black --stdin-filename '.fname.' -'},
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(Poetry is detected when python_black_auto_poetry is set):
@@ -69,8 +74,10 @@ Execute(Poetry is detected when python_black_auto_poetry is set):
 
   call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
 
+  let fname = ale#Escape(ale#path#Simplify(g:dir .'/../test-files/python/poetry/whatever.py'))
+
   AssertEqual
-  \ {'command': ale#Escape('poetry') . ' run black --stdin-filename ''/testplugin/test/test-files/python/poetry/whatever.py'' -'},
+  \ {'command': ale#Escape('poetry') . ' run black --stdin-filename '.fname.' -'},
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(uv is detected when python_black_auto_uv is set):
@@ -78,7 +85,10 @@ Execute(uv is detected when python_black_auto_uv is set):
   let g:ale_python_black_change_directory = 0
 
   call ale#test#SetFilename('../test-files/python/uv/whatever.py')
-
+  
+  let fname = ale#Escape(ale#path#Simplify(g:dir .'/../test-files/python/uv/whatever.py'))
+  
   AssertEqual
-  \ {'command': ale#Escape('uv') . ' run black --stdin-filename ''/testplugin/test/test-files/python/uv/whatever.py'' -'},
+  \ {'command': ale#Escape('uv') . ' run black --stdin-filename '.fname.' -'},
   \ ale#fixers#black#Fix(bufnr(''))
+  
