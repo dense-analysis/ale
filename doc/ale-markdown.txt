@@ -83,6 +83,13 @@ g:ale_markdown_pandoc_options                   *g:ale_markdown_pandoc_options*
 
   This variable can be set to change the default options passed to pandoc
 
+
+===============================================================================
+prettier                                                *ale-markdown-prettier*
+
+See |ale-javascript-prettier| for information about the available options.
+
+
 ===============================================================================
 pymarkdown                                            *ale-markdown-pymarkdown*
 
@@ -139,12 +146,6 @@ g:ale_markdown_pymarkdown_auto_uv             *g:ale_markdown_pymarkdown_auto_uv
 
   Set the executable to `uv` if true. This is overridden by a manually-set
   executable.
-
-
-===============================================================================
-prettier                                                *ale-markdown-prettier*
-
-See |ale-javascript-prettier| for information about the available options.
 
 
 ===============================================================================
