@@ -3207,6 +3207,7 @@ documented in additional help files.
     mdl...................................|ale-markdown-mdl|
     pandoc................................|ale-markdown-pandoc|
     prettier..............................|ale-markdown-prettier|
+    pymarkdown............................|ale-markdown-pymarkdown|
     remark-lint...........................|ale-markdown-remark-lint|
     textlint..............................|ale-markdown-textlint|
     write-good............................|ale-markdown-write-good|
