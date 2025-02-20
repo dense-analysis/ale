@@ -44,7 +44,7 @@ function! ale#fixers#black#Fix(buffer) abort
 
     let l:fname = expand('#' . a:buffer . '...')
     call add(l:cmd, '--stdin-filename '.ale#Escape(ale#path#Simplify(l:fname)))
-    
+
     if expand('#' . a:buffer . ':e') is? 'pyi'
         call add(l:cmd, '--pyi')
     endif
