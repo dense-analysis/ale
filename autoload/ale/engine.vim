@@ -178,6 +178,16 @@ function! s:HandleExit(job_info, buffer, output, data) abort
         let l:loclist = []
     endtry
 
+    try
+        for l:item in l:loclist
+            break
+        endfor
+    catch /E1098/
+        " the linter callback produced a `a:loclist` we couldn't iterate over; don't
+        " pass it down since `ale#engine#HandleLoclist` won't understand it
+        let l:loclist = []
+    endtry
+
     call ale#engine#HandleLoclist(l:linter.name, a:buffer, l:loclist, 0)
 endfunction
 
