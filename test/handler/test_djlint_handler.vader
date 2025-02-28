@@ -9,6 +9,7 @@ Execute(The Djlint handler should parse output with a column correctly):
   \ [
   \   {
   \     'lnum': 47,
+  \     'vcol':  1,
   \     'col':  8,
   \     'code': 'H008',
   \     'text': 'Attributes should be double quoted.',
