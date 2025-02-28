@@ -274,6 +274,7 @@ Notes:
   * `alex`
   * `angular`
   * `cspell`
+  * djlint
   * `eslint`
   * `fecs`
   * `html-beautify`

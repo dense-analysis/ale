@@ -34,6 +34,25 @@ cspell                                                        *ale-html-cspell*
 See |ale-cspell-options|
 
 ===============================================================================
+djlint                                                        *ale-html-djlint*
+
+g:ale_html_djlint_executable                     *g:ale_html_djlint_executable*
+                                                 *b:ale_html_djlint_executable*
+  Type: |String|
+  Default: `'djlint'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_html_djlint_options                            *g:ale_html_djlint_options*
+                                                     *b:ale_html_djlint_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to djlint.
+
+
+===============================================================================
 fecs                                                            *ale-html-fecs*
 
 `fecs` options for HTML are the same as the options for JavaScript, and both

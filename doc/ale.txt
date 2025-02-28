@@ -3106,6 +3106,7 @@ documented in additional help files.
   html....................................|ale-html-options|
     angular...............................|ale-html-angular|
     cspell................................|ale-html-cspell|
+    djlint................................|ale-html-djlint|
     fecs..................................|ale-html-fecs|
     html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
