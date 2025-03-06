@@ -33,6 +33,10 @@ function! ale_linters#go#golangci_lint#Handler(buffer, lines) abort
 
     let l:matches = ale#util#FuzzyJSONDecode(a:lines, [])
 
+    if empty(l:matches)
+        return []
+    endif
+
     for l:match in l:matches['Issues']
         if l:match['FromLinter'] is# 'typecheck'
             let l:msg_type = 'E'
