@@ -1,0 +1,52 @@
+Before:
+    Save g:ale_warn_about_trailing_whitespace
+
+    let g:ale_warn_about_trailing_whitespace = 1
+
+    runtime ale_linters/markdown/pymarkdown.vim
+
+After:
+    Restore
+    unlet! b:ale_warn_about_trailing_whitespace
+
+    call ale#linter#Reset()
+
+Execute (Should parse error correctly):
+  AssertEqual
+  \ [
+  \   {
+        \   'lnum': 1,
+        \   'col': 1,
+        \   'type': 'M',
+        \   'text': 'Headings should be surrounded by blank lines',
+        \   'code': 'MD022',
+  \   }
+  \ ],
+  \ ale_linters#markdown#pymarkdown#Handle(bufnr(''), [
+  \ 'foo.md:1:1: MD022: Headings should be surrounded by blank lines',
+  \ ])
+
+Execute(Warnings about trailing whitespace should be reported by default):
+  AssertEqual
+  \ [
+  \   {
+        \   'lnum': 1,
+        \   'col': 1,
+        \   'type': 'M',
+        \   'text': 'who cares',
+        \   'code': 'MD009',
+  \   },
+  \ ],
+  \ ale_linters#markdown#pymarkdown#Handle(bufnr(''), [
+  \   'foo.md:1:1: MD009: who cares',
+  \ ])
+
+Execute(Disabling trailing whitespace warnings should work):
+  let b:ale_warn_about_trailing_whitespace = 0
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale_linters#markdown#pymarkdown#Handle(bufnr(''), [
+  \   'foo.md:1:1: MD009: who cares',
+  \ ])
