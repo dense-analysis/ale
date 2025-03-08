@@ -1,0 +1,21 @@
+Before:
+  runtime ale_linters/html/djlint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The Djlint handler should parse output with a column correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 47,
+  \     'vcol':  1,
+  \     'col':  8,
+  \     'code': 'H008',
+  \     'text': 'Attributes should be double quoted.',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale_linters#html#djlint#Handle(0, [
+  \ 'H008 47:8 Attributes should be double quoted.'
+  \ ])
