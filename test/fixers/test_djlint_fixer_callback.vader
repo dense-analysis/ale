@@ -1,0 +1,12 @@
+Before:
+  call ale#assert#SetUpFixerTest('html', 'djlint', 'djlint')
+
+After:
+  Restore
+
+  call ale#assert#TearDownFixerTest()
+
+Execute(The djlint callback should return the correct default command):
+  AssertEqual
+  \ {'command': ale#Escape('djlint') . ' --reformat  -'},
+  \ ale#fixers#djlint#Fix(bufnr(''))
