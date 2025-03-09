@@ -3067,7 +3067,7 @@ documented in additional help files.
     govet.................................|ale-go-govet|
     revive................................|ale-go-revive|
     staticcheck...........................|ale-go-staticcheck|
-  gohtmltmpl..............................ale-html-options
+  gohtmltmpl..............................|ale-html-options|
     djlint................................|ale-html-djlint|
   graphql.................................|ale-graphql-options|
     eslint................................|ale-graphql-eslint|
@@ -3119,9 +3119,9 @@ documented in additional help files.
     tidy..................................|ale-html-tidy|
     vscodehtml............................|ale-html-vscode|
     write-good............................|ale-html-write-good|
-  htmlangular.............................ale-html-options
+  htmlangular.............................|ale-html-options|
     djlint................................|ale-html-djlint|
-  htmldjango..............................ale-html-options
+  htmldjango..............................|ale-html-options|
     djlint................................|ale-htm-djlint|
   hurl....................................|ale-hurl-options|
     hurlfmt...............................|ale-hurl-hurlfmt|
@@ -3160,7 +3160,7 @@ documented in additional help files.
     prettier-standard.....................|ale-javascript-prettier-standard|
     standard..............................|ale-javascript-standard|
     xo....................................|ale-javascript-xo|
-  jinja...................................ale-jinja
+  jinja...................................|ale-jinja|
     djlint................................|ale-html-djlint|
   json....................................|ale-json-options|
     biome.................................|ale-json-biome|
@@ -3239,7 +3239,7 @@ documented in additional help files.
     deadnix...............................|ale-nix-deadnix|
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
-  nujuck..................................ale-html-options
+  nujuck..................................|ale-html-options|
     djlint................................|ale-html-djlint|
   objc....................................|ale-objc-options|
     ccls..................................|ale-objc-ccls|
