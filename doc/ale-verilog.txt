@@ -127,6 +127,9 @@ g:ale_verilog_xvlog_options                       *g:ale_verilog_xvlog_options*
   Default: `''`
 
   This variable can be changed to modify the flags/options passed to 'xvlog'.
+  Vivado generates a 'compile.sh' file in the xsim directory with the flags you
+  are probably looking for. Note, however, that you may need to change the
+  relative paths in the Project File '.prj'.
 
 
 ===============================================================================
