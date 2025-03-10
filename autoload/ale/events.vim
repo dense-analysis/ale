@@ -100,6 +100,10 @@ if !exists('s:insert_leave_timer')
     let s:insert_leave_timer = -1
 endif
 
+" True if the ModeChanged event exists.
+" In this case, ModeChanged will be used instead of InsertLeave emulation.
+let s:mode_changed_exists = exists('##ModeChanged')
+
 function! ale#events#EmulateInsertLeave(buffer) abort
     if mode() is# 'n'
         call timer_stop(s:insert_leave_timer)
@@ -114,8 +118,12 @@ function! ale#events#InsertEnterEvent(buffer) abort
 
     " Start a repeating timer if the use might not trigger InsertLeave, so we
     " can emulate its behavior.
+    " If the ModeChanged autocmd exists, it will be used instead of this
+    " timer; as ModeChanged will be sent regardless of how the insert mode is
+    " exited, including <Esc>, <C-c> and <C-]>.
     if ale#Var(a:buffer, 'lint_on_insert_leave')
     \&& maparg("\<C-c>", 'i') isnot# '<Esc>'
+    \&& !s:mode_changed_exists
         call timer_stop(s:insert_leave_timer)
         let s:insert_leave_timer = timer_start(
         \   100,
@@ -126,10 +134,15 @@ function! ale#events#InsertEnterEvent(buffer) abort
 endfunction
 
 function! ale#events#InsertLeaveEvent(buffer) abort
-    if ale#Var(a:buffer, 'lint_on_insert_leave')
-        " Kill the InsertLeave emulation if the event fired.
+    " Kill the InsertLeave emulation if the event fired.
+    " If the ModeChanged event is available, it will be used instead of
+    " a timer.
+    if !s:mode_changed_exists
         call timer_stop(s:insert_leave_timer)
-        call ale#Queue(0)
+    endif
+
+    if ale#Var(a:buffer, 'lint_on_insert_leave')
+        call ale#Queue(0, '', a:buffer)
     endif
 
     " Look for a warning to echo as soon as we leave Insert mode.
@@ -189,8 +202,11 @@ function! ale#events#Init() abort
             "
             " We will emulate leaving insert mode for users that might not
             " trigger InsertLeave.
+            "
+            " If the ModeChanged event is available, this timer will not
+            " be used.
             if g:ale_close_preview_on_insert
-            \|| (g:ale_lint_on_insert_leave && maparg("\<C-c>", 'i') isnot# '<Esc>')
+            \|| (g:ale_lint_on_insert_leave && maparg("\<C-c>", 'i') isnot# '<Esc>' && !s:mode_changed_exists)
                 autocmd InsertEnter * call ale#events#InsertEnterEvent(str2nr(expand('<abuf>')))
             endif
 
@@ -211,7 +227,14 @@ function! ale#events#Init() abort
             endif
 
             if l:add_insert_leave_event
-                autocmd InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand('<abuf>')))
+                if s:mode_changed_exists
+                    " If the ModeChanged event is available, handle any
+                    " transition from the Insert mode to any other mode.
+                    autocmd ModeChanged i*:* call ale#events#InsertLeaveEvent(str2nr(expand('<abuf>')))
+                else
+                    " If ModeChanged is not available, handle InsertLeave events.
+                    autocmd InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand('<abuf>')))
+                endif
             endif
 
             if g:ale_hover_cursor
