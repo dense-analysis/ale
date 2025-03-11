@@ -3525,6 +3525,8 @@ documented in additional help files.
     yq....................................|ale-yaml-yq|
   yang....................................|ale-yang-options|
     yang-lsp..............................|ale-yang-lsp|
+  yara....................................|ale-yara-options|
+    yls...................................|ale-yara-yls|
   zeek....................................|ale-zeek-options|
     zeek..................................|ale-zeek-zeek|
   zig.....................................|ale-zig-options|
