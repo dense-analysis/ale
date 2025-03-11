@@ -1,4 +1,4 @@
-Begin:
+Before:
   Save g:ale_openscad_scadformat_executable
   Save g:ale_openscad_scadformat_options
   
