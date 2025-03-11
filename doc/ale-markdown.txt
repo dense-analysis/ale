@@ -83,11 +83,68 @@ g:ale_markdown_pandoc_options                   *g:ale_markdown_pandoc_options*
 
   This variable can be set to change the default options passed to pandoc
 
-
 ===============================================================================
 prettier                                                *ale-markdown-prettier*
 
 See |ale-javascript-prettier| for information about the available options.
+
+
+===============================================================================
+pymarkdown                                            *ale-markdown-pymarkdown*
+
+g:ale_markdown_pymarkdown_executable       *g:ale_markdown_pymarkdown_executable*
+                                          *b:ale_markdown_pymarkdown_executable*
+  Type: |String|
+  Default: `'pymarkdown'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `pymarkdown'`.
+  Set this to `'poetry'` to invoke `'poetry` `run` `pymarkdown'`.
+
+
+g:ale_markdown_pymarkdown_options             *g:ale_markdown_pymarkdown_options*
+                                             *b:ale_markdown_pymarkdown_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the
+  pymarkdown invocation.
+
+
+g:ale_markdown_pymarkdown_use_global       *g:ale_markdown_pymarkdown_use_global*
+                                          *b:ale_markdown_pymarkdown_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_markdown_pymarkdown_auto_pipenv     *g:ale_markdown_pymarkdown_auto_pipenv*
+                                         *b:ale_markdown_pymarkdown_auto_pipenv*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
+
+g:ale_markdown_pymarkdown_auto_poetry     *g:ale_markdown_pymarkdown_auto_poetry*
+                                         *b:ale_markdown_pymarkdown_auto_poetry*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a poetry, and set the executable to `poetry`
+  if true. This is overridden by a manually-set executable.
+
+
+g:ale_markdown_pymarkdown_auto_uv             *g:ale_markdown_pymarkdown_auto_uv*
+                                             *b:ale_markdown_pymarkdown_auto_uv*
+  Type: |Number|
+  Default: `0`
+
+  Set the executable to `uv` if true. This is overridden by a manually-set
+  executable.
 
 
 ===============================================================================
