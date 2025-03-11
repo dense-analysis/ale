@@ -28,7 +28,7 @@ jobs:
         vim-version:
           - '--vim-80-only'
           - '--vim-90-only'
-          - '--neovim-06-only'
+          - '--neovim-07-only'
           - '--neovim-08-only'
           - '--linters-only'
     steps:
