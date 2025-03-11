@@ -737,6 +737,8 @@ Notes:
   * `yq`
 * YANG
   * `yang-lsp`
+* Yara
+  * `yls`
 * Zeek
   * `zeek`!!
 * Zig
