@@ -5,6 +5,8 @@ Begin:
   let g:ale_openscad_scadformat_executable = 'xxx'
   let g:ale_openscad_scadformat_options = ''
 
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
 After:
   Restore
 
