@@ -19,4 +19,4 @@ Execute(scadformat - defaults OK):
   \ {
   \    'command': ale#Escape('xxx')
   \ },
-  \ ale#fixer#scadformat#Fix(bufnr(''))
+  \ ale#fixers#scadformat#Fix(bufnr(''))
