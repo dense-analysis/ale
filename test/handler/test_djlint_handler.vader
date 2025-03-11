@@ -16,6 +16,6 @@ Execute(The Djlint handler should parse output with a column correctly):
   \     'type': 'W'
   \   }
   \ ],
-  \ ale_linters#html#djlint#Handle(0, [
+  \ ale#handlers#djlint#Handle(0, [
   \ 'H008 47:8 Attributes should be double quoted.'
   \ ])
