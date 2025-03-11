@@ -68,13 +68,7 @@ module.sendAleResultsToDiagnostics = function(buffer, loclist)
   if set_signs == 1 and sign_priority then
     -- If signs are enabled, set the priority for them.
     local local_cfg = { priority = sign_priority }
-    -- NOTE: vim.diagnostic.config() -- retrieving the current config values
-    -- fails in Neovim older than v0.7.0.
-    local ok, diag_cfg = pcall(vim.diagnostic.config)
-    if not ok or not diag_cfg then
-      diag_cfg = { signs = {} }
-    end
-    local global_cfg = diag_cfg.signs
+    local global_cfg = vim.diagnostic.config().signs
 
     if type(global_cfg) == 'boolean' then
       signs = local_cfg
