@@ -735,10 +735,10 @@ Notes:
   * `yamlfmt`
   * `yamllint`
   * `yq`
-* Yara
-  * `yls`
 * YANG
   * `yang-lsp`
+* Yara
+  * `yls`
 * Zeek
   * `zeek`!!
 * Zig
