@@ -697,6 +697,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ruby'],
 \       'description': 'A formatter for Ruby source code',
 \   },
+\   'scadformat': {
+\       'function': 'ale#fixers#scadformat#Fix',
+\       'suggested_filetypes': ['openscad'],
+\       'description': 'Formatter for scad files',
+\   },
 \   'cljfmt': {
 \       'function': 'ale#fixers#cljfmt#Fix',
 \       'suggested_filetypes': ['clojure'],
