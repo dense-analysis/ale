@@ -17,6 +17,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['help'],
 \       'description': 'Align help tags to the right margin',
 \   },
+\   'apkbuild-fixer': {
+\       'function': 'ale#fixers#apkbuild_fixer#Fix',
+\       'suggested_filetypes': ['apkbuild'],
+\       'description': 'Fix policy violations found by apkbuild-lint in APKBUILDs',
+\   },
 \   'autoimport': {
 \       'function': 'ale#fixers#autoimport#Fix',
 \       'suggested_filetypes': ['python'],
@@ -39,7 +44,7 @@ let s:default_registry = {
 \   },
 \   'biome': {
 \       'function': 'ale#fixers#biome#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'jsonc'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'jsonc', 'css', 'graphql'],
 \       'description': 'Fix JavaScript and TypeScript using biome.',
 \   },
 \   'black': {
@@ -103,6 +108,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['erlang'],
 \       'description': 'Indent with the Erlang mode for Emacs',
 \       'aliases': ['erlang-mode'],
+\   },
+\   'erlfmt': {
+\       'function': 'ale#fixers#erlfmt#Fix',
+\       'suggested_filetypes': ['erlang'],
+\       'description': 'Format Erlang code with erlfmt',
 \   },
 \   'fecs': {
 \       'function': 'ale#fixers#fecs#Fix',
@@ -206,6 +216,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#yapf#Fix',
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix Python files with yapf.',
+\   },
+\   'yq': {
+\       'function': 'ale#fixers#yq#Fix',
+\       'suggested_filetypes': ['yaml'],
+\       'description': 'Fix YAML files with yq.',
 \   },
 \   'rubocop': {
 \       'function': 'ale#fixers#rubocop#Fix',
@@ -461,6 +476,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#jq#Fix',
 \       'suggested_filetypes': ['json'],
 \       'description': 'Fix JSON files with jq.',
+\   },
+\   'json_pytool': {
+\       'function': 'ale#fixers#json_pytool#Fix',
+\       'suggested_filetypes': ['json'],
+\       'description': "Fix JSON files with python's built-in json.tool module.",
 \   },
 \   'protolint': {
 \       'function': 'ale#fixers#protolint#Fix',

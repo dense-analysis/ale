@@ -4,63 +4,107 @@ Before:
 After:
   call ale#linter#Reset()
 
-Execute (The golangci-lint handler should handle names with spaces):
-  " We can't test Windows paths with the path resovling on Linux, but we can
-  " test the regex.
-  AssertEqual
-  \ [
-  \   [
-  \     'C:\something\file with spaces.go',
-  \     '12',
-  \     '3',
-  \     'expected ''package'', found ''IDENT'' gibberish',
-  \     'staticcheck',
-  \   ],
-  \ ],
-  \ map(ale_linters#go#golangci_lint#GetMatches([
-  \   'C:\something\file with spaces.go:12:3: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
-  \ ]), 'v:val[1:5]')
-
-Execute (The golangci-lint handler should handle paths correctly):
-  call ale#test#SetFilename('app/test.go')
-
-  let file = ale#path#GetAbsPath(expand('%:p:h'), 'test.go')
-
-  AssertEqual
-  \ [
-  \   {
-  \     'lnum': 12,
-  \     'col': 3,
-  \     'text': 'expected ''package'', found ''IDENT'' gibberish (staticcheck)',
-  \     'type': 'W',
-  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
-  \   },
-  \ ],
-  \ ale_linters#go#golangci_lint#Handler(bufnr(''), [
-  \   file . ':12:3: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
-  \ ])
-
 Execute (The golangci-lint handler should handle only typecheck lines as errors):
   call ale#test#SetFilename('app/main.go')
 
   AssertEqual
   \ [
   \   {
-  \     'lnum': 30,
-  \     'col': 5,
-  \     'text': 'variable ''err'' is not used (typecheck)',
+  \     'lnum': 1,
+  \     'col': 0,
+  \     'text': 'typecheck - found packages main (main.go) and validator (validation.go) in ',
   \     'type': 'E',
-  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/main.go'),
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'text': 'typecheck - package validator_test; expected package main_test',
+  \     'type': 'E',
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/validation_encoder_test.go'),
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'text': 'typecheck - package validator_test; expected package main_test',
+  \     'type': 'E',
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/validation_error_test.go'),
   \   },
   \   {
   \     'lnum': 505,
   \     'col': 75,
-  \     'text': 'Magic number: 404, in <argument> detected (gomnd)',
+  \     'text': 'gomnd - Magic number: 404, in <argument> detected',
   \     'type': 'W',
-  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/main.go'),
   \   }
   \ ],
   \ ale_linters#go#golangci_lint#Handler(bufnr(''), [
-  \   ale#path#GetAbsPath(expand('%:p:h'), 'test.go') . ':30:5: variable ''err'' is not used (typecheck)',
-  \   ale#path#GetAbsPath(expand('%:p:h'), 'test.go') . ':505:75: Magic number: 404, in <argument> detected (gomnd)',
+  \ '{',
+  \ '  "Issues": [',
+  \ '  {',
+  \ '    "FromLinter": "typecheck",',
+  \ '    "Text": "found packages main (main.go) and validator (validation.go) in ",',
+  \ '    "Severity": "",',
+  \ '    "SourceLines": [',
+  \ '      "package main"',
+  \ '    ],',
+  \ '    "Pos": {',
+  \ '      "Filename": "main.go",',
+  \ '      "Offset": 0,',
+  \ '      "Line": 1,',
+  \ '      "Column": 0',
+  \ '    },',
+  \ '    "ExpectNoLint": false,',
+  \ '    "ExpectedNoLintLinter": ""',
+  \ '  },',
+  \ '  {',
+  \ '    "FromLinter": "typecheck",',
+  \ '    "Text": "package validator_test; expected package main_test",',
+  \ '    "Severity": "",',
+  \ '    "SourceLines": [',
+  \ '      "package validator_test"',
+  \ '    ],',
+  \ '    "Pos": {',
+  \ '      "Filename": "validation_encoder_test.go",',
+  \ '      "Offset": 0,',
+  \ '      "Line": 1,',
+  \ '      "Column": 1',
+  \ '    },',
+  \ '    "ExpectNoLint": false,',
+  \ '    "ExpectedNoLintLinter": ""',
+  \ '  },',
+  \ '  {',
+  \ '    "FromLinter": "typecheck",',
+  \ '    "Text": "package validator_test; expected package main_test",',
+  \ '    "Severity": "",',
+  \ '    "SourceLines": [',
+  \ '      "package validator_test"',
+  \ '    ],',
+  \ '    "Pos": {',
+  \ '      "Filename": "validation_error_test.go",',
+  \ '      "Offset": 0,',
+  \ '      "Line": 1,',
+  \ '      "Column": 1',
+  \ '    },',
+  \ '    "ExpectNoLint": false,',
+  \ '    "ExpectedNoLintLinter": ""',
+  \ '  },',
+  \ '  {',
+  \ '    "FromLinter": "gomnd",',
+  \ '    "Text": "Magic number: 404, in <argument> detected",',
+  \ '    "Severity": "",',
+  \ '    "SourceLines": [',
+  \ '      "package validator_test"',
+  \ '    ],',
+  \ '    "Pos": {',
+  \ '      "Filename": "main.go",',
+  \ '      "Offset": 0,',
+  \ '      "Line": 505,',
+  \ '      "Column": 75',
+  \ '    },',
+  \ '    "ExpectNoLint": false,',
+  \ '    "ExpectedNoLintLinter": ""',
+  \ '    }',
+  \ '  ]',
+  \ '}',
   \ ])

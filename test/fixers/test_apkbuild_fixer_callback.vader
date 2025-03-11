@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpFixerTest('apkbuild', 'apkbuild-fixer')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The apkbuild-fixer callback should return the correct default values):
+  AssertFixer {
+  \    'read_temporary_file': 1,
+  \    'command': ale#Escape('apkbuild-fixer') . ' -p apkbuild-lint %t',
+  \}
+
+Execute(The apkbuild-fixer callback should include custom apkbuild-fixer options):
+  let g:ale_apkbuild_apkbuild_fixer_executable = "another-apkbuild-fixer"
+  let g:ale_apkbuild_apkbuild_fixer_options = "-s"
+
+  AssertFixer {
+  \    'read_temporary_file': 1,
+  \    'command': ale#Escape('another-apkbuild-fixer') . ' -p apkbuild-lint -s %t'
+  \}

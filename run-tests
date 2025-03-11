@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-
+DOCKER=${DOCKER:-docker}
+export DOCKER
 # Author: w0rp <devw0rp@gmail.com>
 #
 # This script runs tests for the ALE project. Run `./run-tests --help` for
 # options, or read the output below.
 #
 
-image=denseanalysis/ale
+image=docker.io/denseanalysis/ale
 
 # Create docker image tag based on Dockerfile contents
 if [ -n "$(command -v md5)" ]; then
@@ -155,7 +156,18 @@ set -eu
 
 # Check if docker un image is available locally
 has_image=$(docker images --quiet "${image}:${image_tag}" | wc -l)
-arch=$(docker info -f '{{ .Architecture }}')
+
+if [[ "$DOCKER" == docker ]]; then
+  arch=$(docker info -f '{{ .Architecture }}')
+elif [[ "$DOCKER" == podman ]]; then
+  arch=$(podman info -f '{{ .Host.Arch }}')
+  if [[ "$arch" == "amd64" ]]; then
+    arch="x86_64"
+  fi
+else
+  echo "The DOCKER environnement variable must be docker or podman, not ${DOCKER}"
+  exit 1
+fi
 
 download_image() {
   if [[ $arch != x86_64 ]]; then
@@ -174,12 +186,12 @@ if [ "$has_image" -eq 0 ] && ! download_image; then
   if [[ $arch != x86_64 ]]; then
     echo "Building testbed/vim:24 for $arch"
     testbed_vim_ref=902917c4caa50db2f2e80009b839605602f9f014
-    docker build -t "testbed/vim:$testbed_vim_ref" "https://github.com/Vimjas/vim-testbed.git#$testbed_vim_ref"
+    "$DOCKER" build -t "testbed/vim:$testbed_vim_ref" "https://github.com/Vimjas/vim-testbed.git#$testbed_vim_ref"
     build_args+=( --build-arg TESTBED_VIM_VERSION="$testbed_vim_ref" )
   fi
 
-  docker build "${build_args[@]}" -t "${image}:${image_tag}" .
-  docker tag "${image}:${image_tag}" "${image}:latest"
+  "$DOCKER" build "${build_args[@]}" -t "${image}:${image_tag}" .
+  "$DOCKER" tag "${image}:${image_tag}" "${image}:latest"
 
   if [[ -z "${DOCKER_HUB_USER:-}" || -z "${DOCKER_HUB_PASS:-}" ]]; then
     echo "Docker Hub credentials not set, skip push"
@@ -192,7 +204,7 @@ else
   echo "Docker run image ${image}:${image_tag} ready"
 fi
 
-docker tag "${image}:${image_tag}" "${image}:latest"
+"$DOCKER" tag "${image}:${image_tag}" "${image}:latest"
 
 output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 
@@ -225,7 +237,7 @@ cancel_tests() {
 
 trap cancel_tests INT TERM
 
-for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
+for vim in $("$DOCKER" run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
     || ( [[ $vim =~ ^vim-v9.0 ]] && ((run_vim_90_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.6 ]] && ((run_neovim_06_tests)) ) \

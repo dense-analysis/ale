@@ -23,6 +23,7 @@ Notes:
 * API Blueprint
   * `drafter`
 * APKBUILD
+  * `apkbuild-fixer`
   * `apkbuild-lint`
   * `secfixes-check`
 * AsciiDoc
@@ -104,6 +105,8 @@ Notes:
   * `flawfinder`
   * `gcc` (`cc`)
   * `uncrustify`
+* C3
+  * `c3lsp`
 * Cairo
   * `scarb`!!
   * `starknet`
@@ -271,6 +274,7 @@ Notes:
   * `alex`
   * `angular`
   * `cspell`
+  * djlint
   * `eslint`
   * `fecs`
   * `html-beautify`
@@ -326,6 +330,7 @@ Notes:
   * `eslint`
   * `fixjson`
   * `jq`
+  * `json.tool`
   * `jsonlint`
   * `prettier`
   * `spectral`
@@ -731,6 +736,7 @@ Notes:
   * `yamllint`
 * Yara
   * `yls`
+  * `yq`
 * YANG
   * `yang-lsp`
 * Zeek

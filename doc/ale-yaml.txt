@@ -367,4 +367,42 @@ g:ale_yaml_gitlablint_options                     *g:ale_yaml_gitlablint_options
 
 
 ===============================================================================
+yq                                                                  *ale-yaml-yq*
+
+Website: https://github.com/mikefarah/yq
+
+
+Installation
+-------------------------------------------------------------------------------
+
+Install yq: >
+
+  wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - | tar xz && mv ${BINARY} /usr/bin/yq
+
+Options
+-------------------------------------------------------------------------------
+
+g:ale_yaml_yq_executable                               *g:ale_yaml_yq_executable*
+                                                       *b:ale_yaml_yq_executable*
+  Type: |String|
+  Default: `'yq'`
+
+  This variable can be set to change the path to yq.
+
+
+g:ale_yaml_yq_options                                     *g:ale_yaml_yq_options*
+                                                          *b:ale_yaml_yq_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to yq.
+
+g:ale_yaml_yq_filters                                     *g:ale_yaml_yq_filters
+                                                          *b:ale_yaml_yq_filters*
+  Type: |String|
+  Default: `'.'`
+
+  This option can be changed to pass additional filters to yq
+
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

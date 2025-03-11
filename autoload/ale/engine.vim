@@ -178,6 +178,12 @@ function! s:HandleExit(job_info, buffer, output, data) abort
         let l:loclist = []
     endtry
 
+    if type(l:loclist) isnot# v:t_list
+        " we only expect the list type; don't pass anything else down to
+        " `ale#engine#HandleLoclist` since it won't understand it
+        let l:loclist = []
+    endif
+
     call ale#engine#HandleLoclist(l:linter.name, a:buffer, l:loclist, 0)
 endfunction
 

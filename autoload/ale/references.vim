@@ -17,18 +17,21 @@ function! ale#references#ClearLSPData() abort
 endfunction
 
 function! ale#references#FormatTSResponseItem(response_item, options) abort
+    let l:match = substitute(a:response_item.lineText, '^\s*\(.\{-}\)\s*$', '\1', '')
+
     if get(a:options, 'open_in') is# 'quickfix'
         return {
         \ 'filename': a:response_item.file,
         \ 'lnum': a:response_item.start.line,
         \ 'col': a:response_item.start.offset,
+        \ 'text': l:match,
         \}
     else
         return {
         \ 'filename': a:response_item.file,
         \ 'line': a:response_item.start.line,
         \ 'column': a:response_item.start.offset,
-        \ 'match': substitute(a:response_item.lineText, '^\s*\(.\{-}\)\s*$', '\1', ''),
+        \ 'match': l:match,
         \}
     endif
 endfunction

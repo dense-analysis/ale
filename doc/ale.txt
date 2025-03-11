@@ -2898,6 +2898,7 @@ documented in additional help files.
     ansible-language-server...............|ale-ansible-language-server|
     ansible-lint..........................|ale-ansible-ansible-lint|
   apkbuild................................|ale-apkbuild-options|
+    apkbuild-fixer........................|ale-apkbuild-apkbuild-fixer|
     apkbuild-lint.........................|ale-apkbuild-apkbuild-lint|
     secfixes-check........................|ale-apkbuild-secfixes-check|
   asciidoc................................|ale-asciidoc-options|
@@ -2988,6 +2989,8 @@ documented in additional help files.
     clang-format..........................|ale-cuda-clangformat|
     clangd................................|ale-cuda-clangd|
     nvcc..................................|ale-cuda-nvcc|
+  c3......................................|ale-c3-options|
+    c3lsp.................................|ale-c3-c3lsp|
   d.......................................|ale-d-options|
     dfmt..................................|ale-d-dfmt|
     dls...................................|ale-d-dls|
@@ -3103,6 +3106,7 @@ documented in additional help files.
   html....................................|ale-html-options|
     angular...............................|ale-html-angular|
     cspell................................|ale-html-cspell|
+    djlint................................|ale-html-djlint|
     fecs..................................|ale-html-fecs|
     html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
@@ -3156,6 +3160,7 @@ documented in additional help files.
     dprint................................|ale-json-dprint|
     eslint................................|ale-json-eslint|
     fixjson...............................|ale-json-fixjson|
+    pytool................................|ale-json-pytool|
     jsonlint..............................|ale-json-jsonlint|
     jq....................................|ale-json-jq|
     prettier..............................|ale-json-prettier|
@@ -3517,6 +3522,7 @@ documented in additional help files.
     yamlfmt...............................|ale-yaml-yamlfmt|
     yamllint..............................|ale-yaml-yamllint|
     gitlablint............................|ale-yaml-gitlablint|
+    yq....................................|ale-yaml-yq|
   yang....................................|ale-yang-options|
     yang-lsp..............................|ale-yang-lsp|
   zeek....................................|ale-zeek-options|
