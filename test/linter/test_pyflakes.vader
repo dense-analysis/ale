@@ -58,3 +58,10 @@ Execute(Poetry is detected when python_pyflakes_auto_poetry is set):
 
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run pyflakes %t'
+
+Execute(uv is detected when python_pyflakes_auto_uv is set):
+  let g:ale_python_pyflakes_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run pyflakes %t'

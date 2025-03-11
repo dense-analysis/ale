@@ -1,25 +1,34 @@
 Before:
-  Save b:ale_elm_format_executable
-  Save b:ale_elm_format_options
-
-  let b:ale_elm_format_executable = 'erlfmt'
-  let b:ale_elm_format_options = ''
+  call ale#assert#SetUpFixerTest('erlang', 'erlfmt')
 
 After:
-  Restore
+  unlet! b:root
+
+  call ale#assert#TearDownFixerTest()
+
+Execute(The local erlfmt executable should be used by default):
+  " Not sure if this is a good default though.  It seems to imply
+  " that the executable is committed to the repository.
+
+  let b:root = '../test-files/erlang/app_with_erlfmt'
+
+  call ale#test#SetFilename(b:root . '/src/app.erl')
+  AssertFixer {
+  \ 'command': ale#Escape(ale#test#GetFilename(b:root . '/erlfmt')) . ' -',
+  \}
+
+Execute(The global erlfmt executable should be configurable):
+  let b:root = '../test-files/erlang/app_with_erlfmt'
+
+  let b:ale_erlang_erlfmt_executable = '/path/to/erlfmt'
+  let b:ale_erlang_erlfmt_use_global = 1
+
+  call ale#test#SetFilename(b:root . '/src/app.erl')
+  AssertFixer {'command': ale#Escape('/path/to/erlfmt') . ' -'}
 
 Execute(The erlfmt command should handle empty options):
-  AssertEqual
-  \ {
-  \   'command': ale#Escape('erlfmt') . ' %s'
-  \ },
-  \ ale#fixers#erlfmt#Fix(bufnr(''))
+  AssertFixer {'command': ale#Escape('erlfmt') . ' -'}
 
 Execute(The erlfmt command should handle custom options):
   let b:ale_erlang_erlfmt_options = '--insert-pragma'
-
-  AssertEqual
-  \ {
-  \   'command': ale#Escape('erlfmt') . ' --insert-pragma %s'
-  \ },
-  \ ale#fixers#erlfmt#Fix(bufnr(''))
+  AssertFixer {'command': ale#Escape('erlfmt') . ' --insert-pragma -'}

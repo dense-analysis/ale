@@ -21,6 +21,8 @@ function! ale#floating_preview#Show(lines, ...) abort
     else
         call s:VimShow(a:lines, l:options)
     endif
+
+    return w:preview.id
 endfunction
 
 function! s:NvimShow(lines, options) abort

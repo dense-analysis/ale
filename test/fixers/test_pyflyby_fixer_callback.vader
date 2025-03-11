@@ -36,3 +36,14 @@ Execute(Poetry is detected when python_pyflyby_auto_poetry is set):
   \ {
   \   'command': ale#Escape('poetry') . ' run tidy-imports'
   \ }
+
+Execute(uv is detected when python_pyflyby_auto_uv is set):
+  let g:ale_python_pyflyby_auto_uv = 1
+
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  GivenCommandOutput ['VERSION 5.7.0']
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('uv') . ' run tidy-imports'
+  \ }

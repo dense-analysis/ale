@@ -117,3 +117,11 @@ Execute(poetry is detected when python_ruff_auto_poetry is set):
   AssertLinterCwd expand('%:p:h')
   AssertLinter 'poetry', ale#Escape('poetry') . ' run ruff -q --no-fix'
   \   . b:command_tail
+
+Execute(uv is detected when python_ruff_auto_uv is set):
+  let g:ale_python_ruff_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'uv', ale#Escape('uv') . ' run ruff -q --no-fix'
+  \   . b:command_tail

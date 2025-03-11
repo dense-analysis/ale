@@ -20,7 +20,30 @@ function! ale_linters#yaml#actionlint#GetCommand(buffer) abort
         let l:options .= ale#Pad('-oneline')
     endif
 
+    let l:configfile = ale_linters#yaml#actionlint#GitRepoHasConfig(a:buffer)
+
+    if !empty(l:configfile)
+        let l:options .= ale#Pad('-config-file ' . l:configfile)
+    endif
+
     return '%e' . ale#Pad(l:options) . ' - '
+endfunction
+
+" If we have a actionlint.yml or actionlint.yaml in our github directory
+" use that as our config file.
+function! ale_linters#yaml#actionlint#GitRepoHasConfig(buffer) abort
+    let l:filename = expand('#' . a:buffer . ':p')
+    let l:configfilebase = substitute(l:filename, '\.github/.*', '.github/actionlint.','')
+
+    for l:ext in ['yml', 'yaml']
+        let l:configfile = l:configfilebase . l:ext
+
+        if filereadable(l:configfile)
+            return l:configfile
+        endif
+    endfor
+
+    return ''
 endfunction
 
 function! ale_linters#yaml#actionlint#Handle(buffer, lines) abort

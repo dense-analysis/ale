@@ -1,0 +1,14 @@
+Before:
+  call ale#assert#SetUpLinterTest('html', 'djlint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default djlint command should be correct):
+  AssertLinter 'djlint', ale#Escape('djlint') . ' %s'
+
+Execute(The executable should be configurable):
+  let g:ale_html_djlint_executable = 'foo bar'
+  let g:ale_html_djlint_options = '--option'
+
+  AssertLinter 'foo bar', ale#Escape('foo bar') . ' --option %s'

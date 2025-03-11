@@ -18,22 +18,6 @@ After:
 
   call ale#test#RestoreDirectory()
 
-Execute(The autoflake callback should return the correct default values):
-  AssertEqual
-  \ 0,
-  \ ale#fixers#autoflake#Fix(bufnr(''))
-
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
-  AssertEqual
-  \ {
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoflake'))
-  \     . ' --in-place '
-  \     . ' %t',
-  \   'read_temporary_file': 1,
-  \ },
-  \ ale#fixers#autoflake#Fix(bufnr(''))
-
-
 Execute(The autoflake callback should include options):
   let g:ale_python_autoflake_options = '--some-option'
 
@@ -44,6 +28,42 @@ Execute(The autoflake callback should include options):
   \     . ' --some-option'
   \     . ' --in-place '
   \     . ' %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#autoflake#Fix(bufnr(''))
+
+Execute(pipenv is detected when python_autoflake_auto_pipenv is set):
+  let g:ale_python_autoflake_auto_pipenv = 1
+
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('pipenv') . ' run autoflake --in-place  %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#autoflake#Fix(bufnr(''))
+
+Execute(Poetry is detected when python_autoflake_auto_poetry is set):
+  let g:ale_python_autoflake_auto_poetry = 1
+
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('poetry') . ' run autoflake --in-place  %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#autoflake#Fix(bufnr(''))
+
+Execute(uv is detected when python_autoflake_auto_uv is set):
+  let g:ale_python_autoflake_auto_uv = 1
+
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('uv') . ' run autoflake --in-place  %t',
   \   'read_temporary_file': 1,
   \ },
   \ ale#fixers#autoflake#Fix(bufnr(''))

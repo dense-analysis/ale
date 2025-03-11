@@ -52,6 +52,57 @@ g:ale_erlang_elvis_executable                   *g:ale_erlang_elvis_executable*
 
 
 -------------------------------------------------------------------------------
+erlang-mode                                            *ale-erlang-erlang-mode*
+
+g:ale_erlang_erlang_mode_emacs_executable
+                                    *g:ale_erlang_erlang_mode_emacs_executable*
+                                    *b:ale_erlang_erlang_mode_emacs_executable*
+  Type: |String|
+  Default: `'emacs'`
+
+  This variable can be changed to specify the Emacs executable.
+
+g:ale_erlang_erlang_mode_indent_level   *g:ale_erlang_erlang_mode_indent_level*
+                                        *b:ale_erlang_erlang_mode_indent_level*
+  Type: |Number|
+  Default: `4`
+
+  Indentation of Erlang calls/clauses within blocks.
+
+g:ale_erlang_erlang_mode_icr_indent       *g:ale_erlang_erlang_mode_icr_indent*
+                                          *b:ale_erlang_erlang_mode_icr_indent*
+  Type: `'nil'` or |Number|
+  Default: `'nil'`
+
+  Indentation of Erlang if/case/receive patterns. `'nil'` means keeping default
+  behavior. When non-`'nil'`, indent to the column of if/case/receive.
+
+g:ale_erlang_erlang_mode_indent_guard   *g:ale_erlang_erlang_mode_indent_guard*
+                                        *b:ale_erlang_erlang_mode_indent_guard*
+  Type: |Number|
+  Default: `2`
+
+  Indentation of Erlang guards.
+
+g:ale_erlang_erlang_mode_argument_indent
+                                     *g:ale_erlang_erlang_mode_argument_indent*
+                                     *b:ale_erlang_erlang_mode_argument_indent*
+  Type: `'nil'` or |Number|
+  Default: `2`
+
+  Indentation of the first argument in a function call. When `'nil'`, indent
+  to the column after the `'('` of the function.
+
+g:ale_erlang_erlang_mode_indent_tabs_mode
+                                    *g:ale_erlang_erlang_mode_indent_tabs_mode*
+                                    *b:ale_erlang_erlang_mode_indent_tabs_mode*
+  Type: `'nil'` or `'t'`
+  Default: `'nil'`
+
+  Indentation can insert tabs if this is non-`'nil'`.
+
+
+-------------------------------------------------------------------------------
 erlang_ls                                                *ale-erlang-erlang_ls*
 
 g:ale_erlang_erlang_ls_executable           *g:ale_erlang_erlang_ls_executable*

@@ -158,9 +158,9 @@ Execute(The message at the cursor should be shown when linting ends):
 
   AssertEqual 'semi: Missing semicolon.', g:last_message
 
-Execute(The message at the cursor should be shown on InsertLeave):
+Execute(The message at the cursor should be shown when leaving insert mode):
   call cursor(2, 9)
-  doautocmd InsertLeave
+  call feedkeys("i\<Esc>", 'tnix')
 
   AssertEqual 'space-infix-ops: Infix operators must be spaced.', g:last_message
 

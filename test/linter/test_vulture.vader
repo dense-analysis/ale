@@ -61,3 +61,25 @@ Execute(Setting executable to 'poetry' appends 'run vulture'):
   let g:ale_python_vulture_executable = 'path/to/poetry'
 
   AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run vulture' . '  .'
+
+Execute(pipenv is detected when python_vulture_auto_pipenv is set):
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+  let g:ale_python_vulture_auto_pipenv = 1
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run vulture' . '  .'
+
+
+Execute(poetry is detected when python_vulture_auto_poetry is set):
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+  let g:ale_python_vulture_auto_poetry = 1
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run vulture' . '  .'
+
+Execute(uv is detected when python_vulture_auto_uv is set):
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+  let g:ale_python_vulture_auto_uv = 1
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run vulture' . '  .'

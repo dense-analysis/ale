@@ -49,10 +49,10 @@ changes should be preceded by a deprecation phase complete with warnings.
 Changes required for security may be an exception.
 
 ALE supports Vim 8 and above, and NeoVim 0.6.0 or newer. These are the
-earliest versions of Vim and NeoVim which support |job|, |timer|, |closure|,
-and |lambda| features. All ALE code should be written so it is compatible with
-these versions of Vim, or with version checks so particular features can
-degrade or fail gracefully.
+earliest versions of Vim and NeoVim which support |+job|, |+timer|,
+|+closure|, and |+lambda| features. All ALE code should be written so it is
+compatible with these versions of Vim, or with version checks so particular
+features can degrade or fail gracefully.
 
 Just about everything should be documented and covered with tests.
 
@@ -486,7 +486,7 @@ last minor version.
 
 Generally ALE releases hit a major version only when there are breaking
 changes to a public ALE setting or function. A "public" setting or function is
-defined as any setting or function documented in the `:help` |ale| text file.
+defined as any setting or function documented in the `:help` |ale.txt| file.
 Major ALE versions ought to be so rare that they only come once a year at
 most. ALE should not typically introduce any breaking changes.
 
