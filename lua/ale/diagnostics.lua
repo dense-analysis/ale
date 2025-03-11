@@ -61,11 +61,31 @@ module.sendAleResultsToDiagnostics = function(buffer, loclist)
     [1] = true,
   }
 
-  local signs = module.aleVar(buffer, 'set_signs') == 1
+  local set_signs = module.aleVar(buffer, 'set_signs')
+  local sign_priority = module.aleVar(buffer, 'sign_priority')
+  local signs
 
-  if signs then
+  if set_signs == 1 and sign_priority then
     -- If signs are enabled, set the priority for them.
-    signs = {priority = vim.g.ale_sign_priority }
+    local local_cfg = { priority = sign_priority }
+    -- NOTE: vim.diagnostic.config() -- retrieving the current config values
+    -- fails in Neovim older than v0.7.0.
+    local ok, diag_cfg = pcall(vim.diagnostic.config)
+    if not ok or not diag_cfg then
+      diag_cfg = { signs = {} }
+    end
+    local global_cfg = diag_cfg.signs
+
+    if type(global_cfg) == 'boolean' then
+      signs = local_cfg
+    elseif type(global_cfg) == 'table' then
+      signs = vim.tbl_extend('force', global_cfg, local_cfg)
+    else
+      signs = function(...)
+        local calculated = global_cfg(...)
+        return vim.tbl_extend('force', calculated, local_cfg)
+      end
+    end
   end
 
   vim.diagnostic.set(
@@ -73,8 +93,8 @@ module.sendAleResultsToDiagnostics = function(buffer, loclist)
     buffer,
     diagnostics,
     {
-        virtual_text = virtualtext_enabled_set[vim.g.ale_virtualtext_cursor] ~= nil,
-        signs = signs,
+      virtual_text = virtualtext_enabled_set[vim.g.ale_virtualtext_cursor] ~= nil,
+      signs = signs,
     }
   )
 end
