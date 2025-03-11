@@ -4,7 +4,7 @@ FROM testbed/vim:${TESTBED_VIM_VERSION}
 
 RUN install_vim -tag v8.0.0027 -build \
                 -tag v9.0.0297 -build \
-                -tag neovim:v0.6.0 -build \
+                -tag neovim:v0.7.0 -build \
                 -tag neovim:v0.8.0 -build
 
 ENV PACKAGES="\

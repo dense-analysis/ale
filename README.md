@@ -5,12 +5,12 @@
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](https://user-images.githubusercontent.com/3518142/59195920-2c339500-8b85-11e9-9c22-f6b7f69637b8.jpg)
 
 ALE (Asynchronous Lint Engine) is a plugin providing linting (syntax checking
-and semantic errors) in NeoVim 0.6.0+ and Vim 8.0+ while you edit your text files,
+and semantic errors) in Neovim 0.7.0+ and Vim 8.0+ while you edit your text files,
 and acts as a Vim [Language Server Protocol](https://langserver.org/) client.
 
 <video autoplay="true" muted="true" loop="true" controls="false" src="https://user-images.githubusercontent.com/3518142/210141215-8f2ff760-6a87-4704-a11e-c109b8e9ec41.mp4" title="An example showing what ALE can do."></video>
 
-ALE makes use of NeoVim and Vim 8 job control functions and timers to
+ALE makes use of Neovim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
 text is changed in Vim. This allows for displaying warnings and
 errors in files being edited in Vim before files have been saved
@@ -644,7 +644,7 @@ LSP features in ALE for different filetypes.
 
 #### Neovim Diagnostics
 
-If you are running Neovim 0.6 or later, you can make ALE display errors and
+If you are running Neovim 0.7 or later, you can make ALE display errors and
 warnings via the Neovim diagnostics API.
 
 ```vim

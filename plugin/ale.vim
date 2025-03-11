@@ -14,7 +14,7 @@ let g:loaded_ale_dont_use_this_in_other_plugins_please = 1
 
 " A flag for detecting if the required features are set.
 if has('nvim')
-    " We check for NeoVim 0.2.0+, but we only officially support NeoVim 0.6.0
+    " We check for Neovim 0.2.0+, but we only officially support NeoVim 0.7.0
     let s:has_features = has('timers') && has('nvim-0.2.0')
 else
     " Check if Job and Channel functions are available, instead of the
@@ -26,7 +26,7 @@ if !s:has_features
     " Only output a warning if editing some special files.
     if index(['', 'gitcommit'], &filetype) == -1
         " no-custom-checks
-        echoerr 'ALE requires NeoVim >= 0.6.0 or Vim 8 with +timers +job +channel'
+        echoerr 'ALE requires NeoVim >= 0.7.0 or Vim 8 with +timers +job +channel'
         " no-custom-checks
         echoerr 'Please update your editor appropriately.'
     endif
@@ -204,11 +204,11 @@ let g:ale_save_hidden = get(g:, 'ale_save_hidden', 0)
 
 " If 1, disables ALE's built in error display. Instead, all errors are piped
 " to the diagnostics API.
-let g:ale_use_neovim_diagnostics_api = get(g:, 'ale_use_neovim_diagnostics_api', has('nvim-0.6'))
+let g:ale_use_neovim_diagnostics_api = get(g:, 'ale_use_neovim_diagnostics_api', has('nvim-0.7'))
 
-if g:ale_use_neovim_diagnostics_api && !has('nvim-0.6')
+if g:ale_use_neovim_diagnostics_api && !has('nvim-0.7')
     " no-custom-checks
-    echoerr('Setting g:ale_use_neovim_diagnostics_api to 1 requires Neovim 0.6+.')
+    echoerr('Setting g:ale_use_neovim_diagnostics_api to 1 requires Neovim 0.7+.')
 endif
 
 if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'
