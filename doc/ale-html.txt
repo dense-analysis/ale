@@ -36,6 +36,9 @@ See |ale-cspell-options|
 ===============================================================================
 djlint                                                        *ale-html-djlint*
 
+`djlint` options for HTML are the same as the options for htmlangular,
+htmldjango, jinja, handlebars, nunjucks and gotmplhtml.
+
 g:ale_html_djlint_executable                     *g:ale_html_djlint_executable*
                                                  *b:ale_html_djlint_executable*
   Type: |String|

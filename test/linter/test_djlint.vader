@@ -12,3 +12,58 @@ Execute(The executable should be configurable):
   let g:ale_html_djlint_options = '--option'
 
   AssertLinter 'foo bar', ale#Escape('foo bar') . ' --option %s'
+
+Execute(The --profile option should not be overridden):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=htmldjango
+  let g:ale_html_djlint_options = '--profile jinja'
+
+  AssertLinter 'djlint', ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --profile jinja'
+  \     . ' %s',
+
+Execute(Should set --profile for htmlangular):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=htmlangular
+
+  AssertLinter 'djlint', ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --profile angular'
+  \     . ' %s',
+
+Execute(Should set --profile for jinja):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=jinja
+
+  AssertLinter 'djlint', ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --profile jinja'
+  \     . ' %s',
+
+Execute(Should set --profile for Handlebars):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=handlebars
+
+  AssertLinter 'djlint', ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --profile handlebars'
+  \     . ' %s',
+
+Execute(Should set --profile for nunjucks):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=nunjucks
+
+  AssertLinter 'djlint', ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --profile nunjucks'
+  \     . ' %s',
+
+Execute(Should set --profile for Go HTML Templates):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=gohtmltmpl
+
+  AssertLinter 'djlint', ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --profile golang'
+  \     . ' %s',
