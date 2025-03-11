@@ -22,7 +22,7 @@ g:ale_openscad_sca2d_options                     *g:ale_openscad_sca2d_options*
 
 
 ===============================================================================
-scadformat                                            ale-openscad-scadformat
+scadformat                                            *ale-openscad-scadformat*
 
 g:ale_openscad_scadformat_executable     *g:ale_openscad_scadformat_executable*
                                          *b:ale_openscad_scadformat_executable*
