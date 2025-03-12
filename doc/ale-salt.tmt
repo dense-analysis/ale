@@ -23,7 +23,7 @@ virtualenv directories.
 Options
 -------------------------------------------------------------------------------
 
-g:ale_salt_salt-lint_executable                *g:ale_salt_salt_lint_executable*
+g:ale_salt_salt_lint_executable                *g:ale_salt_salt_lint_executable*
                                                *b:ale_salt_salt_lint_executable*
   Type: |String|
   Default: `'salt-lint'`
@@ -31,8 +31,8 @@ g:ale_salt_salt-lint_executable                *g:ale_salt_salt_lint_executable*
   This variable can be set to change the path to salt-lint.
 
 
-g:ale_salt_salt-lint_options                      *g:ale_salt_salt-lint_options*
-                                                  *b:ale_salt_salt-lint_options*
+g:ale_salt_salt_lint_options                      *g:ale_salt_salt_lint_options*
+                                                  *b:ale_salt_salt_lint_options*
   Type: |String|
   Default: `''`
 
