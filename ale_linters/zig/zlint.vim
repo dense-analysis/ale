@@ -22,11 +22,13 @@ function! ale_linters#zig#zlint#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#zig#zlint#GetCommand(buffer) abort
+    return ale#Escape(ale#Var(a:buffer, 'zig_zlint_executable')) . ' %s -f gh'
+endfunction
+
 call ale#linter#Define('zig', {
 \   'name': 'zlint',
 \   'executable': {b -> ale#Var(b, "zig_zlint_executable")},
-\   'command': {b ->
-\       ale#Escape(ale#Var(b, 'zig_zlint_executable')) . ' %s -f gh'
-\   },
+\   'command': function('ale_linters#zig#zlint#GetCommand'),
 \   'callback': 'ale_linters#zig#zlint#Handle',
 \})
