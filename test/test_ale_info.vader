@@ -767,3 +767,6 @@ Execute (ALEInfo should include linter global options for enabled linters):
   \)
 
 
+Given ale-info (An ALEInfo buffer):
+Execute(ALEInfo should not report information about its own window):
+  call CheckInfo([])

@@ -340,6 +340,11 @@ function! ale#debugging#InfoCommand(...) abort
         return
     endif
 
+    " Do not show info for the info window itself.
+    if &filetype is# 'ale-info'
+        return
+    endif
+
     " Get 'echo' from '-echo', if there's an argument.
     let l:mode = get(a:000, '')[1:]
 
