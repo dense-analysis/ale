@@ -3116,6 +3116,8 @@ documented in additional help files.
     tidy..................................|ale-html-tidy|
     vscodehtml............................|ale-html-vscode|
     write-good............................|ale-html-write-good|
+  http....................................|ale-http-options|
+    kulala_fmt............................|ale-http-kulala_fmt|
   hurl....................................|ale-hurl-options|
     hurlfmt...............................|ale-hurl-hurlfmt|
   idris...................................|ale-idris-options|
@@ -3360,6 +3362,8 @@ documented in additional help files.
     cspell................................|ale-rego-cspell|
     opacheck..............................|ale-rego-opa-check|
     opafmt................................|ale-rego-opa-fmt-fixer|
+  rest....................................|ale-rest-options|
+    kulala_fmt............................|ale-rest-kulala_fmt|
   restructuredtext........................|ale-restructuredtext-options|
     cspell................................|ale-restructuredtext-cspell|
     textlint..............................|ale-restructuredtext-textlint|
