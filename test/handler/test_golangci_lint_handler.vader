@@ -108,3 +108,39 @@ Execute (The golangci-lint handler should handle only typecheck lines as errors)
   \ '  ]',
   \ '}',
   \ ])
+
+Execute (The golangci-lint handler should set proper filename):
+  call ale#test#SetFilename('app/cmd/server/main.go')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 198,
+  \     'col': 19,
+  \     'text': 'funlen - Function getConfig has too many statements (51 > 50)',
+  \     'type': 'W',
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/main.go'),
+  \   },
+  \ ],
+  \ ale_linters#go#golangci_lint#Handler(bufnr(''), [
+  \ '{',
+  \ '  "Issues": [',
+  \ '  {',
+  \ '    "FromLinter": "funlen",',
+  \ '    "Text": "Function getConfig has too many statements (51 > 50)",',
+  \ '    "Severity": "",',
+  \ '    "SourceLines": [',
+  \ '      "package main"',
+  \ '    ],',
+  \ '    "Pos": {',
+  \ '      "Filename": "cmd/server/main.go",',
+  \ '      "Offset": 5374,',
+  \ '      "Line": 198,',
+  \ '      "Column": 19',
+  \ '    },',
+  \ '    "ExpectNoLint": false,',
+  \ '    "ExpectedNoLintLinter": ""',
+  \ '  }',
+  \ '  ]',
+  \ '}',
+  \ ])
