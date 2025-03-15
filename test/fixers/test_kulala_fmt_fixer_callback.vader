@@ -17,7 +17,7 @@ Execute(The kualala_fmt callback should return the correct default values):
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_http_kulala_fmt_executable)
-  \     . ' format %t',
+  \     . ' format %t > /dev/null',
   \   'read_temporary_file': 1,
   \ },
   \ ale#fixers#kulala_fmt#Fix(bufnr(''))
