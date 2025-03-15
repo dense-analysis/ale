@@ -1,0 +1,23 @@
+Before:
+  Save g:ale_http_kulala_fmt_executable
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_http_kulala_fmt_executable = 'xxxinvalid'
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The kualala_fmt callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/http/dummy.http')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_http_kulala_fmt_executable)
+  \     . ' format %t > /dev/null',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#kulala_fmt#Fix(bufnr(''))

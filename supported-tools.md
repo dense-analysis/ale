@@ -293,6 +293,8 @@ formatting.
   * [rustywind](https://github.com/avencera/rustywind)
   * [tidy](http://www.html-tidy.org/)
   * [write-good](https://github.com/btford/write-good)
+* HTTP
+  * [kulala_fmt](https://github.com/mistweaverco/kulala-fmt)
 * Hurl
   * [hurlfmt](https://hurl.dev)
 * Idris
@@ -567,6 +569,8 @@ formatting.
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [opacheck](https://www.openpolicyagent.org/docs/latest/cli/#opa-check)
   * [opafmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt)
+* REST
+  * [kulala_fmt](https://github.com/mistweaverco/kulala-fmt)
 * reStructuredText
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)

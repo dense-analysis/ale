@@ -284,6 +284,8 @@ Notes:
   * `rustywind`
   * `tidy`
   * `write-good`
+* HTTP
+  * kulala_fmt
 * Hurl
   * `hurlfmt`
 * Idris
@@ -558,6 +560,8 @@ Notes:
   * `cspell`
   * `opacheck`
   * `opafmt`
+* REST
+  * kulala_fmt
 * reStructuredText
   * `alex`
   * `cspell`
