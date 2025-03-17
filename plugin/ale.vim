@@ -211,6 +211,16 @@ if g:ale_use_neovim_diagnostics_api && !has('nvim-0.7')
     echoerr('Setting g:ale_use_neovim_diagnostics_api to 1 requires Neovim 0.7+.')
 endif
 
+let g:ale_use_neovim_lsp_api = get(g:, 'ale_use_neovim_lsp_api', has('nvim-0.8'))
+
+" If 1, replaces ALE's use of jobs and channels to connect to language
+" servers, plus the custom code, and instead hooks ALE into Neovim's built-in
+" language server tools.
+if g:ale_use_neovim_lsp_api && !has('nvim-0.8')
+    " no-custom-checks
+    echoerr('Setting g:ale_use_neovim_lsp_api to 1 requires Neovim 0.8+.')
+endif
+
 if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'
     call ale#balloon#Enable()
 endif

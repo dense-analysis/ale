@@ -488,6 +488,12 @@ function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
 endfunction
 
 function! s:CheckWithLSP(linter, details) abort
+    if g:ale_use_neovim_lsp_api && a:linter.lsp isnot# 'tsserver'
+        " If running an LSP client via Neovim's API then Neovim will
+        " internally track buffers for changes for us, and we can stop here.
+        return
+    endif
+
     let l:buffer = a:details.buffer
     let l:info = get(g:ale_buffer_info, l:buffer)
 
@@ -546,6 +552,7 @@ function! s:OnReadyForCustomRequests(args, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
     let l:request_id = ale#lsp#Send(l:id, a:args.message)
 
+    " TODO: Implement this whole flow with the lua API.
     if l:request_id > 0 && has_key(a:args, 'handler')
         let l:Callback = function('s:HandleLSPResponseToCustomRequests')
         call ale#lsp#RegisterCallback(l:id, l:Callback)
