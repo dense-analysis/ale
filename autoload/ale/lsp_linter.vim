@@ -488,12 +488,6 @@ function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
 endfunction
 
 function! s:CheckWithLSP(linter, details) abort
-    if g:ale_use_neovim_lsp_api && a:linter.lsp isnot# 'tsserver'
-        " If running an LSP client via Neovim's API then Neovim will
-        " internally track buffers for changes for us, and we can stop here.
-        return
-    endif
-
     let l:buffer = a:details.buffer
     let l:info = get(g:ale_buffer_info, l:buffer)
 
@@ -503,12 +497,18 @@ function! s:CheckWithLSP(linter, details) abort
 
     let l:id = a:details.connection_id
 
+    " Remember the linter this connection is for.
+    let s:lsp_linter_map[l:id] = a:linter
+
+    if g:ale_use_neovim_lsp_api && a:linter.lsp isnot# 'tsserver'
+        " If running an LSP client via Neovim's API then Neovim will
+        " internally track buffers for changes for us, and we can stop here.
+        return
+    endif
+
     " Register a callback now for handling errors now.
     let l:Callback = function('ale#lsp_linter#HandleLSPResponse')
     call ale#lsp#RegisterCallback(l:id, l:Callback)
-
-    " Remember the linter this connection is for.
-    let s:lsp_linter_map[l:id] = a:linter
 
     if a:linter.lsp is# 'tsserver'
         let l:message = ale#lsp#tsserver_message#Geterr(l:buffer)

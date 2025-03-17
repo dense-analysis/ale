@@ -8,7 +8,26 @@ module.start = function(config)
         config.init_options[true] = nil
     end
 
+    config.handlers = {
+        -- Override Neovim's handling of diagnostics to run through ALE's
+        -- functions so all of the functionality in ALE works.
+        ["textDocument/publishDiagnostics"] = function(err, result, _, _)
+            if err == nil then
+                vim.fn["ale#lsp_linter#HandleLSPResponse"](config.name, {
+                    jsonrpc = "2.0",
+                    method = "textDocument/publishDiagnostics",
+                    params = result
+                })
+            end
+        end
+    }
+
     config.on_init = function(_, _)
+        -- Neovim calls `on_init` before marking a client as active, meaning
+        -- we can't get a client via get_client_by_id until after `on_init` is
+        -- called. By deferring execution of calling the init callbacks we
+        -- can only call them after the client becomes available, which
+        -- will make notifications for configuration changes work, etc.
         vim.defer_fn(function()
             vim.fn["ale#lsp#CallInitCallbacks"](config.name)
         end, 0)
