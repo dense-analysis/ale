@@ -3067,6 +3067,8 @@ documented in additional help files.
     govet.................................|ale-go-govet|
     revive................................|ale-go-revive|
     staticcheck...........................|ale-go-staticcheck|
+  go html template........................|ale-gohtmltmpl-options|
+    djlint................................|ale-gohtmltmpl-djlint|
   graphql.................................|ale-graphql-options|
     eslint................................|ale-graphql-eslint|
     gqlint................................|ale-graphql-gqlint|
@@ -3078,6 +3080,7 @@ documented in additional help files.
     hackfmt...............................|ale-hack-hackfmt|
     hhast.................................|ale-hack-hhast|
   handlebars..............................|ale-handlebars-options|
+    djlint................................|ale-handlebars-djlint|
     prettier..............................|ale-handlebars-prettier|
     ember-template-lint...................|ale-handlebars-embertemplatelint|
   haskell.................................|ale-haskell-options|
@@ -3116,6 +3119,10 @@ documented in additional help files.
     tidy..................................|ale-html-tidy|
     vscodehtml............................|ale-html-vscode|
     write-good............................|ale-html-write-good|
+  html angular template...................|ale-htmlangular-options|
+    djlint................................|ale-htmlangular-djlint|
+  html django template....................|ale-htmldjango-options|
+    djlint................................|ale-htmldjango-djlint|
   hurl....................................|ale-hurl-options|
     hurlfmt...............................|ale-hurl-hurlfmt|
   idris...................................|ale-idris-options|
@@ -3153,6 +3160,8 @@ documented in additional help files.
     prettier-standard.....................|ale-javascript-prettier-standard|
     standard..............................|ale-javascript-standard|
     xo....................................|ale-javascript-xo|
+  jinja...................................|ale-jinja-options|
+    djlint................................|ale-jinja-djlint|
   json....................................|ale-json-options|
     biome.................................|ale-json-biome|
     clang-format..........................|ale-json-clangformat|
@@ -3231,6 +3240,8 @@ documented in additional help files.
     deadnix...............................|ale-nix-deadnix|
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
+  nunjucks................................|ale-nunjucks-options|
+    djlint................................|ale-nunjucks-djlint|
   objc....................................|ale-objc-options|
     ccls..................................|ale-objc-ccls|
     clang.................................|ale-objc-clang|

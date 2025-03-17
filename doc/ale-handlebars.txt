@@ -3,6 +3,13 @@ ALE Handlebars Integration                             *ale-handlebars-options*
 
 
 ===============================================================================
+djlint                                                  *ale-handlebars-djlint*
+
+See |ale-html-djlint|
+
+===============================================================================
+
+===============================================================================
 prettier                                              *ale-handlebars-prettier*
 
 See |ale-javascript-prettier| for information about the available options.

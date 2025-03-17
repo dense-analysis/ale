@@ -243,6 +243,8 @@ formatting.
   * [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype) :warning: :floppy_disk:
   * [revive](https://github.com/mgechev/revive) :warning: :floppy_disk:
   * [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) :warning: :floppy_disk:
+* Go HTML Templates
+  * [djlint](https://djlint.com/)
 * GraphQL
   * [eslint](http://eslint.org/)
   * [gqlint](https://github.com/happylinks/gqlint)
@@ -256,6 +258,7 @@ formatting.
 * Haml
   * [haml-lint](https://github.com/brigade/haml-lint)
 * Handlebars
+  * [djlint](https://djlint.com/)
   * [ember-template-lint](https://github.com/rwjblue/ember-template-lint)
 * Haskell
   * [brittany](https://github.com/lspitzner/brittany)
@@ -293,6 +296,10 @@ formatting.
   * [rustywind](https://github.com/avencera/rustywind)
   * [tidy](http://www.html-tidy.org/)
   * [write-good](https://github.com/btford/write-good)
+* HTML Angular
+  * [djlint](https://djlint.com/)
+* HTML Django
+  * [djlint](https://djlint.com/)
 * Hurl
   * [hurlfmt](https://hurl.dev)
 * Idris
@@ -330,6 +337,8 @@ formatting.
   * [standard](http://standardjs.com/)
   * [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29)
   * [xo](https://github.com/sindresorhus/xo)
+* Jinja
+  * [djlint](https://djlint.com/)
 * JSON
   * [VSCode JSON language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [biome](https://biomejs.dev/)
@@ -430,6 +439,8 @@ formatting.
   * [alex](https://github.com/get-alex/alex)
   * [proselint](http://proselint.com/)
   * [write-good](https://github.com/btford/write-good)
+* Nunjucks
+  * [djlint](https://djlint.com/)
 * Objective-C
   * [ccls](https://github.com/MaskRay/ccls)
   * [clang](http://clang.llvm.org/)
