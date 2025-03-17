@@ -313,6 +313,21 @@ function! ale#lsp#UpdateConfig(conn_id, buffer, config) abort
     return 1
 endfunction
 
+function! ale#lsp#CallInitCallbacks(conn_id) abort
+    let l:conn = s:connections[a:conn_id]
+
+    " Ensure the connection is marked as initialized.
+    " For integration with Neovim's LSP tooling this ensures immediately
+    " call OnInit functions in Vim after the `on_init` callback is called.
+    let l:conn.initialized = 1
+
+    " Call capabilities callbacks queued for the project.
+    for l:Callback in l:conn.init_queue
+        call l:Callback()
+    endfor
+
+    let l:conn.init_queue = []
+endfunction
 
 function! ale#lsp#HandleInitResponse(conn, response) abort
     if get(a:response, 'method', '') is# 'initialize'
@@ -331,12 +346,7 @@ function! ale#lsp#HandleInitResponse(conn, response) abort
     " The initialized message must be sent before everything else.
     call ale#lsp#Send(a:conn.id, ale#lsp#message#Initialized())
 
-    " Call capabilities callbacks queued for the project.
-    for l:Callback in a:conn.init_queue
-        call l:Callback()
-    endfor
-
-    let a:conn.init_queue = []
+    call ale#lsp#CallInitCallbacks(a:conn.id)
 endfunction
 
 function! ale#lsp#HandleMessage(conn_id, message) abort
@@ -482,6 +492,29 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
     let l:conn = s:connections[a:conn_id]
     let l:started = 0
 
+    if g:ale_use_neovim_lsp_api && !l:conn.is_tsserver
+        " For Windows from 'cmd /s/c "foo bar"' we need 'foo bar'
+        let l:lsp_cmd = has('win32')
+        \   ? ['cmd', '/s/c/', a:command[10:-2]]
+        \   : a:command
+
+        " Always call lsp.start, which will either create or re-use a
+        " connection. We'll set `attach` to `false` so we can later use
+        " our OpenDocument function to attach the buffer separately.
+        let l:client_id = luaeval('require("ale.lsp").start(_A)', {
+        \   'name': a:conn_id,
+        \   'cmd': l:lsp_cmd,
+        \   'root_dir': l:conn.root,
+        \   'init_options': l:conn.init_options,
+        \})
+
+        if l:client_id > 0
+            let l:conn.client_id = l:client_id
+        endif
+
+        return l:client_id > 0
+    endif
+
     if !has_key(l:conn, 'job_id') || !ale#job#HasOpenChannel(l:conn.job_id)
         let l:options = {
         \   'mode': 'raw',
@@ -520,6 +553,7 @@ function! ale#lsp#ConnectToAddress(conn_id, address) abort
     let l:conn = s:connections[a:conn_id]
     let l:started = 0
 
+    " TODO: Start Neovim client here.
     if !has_key(l:conn, 'channel_id') || !ale#socket#IsOpen(l:conn.channel_id)
         let l:channel_id = ale#socket#Open(a:address, {
         \   'callback': {_, mess -> ale#lsp#HandleMessage(a:conn_id, mess)},
@@ -606,6 +640,15 @@ function! ale#lsp#Send(conn_id, message) abort
         throw 'LSP server not initialized yet!'
     endif
 
+    if g:ale_use_neovim_lsp_api
+        return luaeval('require("ale.lsp").send_message(_A)', {
+        \   'client_id': l:conn.client_id,
+        \   'is_notification': a:message[0] == 1 ? v:true : v:false,
+        \   'method': a:message[1],
+        \   'params': get(a:message, 2, v:null)
+        \})
+    endif
+
     let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
     call s:SendMessageData(l:conn, l:data)
 
@@ -621,11 +664,17 @@ function! ale#lsp#OpenDocument(conn_id, buffer, language_id) abort
     if !empty(l:conn) && !has_key(l:conn.open_documents, a:buffer)
         if l:conn.is_tsserver
             let l:message = ale#lsp#tsserver_message#Open(a:buffer)
+            call ale#lsp#Send(a:conn_id, l:message)
+        elseif g:ale_use_neovim_lsp_api
+            call luaeval('require("ale.lsp").buf_attach(_A)', {
+            \    'bufnr': a:buffer,
+            \    'client_id': l:conn.client_id,
+            \})
         else
             let l:message = ale#lsp#message#DidOpen(a:buffer, a:language_id)
+            call ale#lsp#Send(a:conn_id, l:message)
         endif
 
-        call ale#lsp#Send(a:conn_id, l:message)
         let l:conn.open_documents[a:buffer] = getbufvar(a:buffer, 'changedtick')
         let l:opened = 1
     endif
@@ -649,11 +698,17 @@ function! ale#lsp#CloseDocument(buffer) abort
         if l:conn.initialized && has_key(l:conn.open_documents, a:buffer)
             if l:conn.is_tsserver
                 let l:message = ale#lsp#tsserver_message#Close(a:buffer)
+                call ale#lsp#Send(l:conn_id, l:message)
+            elseif g:ale_use_neovim_lsp_api
+                call luaeval('require("ale.lsp").buf_detach(_A)', {
+                \    'bufnr': a:buffer,
+                \    'client_id': l:conn.client_id,
+                \})
             else
                 let l:message = ale#lsp#message#DidClose(a:buffer)
+                call ale#lsp#Send(l:conn_id, l:message)
             endif
 
-            call ale#lsp#Send(l:conn_id, l:message)
             call remove(l:conn.open_documents, a:buffer)
             let l:closed = 1
         endif
