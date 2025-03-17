@@ -1,7 +1,5 @@
 local module = {}
 
-vim.lsp.set_log_level("debug")
-
 module.start = function(config)
     -- Neovim's luaeval sometimes adds a Boolean key to table we need to remove.
     if config.init_options[true] ~= nil then
