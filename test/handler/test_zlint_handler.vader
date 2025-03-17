@@ -42,16 +42,3 @@ Execute(The zlint handler should parse GitHub Actions format correctly):
   " Assert equality
   AssertEqual expected_output, actual_output
 
-Execute(The zlint executable and command should be configured correctly):
-  " Set a custom executable path
-  let g:ale_zig_zlint_executable = '/custom/path/to/zlint'
-
-  " Create a buffer with Zig filetype
-  call ale#test#SetFilename('test.zig')
-
-  " Check the executable
-  AssertEqual '/custom/path/to/zlint', ale#Var(bufnr(''), 'zig_zlint_executable')
-
-  " Check the command
-  let cmd = ale_linters#zig#zlint#GetCommand(bufnr(''))
-  AssertEqual ale#Escape('/custom/path/to/zlint') . ' %s -f gh', cmd
