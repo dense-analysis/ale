@@ -686,6 +686,8 @@ Notes:
   * `tslint`
   * `tsserver`
   * `typecheck`
+* Typst
+  * `typstyle`
 * V
   * `v`!!
   * `vfmt`

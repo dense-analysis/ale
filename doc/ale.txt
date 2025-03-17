@@ -3478,6 +3478,8 @@ documented in additional help files.
     tslint................................|ale-typescript-tslint|
     tsserver..............................|ale-typescript-tsserver|
     xo....................................|ale-typescript-xo|
+  typst...................................|ale-typst-options|
+    typstyle..............................|ale-typst-typstyle|
   v.......................................|ale-v-options|
     v.....................................|ale-v-v|
     vfmt..................................|ale-v-vfmt|

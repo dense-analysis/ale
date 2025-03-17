@@ -707,6 +707,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['clojure'],
 \       'description': 'formatter and linter for clojure files',
 \   },
+\   'typstyle': {
+\       'function': 'ale#fixers#typstyle#Fix',
+\       'suggested_filetypes': ['typst'],
+\       'description': 'A formatter for Typst files',
+\   },
 \}
 
 " Reset the function registry to the default entries.
