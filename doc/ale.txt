@@ -14,14 +14,15 @@ CONTENTS                                                         *ale-contents*
     3.3 Other Sources.....................|ale-lint-other-sources|
   4. Fixing Problems......................|ale-fix|
   5. Language Server Protocol Support.....|ale-lsp|
-    5.1 Completion........................|ale-completion|
-    5.2 Go To Definition..................|ale-go-to-definition|
-    5.3 Go To Type Definition.............|ale-go-to-type-definition|
-    5.4 Go To Implementation..............|ale-go-to-implementation|
-    5.5 Find References...................|ale-find-references|
-    5.6 Hovering..........................|ale-hover|
-    5.7 Symbol Search.....................|ale-symbol-search|
-    5.8 Refactoring: Rename, Actions......|ale-refactor|
+    5.1 LSP Neovim Integration............|ale-lsp-neovim|
+    5.2 Completion........................|ale-completion|
+    5.3 Go To Definition..................|ale-go-to-definition|
+    5.4 Go To Type Definition.............|ale-go-to-type-definition|
+    5.5 Go To Implementation..............|ale-go-to-implementation|
+    5.6 Find References...................|ale-find-references|
+    5.7 Hovering..........................|ale-hover|
+    5.8 Symbol Search.....................|ale-symbol-search|
+    5.9 Refactoring: Rename, Actions......|ale-refactor|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
   7. Linter/Fixer Options.................|ale-integration-options|
@@ -446,14 +447,20 @@ server, etc. See |ale-lint-other-machines|.
 ===============================================================================
 5. Language Server Protocol Support                                   *ale-lsp*
 
-ALE offers some support for integrating with Language Server Protocol (LSP)
-servers. LSP linters can be used in combination with any other linter, and
-will automatically connect to LSP servers when needed. ALE also supports
-`tsserver` for TypeScript, which uses a different but very similar protocol.
+ALE integrates with Language Server Protocol (LSP) servers. LSP linters can be
+used in combination with any other linter, and will automatically connect to
+LSP servers when needed. ALE also supports `tsserver` for TypeScript, which
+uses a different but very similar protocol.
 
 If you want to use another plugin for LSP features and tsserver, you can use
 the |g:ale_disable_lsp| setting to disable ALE's own LSP integrations, or
-ignore particular linters with |g:ale_linters_ignore|.
+ignore particular linters with |g:ale_linters_ignore|. In ALE's default
+configuration ALE will attempt to avoid conflicting with `nvim-lspconfig`.
+
+ALE will integrate with Neovim's LSP client by default in Neovim 0.8+. This
+functionality can be controlled with the |g:ale_use_neovim_lsp_api| setting.
+See |ale-lsp-neovim| below for information about ALE's integration with
+Neovim's LSP client.
 
 If for any reason you want to stop a language server ALE starts, such as when
 a project configuration has significantly changed, or new files have been
@@ -461,7 +468,111 @@ added the language server isn't aware of, use either `:ALEStopLSP` or
 `:ALEStopAllLSPs` to stop the server until ALE automatically starts it again.
 
 -------------------------------------------------------------------------------
-5.1 Completion                                                 *ale-completion*
+5.1 LSP Neovim Integration                                     *ale-lsp-neovim*
+
+In Neovim 0.8+ ALE will integrate with Neovim's native LSP client by default,
+unless disabled by setting |g:ale_use_neovim_lsp_api| to `0`. All built in
+functionality for Neovim's LSP client should work as expected, and this
+ensures ALE integrates well with other plugins that rely on Neovim's LSP
+client.
+
+See |lsp| for information on Neovim's built in LSP client.
+
+For diagnostics, for computing problems to show via ALE, ALE overrides the
+diagnostics handler for the LSP client launched by ALE, so all of the
+functionality in ALE will work as expected. By default ALE will send
+diagnostics back to Neovim's diagnostics API, which can be configured with the
+|g:ale_use_neovim_diagnostics_api| setting. This ensures that all of the
+functionality ALE adds on top for diagnostics will function, and that problems
+from linters that don't use LSP can be combined with LSP servers. See the
+diagram below. >
+
+  +-------------------+
+  |  Language Server  |  (Sends diagnostics)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Receives diagnostics)
+  +-------------------+
+           |
+  +-------------------+
+  |  ALE Processing   |  (Intercepts and processes diagnostics)
+  +-------------------+
+           |
+  +-------------------+
+  | Diagnostic engine |  (Either Neovim's diagnostics or ALE's custom code)
+  +-------------------+
+           |
+  +-------------------+
+  |      Neovim       |  (User sees formatted diagnostics)
+  +-------------------+
+<
+For LSP functionality executed via ALE's own functions, commands, and
+keybinds, ALE will intercept requests and handle them in an entirely custom
+way, ensuring ALE functionality should work largely the same between
+different Vim versions. See the diagram below. >
+
+  +-------------------+
+  |      Neovim       |  (User triggers LSP request via ALE)
+  +-------------------+
+           |
+  +-------------------+
+  |       ALE         |  (ALE sends request to Neovim client)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Forwards request to language server)
+  +-------------------+
+           |
+  +-------------------+
+  | Language Server   |  (Processes request and sends response)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Receives response)
+  +-------------------+
+           |
+  +-------------------+
+  |       ALE         |  (ALE Handles "raw" LSP response)
+  +-------------------+
+           |
+  +-------------------+
+  |      Neovim       |  (User sees result)
+  +-------------------+
+<
+For LSP functionality built-in to Neovim, such as the |gd| keybind for jumping
+to a definition, Neovim will bypass ALE entirely, ensuring that ALE does not
+interfere with LSP functionality as expected by built-in Neovim tools or other
+plugins. See the diagram below. >
+
+  +-------------------+
+  |      Neovim       |  (User triggers LSP request)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Directly handles the request)
+  +-------------------+
+           |
+  +-------------------+
+  | Language Server   |  (Processes request and sends response)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Receives response and shows result)
+  +-------------------+
+           |
+  +-------------------+
+  |      Neovim       |  (User sees result)
+  +-------------------+
+<
+
+-------------------------------------------------------------------------------
+5.2 Completion                                                 *ale-completion*
+
+In Neovim 0.8+ ALE's integration with its native LSP client will make it
+possible to use other plugins that rely on Neovim's LSP client as a basis.
+`nvim-cmp` is recommended as a completion plugin worth trying in Neovim.
+See: https://github.com/hrsh7th/nvim-cmp
 
 ALE offers support for automatic completion of code while you type.
 Completion is only supported while at least one LSP linter is enabled. ALE
@@ -622,7 +733,7 @@ would like to use. An example here shows the available options for symbols  >
   \ }
 <
 -------------------------------------------------------------------------------
-5.2 Go To Definition                                     *ale-go-to-definition*
+5.3 Go To Definition                                     *ale-go-to-definition*
 
 ALE supports jumping to the files and locations where symbols are defined
 through any enabled LSP linters. The locations ALE will jump to depend on the
@@ -634,7 +745,7 @@ ALE will update Vim's |tagstack| automatically unless |g:ale_update_tagstack| is
 set to `0`.
 
 -------------------------------------------------------------------------------
-5.3 Go To Type Definition                           *ale-go-to-type-definition*
+5.4 Go To Type Definition                           *ale-go-to-type-definition*
 
 ALE supports jumping to the files and locations where symbols' types are
 defined through any enabled LSP linters. The locations ALE will jump to depend
@@ -644,7 +755,7 @@ documentation for the command for configuring how the location will be
 displayed.
 
 -------------------------------------------------------------------------------
-5.4 Go To Implementation                             *ale-go-to-implementation*
+5.5 Go To Implementation                             *ale-go-to-implementation*
 
 ALE supports jumping to the files and locations where symbols are implemented
 through any enabled LSP linters. The locations ALE will jump to depend on the
@@ -653,14 +764,14 @@ jump to the implementation of symbols under the cursor. See the documentation
 for the command for configuring how the location will be displayed.
 
 -------------------------------------------------------------------------------
-5.5 Find References                                       *ale-find-references*
+5.6 Find References                                       *ale-find-references*
 
 ALE supports finding references for symbols though any enabled LSP linters
 with the `:ALEFindReferences` command. See the documentation for the command
 for a full list of options.
 
 -------------------------------------------------------------------------------
-5.6 Hovering                                                        *ale-hover*
+5.7 Hovering                                                        *ale-hover*
 
 ALE supports "hover" information for printing brief information about symbols
 at the cursor taken from LSP linters. The following commands are supported:
@@ -703,14 +814,14 @@ Documentation for symbols at the cursor can be retrieved using the
 `:ALEDocumentation` command. This command is only available for `tsserver`.
 
 -------------------------------------------------------------------------------
-5.7 Symbol Search                                           *ale-symbol-search*
+5.8 Symbol Search                                           *ale-symbol-search*
 
 ALE supports searching for workspace symbols via LSP linters with the
 `:ALESymbolSearch` command. See the documentation for the command
 for a full list of options.
 
 -------------------------------------------------------------------------------
-5.8 Refactoring: Rename, Actions                                 *ale-refactor*
+5.9 Refactoring: Rename, Actions                                 *ale-refactor*
 
 ALE supports renaming symbols in code such as variables or class names with
 the `:ALERename` command.
@@ -1011,7 +1122,7 @@ g:ale_disable_lsp                                           *g:ale_disable_lsp*
   Default: `'auto'`
 
   When this option is set to `'auto'`, ALE will automatically disable linters
-  that it detects as having already been configured with the nvim-lspconfig
+  that it detects as having already been configured with the `nvim-lspconfig`
   plugin. When this option is set to `1`, ALE ignores all linters powered by
   LSP, and also `tsserver`.
 
@@ -2356,6 +2467,22 @@ g:ale_use_neovim_diagnostics_api             *g:ale_use_neovim_diagnostics_api*
   API.
 
 
+g:ale_use_neovim_lsp_api                             *g:ale_use_neovim_lsp_api*
+
+  Type: |Number|
+  Default: `has('nvim-0.8')`
+
+  If enabled, ALE will use Neovim's native LSP client API for LSP
+  functionality. This makes it possible to use Neovim's built in LSP commands
+  and keybinds, and improves integration with other Neovim plugins that
+  integrate with Neovim's LSP client.
+
+  See |ale-lsp-neovim| for more information about ALE's integration with
+  Neovim's LSP client.
+
+  This option requires Neovim 0.8+.
+
+
 g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
   Type: |Number|
@@ -3632,7 +3759,7 @@ documented in additional help files.
   See |ale-fix| for more information.
 
 
-:ALEGoToDefinition [options]                                *:ALEGoToDefinition*
+:ALEGoToDefinition [options]                               *:ALEGoToDefinition*
 
   Jump to the definition of a symbol under the cursor using the enabled LSP
   linters for the buffer. ALE will jump to a definition if an LSP server
