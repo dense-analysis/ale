@@ -429,6 +429,7 @@ formatting.
   * [nim check](https://nim-lang.org/docs/nimc.html) :floppy_disk:
   * [nimlsp](https://github.com/PMunch/nimlsp)
   * nimpretty
+  * [nimpsort](https://github.com/cycneuramus/nimpsort)
 * nix
   * [alejandra](https://github.com/kamadorueda/alejandra)
   * [deadnix](https://github.com/astro/deadnix)

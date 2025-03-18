@@ -3234,6 +3234,7 @@ documented in additional help files.
     nimcheck..............................|ale-nim-nimcheck|
     nimlsp................................|ale-nim-nimlsp|
     nimpretty.............................|ale-nim-nimpretty|
+    nimpsort..............................|ale-nim-nimpsort|
   nix.....................................|ale-nix-options|
     alejandra.............................|ale-nix-alejandra|
     nixfmt................................|ale-nix-nixfmt|

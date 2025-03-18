@@ -151,6 +151,11 @@ let s:default_registry = {
 \       'description': 'Apply elm-format to a file.',
 \       'aliases': ['format'],
 \   },
+\   'nimpsort': {
+\       'function': 'ale#fixers#nimpsort#Fix',
+\       'suggested_filetypes': ['nim'],
+\       'description': 'Apply nimpsort to a file.',
+\   },
 \   'nimpretty': {
 \       'function': 'ale#fixers#nimpretty#Fix',
 \       'suggested_filetypes': ['nim'],

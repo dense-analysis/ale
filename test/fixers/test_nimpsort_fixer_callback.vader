@@ -1,0 +1,22 @@
+Before:
+  call ale#assert#SetUpFixerTest('nim', 'nimpsort')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute (The nimpsort callback should return the 'nimsort' command with '%t' appended):
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('nimpsort') . ' %t'
+  \ },
+  \ ale#fixers#nimpsort#Fix(bufnr(''))
+
+Execute (The nimpsort callback should allow custom nimpsort executables):
+  let g:ale_nim_nimpsort_executable = '/path/to/nimpsort'
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('/path/to/nimpsort') . ' %t'
+  \ },
+  \ ale#fixers#nimpsort#Fix(bufnr(''))

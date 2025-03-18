@@ -420,6 +420,7 @@ Notes:
   * `nim check`!!
   * `nimlsp`
   * `nimpretty`
+  * `nimpsort`
 * nix
   * `alejandra`
   * `deadnix`
