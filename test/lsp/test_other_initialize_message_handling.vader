@@ -2,30 +2,10 @@ Before:
   runtime autoload/ale/lsp.vim
 
   let g:message_list = []
-  let b:conn = {
-  \ 'id': 1,
-  \ 'is_tsserver': 0,
-  \ 'data': '',
-  \ 'root': '/foo/bar',
-  \ 'open_documents': {},
-  \ 'initialized': 0,
-  \ 'init_request_id': 0,
-  \ 'init_options': {},
-  \ 'config': {},
-  \ 'callback_list': [],
-  \ 'message_queue': [],
-  \ 'init_queue': [],
-  \ 'capabilities': {
-  \   'hover': 0,
-  \   'rename': 0,
-  \   'references': 0,
-  \   'completion': 0,
-  \   'completion_trigger_characters': [],
-  \   'definition': 0,
-  \   'symbol_search': 0,
-  \   'code_actions': 0,
-  \ },
-  \}
+
+  " Register a fake connection and get it for tests.
+  call ale#lsp#Register('ale-fake-lsp-server', '/code', {})
+  let b:conn = ale#lsp#GetConnections()['ale-fake-lsp-server:/code']
 
   function! ale#lsp#Send(conn_id, message) abort
     call add(g:message_list, a:message)
@@ -34,6 +14,9 @@ Before:
   endfunction
 
 After:
+  " Remove the connection with the ID.
+  call ale#lsp#RemoveConnectionWithID(b:conn.id)
+
   unlet! b:conn
   unlet! g:message_list
 
@@ -58,7 +41,7 @@ Execute(Other messages should not initialize projects):
   AssertEqual 0, b:conn.initialized
   AssertEqual [], g:message_list
 
-Execute(Capabilities should bet set up correctly):
+Execute(Capabilities should be set up correctly):
   call ale#lsp#HandleInitResponse(b:conn, {
   \ 'jsonrpc': '2.0',
   \ 'id': 1,
@@ -96,14 +79,19 @@ Execute(Capabilities should bet set up correctly):
   AssertEqual 1, b:conn.initialized
   AssertEqual
   \ {
-  \   'completion_trigger_characters': ['.'],
-  \   'completion': 1,
-  \   'references': 1,
-  \   'hover': 1,
-  \   'definition': 1,
-  \   'symbol_search': 1,
-  \   'rename': 1,
   \   'code_actions': 1,
+  \   'completion': 1,
+  \   'completion_trigger_characters': ['.'],
+  \   'definition': 1,
+  \   'did_save': 0,
+  \   'filerename': 0,
+  \   'hover': 1,
+  \   'implementation': 0,
+  \   'includeText': 0,
+  \   'references': 1,
+  \   'rename': 1,
+  \   'symbol_search': 1,
+  \   'typeDefinition': 0,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list
@@ -141,19 +129,24 @@ Execute(Disabled capabilities should be recognised correctly):
   AssertEqual 1, b:conn.initialized
   AssertEqual
   \ {
-  \   'completion_trigger_characters': [],
-  \   'completion': 0,
-  \   'references': 0,
-  \   'hover': 0,
-  \   'definition': 0,
-  \   'symbol_search': 0,
-  \   'rename': 0,
   \   'code_actions': 0,
+  \   'completion': 0,
+  \   'completion_trigger_characters': [],
+  \   'definition': 0,
+  \   'did_save': 0,
+  \   'filerename': 0,
+  \   'hover': 0,
+  \   'implementation': 0,
+  \   'includeText': 0,
+  \   'references': 0,
+  \   'rename': 0,
+  \   'symbol_search': 0,
+  \   'typeDefinition': 0,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list
 
-Execute(Capabilities should be enabled when send as Dictionaries):
+Execute(Capabilities should be enabled when sent as Dictionaries):
   call ale#lsp#HandleInitResponse(b:conn, {
   \ 'jsonrpc': '2.0',
   \ 'id': 1,
@@ -174,7 +167,11 @@ Execute(Capabilities should be enabled when send as Dictionaries):
   \       'resolveProvider': v:false
   \     },
   \     'referencesProvider': {},
-  \     'textDocumentSync': 2,
+  \     'textDocumentSync': {
+  \       'save': {
+  \         'includeText': v:true
+  \       }
+  \     },
   \     'documentFormattingProvider': v:true,
   \     'codeActionProvider': v:true,
   \     'signatureHelpProvider': {
@@ -193,16 +190,19 @@ Execute(Capabilities should be enabled when send as Dictionaries):
   AssertEqual 1, b:conn.initialized
   AssertEqual
   \ {
-  \   'completion_trigger_characters': ['.'],
-  \   'completion': 1,
-  \   'references': 1,
-  \   'hover': 1,
-  \   'definition': 1,
-  \   'typeDefinition': 1,
-  \   'implementation': 1,
-  \   'symbol_search': 1,
-  \   'rename': 1,
   \   'code_actions': 1,
+  \   'completion': 1,
+  \   'completion_trigger_characters': ['.'],
+  \   'definition': 1,
+  \   'did_save': 1,
+  \   'filerename': 0,
+  \   'hover': 1,
+  \   'implementation': 1,
+  \   'includeText': 1,
+  \   'references': 1,
+  \   'rename': 1,
+  \   'symbol_search': 1,
+  \   'typeDefinition': 1,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list

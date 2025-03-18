@@ -320,19 +320,21 @@ function! ale#lsp#UpdateConfig(conn_id, buffer, config) abort
 endfunction
 
 function! ale#lsp#CallInitCallbacks(conn_id) abort
-    let l:conn = s:connections[a:conn_id]
+    let l:conn = get(s:connections, a:conn_id, {})
 
-    " Ensure the connection is marked as initialized.
-    " For integration with Neovim's LSP tooling this ensures immediately
-    " call OnInit functions in Vim after the `on_init` callback is called.
-    let l:conn.initialized = 1
+    if !empty(l:conn)
+        " Ensure the connection is marked as initialized.
+        " For integration with Neovim's LSP tooling this ensures immediately
+        " call OnInit functions in Vim after the `on_init` callback is called.
+        let l:conn.initialized = 1
 
-    " Call capabilities callbacks queued for the project.
-    for l:Callback in l:conn.init_queue
-        call l:Callback()
-    endfor
+        " Call capabilities callbacks queued for the project.
+        for l:Callback in l:conn.init_queue
+            call l:Callback()
+        endfor
 
-    let l:conn.init_queue = []
+        let l:conn.init_queue = []
+    endif
 endfunction
 
 function! ale#lsp#HandleInitResponse(conn, response) abort
