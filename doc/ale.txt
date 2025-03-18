@@ -3546,6 +3546,7 @@ documented in additional help files.
     zeek..................................|ale-zeek-zeek|
   zig.....................................|ale-zig-options|
     zigfmt................................|ale-zig-zigfmt|
+    zlint.................................|ale-zig-zlint|
     zls...................................|ale-zig-zls|
 
 

@@ -767,4 +767,5 @@ formatting.
   * [zeek](http://zeek.org) :floppy_disk:
 * Zig
   * [zigfmt](https://github.com/ziglang/zig)
+  * [zlint](https://github.com/DonIsaac/zlint)
   * [zls](https://github.com/zigtools/zls)
