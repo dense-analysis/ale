@@ -20,7 +20,15 @@ module.start = function(config)
         end
     }
 
-    config.on_init = function(_, _)
+    config.on_init = function(client, _)
+        -- Tell ALE about server capabilities as soon as we can.
+        -- This will inform ALE commands what can be done with each server,
+        -- such as "go to definition" support, etc.
+        vim.fn["ale#lsp#UpdateCapabilities"](
+            config.name,
+            client.server_capabilities
+        )
+
         -- Neovim calls `on_init` before marking a client as active, meaning
         -- we can't get a client via get_client_by_id until after `on_init` is
         -- called. By deferring execution of calling the init callbacks we
@@ -55,6 +63,7 @@ module.send_message = function(args)
     local client = vim.lsp.get_client_by_id(args.client_id)
 
     if args.is_notification then
+        -- For notifications we send a request and expect no direct response.
         local success = client.notify(args.method, args.params)
 
         if success then
@@ -64,10 +73,23 @@ module.send_message = function(args)
         return 0
     end
 
-    -- NOTE: We aren't yet handling reponses to requests properly!
-    -- NOTE: There is a fourth argument for a bufnr here, and it's not
-    --       clear what that argument is for or why we need it.
-    local success, request_id = client.request(args.method, args.params)
+    local success, request_id
+
+    -- For request we send a request and handle the response.
+    --
+    -- We set the bufnr to -1 to prevent Neovim from flushing anything, as ALE
+    -- already flushes changes to files before sending requests.
+    success, request_id = client.request(
+        args.method,
+        args.params,
+        function(_, result, _, _)
+            vim.fn["ale#lsp#HandleResponse"](client.name, {
+                id = request_id,
+                result = result,
+            })
+        end,
+        -1
+    )
 
     if success then
         return request_id
