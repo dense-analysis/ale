@@ -211,6 +211,8 @@ if g:ale_use_neovim_diagnostics_api && !has('nvim-0.7')
     echoerr('Setting g:ale_use_neovim_diagnostics_api to 1 requires Neovim 0.7+.')
 endif
 
+" If 1, uses Neovim's built-in LSP client to integrate with LSP, which
+" improves ALE's integration with built-in Neovim tools and other plugins.
 let g:ale_use_neovim_lsp_api = get(g:, 'ale_use_neovim_lsp_api', has('nvim-0.8'))
 
 " If 1, replaces ALE's use of jobs and channels to connect to language
