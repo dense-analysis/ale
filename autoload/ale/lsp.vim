@@ -195,101 +195,107 @@ endfunction
 
 " Update capabilities from the server, so we know which features the server
 " supports.
-function! s:UpdateCapabilities(conn, capabilities) abort
+function! ale#lsp#UpdateCapabilities(conn_id, capabilities) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return
+    endif
+
     if type(a:capabilities) isnot v:t_dict
         return
     endif
 
     if get(a:capabilities, 'hoverProvider') is v:true
-        let a:conn.capabilities.hover = 1
+        let l:conn.capabilities.hover = 1
     endif
 
     if type(get(a:capabilities, 'hoverProvider')) is v:t_dict
-        let a:conn.capabilities.hover = 1
+        let l:conn.capabilities.hover = 1
     endif
 
     if get(a:capabilities, 'referencesProvider') is v:true
-        let a:conn.capabilities.references = 1
+        let l:conn.capabilities.references = 1
     endif
 
     if type(get(a:capabilities, 'referencesProvider')) is v:t_dict
-        let a:conn.capabilities.references = 1
+        let l:conn.capabilities.references = 1
     endif
 
     if get(a:capabilities, 'renameProvider') is v:true
-        let a:conn.capabilities.rename = 1
+        let l:conn.capabilities.rename = 1
     endif
 
     if type(get(a:capabilities, 'renameProvider')) is v:t_dict
-        let a:conn.capabilities.rename = 1
+        let l:conn.capabilities.rename = 1
     endif
 
     if get(a:capabilities, 'codeActionProvider') is v:true
-        let a:conn.capabilities.code_actions = 1
+        let l:conn.capabilities.code_actions = 1
     endif
 
     if type(get(a:capabilities, 'codeActionProvider')) is v:t_dict
-        let a:conn.capabilities.code_actions = 1
+        let l:conn.capabilities.code_actions = 1
     endif
 
     if !empty(get(a:capabilities, 'completionProvider'))
-        let a:conn.capabilities.completion = 1
+        let l:conn.capabilities.completion = 1
     endif
 
     if type(get(a:capabilities, 'completionProvider')) is v:t_dict
         let l:chars = get(a:capabilities.completionProvider, 'triggerCharacters')
 
         if type(l:chars) is v:t_list
-            let a:conn.capabilities.completion_trigger_characters = l:chars
+            let l:conn.capabilities.completion_trigger_characters = l:chars
         endif
     endif
 
     if get(a:capabilities, 'definitionProvider') is v:true
-        let a:conn.capabilities.definition = 1
+        let l:conn.capabilities.definition = 1
     endif
 
     if type(get(a:capabilities, 'definitionProvider')) is v:t_dict
-        let a:conn.capabilities.definition = 1
+        let l:conn.capabilities.definition = 1
     endif
 
     if get(a:capabilities, 'typeDefinitionProvider') is v:true
-        let a:conn.capabilities.typeDefinition = 1
+        let l:conn.capabilities.typeDefinition = 1
     endif
 
     if type(get(a:capabilities, 'typeDefinitionProvider')) is v:t_dict
-        let a:conn.capabilities.typeDefinition = 1
+        let l:conn.capabilities.typeDefinition = 1
     endif
 
     if get(a:capabilities, 'implementationProvider') is v:true
-        let a:conn.capabilities.implementation = 1
+        let l:conn.capabilities.implementation = 1
     endif
 
     if type(get(a:capabilities, 'implementationProvider')) is v:t_dict
-        let a:conn.capabilities.implementation = 1
+        let l:conn.capabilities.implementation = 1
     endif
 
     if get(a:capabilities, 'workspaceSymbolProvider') is v:true
-        let a:conn.capabilities.symbol_search = 1
+        let l:conn.capabilities.symbol_search = 1
     endif
 
     if type(get(a:capabilities, 'workspaceSymbolProvider')) is v:t_dict
-        let a:conn.capabilities.symbol_search = 1
+        let l:conn.capabilities.symbol_search = 1
     endif
 
     if type(get(a:capabilities, 'textDocumentSync')) is v:t_dict
         let l:syncOptions = get(a:capabilities, 'textDocumentSync')
 
         if get(l:syncOptions, 'save') is v:true
-            let a:conn.capabilities.did_save = 1
+            let l:conn.capabilities.did_save = 1
         endif
 
         if type(get(l:syncOptions, 'save')) is v:t_dict
-            let a:conn.capabilities.did_save = 1
+            let l:conn.capabilities.did_save = 1
 
             let l:saveOptions = get(l:syncOptions, 'save')
 
             if get(l:saveOptions, 'includeText') is v:true
-                let a:conn.capabilities.includeText = 1
+                let l:conn.capabilities.includeText = 1
             endif
         endif
     endif
@@ -334,7 +340,7 @@ function! ale#lsp#HandleInitResponse(conn, response) abort
         let a:conn.initialized = 1
     elseif type(get(a:response, 'result')) is v:t_dict
     \&& has_key(a:response.result, 'capabilities')
-        call s:UpdateCapabilities(a:conn, a:response.result.capabilities)
+        call ale#lsp#UpdateCapabilities(a:conn.id, a:response.result.capabilities)
 
         let a:conn.initialized = 1
     endif
@@ -383,6 +389,20 @@ function! ale#lsp#HandleMessage(conn_id, message) abort
             endfor
         endfor
     endif
+endfunction
+
+" Handle a JSON response from a language server.
+" This is called from Lua for integration with Neovim's LSP API.
+function! ale#lsp#HandleResponse(conn_id, response) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return
+    endif
+
+    for l:Callback in l:conn.callback_list
+        call ale#util#GetFunction(l:Callback)(a:conn_id, a:response)
+    endfor
 endfunction
 
 " Given a connection ID, mark it as a tsserver connection, so it will be
