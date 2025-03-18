@@ -5,9 +5,10 @@
 let s:connections = get(s:, 'connections', {})
 let g:ale_lsp_next_message_id = 1
 
-" Given an id, which can be an executable or address, and a project path,
+" Given an id, which can be an executable or address, a project path,
+" and a language string or (bufnr) -> string function
 " create a new connection if needed. Return a unique ID for the connection.
-function! ale#lsp#Register(executable_or_address, project, init_options) abort
+function! ale#lsp#Register(executable_or_address, project, language, init_options) abort
     let l:conn_id = a:executable_or_address . ':' . a:project
 
     if !has_key(s:connections, l:conn_id)
@@ -28,6 +29,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \   'is_tsserver': 0,
         \   'data': '',
         \   'root': a:project,
+        \   'language': a:language,
         \   'open_documents': {},
         \   'initialized': 0,
         \   'init_request_id': 0,
@@ -677,9 +679,20 @@ function! ale#lsp#Send(conn_id, message) abort
     return l:id == 0 ? -1 : l:id
 endfunction
 
+function! ale#lsp#GetLanguage(conn_id, buffer) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+    let l:Language = get(l:conn, 'language')
+
+    if empty(l:Language)
+        return getbufvar(a:buffer, '&filetype')
+    endif
+
+    return type(l:Language) is v:t_func ? l:Language(a:buffer) : l:Language
+endfunction
+
 " Notify LSP servers or tsserver if a document is opened, if needed.
 " If a document is opened, 1 will be returned, otherwise 0 will be returned.
-function! ale#lsp#OpenDocument(conn_id, buffer, language_id) abort
+function! ale#lsp#OpenDocument(conn_id, buffer) abort
     let l:conn = get(s:connections, a:conn_id, {})
     let l:opened = 0
 
@@ -693,7 +706,8 @@ function! ale#lsp#OpenDocument(conn_id, buffer, language_id) abort
             \    'client_id': l:conn.client_id,
             \})
         else
-            let l:message = ale#lsp#message#DidOpen(a:buffer, a:language_id)
+            let l:language_id = ale#lsp#GetLanguage(a:conn_id, a:buffer)
+            let l:message = ale#lsp#message#DidOpen(a:buffer, l:language_id)
             call ale#lsp#Send(a:conn_id, l:message)
         endif
 

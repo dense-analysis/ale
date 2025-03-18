@@ -441,7 +441,7 @@ Execute(Deferred addresses should be handled correctly):
   call AssertInitSuccess('foo', 'localhost:1234', 'foobar', '/foo/bar', '', bufnr(''))
 
 Execute(Servers that have crashed should be restarted):
-  call ale#lsp#Register('foo', '/foo/bar', {})
+  call ale#lsp#Register('foo', '/foo/bar', '', {})
   call extend(ale#lsp#GetConnections()['foo:/foo/bar'], {'initialized': 1})
 
   " Starting the program again should reset initialized to `0`.

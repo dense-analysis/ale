@@ -306,11 +306,10 @@ function! ale#lsp_linter#OnInit(linter, details, Callback) abort
     let l:command = a:details.command
 
     let l:config = ale#lsp_linter#GetConfig(l:buffer, a:linter)
-    let l:language_id = ale#linter#GetLanguage(l:buffer, a:linter)
 
     call ale#lsp#UpdateConfig(l:conn_id, l:buffer, l:config)
 
-    if ale#lsp#OpenDocument(l:conn_id, l:buffer, l:language_id)
+    if ale#lsp#OpenDocument(l:conn_id, l:buffer)
         if g:ale_history_enabled && !empty(l:command)
             call ale#history#Add(l:buffer, 'started', l:conn_id, l:command)
         endif
@@ -357,11 +356,21 @@ function! s:StartLSP(options, address, executable, command) abort
     let l:init_options = ale#lsp_linter#GetOptions(l:buffer, l:linter)
 
     if l:linter.lsp is# 'socket'
-        let l:conn_id = ale#lsp#Register(a:address, l:root, l:init_options)
+        let l:conn_id = ale#lsp#Register(
+        \   a:address,
+        \   l:root,
+        \   l:linter.language,
+        \   l:init_options
+        \)
         let l:ready = ale#lsp#ConnectToAddress(l:conn_id, a:address)
         let l:command = ''
     else
-        let l:conn_id = ale#lsp#Register(a:executable, l:root, l:init_options)
+        let l:conn_id = ale#lsp#Register(
+        \   a:executable,
+        \   l:root,
+        \   l:linter.language,
+        \   l:init_options
+        \)
 
         " tsserver behaves differently, so tell the LSP API that it is tsserver.
         if l:linter.lsp is# 'tsserver'
