@@ -497,18 +497,12 @@ function! s:CheckWithLSP(linter, details) abort
 
     let l:id = a:details.connection_id
 
-    " Remember the linter this connection is for.
-    let s:lsp_linter_map[l:id] = a:linter
-
-    if g:ale_use_neovim_lsp_api && a:linter.lsp isnot# 'tsserver'
-        " If running an LSP client via Neovim's API then Neovim will
-        " internally track buffers for changes for us, and we can stop here.
-        return
-    endif
-
     " Register a callback now for handling errors now.
     let l:Callback = function('ale#lsp_linter#HandleLSPResponse')
     call ale#lsp#RegisterCallback(l:id, l:Callback)
+
+    " Remember the linter this connection is for.
+    let s:lsp_linter_map[l:id] = a:linter
 
     if a:linter.lsp is# 'tsserver'
         let l:message = ale#lsp#tsserver_message#Geterr(l:buffer)
@@ -517,17 +511,16 @@ function! s:CheckWithLSP(linter, details) abort
         if l:notified
             call ale#engine#MarkLinterActive(l:info, a:linter)
         endif
-    else
+    elseif !g:ale_use_neovim_lsp_api
         let l:notified = ale#lsp#NotifyForChanges(l:id, l:buffer)
-    endif
 
-    " If this was a file save event, also notify the server of that.
-    if a:linter.lsp isnot# 'tsserver'
-    \&& getbufvar(l:buffer, 'ale_save_event_fired', 0)
-    \&& ale#lsp#HasCapability(l:id, 'did_save')
-        let l:include_text = ale#lsp#HasCapability(l:id, 'includeText')
-        let l:save_message = ale#lsp#message#DidSave(l:buffer, l:include_text)
-        let l:notified = ale#lsp#Send(l:id, l:save_message) != 0
+        " If this was a file save event, also notify the server of that.
+        if getbufvar(l:buffer, 'ale_save_event_fired', 0)
+        \&& ale#lsp#HasCapability(l:id, 'did_save')
+            let l:include_text = ale#lsp#HasCapability(l:id, 'includeText')
+            let l:save_message = ale#lsp#message#DidSave(l:buffer, l:include_text)
+            let l:notified = ale#lsp#Send(l:id, l:save_message) != 0
+        endif
     endif
 endfunction
 
@@ -552,7 +545,6 @@ function! s:OnReadyForCustomRequests(args, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
     let l:request_id = ale#lsp#Send(l:id, a:args.message)
 
-    " TODO: Implement this whole flow with the lua API.
     if l:request_id > 0 && has_key(a:args, 'handler')
         let l:Callback = function('s:HandleLSPResponseToCustomRequests')
         call ale#lsp#RegisterCallback(l:id, l:Callback)
