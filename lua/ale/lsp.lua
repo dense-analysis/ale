@@ -39,6 +39,10 @@ module.start = function(config)
         end, 0)
     end
 
+    config.get_language_id = function(bufnr, _)
+        return vim.fn["ale#lsp#GetLanguage"](config.name, bufnr)
+    end
+
     return vim.lsp.start(config, {
         attach = false,
         silent = true,

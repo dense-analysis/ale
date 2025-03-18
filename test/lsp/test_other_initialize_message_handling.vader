@@ -4,7 +4,7 @@ Before:
   let g:message_list = []
 
   " Register a fake connection and get it for tests.
-  call ale#lsp#Register('ale-fake-lsp-server', '/code', {})
+  call ale#lsp#Register('ale-fake-lsp-server', '/code', '', {})
   let b:conn = ale#lsp#GetConnections()['ale-fake-lsp-server:/code']
 
   function! ale#lsp#Send(conn_id, message) abort
