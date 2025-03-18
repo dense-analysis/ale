@@ -129,6 +129,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['hurl'],
 \       'description': 'Fix hurl files with hurlfmt.',
 \   },
+\   'kulala_fmt': {
+\       'function': 'ale#fixers#kulala_fmt#Fix',
+\       'suggested_filetypes': ['http', 'rest'],
+\       'description': 'Fix http and rest files with kulala_fmt.',
+\   },
 \   'tidy': {
 \       'function': 'ale#fixers#tidy#Fix',
 \       'suggested_filetypes': ['html'],

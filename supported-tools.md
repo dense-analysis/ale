@@ -300,6 +300,8 @@ formatting.
   * [djlint](https://djlint.com/)
 * HTML Django
   * [djlint](https://djlint.com/)
+* HTTP
+  * [kulala_fmt](https://github.com/mistweaverco/kulala-fmt)
 * Hurl
   * [hurlfmt](https://hurl.dev)
 * Idris
@@ -578,6 +580,8 @@ formatting.
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [opacheck](https://www.openpolicyagent.org/docs/latest/cli/#opa-check)
   * [opafmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt)
+* REST
+  * [kulala_fmt](https://github.com/mistweaverco/kulala-fmt)
 * reStructuredText
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)

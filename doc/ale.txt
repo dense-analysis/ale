@@ -3123,6 +3123,8 @@ documented in additional help files.
     djlint................................|ale-htmlangular-djlint|
   html django template....................|ale-htmldjango-options|
     djlint................................|ale-htmldjango-djlint|
+  http....................................|ale-http-options|
+    kulala_fmt............................|ale-http-kulala_fmt|
   hurl....................................|ale-hurl-options|
     hurlfmt...............................|ale-hurl-hurlfmt|
   idris...................................|ale-idris-options|
@@ -3371,6 +3373,8 @@ documented in additional help files.
     cspell................................|ale-rego-cspell|
     opacheck..............................|ale-rego-opa-check|
     opafmt................................|ale-rego-opa-fmt-fixer|
+  rest....................................|ale-rest-options|
+    kulala_fmt............................|ale-rest-kulala_fmt|
   restructuredtext........................|ale-restructuredtext-options|
     cspell................................|ale-restructuredtext-cspell|
     textlint..............................|ale-restructuredtext-textlint|
