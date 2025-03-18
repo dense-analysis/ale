@@ -98,6 +98,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['dhall'],
 \       'description': 'Standard code formatter for the Dhall language and removing dead code',
 \   },
+\   'djlint': {
+\       'function': 'ale#fixers#djlint#Fix',
+\       'suggested_filetypes': ['html', 'htmldjango', 'htmlangular', 'jinja', 'handlebars', 'nunjucks', 'gohtmltmpl'],
+\       'description': 'Fix HTML templates with `djlint --reformat`.',
+\   },
 \   'dune': {
 \       'function': 'ale#fixers#dune#Fix',
 \       'suggested_filetypes': ['dune'],
@@ -711,6 +716,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#cljfmt#Fix',
 \       'suggested_filetypes': ['clojure'],
 \       'description': 'formatter and linter for clojure files',
+\   },
+\   'typstyle': {
+\       'function': 'ale#fixers#typstyle#Fix',
+\       'suggested_filetypes': ['typst'],
+\       'description': 'A formatter for Typst files',
 \   },
 \}
 

@@ -45,7 +45,7 @@ function! ale_linters#go#golangci_lint#Handler(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'filename': ale#path#GetAbsPath(l:dir, l:match['Pos']['Filename']),
+        \   'filename': ale#path#GetAbsPath(l:dir, fnamemodify(l:match['Pos']['Filename'], ':t')),
         \   'lnum': l:match['Pos']['Line'] + 0,
         \   'col': l:match['Pos']['Column'] + 0,
         \   'type': l:msg_type,

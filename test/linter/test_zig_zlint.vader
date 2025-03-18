@@ -1,0 +1,15 @@
+Before:
+  call ale#assert#SetUpLinterTest('zig', 'zlint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The zlint executable and command should be configured correctly):
+  AssertLinter 'zlint', ale#Escape('zlint') . ' %s -f gh'
+
+  " Set a custom executable path
+  let g:ale_zig_zlint_executable = '/custom/path/to/zlint'
+
+  AssertLinter
+  \ '/custom/path/to/zlint',
+  \ ale#Escape('/custom/path/to/zlint') . ' %s -f gh'

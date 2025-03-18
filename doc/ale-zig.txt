@@ -5,7 +5,10 @@ ALE Zig Integration                                           *ale-zig-options*
 ===============================================================================
 Integration Information
 
-  Currently, the only supported linter for zig is zls.
+  The following linters are supported for Zig:
+
+  * zlint (https://github.com/DonIsaac/zlint)
+  * zls (https://github.com/zigtools/zls)
 
 
 ===============================================================================
@@ -18,6 +21,16 @@ g:ale_zig_zigfmt_executable                       *g:ale_zig_zigfmt_executable*
 
   The executable that will be run for the `zig fmt` fixer.
 
+
+===============================================================================
+zlint                                                           *ale-zig-zlint*
+
+g:ale_zig_zlint_executable                         *g:ale_zig_zlint_executable*
+                                                   *b:ale_zig_zlint_executable*
+  Type: |String|
+  Default: `'zlint'`
+
+  This variable can be modified to change the executable path for `zlint`.
 
 ===============================================================================
 zls                                                               *ale-zig-zls*

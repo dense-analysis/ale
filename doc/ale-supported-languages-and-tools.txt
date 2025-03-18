@@ -234,6 +234,8 @@ Notes:
   * `gotype`!!
   * `revive`!!
   * `staticcheck`!!
+* Go HTML Templates
+  * djlint
 * GraphQL
   * `eslint`
   * `gqlint`
@@ -247,6 +249,7 @@ Notes:
 * Haml
   * `haml-lint`
 * Handlebars
+  * djlint
   * `ember-template-lint`
 * Haskell
   * `brittany`
@@ -284,6 +287,10 @@ Notes:
   * `rustywind`
   * `tidy`
   * `write-good`
+* HTML Angular
+  * djlint
+* HTML Django
+  * djlint
 * HTTP
   * kulala_fmt
 * Hurl
@@ -323,6 +330,8 @@ Notes:
   * `standard`
   * `tsserver`
   * `xo`
+* Jinja
+  * djlint
 * JSON
   * `VSCode JSON language server`
   * `biome`
@@ -423,6 +432,8 @@ Notes:
   * `alex`
   * `proselint`
   * `write-good`
+* Nunjucks
+  * djlint
 * Objective-C
   * `ccls`
   * `clang`
@@ -690,6 +701,8 @@ Notes:
   * `tslint`
   * `tsserver`
   * `typecheck`
+* Typst
+  * `typstyle`
 * V
   * `v`!!
   * `vfmt`
@@ -749,6 +762,7 @@ Notes:
   * `zeek`!!
 * Zig
   * `zigfmt`
+  * `zlint`
   * `zls`
 
 ===============================================================================

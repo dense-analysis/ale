@@ -1,0 +1,21 @@
+Before:
+  call ale#assert#SetUpFixerTest('typst', 'typstyle', 'typstyle')
+
+After:
+  Restore
+
+  call ale#assert#TearDownFixerTest()
+
+Execute(The typstyle callback should return the correct default command):
+  AssertEqual
+  \ {'command': ale#Escape('typstyle') . ' '},
+  \ ale#fixers#typstyle#Fix(bufnr(''))
+
+Execute(The typstyle options should be considered):
+  call ale#test#SetFilename('../test-files/typstyle/testfile.typ')
+  let g:ale_typst_typstyle_options = '-c 100'
+
+  AssertFixer
+  \ { 'command': ale#Escape(g:ale_typst_typstyle_executable)
+  \     . ' -c 100',
+  \ }
