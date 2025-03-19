@@ -476,6 +476,11 @@ functionality for Neovim's LSP client should work as expected, and this
 ensures ALE integrates well with other plugins that rely on Neovim's LSP
 client.
 
+NOTE: Neovim versions below `0.11.0` do not support socket connections to
+language servers when the `address` defined in ALE uses a hostname instead of
+an IP address. To work around this, configure language clients with an IP
+address instead of a hostname, or revert back to ALE's custom LSP client.
+
 See |lsp| for information on Neovim's built in LSP client.
 
 For diagnostics, for computing problems to show via ALE, ALE overrides the

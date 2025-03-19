@@ -1,0 +1,9 @@
+Execute(Address splitting should function as intended):
+  AssertEqual ['foo', v:null], ale#lsp#SplitAddress('foo')
+  AssertEqual ['foo:', v:null], ale#lsp#SplitAddress('foo:')
+  AssertEqual ['foo', v:null], ale#lsp#SplitAddress('foo:0')
+  AssertEqual ['foo', 123], ale#lsp#SplitAddress('foo:123')
+  AssertEqual ['protocol:/foo:', v:null], ale#lsp#SplitAddress('protocol:/foo:')
+  AssertEqual ['protocol:/foo', v:null], ale#lsp#SplitAddress('protocol:/foo:0')
+  AssertEqual ['protocol:/foo', 123], ale#lsp#SplitAddress('protocol:/foo:123')
+  AssertEqual ['protocol:foo', v:null], ale#lsp#SplitAddress('protocol:foo')
