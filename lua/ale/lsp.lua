@@ -6,6 +6,31 @@ module.start = function(config)
         config.init_options[true] = nil
     end
 
+    -- If configuring LSP via a socket connection, then generate the cmd
+    -- using vim.lsp.rpc.connect(), as defined in Neovim documentation.
+    if config.host then
+        local cmd_func = vim.lsp.rpc.connect(config.host, config.port)
+        config.host = nil
+        config.port = nil
+
+        -- Wrap the cmd function so we don't throw errors back to the user
+        -- if the connection to an address fails to start.
+        --
+        -- We will separately log in ALE that we failed to start a connection.
+        --
+        -- In older Neovim versions TCP connections do not function if supplied
+        -- a hostname instead of an address.
+        config.cmd = function(dispatch)
+            local success, result = pcall(cmd_func, dispatch)
+
+            if success then
+                return result
+            end
+
+            return nil
+        end
+    end
+
     config.handlers = {
         -- Override Neovim's handling of diagnostics to run through ALE's
         -- functions so all of the functionality in ALE works.

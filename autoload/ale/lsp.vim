@@ -569,6 +569,21 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
     return l:job_id > 0
 endfunction
 
+" Split an address into [host, port].
+" The port will either be a number or v:null.
+function! ale#lsp#SplitAddress(address) abort
+    let l:port_match = matchlist(a:address, '\v:(\d+)$')
+
+    if !empty(l:port_match)
+        let l:host = a:address[:-len(l:port_match[1]) - 2]
+        let l:port = l:port_match[1] + 0
+
+        return [l:host, l:port ? l:port : v:null]
+    endif
+
+    return [a:address, v:null]
+endfunction
+
 " Connect to an LSP server via TCP.
 "
 " 1 will be returned if the connection is running, or 0 if the connection could
@@ -577,8 +592,23 @@ function! ale#lsp#ConnectToAddress(conn_id, address) abort
     let l:conn = s:connections[a:conn_id]
     let l:started = 0
 
-    " TODO: Start Neovim client here.
-    if !has_key(l:conn, 'channel_id') || !ale#socket#IsOpen(l:conn.channel_id)
+    if g:ale_use_neovim_lsp_api && !l:conn.is_tsserver
+        let [l:host, l:port] = ale#lsp#SplitAddress(a:address)
+
+        let l:client_id = luaeval('require("ale.lsp").start(_A)', {
+        \   'name': a:conn_id,
+        \   'host': l:host,
+        \   'port': l:port,
+        \   'root_dir': l:conn.root,
+        \   'init_options': l:conn.init_options,
+        \})
+
+        if l:client_id > 0
+            let l:conn.client_id = l:client_id
+        endif
+
+        return l:client_id > 0
+    elseif !has_key(l:conn, 'channel_id') || !ale#socket#IsOpen(l:conn.channel_id)
         let l:channel_id = ale#socket#Open(a:address, {
         \   'callback': {_, mess -> ale#lsp#HandleMessage(a:conn_id, mess)},
         \})
