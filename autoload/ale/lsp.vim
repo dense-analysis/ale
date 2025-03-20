@@ -518,7 +518,7 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
 
     if g:ale_use_neovim_lsp_api && !l:conn.is_tsserver
         " For Windows from 'cmd /s/c "foo bar"' we need 'foo bar'
-        let l:lsp_cmd = has('win32')
+        let l:lsp_cmd = has('win32') && type(a:command) is v:t_string
         \   ? ['cmd', '/s/c/', a:command[10:-2]]
         \   : a:command
 
