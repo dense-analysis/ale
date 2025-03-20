@@ -4,26 +4,32 @@ ALE C3 Integration                                             *ale-c3-options*
 ===============================================================================
 c3lsp                                                            *ale-c3-c3lsp*
 
-g:ale_c3_c3lsp_executable                           *g:ale_c3_c3lsp_executable*
+                                              *ale-options.c3_c3lsp_executable*
+                                                    *g:ale_c3_c3lsp_executable*
                                                     *b:ale_c3_c3lsp_executable*
+c3_c3lsp_executable
+g:ale_c3_c3lsp_executable
   Type: |String|
   Default: `c3lsp`
 
   This variable can be changed to set the path to c3lsp executable.
 
-
-g:ale_c3_c3lsp_options                                 *g:ale_c3_c3lsp_options*
+                                                 *ale-options.c3_c3lsp_options*
+                                                       *g:ale_c3_c3lsp_options*
                                                        *b:ale_c3_c3lsp_options*
-
+c3_c3lsp_options
+g:ale_c3_c3lsp_options
   Type: |String|
   Default: `''`
 
   Add command line options to the c3lsp executable. This is useful to specify
   the path to the C3 standard library with '-stdlib-path=<path>'.
 
-
-g:ale_c3_c3lsp_init_options                       *g:ale_c3_c3lsp_init_options*
+                                            *ale-options.c3_c3lsp_init_options*
+                                                  *g:ale_c3_c3lsp_init_options*
                                                   *b:ale_c3_c3lsp_init_options*
+c3_c3lsp_init_options
+g:ale_c3_c3lsp_init_options
   Type: |Dictionary|
   Default: `{}`
 

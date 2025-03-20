@@ -5,8 +5,11 @@ ALE WGSL Integration                                         *ale-wgsl-options*
 ===============================================================================
 naga                                                            *ale-wgsl-naga*
 
-g:ale_wgsl_naga_executable                         *g:ale_wgsl_naga_executable*
+                                             *ale-options.wgsl_naga_executable*
+                                                   *g:ale_wgsl_naga_executable*
                                                    *b:ale_wgsl_naga_executable*
+wgsl_naga_executable
+g:ale_wgsl_naga_executable
   Type: |String|
   Default: `'naga'`
 

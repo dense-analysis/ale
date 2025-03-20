@@ -5,16 +5,21 @@ ALE Pony Integration                                         *ale-pony-options*
 ===============================================================================
 ponyc                                                          *ale-pony-ponyc*
 
-g:ale_pony_ponyc_executable                       *g:ale_pony_ponyc_executable*
+                                            *ale-options.pony_ponyc_executable*
+                                                  *g:ale_pony_ponyc_executable*
                                                   *b:ale_pony_ponyc_executable*
+pony_ponyc_executable
+g:ale_pony_ponyc_executable
   Type: |String|
   Default: `'ponyc'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_pony_ponyc_options                             *g:ale_pony_ponyc_options*
+                                               *ale-options.pony_ponyc_options*
+                                                     *g:ale_pony_ponyc_options*
                                                      *b:ale_pony_ponyc_options*
+pony_ponyc_options
+g:ale_pony_ponyc_options
   Type: |String|
   Default: `'--pass paint'`
 

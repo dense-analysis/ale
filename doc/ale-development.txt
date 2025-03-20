@@ -17,6 +17,7 @@ CONTENTS                                             *ale-development-contents*
   5. Contributing.........................|ale-development-contributing|
     5.1. Preparing a Release..............|ale-development-release|
 
+
 ===============================================================================
 1. Introduction                                  *ale-development-introduction*
 
@@ -24,6 +25,7 @@ This document contains helpful information for ALE developers, including
 design goals, information on how to run the tests, coding standards, and so
 on. You should read this document if you want to get involved with ALE
 development.
+
 
 ===============================================================================
 2. Design Goals                                              *ale-design-goals*
@@ -65,6 +67,7 @@ better support for LSP features as time goes on.
 
 When merging pull requests, you should respond with `Cheers! :beers:`, purely
 for comedy value.
+
 
 ===============================================================================
 3. Coding Standards                                      *ale-coding-standards*
@@ -146,6 +149,7 @@ Apply the following rules when writing Bash scripts.
 * Run `shellcheck`, and do everything it says.
   See: https://github.com/koalaman/shellcheck
 * Try to write scripts so they will run on Linux, BSD, or Mac OSX.
+
 
 ===============================================================================
 4. Testing ALE              *ale-development-tests* *ale-dev-tests* *ale-tests*
@@ -246,6 +250,7 @@ margin. For example, if you add a heading for an `aardvark` tool to
 Make sure to make the table of contents match the headings, and to keep the
 doc tags on the right margin.
 
+
 ===============================================================================
 4.1 Writing Linter Tests                         *ale-development-linter-tests*
 
@@ -326,6 +331,7 @@ given the above setup are as follows.
 `AssertLSPProject project_root`    - Check the root given to an LSP server.
 `AssertLSPAddress address`         - Check the address to an LSP server.
 
+
 ===============================================================================
 4.2 Writing Fixer Tests                           *ale-development-fixer-tests*
 
@@ -366,6 +372,7 @@ given the above setup are as follows.
 `AssertFixerCwd cwd`               - Check the `cwd` for the fixer.
 `AssertFixer results`              - Check the fixer results
 `AssertFixerNotExecuted`           - Check that fixers will not be executed.
+
 
 ===============================================================================
 4.3 Running Tests in a Windows VM               *ale-development-windows-tests*
@@ -443,6 +450,7 @@ You can run a specific test by passing the filename as an argument to the
 batch file, for example: `run-tests test/test_c_flag_parsing.vader` . This will
 give you results much more quickly.
 
+
 ===============================================================================
 5. Contributing                                  *ale-development-contributing*
 
@@ -460,6 +468,7 @@ and profile settings. See: https://docs.github.com/en/account-and-profile/
 
 Unless configuring GitHub to expose contact details, commits will be rewritten
 to appear by `USERNAME <RANDOM_NUMBER+USERNAME@users.noreply.github.com>` .
+
 
 ===============================================================================
 5.1 Preparing a Release                               *ale-development-release*
@@ -531,6 +540,7 @@ Once you do, follow these steps.
 
 Have fun creating ALE releases. Drink responsibly, or not at all, which is the
 preference of w0rp.
+
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

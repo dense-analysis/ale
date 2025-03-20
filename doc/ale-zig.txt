@@ -14,8 +14,11 @@ Integration Information
 ===============================================================================
 zigfmt                                                         *ale-zig-zigfmt*
 
-g:ale_zig_zigfmt_executable                       *g:ale_zig_zigfmt_executable*
+                                            *ale-options.zig_zigfmt_executable*
+                                                  *g:ale_zig_zigfmt_executable*
                                                   *b:ale_zig_zigfmt_executable*
+zig_zigfmt_executable
+g:ale_zig_zigfmt_executable
   Type: |String|
   Default: `'zig'`
 
@@ -25,26 +28,35 @@ g:ale_zig_zigfmt_executable                       *g:ale_zig_zigfmt_executable*
 ===============================================================================
 zlint                                                           *ale-zig-zlint*
 
-g:ale_zig_zlint_executable                         *g:ale_zig_zlint_executable*
+                                             *ale-options.zig_zlint_executable*
+                                                   *g:ale_zig_zlint_executable*
                                                    *b:ale_zig_zlint_executable*
+zig_zlint_executable
+g:ale_zig_zlint_executable
   Type: |String|
   Default: `'zlint'`
 
   This variable can be modified to change the executable path for `zlint`.
 
+
 ===============================================================================
 zls                                                               *ale-zig-zls*
 
-g:ale_zig_zls_executable                             *g:ale_zig_zls_executable*
+                                               *ale-options.zig_zls_executable*
+                                                     *g:ale_zig_zls_executable*
                                                      *b:ale_zig_zls_executable*
+zig_zls_executable
+g:ale_zig_zls_executable
   Type: |String|
   Default: `'zls'`
 
   This variable can be modified to change the executable path for `zls`.
 
-
-g:ale_zig_zls_config                                     *g:ale_zig_zls_config*
+                                                   *ale-options.zig_zls_config*
+                                                         *g:ale_zig_zls_config*
                                                          *b:ale_zig_zls_config*
+zig_zls_config
+g:ale_zig_zls_config
   Type: |Dictionary|
   Default: `{}`
 

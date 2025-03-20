@@ -5,8 +5,9 @@ ALE Dart Integration                                         *ale-dart-options*
 ===============================================================================
 analysis_server                                      *ale-dart-analysis_server*
 
-Installation
+
 -------------------------------------------------------------------------------
+Installation
 
 Install Dart via whatever means. `analysis_server` will be included in the SDK.
 
@@ -16,20 +17,23 @@ its absolute path. : >
   let g:ale_dart_analysis_server_executable = '/usr/local/bin/dart'
 <
 
-Options
 -------------------------------------------------------------------------------
-
-g:ale_dart_analysis_server_executable   *g:ale_dart_analysis_server_executable*
+Options
+                                  *ale-options.dart_analysis_server_executable*
+                                        *g:ale_dart_analysis_server_executable*
                                         *b:ale_dart_analysis_server_executable*
+dart_analysis_server_executable
+g:ale_dart_analysis_server_executable
   Type: |String|
   Default: `'dart'`
 
   This variable can be set to change the path of dart.
 
-
-g:ale_dart_analysis_server_enable_language_server
+                      *ale-options.dart_analysis_server_enable_language_server*
                             *g:ale_dart_analysis_server_enable_language_server*
                             *b:ale_dart_analysis_server_enable_language_server*
+dart_analysis_server_enable_language_server
+g:ale_dart_analysis_server_enable_language_server
   Type: |Number|
   Default: `1`
 
@@ -43,8 +47,9 @@ g:ale_dart_analysis_server_enable_language_server
 ===============================================================================
 dart-analyze                                                 *ale-dart-analyze*
 
-Installation
+
 -------------------------------------------------------------------------------
+Installation
 
 Installing Dart should probably ensure that `dart` is in your `$PATH`.
 
@@ -55,11 +60,14 @@ In case it is not, try to set the executable option to its absolute path. : >
 
 Install Dart via whatever means. `dart analyze` will be included in the SDK.
 
-Options
--------------------------------------------------------------------------------
 
-g:ale_dart_analyze_executable                   *g:ale_dart_analyze_executable*
+-------------------------------------------------------------------------------
+Options
+                                          *ale-options.dart_analyze_executable*
+                                                *g:ale_dart_analyze_executable*
                                                 *b:ale_dart_analyze_executable*
+dart_analyze_executable
+g:ale_dart_analyze_executable
   Type: |String|
   Default: `'dart'`
 
@@ -70,30 +78,36 @@ g:ale_dart_analyze_executable                   *g:ale_dart_analyze_executable*
 ===============================================================================
 dart-format                                                   *ale-dart-format*
 
-Installation
+
 -------------------------------------------------------------------------------
+Installation
 
 Installing Dart should probably ensure that `dart` is in your `$PATH`.
 
-In case it is not, try to set the executable option to its absolute path. : >
+In case it is not, try to set the executable option to its absolute path: >
+
   " Set the executable path for dart to the absolute path to it.
   let g:ale_dart_format_executable = '/usr/lib/dart/bin/dart'
- >
+<
 
-Options
 -------------------------------------------------------------------------------
-
-g:ale_dart_format_executable                     *g:ale_dart_format_executable*
+Options
+                                           *ale-options.dart_format_executable*
+                                                 *g:ale_dart_format_executable*
                                                  *b:ale_dart_format_executable*
+dart_format_executable
+g:ale_dart_format_executable
   Type: |String|
   Default: `'dart'`
 
   This variable can be set to specify an absolute path to the
   format executable (or to specify an alternate executable).
 
-
-g:ale_dart_format_options                           *g:ale_dart_format_options*
+                                              *ale-options.dart_format_options*
+                                                    *g:ale_dart_format_options*
                                                     *b:ale_dart_format_options*
+dart_format_options
+g:ale_dart_format_options
   Type: |String|
   Default: `''`
 
@@ -103,35 +117,41 @@ g:ale_dart_format_options                           *g:ale_dart_format_options*
 ===============================================================================
 dartfmt                                                      *ale-dart-dartfmt*
 
-Installation
+
 -------------------------------------------------------------------------------
+Installation
 
 Installing Dart should probably ensure that `dartfmt` is in your `$PATH`.
 
-In case it is not, try to set the executable option to its absolute path. : >
+In case it is not, try to set the executable option to its absolute path: >
+
   " Set the executable path for dartfmt to the absolute path to it.
   let g:ale_dart_dartfmt_executable = '/usr/lib/dart/bin/dartfmt'
- >
+<
 
-Options
 -------------------------------------------------------------------------------
-
-g:ale_dart_dartfmt_executable                   *g:ale_dart_dartfmt_executable*
+Options
+                                          *ale-options.dart_dartfmt_executable*
+                                                *g:ale_dart_dartfmt_executable*
                                                 *b:ale_dart_dartfmt_executable*
+dart_dartfmt_executable
+g:ale_dart_dartfmt_executable
   Type: |String|
   Default: `''`
 
   This variable can be set to specify an absolute path to the
   dartfmt executable (or to specify an alternate executable).
 
-
-g:ale_dart_dartfmt_options                         *g:ale_dart_dartfmt_options*
+                                             *ale-options.dart_dartfmt_options*
+                                                   *g:ale_dart_dartfmt_options*
                                                    *b:ale_dart_dartfmt_options*
+dart_dartfmt_options
+g:ale_dart_dartfmt_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to the dartfmt fixer.
 
-===============================================================================
 
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

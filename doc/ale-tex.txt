@@ -5,16 +5,21 @@ ALE TeX Integration                                           *ale-tex-options*
 ===============================================================================
 chktex                                                         *ale-tex-chktex*
 
-g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
+                                            *ale-options.tex_chktex_executable*
+                                                  *g:ale_tex_chktex_executable*
                                                   *b:ale_tex_chktex_executable*
+tex_chktex_executable
+g:ale_tex_chktex_executable
   Type: |String|
   Default: `'chktex'`
 
   This variable can be changed to change the path to chktex.
 
-
-g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
+                                               *ale-options.tex_chktex_options*
+                                                     *g:ale_tex_chktex_options*
                                                      *b:ale_tex_chktex_options*
+tex_chktex_options
+g:ale_tex_chktex_options
   Type: |String|
   Default: `'-I'`
 
@@ -30,8 +35,11 @@ See |ale-cspell-options|
 ===============================================================================
 lacheck                                                       *ale-tex-lacheck*
 
-g:ale_lacheck_executable                             *g:ale_lacheck_executable*
+                                               *ale-options.lacheck_executable*
+                                                     *g:ale_lacheck_executable*
                                                      *b:ale_lacheck_executable*
+lacheck_executable
+g:ale_lacheck_executable
   Type: |String|
   Default: `'lacheck'`
 
@@ -41,16 +49,21 @@ g:ale_lacheck_executable                             *g:ale_lacheck_executable*
 ===============================================================================
 latexindent                                               *ale-tex-latexindent*
 
-g:ale_tex_latexindent_executable             *g:ale_tex_latexindent_executable*
+                                       *ale-options.tex_latexindent_executable*
+                                             *g:ale_tex_latexindent_executable*
                                              *b:ale_tex_latexindent_executable*
+tex_latexindent_executable
+g:ale_tex_latexindent_executable
   Type: |String|
   Default: `'latexindent'`
 
   This variable can be changed to change the path to latexindent.
 
-
-g:ale_tex_latexindent_options                   *g:ale_tex_latexindent_options*
+                                          *ale-options.tex_latexindent_options*
+                                                *g:ale_tex_latexindent_options*
                                                 *b:ale_tex_latexindent_options*
+tex_latexindent_options
+g:ale_tex_latexindent_options
   Type: |String|
   Default: `''`
 
@@ -60,34 +73,41 @@ g:ale_tex_latexindent_options                   *g:ale_tex_latexindent_options*
 ===============================================================================
 texlab                                                         *ale-tex-texlab*
 
-g:ale_tex_texlab_executable                       *g:ale_tex_texlab_executable*
+                                            *ale-options.tex_texlab_executable*
+                                                  *g:ale_tex_texlab_executable*
                                                   *b:ale_tex_texlab_executable*
+tex_texlab_executable
+g:ale_tex_texlab_executable
   Type: |String|
   Default: `'texlab'`
 
   This variable can be changed to change the path to texlab.
 
-
-g:ale_tex_texlab_options                             *g:ale_tex_texlab_options*
+                                               *ale-options.tex_texlab_options*
+                                                     *g:ale_tex_texlab_options*
                                                      *b:ale_tex_texlab_options*
+tex_texlab_options
+g:ale_tex_texlab_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to texlab command.
 
-g:ale_tex_texlab_config                               *g:ale_tex_texlab_config*
+                                                *ale-options.tex_texlab_config*
+                                                      *g:ale_tex_texlab_config*
                                                       *b:ale_tex_texlab_config*
+tex_texlab_config
+g:ale_tex_texlab_config
   Type: |Dictionary|
   Default: `{}`
 
   Dictionary containing LSP configuration settings used to initialize texlab
   language server. Refer to texlab documentation for possible settings:
 
-    https://github.com/latex-lsp/texlab/blob/master/docs/options.md
+  https://github.com/latex-lsp/texlab/blob/master/docs/options.md
 
-  For example to set build onSave initialization setting:
+  For example to set build onSave initialization setting: >
 
->
   let g:ale_tex_texlab_config = {"build":{"onSave":v:true}}
 <
 

@@ -1,6 +1,7 @@
 ===============================================================================
 ALE Racket Integration                                       *ale-racket-options*
 
+
 ===============================================================================
 racket_langserver                                         *ale-racket-langserver*
 
@@ -14,11 +15,15 @@ racket_langserver                                         *ale-racket-langserver
 You should be able to see linter results and use LSP features of `ALE` like
 `ALEGoToDefinition` with `racket-langserver`.
 
+
 ===============================================================================
 raco_fmt                                                    *ale-racket-raco-fmt*
 
-g:ale_racket_raco_fmt_executable               *g:ale_racket_raco_fmt_executable*
+                                       *ale-options.racket_raco_fmt_executable*
+                                             *g:ale_racket_raco_fmt_executable*
                                                *b:ale_racket_raco_fmt_executable*
+racket_raco_fmt_executable
+g:ale_racket_raco_fmt_executable
   Type: |String|
   Default: `'raco'`
 
@@ -26,8 +31,11 @@ g:ale_racket_raco_fmt_executable               *g:ale_racket_raco_fmt_executable
   prefer to use one installed in a custom location, set this option to the
   path to the specific `raco` executable.
 
-g:ale_racket_raco_fmt_options                     *g:ale_racket_raco_fmt_options*
+                                          *ale-options.racket_raco_fmt_options*
+                                                *g:ale_racket_raco_fmt_options*
                                                   *b:ale_racket_raco_fmt_options*
+racket_raco_fmt_options
+g:ale_racket_raco_fmt_options
   Type: |String|
   Default: `''`
 

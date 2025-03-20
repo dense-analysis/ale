@@ -13,16 +13,21 @@ See |g:ale_linters|.
 ===============================================================================
 perl                                                            *ale-perl-perl*
 
-g:ale_perl_perl_executable                         *g:ale_perl_perl_executable*
+                                             *ale-options.perl_perl_executable*
+                                                   *g:ale_perl_perl_executable*
                                                    *b:ale_perl_perl_executable*
+perl_perl_executable
+g:ale_perl_perl_executable
   Type: |String|
   Default: `'perl'`
 
   This variable can be changed to modify the executable used for linting perl.
 
-
-g:ale_perl_perl_options                               *g:ale_perl_perl_options*
+                                                *ale-options.perl_perl_options*
+                                                      *g:ale_perl_perl_options*
                                                       *b:ale_perl_perl_options*
+perl_perl_options
+g:ale_perl_perl_options
   Type: |String|
   Default: `'-c -Mwarnings -Ilib'`
 
@@ -33,17 +38,22 @@ g:ale_perl_perl_options                               *g:ale_perl_perl_options*
 ===============================================================================
 perlcritic                                                *ale-perl-perlcritic*
 
-g:ale_perl_perlcritic_executable              *g:ale_perl_perlcritic_executable*
-                                              *b:ale_perl_perlcritic_executable*
+                                       *ale-options.perl_perlcritic_executable*
+                                             *g:ale_perl_perlcritic_executable*
+                                             *b:ale_perl_perlcritic_executable*
+perl_perlcritic_executable
+g:ale_perl_perlcritic_executable
   Type: |String|
   Default: `'perlcritic'`
 
   This variable can be changed to modify the perlcritic executable used for
   linting perl.
 
-
-g:ale_perl_perlcritic_profile                    *g:ale_perl_perlcritic_profile*
-                                                 *b:ale_perl_perlcritic_profile*
+                                          *ale-options.perl_perlcritic_profile*
+                                                *g:ale_perl_perlcritic_profile*
+                                                *b:ale_perl_perlcritic_profile*
+perl_perlcritic_profile
+g:ale_perl_perlcritic_profile
   Type: |String|
   Default: `'.perlcriticrc'`
 
@@ -59,33 +69,42 @@ g:ale_perl_perlcritic_profile                    *g:ale_perl_perlcritic_profile*
   string and pass `'--no-profile'`to perlcritic via the
   |g:ale_perl_perlcritic_options| variable.
 
-
-g:ale_perl_perlcritic_options                    *g:ale_perl_perlcritic_options*
-                                                 *b:ale_perl_perlcritic_options*
+                                          *ale-options.perl_perlcritic_options*
+                                                *g:ale_perl_perlcritic_options*
+                                                *b:ale_perl_perlcritic_options*
+perl_perlcritic_options
+g:ale_perl_perlcritic_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to supply additional command-line arguments to
   the perlcritic invocation.
 
-
-g:ale_perl_perlcritic_showrules               *g:ale_perl_perlcritic_showrules*
-
+                                        *ale-options.perl_perlcritic_showrules*
+                                              *g:ale_perl_perlcritic_showrules*
+perl_perlcritic_showrules
+g:ale_perl_perlcritic_showrules
   Type: |Number|
   Default: `0`
 
   Controls whether perlcritic rule names are shown after the error message.
   Defaults to off to reduce length of message.
+
+
 ===============================================================================
 perltidy                                                    *ale-perl-perltidy*
 
-g:ale_perl_perltidy_options                       *g:ale_perl_perltidy_options*
+                                            *ale-options.perl_perltidy_options*
+                                                  *g:ale_perl_perltidy_options*
                                                   *b:ale_perl_perltidy_options*
+perl_perltidy_options
+g:ale_perl_perltidy_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to alter the command-line arguments to
   the perltidy invocation.
+
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

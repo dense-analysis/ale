@@ -5,22 +5,31 @@ ALE BitBake Integration                                   *ale-bitbake-options*
 ===============================================================================
 oelint-adv                                             *ale-bitbake-oelint_adv*
 
-g:ale_bitbake_oelint_adv_executable       *g:ale_bitbake_oelint_adv_executable*
+                                    *ale-options.bitbake_oelint_adv_executable*
+                                          *g:ale_bitbake_oelint_adv_executable*
+                                          *b:ale_bitbake_oelint_adv_executable*
+bitbake_oelint_adv_executable
+g:ale_bitbake_oelint_adv_executable
 
   Type: |String|
   Default: `'oelint-adv'`
 
   This variable can be changed to use a different executable for oelint-adv.
 
-g:ale_bitbake_oelint_adv_options             *g:ale_bitbake_oelint_adv_options*
-
+                                       *ale-options.bitbake_oelint_adv_options*
+                                             *g:ale_bitbake_oelint_adv_options*
+                                             *b:ale_bitbake_oelint_adv_options*
+bitbake_oelint_adv_options
+g:ale_bitbake_oelint_adv_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to oelint-adv.
 
-  g:ale_bitbake_oelint_adv_config             *g:ale_bitbake_oelint_adv_config*
-
+                                        *ale-options.bitbake_oelint_adv_config*
+                                              *g:ale_bitbake_oelint_adv_config*
+                                              *b:ale_bitbake_oelint_adv_config*
+g:ale_bitbake_oelint_adv_config
   Type: |String|
   Default: `'.oelint.cfg'`
 

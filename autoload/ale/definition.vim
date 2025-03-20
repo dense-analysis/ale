@@ -4,7 +4,7 @@
 let s:go_to_definition_map = {}
 
 " Enable automatic updates of the tagstack
-let g:ale_update_tagstack = get(g:, 'ale_update_tagstack', 1)
+let g:ale_update_tagstack = get(g:, 'ale_update_tagstack', v:true)
 let g:ale_default_navigation = get(g:, 'ale_default_navigation', 'buffer')
 
 " Used to get the definition map in tests.

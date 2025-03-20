@@ -7,9 +7,11 @@ runs either `clang`, or `gcc`. See |ale-c-cc|.
 
 ===============================================================================
 Global Options
-
-g:ale_c_always_make                                       *g:ale_c_always_make*
+                                                    *ale-options.c_always_make*
+                                                          *g:ale_c_always_make*
                                                           *b:ale_c_always_make*
+c_always_make
+g:ale_c_always_make
   Type: |Number|
   Default: `has('unix') && !has('macunix')`
 
@@ -18,10 +20,11 @@ g:ale_c_always_make                                       *g:ale_c_always_make*
   support this option, so you probably want to turn this option off when using
   a BSD variant.
 
-
-g:ale_c_build_dir_names                               *g:ale_c_build_dir_names*
+                                                *ale-options.c_build_dir_names*
+                                                      *g:ale_c_build_dir_names*
                                                       *b:ale_c_build_dir_names*
-
+c_build_dir_names
+g:ale_c_build_dir_names
   Type: |List|
   Default: `['build', 'bin']`
 
@@ -32,10 +35,11 @@ g:ale_c_build_dir_names                               *g:ale_c_build_dir_names*
   database.  This feature is useful for the clang tools wrapped around
   LibTooling (namely here, clang-tidy)
 
-
-g:ale_c_build_dir                                           *g:ale_c_build_dir*
+                                                      *ale-options.c_build_dir*
+                                                            *g:ale_c_build_dir*
                                                             *b:ale_c_build_dir*
-
+c_build_dir
+g:ale_c_build_dir
   Type: |String|
   Default: `''`
 
@@ -47,9 +51,11 @@ g:ale_c_build_dir                                           *g:ale_c_build_dir*
 
   This directory will be searched instead of |g:ale_c_build_dir_names|.
 
-
-g:ale_c_parse_compile_commands                 *g:ale_c_parse_compile_commands*
+                                         *ale-options.c_parse_compile_commands*
+                                               *g:ale_c_parse_compile_commands*
                                                *b:ale_c_parse_compile_commands*
+c_parse_compile_commands
+g:ale_c_parse_compile_commands
   Type: |Number|
   Default: `1`
 
@@ -59,9 +65,11 @@ g:ale_c_parse_compile_commands                 *g:ale_c_parse_compile_commands*
   `compile_commands.json` files in the directories for
   |g:ale_c_build_dir_names|.
 
-
-g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
+                                                 *ale-options.c_parse_makefile*
+                                                       *g:ale_c_parse_makefile*
                                                        *b:ale_c_parse_makefile*
+c_parse_makefile
+g:ale_c_parse_makefile
   Type: |Number|
   Default: `0`
 
@@ -91,16 +99,21 @@ g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
 ===============================================================================
 astyle                                                           *ale-c-astyle*
 
-g:ale_c_astyle_executable                           *g:ale_c_astyle_executable*
+                                              *ale-options.c_astyle_executable*
+                                                    *g:ale_c_astyle_executable*
                                                     *b:ale_c_astyle_executable*
+c_astyle_executable
+g:ale_c_astyle_executable
   Type: |String|
   Default: `'astyle'`
 
   This variable can be changed to use a different executable for astyle.
 
-
-g:ale_c_astyle_project_options                 *g:ale_c_astyle_project_options*
+                                         *ale-options.c_astyle_project_options*
+                                               *g:ale_c_astyle_project_options*
                                                *b:ale_c_astyle_project_options*
+c_astyle_project_options
+g:ale_c_astyle_project_options
   Type: |String|
   Default: `''`
 
@@ -117,8 +130,11 @@ cc                                                                   *ale-c-cc*
                                                                     *ale-c-gcc*
                                                                   *ale-c-clang*
 
-g:ale_c_cc_executable                                   *g:ale_c_cc_executable*
+                                                  *ale-options.c_cc_executable*
+                                                        *g:ale_c_cc_executable*
                                                         *b:ale_c_cc_executable*
+c_cc_executable
+g:ale_c_cc_executable
   Type: |String|
   Default: `'<auto>'`
 
@@ -127,17 +143,21 @@ g:ale_c_cc_executable                                   *g:ale_c_cc_executable*
   ALE will try to use `clang` if Clang is available, otherwise ALE will
   default to checking C code with `gcc`.
 
-
-g:ale_c_cc_options                                         *g:ale_c_cc_options*
+                                                     *ale-options.c_cc_options*
+                                                           *g:ale_c_cc_options*
                                                            *b:ale_c_cc_options*
+c_cc_options
+g:ale_c_cc_options
   Type: |String|
   Default: `'-std=c11 -Wall'`
 
   This variable can be changed to modify flags given to the C compiler.
 
-
-g:ale_c_cc_use_header_lang_flag               *g:ale_c_cc_use_header_lang_flag*
+                                        *ale-options.c_cc_use_header_lang_flag*
+                                              *g:ale_c_cc_use_header_lang_flag*
                                               *b:ale_c_cc_use_header_lang_flag*
+c_cc_use_header_lang_flag
+g:ale_c_cc_use_header_lang_flag
   Type: |Number|
   Default: `-1`
 
@@ -158,9 +178,11 @@ g:ale_c_cc_use_header_lang_flag               *g:ale_c_cc_use_header_lang_flag*
   which is what ALE does. This why, by default, ALE only uses `'-x c-header'`
   with Clang.
 
-
-g:ale_c_cc_header_exts                                 *g:ale_c_cc_header_exts*
+                                                 *ale-options.c_cc_header_exts*
+                                                       *g:ale_c_cc_header_exts*
                                                        *b:ale_c_cc_header_exts*
+c_cc_header_exts
+g:ale_c_cc_header_exts
   Type: |List|
   Default: `['h']`
 
@@ -174,29 +196,35 @@ g:ale_c_cc_header_exts                                 *g:ale_c_cc_header_exts*
 ===============================================================================
 ccls                                                               *ale-c-ccls*
 
-g:ale_c_ccls_executable                               *g:ale_c_ccls_executable*
+                                                *ale-options.c_ccls_executable*
+                                                      *g:ale_c_ccls_executable*
                                                       *b:ale_c_ccls_executable*
+c_ccls_executable
+g:ale_c_ccls_executable
   Type: |String|
   Default: `'ccls'`
 
   This variable can be changed to use a different executable for ccls.
 
-
-g:ale_c_ccls_init_options                           *g:ale_c_ccls_init_options*
+                                              *ale-options.c_ccls_init_options*
+                                                    *g:ale_c_ccls_init_options*
                                                     *b:ale_c_ccls_init_options*
+c_ccls_init_options
+g:ale_c_ccls_init_options
   Type: |Dictionary|
   Default: `{}`
 
   This variable can be changed to customize ccls initialization options.
-  Example: >
-      {
-    \   'cacheDirectory': '/tmp/ccls',
-    \   'cacheFormat': 'binary',
-    \   'diagnostics': {
-    \     'onOpen': 0,
-    \     'opChange': 1000,
-    \   },
-    \ }
+  For example: >
+
+  let g:ale_c_ccls_init_options = {
+  \   'cacheDirectory': '/tmp/ccls',
+  \   'cacheFormat': 'binary',
+  \   'diagnostics': {
+  \       'onOpen': 0,
+  \       'opChange': 1000,
+  \   },
+  \}
 <
   For all available options and explanations, visit
   https://github.com/MaskRay/ccls/wiki/Customization#initialization-options.
@@ -213,16 +241,23 @@ Therefore, `clang-check` linter reads the options |g:ale_c_build_dir| and
 overrides |g:ale_c_build_dir_names|.
 
 
-g:ale_c_clangcheck_executable                   *g:ale_c_clangcheck_executable*
+-------------------------------------------------------------------------------
+Options
+                                          *ale-options.c_clangcheck_executable*
+                                                *g:ale_c_clangcheck_executable*
                                                 *b:ale_c_clangcheck_executable*
+c_clangcheck_executable
+g:ale_c_clangcheck_executable
   Type: |String|
   Default: `'clang-check'`
 
   This variable can be changed to use a different executable for clangcheck.
 
-
-g:ale_c_clangcheck_options                         *g:ale_c_clangcheck_options*
+                                             *ale-options.c_clangcheck_options*
+                                                   *g:ale_c_clangcheck_options*
                                                    *b:ale_c_clangcheck_options*
+c_clangcheck_options
+g:ale_c_clangcheck_options
   Type: |String|
   Default: `''`
 
@@ -236,16 +271,21 @@ g:ale_c_clangcheck_options                         *g:ale_c_clangcheck_options*
 ===============================================================================
 clangd                                                           *ale-c-clangd*
 
-g:ale_c_clangd_executable                           *g:ale_c_clangd_executable*
+                                              *ale-options.c_clangd_executable*
+                                                    *g:ale_c_clangd_executable*
                                                     *b:ale_c_clangd_executable*
+c_clangd_executable
+g:ale_c_clangd_executable
   Type: |String|
   Default: `'clangd'`
 
   This variable can be changed to use a different executable for clangd.
 
-
-g:ale_c_clangd_options                                 *g:ale_c_clangd_options*
+                                                 *ale-options.c_clangd_options*
+                                                       *g:ale_c_clangd_options*
                                                        *b:ale_c_clangd_options*
+c_clangd_options
+g:ale_c_clangd_options
   Type: |String|
   Default: `''`
 
@@ -255,24 +295,31 @@ g:ale_c_clangd_options                                 *g:ale_c_clangd_options*
 ===============================================================================
 clang-format                                                *ale-c-clangformat*
 
-g:ale_c_clangformat_executable                 *g:ale_c_clangformat_executable*
+                                         *ale-options.c_clangformat_executable*
+                                               *g:ale_c_clangformat_executable*
                                                *b:ale_c_clangformat_executable*
+c_clangformat_executable
+g:ale_c_clangformat_executable
   Type: |String|
   Default: `'clang-format'`
 
   This variable can be changed to use a different executable for clang-format.
 
-
-g:ale_c_clangformat_options                       *g:ale_c_clangformat_options*
+                                            *ale-options.c_clangformat_options*
+                                                  *g:ale_c_clangformat_options*
                                                   *b:ale_c_clangformat_options*
+c_clangformat_options
+g:ale_c_clangformat_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to clang-format.
 
-
-g:ale_c_clangformat_style_option             *g:ale_c_clangformat_style_option*
+                                       *ale-options.c_clangformat_style_option*
+                                             *g:ale_c_clangformat_style_option*
                                              *b:ale_c_clangformat_style_option*
+c_clangformat_style_option
+g:ale_c_clangformat_style_option
   Type: |String|
   Default: `''`
 
@@ -281,19 +328,21 @@ g:ale_c_clangformat_style_option             *g:ale_c_clangformat_style_option*
   flag of clang-format.
 
   Example: >
-      {
-    \ BasedOnStyle:                        Microsoft,
-    \ ColumnLimit:                         80,
-    \ AllowShortBlocksOnASingleLine:       Always,
-    \ AllowShortFunctionsOnASingleLine:    Inline,
-    \ }
+  let g:ale_c_clangformat_style_option = {
+  \   'BasedOnStyle': 'Microsoft',
+  \   'ColumnLimit': 80,
+  \   'AllowShortBlocksOnASingleLine': 'Always',
+  \   'AllowShortFunctionsOnASingleLine': 'Inline',
+  \}
 <
   If you set this variable, ensure you don't modify -style in
   |g:ale_c_clangformat_options|, as this will cause clang-format to error.
 
-
-g:ale_c_clangformat_use_local_file         *g:ale_c_clangformat_use_local_file*
+                                     *ale-options.c_clangformat_use_local_file*
+                                           *g:ale_c_clangformat_use_local_file*
                                            *b:ale_c_clangformat_use_local_file*
+c_clangformat_use_local_file
+g:ale_c_clangformat_use_local_file
   Type: |Number|
   Default: `0`
 
@@ -320,8 +369,13 @@ Therefore, `clang-tidy` linter reads the options |g:ale_c_build_dir| and
 overrides |g:ale_c_build_dir_names|.
 
 
-g:ale_c_clangtidy_checks                             *g:ale_c_clangtidy_checks*
+-------------------------------------------------------------------------------
+Options
+                                               *ale-options.c_clangtidy_checks*
+                                                     *g:ale_c_clangtidy_checks*
                                                      *b:ale_c_clangtidy_checks*
+c_clangtidy_checks
+g:ale_c_clangtidy_checks
   Type: |List|
   Default: `[]`
 
@@ -335,17 +389,21 @@ g:ale_c_clangtidy_checks                             *g:ale_c_clangtidy_checks*
   clang documentation for an up-to-date list of compatible checks:
   http://clang.llvm.org/extra/clang-tidy/checks/list.html
 
-
-g:ale_c_clangtidy_executable                     *g:ale_c_clangtidy_executable*
+                                           *ale-options.c_clangtidy_executable*
+                                                 *g:ale_c_clangtidy_executable*
                                                  *b:ale_c_clangtidy_executable*
+c_clangtidy_executable
+g:ale_c_clangtidy_executable
   Type: |String|
   Default: `'clang-tidy'`
 
   This variable can be changed to use a different executable for clangtidy.
 
-
-g:ale_c_clangtidy_options                           *g:ale_c_clangtidy_options*
+                                              *ale-options.c_clangtidy_options*
+                                                    *g:ale_c_clangtidy_options*
                                                     *b:ale_c_clangtidy_options*
+c_clangtidy_options
+g:ale_c_clangtidy_options
   Type: |String|
   Default: `''`
 
@@ -361,17 +419,21 @@ g:ale_c_clangtidy_options                           *g:ale_c_clangtidy_options*
   entirely manually, and no `compile_commands.json` file is in one
   of the |g:ale_c_build_dir_names| directories of the project tree.
 
-
-g:ale_c_clangtidy_extra_options               *g:ale_c_clangtidy_extra_options*
+                                        *ale-options.c_clangtidy_extra_options*
+                                              *g:ale_c_clangtidy_extra_options*
                                               *b:ale_c_clangtidy_extra_options*
+c_clangtidy_extra_options
+g:ale_c_clangtidy_extra_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to clang-tidy.
 
-
-g:ale_c_clangtidy_fix_errors                     *g:ale_c_clangtidy_fix_errors*
+                                           *ale-options.c_clangtidy_fix_errors*
+                                                 *g:ale_c_clangtidy_fix_errors*
                                                  *b:ale_c_clangtidy_fix_errors*
+c_clangtidy_fix_errors
+g:ale_c_clangtidy_fix_errors
   Type: |Number|
   Default: `1`
 
@@ -382,16 +444,21 @@ g:ale_c_clangtidy_fix_errors                     *g:ale_c_clangtidy_fix_errors*
 ===============================================================================
 cppcheck                                                       *ale-c-cppcheck*
 
-g:ale_c_cppcheck_executable                       *g:ale_c_cppcheck_executable*
+                                            *ale-options.c_cppcheck_executable*
+                                                  *g:ale_c_cppcheck_executable*
                                                   *b:ale_c_cppcheck_executable*
+c_cppcheck_executable
+g:ale_c_cppcheck_executable
   Type: |String|
   Default: `'cppcheck'`
 
   This variable can be changed to use a different executable for cppcheck.
 
-
-g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
+                                               *ale-options.c_cppcheck_options*
+                                                     *g:ale_c_cppcheck_options*
                                                      *b:ale_c_cppcheck_options*
+c_cppcheck_options
+g:ale_c_cppcheck_options
   Type: |String|
   Default: `'--enable=style'`
 
@@ -401,21 +468,26 @@ g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
 ===============================================================================
 cquery                                                           *ale-c-cquery*
 
-g:ale_c_cquery_executable                           *g:ale_c_cquery_executable*
+                                              *ale-options.c_cquery_executable*
+                                                    *g:ale_c_cquery_executable*
                                                     *b:ale_c_cquery_executable*
+c_cquery_executable
+g:ale_c_cquery_executable
   Type: |String|
   Default: `'cquery'`
 
   This variable can be changed to use a different executable for cquery.
 
-
-g:ale_c_cquery_cache_directory                 *g:ale_c_cquery_cache_directory*
+                                         *ale-options.c_cquery_cache_directory*
+                                               *g:ale_c_cquery_cache_directory*
                                                *b:ale_c_cquery_cache_directory*
+c_cquery_cache_directory
+g:ale_c_cquery_cache_directory
   Type: |String|
   Default: `'~/.cache/cquery'`
 
   This variable can be changed to decide which directory cquery uses for its
-cache.
+  cache.
 
 
 ===============================================================================
@@ -427,31 +499,41 @@ See |ale-cspell-options|
 ===============================================================================
 flawfinder                                                   *ale-c-flawfinder*
 
-g:ale_c_flawfinder_executable                   *g:ale_c_flawfinder_executable*
+                                          *ale-options.c_flawfinder_executable*
+                                                *g:ale_c_flawfinder_executable*
                                                 *b:ale_c_flawfinder_executable*
+c_flawfinder_executable
+g:ale_c_flawfinder_executable
   Type: |String|
   Default: `'flawfinder'`
 
   This variable can be changed to use a different executable for flawfinder.
 
-
-g:ale_c_flawfinder_minlevel                       *g:ale_c_flawfinder_minlevel*
+                                            *ale-options.c_flawfinder_minlevel*
+                                                  *g:ale_c_flawfinder_minlevel*
                                                   *b:ale_c_flawfinder_minlevel*
+c_flawfinder_minlevel
+g:ale_c_flawfinder_minlevel
   Type: |Number|
   Default: `1`
 
   This variable can be changed to ignore risks under the given risk threshold.
 
-
-g:ale_c_flawfinder_options                                 *g:ale-c-flawfinder*
+                                             *ale-options.c_flawfinder_options*
+                                                   *g:ale_c_flawfinder_options*
                                                            *b:ale-c-flawfinder*
+c_flawfinder_options
+g:ale_c_flawfinder_options
   Type: |String|
   Default: `''`
 
   This variable can be used to pass extra options into the flawfinder command.
 
-g:ale_c_flawfinder_error_severity           *g:ale_c_flawfinder_error_severity*
+                                      *ale-options.c_flawfinder_error_severity*
+                                            *g:ale_c_flawfinder_error_severity*
                                             *b:ale_c_flawfinder_error_severity*
+c_flawfinder_error_severity
+g:ale_c_flawfinder_error_severity
   Type: |Number|
   Default: `6`
 
@@ -462,16 +544,21 @@ g:ale_c_flawfinder_error_severity           *g:ale_c_flawfinder_error_severity*
 ===============================================================================
 uncrustify                                                   *ale-c-uncrustify*
 
-g:ale_c_uncrustify_executable                   *g:ale_c_uncrustify_executable*
+                                          *ale-options.c_uncrustify_executable*
+                                                *g:ale_c_uncrustify_executable*
                                                 *b:ale_c_uncrustify_executable*
+c_uncrustify_executable
+g:ale_c_uncrustify_executable
   Type: |String|
   Default: `'uncrustify'`
 
   This variable can be changed to use a different executable for uncrustify.
 
-
-g:ale_c_uncrustify_options                         *g:ale_c_uncrustify_options*
+                                             *ale-options.c_uncrustify_options*
+                                                   *g:ale_c_uncrustify_options*
                                                    *b:ale_c_uncrustify_options*
+c_uncrustify_options
+g:ale_c_uncrustify_options
   Type: |String|
   Default: `''`
 

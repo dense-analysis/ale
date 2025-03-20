@@ -92,6 +92,12 @@ Before:
     call g:LastHandleCallback(a:conn_id, a:message)
     AssertEqual [[0, '']], g:ale_queue_call_list
 
+    let g:ale_lint_on_text_changed = v:true
+
+    let g:ale_queue_call_list = []
+    call g:LastHandleCallback(a:conn_id, a:message)
+    AssertEqual [[0, '']], g:ale_queue_call_list
+
     let g:ale_lint_on_text_changed = 'normal'
 
     let g:ale_queue_call_list = []
@@ -228,7 +234,7 @@ Execute(ALEImport should request imports correctly for tsserver):
   \ [
   \   [0, 'ts@completions', {
   \     'file': expand('%:p'),
-  \     'includeExternalModuleExports': 1,
+  \     'includeExternalModuleExports': v:true,
   \     'offset': 21,
   \     'line': 2,
   \     'prefix': 'missingword',

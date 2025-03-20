@@ -5,34 +5,44 @@ ALE Erlang Integration                                     *ale-erlang-options*
 ===============================================================================
 dialyzer                                                  *ale-erlang-dialyzer*
 
-g:ale_erlang_dialyzer_executable             *g:ale_erlang_dialyzer_executable*
+                                       *ale-options.erlang_dialyzer_executable*
+                                             *g:ale_erlang_dialyzer_executable*
                                              *b:ale_erlang_dialyzer_executable*
+erlang_dialyzer_executable
+g:ale_erlang_dialyzer_executable
   Type: |String|
   Default: `'dialyzer'`
 
   This variable can be changed to specify the dialyzer executable.
 
-
-g:ale_erlang_dialyzer_options                   *g:ale_erlang_dialyzer_options*
+                                          *ale-options.erlang_dialyzer_options*
+                                                *g:ale_erlang_dialyzer_options*
                                                 *b:ale_erlang_dialyzer_options*
+erlang_dialyzer_options
+g:ale_erlang_dialyzer_options
   Type: |String|
   Default: `'-Wunmatched_returns -Werror_handling -Wrace_conditions -Wunderspec'`
 
   This variable can be changed to specify the options to pass to the dialyzer
   executable.
-
-g:ale_erlang_dialyzer_plt_file                 *g:ale_erlang_dialyzer_plt_file*
+                                         *ale-options.erlang_dialyzer_plt_file*
+                                               *g:ale_erlang_dialyzer_plt_file*
                                                *b:ale_erlang_dialyzer_plt_file*
+erlang_dialyzer_plt_file
+g:ale_erlang_dialyzer_plt_file
   Type: |String|
+  Default: `''`
 
   This variable can be changed to specify the path to the PLT file. By
   default, it will search for the PLT file inside the `_build` directory. If
   there isn't one, it will fallback to the path `$REBAR_PLT_DIR/dialyzer/plt`.
   Otherwise, it will default to `$HOME/.dialyzer_plt`.
 
-
-g:ale_erlang_dialyzer_rebar3_profile     *g:ale_erlang_dialyzer_rebar3_profile*
+                                   *ale-options.erlang_dialyzer_rebar3_profile*
+                                         *g:ale_erlang_dialyzer_rebar3_profile*
                                          *b:ale_erlang_dialyzer_rebar3_profile*
+erlang_dialyzer_rebar3_profile
+g:ale_erlang_dialyzer_rebar3_profile
   Type: |String|
   Default: `'default'`
 
@@ -40,106 +50,138 @@ g:ale_erlang_dialyzer_rebar3_profile     *g:ale_erlang_dialyzer_rebar3_profile*
   run dialyzer with rebar3.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 elvis                                                        *ale-erlang-elvis*
 
-g:ale_erlang_elvis_executable                   *g:ale_erlang_elvis_executable*
+                                          *ale-options.erlang_elvis_executable*
+                                                *g:ale_erlang_elvis_executable*
                                                 *b:ale_erlang_elvis_executable*
+erlang_elvis_executable
+g:ale_erlang_elvis_executable
   Type: |String|
   Default: `'elvis'`
 
   This variable can be changed to specify the elvis executable.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 erlang-mode                                            *ale-erlang-erlang-mode*
 
-g:ale_erlang_erlang_mode_emacs_executable
+                              *ale-options.erlang_erlang_mode_emacs_executable*
                                     *g:ale_erlang_erlang_mode_emacs_executable*
                                     *b:ale_erlang_erlang_mode_emacs_executable*
+erlang_erlang_mode_emacs_executable
+g:ale_erlang_erlang_mode_emacs_executable
   Type: |String|
   Default: `'emacs'`
 
   This variable can be changed to specify the Emacs executable.
 
-g:ale_erlang_erlang_mode_indent_level   *g:ale_erlang_erlang_mode_indent_level*
+                                  *ale-options.erlang_erlang_mode_indent_level*
+                                        *g:ale_erlang_erlang_mode_indent_level*
                                         *b:ale_erlang_erlang_mode_indent_level*
+erlang_erlang_mode_indent_level
+g:ale_erlang_erlang_mode_indent_level
   Type: |Number|
   Default: `4`
 
   Indentation of Erlang calls/clauses within blocks.
 
-g:ale_erlang_erlang_mode_icr_indent       *g:ale_erlang_erlang_mode_icr_indent*
+                                    *ale-options.erlang_erlang_mode_icr_indent*
+                                          *g:ale_erlang_erlang_mode_icr_indent*
                                           *b:ale_erlang_erlang_mode_icr_indent*
+erlang_erlang_mode_icr_indent
+g:ale_erlang_erlang_mode_icr_indent
   Type: `'nil'` or |Number|
   Default: `'nil'`
 
   Indentation of Erlang if/case/receive patterns. `'nil'` means keeping default
   behavior. When non-`'nil'`, indent to the column of if/case/receive.
 
-g:ale_erlang_erlang_mode_indent_guard   *g:ale_erlang_erlang_mode_indent_guard*
+                                  *ale-options.erlang_erlang_mode_indent_guard*
+                                        *g:ale_erlang_erlang_mode_indent_guard*
                                         *b:ale_erlang_erlang_mode_indent_guard*
+erlang_erlang_mode_indent_guard
+g:ale_erlang_erlang_mode_indent_guard
   Type: |Number|
   Default: `2`
 
   Indentation of Erlang guards.
 
-g:ale_erlang_erlang_mode_argument_indent
+                               *ale-options.erlang_erlang_mode_argument_indent*
                                      *g:ale_erlang_erlang_mode_argument_indent*
                                      *b:ale_erlang_erlang_mode_argument_indent*
+erlang_erlang_mode_argument_indent
+g:ale_erlang_erlang_mode_argument_indent
   Type: `'nil'` or |Number|
   Default: `2`
 
   Indentation of the first argument in a function call. When `'nil'`, indent
   to the column after the `'('` of the function.
 
-g:ale_erlang_erlang_mode_indent_tabs_mode
+                              *ale-options.erlang_erlang_mode_indent_tabs_mode*
                                     *g:ale_erlang_erlang_mode_indent_tabs_mode*
                                     *b:ale_erlang_erlang_mode_indent_tabs_mode*
+erlang_erlang_mode_indent_tabs_mode
+g:ale_erlang_erlang_mode_indent_tabs_mode
   Type: `'nil'` or `'t'`
   Default: `'nil'`
 
   Indentation can insert tabs if this is non-`'nil'`.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 erlang_ls                                                *ale-erlang-erlang_ls*
 
-g:ale_erlang_erlang_ls_executable           *g:ale_erlang_erlang_ls_executable*
+                                      *ale-options.erlang_erlang_ls_executable*
+                                            *g:ale_erlang_erlang_ls_executable*
                                             *b:ale_erlang_erlang_ls_executable*
+erlang_erlang_ls_executable
+g:ale_erlang_erlang_ls_executable
   Type: |String|
   Default: `'erlang_ls'`
 
   This variable can be changed to specify the erlang_ls executable.
 
-g:ale_erlang_erlang_ls_log_dir                 *g:ale_erlang_erlang_ls_log_dir*
+                                         *ale-options.erlang_erlang_ls_log_dir*
+                                               *g:ale_erlang_erlang_ls_log_dir*
                                                *b:ale_erlang_erlang_ls_log_dir*
+erlang_erlang_ls_log_dir
+g:ale_erlang_erlang_ls_log_dir
   Type: |String|
   Default: `''`
 
   If set this variable overrides default directory where logs will be written.
 
-g:ale_erlang_erlang_ls_log_level             *g:ale_erlang_erlang_ls_log_level*
+                                       *ale-options.erlang_erlang_ls_log_level*
+                                             *g:ale_erlang_erlang_ls_log_level*
                                              *b:ale_erlang_erlang_ls_log_level*
+erlang_erlang_ls_log_level
+g:ale_erlang_erlang_ls_log_level
   Type: |String|
   Default: `'info'`
 
   This variable can be changed to specify log level.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 erlc                                                          *ale-erlang-erlc*
 
-g:ale_erlang_erlc_executable                     *g:ale_erlang_erlc_executable*
+                                           *ale-options.erlang_erlc_executable*
+                                                 *g:ale_erlang_erlc_executable*
                                                  *b:ale_erlang_erlc_executable*
+erlang_erlc_executable
+g:ale_erlang_erlc_executable
   Type: |String|
   Default: `'erlc'`
 
   This variable can be changed to specify the erlc executable.
 
-
-g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
+                                              *ale-options.erlang_erlc_options*
+                                                    *g:ale_erlang_erlc_options*
                                                     *b:ale_erlang_erlc_options*
+erlang_erlc_options
+g:ale_erlang_erlc_options
   Type: |String|
   Default: `''`
 
@@ -147,19 +189,24 @@ g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
   or `-pa`.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 erlfmt                                                      *ale-erlang-erlfmt*
 
-g:ale_erlang_erlfmt_executable                 *g:ale_erlang_erlfmt_executable*
+                                         *ale-options.erlang_erlfmt_executable*
+                                               *g:ale_erlang_erlfmt_executable*
                                                *b:ale_erlang_erlfmt_executable*
+erlang_erlfmt_executable
+g:ale_erlang_erlfmt_executable
   Type: |String|
   Default: `'erlfmt'`
 
   This variable can be changed to specify the erlfmt executable.
 
-
-g:ale_erlang_erlfmt_options                       *g:ale_erlang_erlfmt_options*
+                                            *ale-options.erlang_erlfmt_options*
+                                                  *g:ale_erlang_erlfmt_options*
                                                   *b:ale_erlang_erlfmt_options*
+erlang_erlfmt_options
+g:ale_erlang_erlfmt_options
   Type: |String|
   Default: `''`
 
@@ -167,11 +214,14 @@ g:ale_erlang_erlfmt_options                       *g:ale_erlang_erlfmt_options*
   `--insert-pragma` or `--print-width`.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 syntaxerl                                                *ale-erlang-syntaxerl*
 
-g:ale_erlang_syntaxerl_executable           *g:ale_erlang_syntaxerl_executable*
+                                      *ale-options.erlang_syntaxerl_executable*
+                                            *g:ale_erlang_syntaxerl_executable*
                                             *b:ale_erlang_syntaxerl_executable*
+erlang_syntaxerl_executable
+g:ale_erlang_syntaxerl_executable
   Type: |String|
   Default: `'syntaxerl'`
 

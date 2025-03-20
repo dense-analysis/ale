@@ -16,7 +16,7 @@ onoremap <silent> <Plug>(ale_show_completion_menu) <Nop>
 let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
 let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [])
 let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
-let g:ale_completion_autoimport = get(g:, 'ale_completion_autoimport', 1)
+let g:ale_completion_autoimport = get(g:, 'ale_completion_autoimport', v:true)
 let g:ale_completion_tsserver_remove_warnings = get(g:, 'ale_completion_tsserver_remove_warnings', 0)
 
 let s:timer_id = -1
@@ -394,6 +394,7 @@ function! ale#completion#Show(result) abort
         if g:ale_enabled
         \&& (
         \   l:text_changed is# '1'
+        \   || g:ale_lint_on_text_changed is v:true
         \   || l:text_changed is# 'always'
         \   || l:text_changed is# 'normal'
         \   || l:text_changed is# 'insert'
@@ -510,7 +511,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
         \   'dup': get(l:info, 'additional_edits_only', 0)
-        \       ||  g:ale_completion_autoimport,
+        \       || (g:ale_completion_autoimport + 0),
         \   'info': join(l:documentationParts, ''),
         \}
         " This flag is used to tell if this completion came from ALE or not.
@@ -625,7 +626,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
         \   'icase': 1,
         \   'menu': l:detail,
         \   'dup': get(l:info, 'additional_edits_only', 0)
-        \       ||  g:ale_completion_autoimport,
+        \       || (g:ale_completion_autoimport + 0),
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
         \}
         " This flag is used to tell if this completion came from ALE or not.
@@ -779,18 +780,15 @@ function! s:OnReady(linter, lsp_details) abort
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     if a:linter.lsp is# 'tsserver'
-        if get(g:, 'ale_completion_tsserver_autoimport') is 1
-            " no-custom-checks
-            echom '`g:ale_completion_tsserver_autoimport` is deprecated. Use `g:ale_completion_autoimport` instead.'
-        endif
-
         let l:message = ale#lsp#tsserver_message#Completions(
         \   l:buffer,
         \   b:ale_completion_info.line,
         \   b:ale_completion_info.column,
         \   b:ale_completion_info.prefix,
-        \   get(b:ale_completion_info, 'additional_edits_only', 0)
-        \       || g:ale_completion_autoimport,
+        \   (
+        \       get(b:ale_completion_info, 'additional_edits_only', 0)
+        \       || g:ale_completion_autoimport
+        \   ) ? v:true : v:false,
         \)
     else
         " Send a message saying the buffer has changed first, otherwise

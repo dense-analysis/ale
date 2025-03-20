@@ -5,17 +5,22 @@ ALE Ruby Integration                                         *ale-ruby-options*
 ===============================================================================
 brakeman                                                    *ale-ruby-brakeman*
 
-g:ale_ruby_brakeman_executable                 *g:ale_ruby_brakeman_executable*
+                                         *ale-options.ruby_brakeman_executable*
+                                               *g:ale_ruby_brakeman_executable*
                                                *b:ale_ruby_brakeman_executable*
+ruby_brakeman_executable
+g:ale_ruby_brakeman_executable
   Type: |String|
   Default: `'brakeman'`
 
   Override the invoked brakeman binary. Set this to `'bundle'` to invoke
   `'bundle` `exec` brakeman'.
 
-
-g:ale_ruby_brakeman_options                       *g:ale_ruby_brakeman_options*
+                                            *ale-options.ruby_brakeman_options*
+                                                  *g:ale_ruby_brakeman_options*
                                                   *b:ale_ruby_brakeman_options*
+ruby_brakeman_options
+g:ale_ruby_brakeman_options
   Type: |String|
   Default: `''`
 
@@ -31,17 +36,22 @@ See |ale-cspell-options|
 ===============================================================================
 debride                                                      *ale-ruby-debride*
 
-g:ale_ruby_debride_executable                   *g:ale_ruby_debride_executable*
+                                          *ale-options.ruby_debride_executable*
+                                                *g:ale_ruby_debride_executable*
                                                 *b:ale_ruby_debride_executable*
+ruby_debride_executable
+g:ale_ruby_debride_executable
   Type: |String|
   Default: `'debride'`
 
   Override the invoked debride binary. Set this to `'bundle'` to invoke
   `'bundle` `exec` debride'.
 
-
-g:ale_ruby_debride_options                         *g:ale_ruby_debride_options*
+                                             *ale-options.ruby_debride_options*
+                                                   *g:ale_ruby_debride_options*
                                                    *b:ale_ruby_debride_options*
+ruby_debride_options
+g:ale_ruby_debride_options
   Type: |String|
   Default: `''`
 
@@ -51,17 +61,22 @@ g:ale_ruby_debride_options                         *g:ale_ruby_debride_options*
 ===============================================================================
 packwerk                                                    *ale-ruby-packwerk*
 
-g:ale_ruby_packwerk_executable                 *g:ale_ruby_packwerk_executable*
+                                         *ale-options.ruby_packwerk_executable*
+                                               *g:ale_ruby_packwerk_executable*
                                                *b:ale_ruby_packwerk_executable*
+ruby_packwerk_executable
+g:ale_ruby_packwerk_executable
   Type: |String|
   Default: `'packwerk'`
 
   Override the invoked packwerk binary. Set this to `'bundle'` to invoke
   `'bundle` `exec` packwerk'.
 
-
-g:ale_ruby_packwerk_options                       *g:ale_ruby_packwerk_options*
+                                            *ale-options.ruby_packwerk_options*
+                                                  *g:ale_ruby_packwerk_options*
                                                   *b:ale_ruby_packwerk_options*
+ruby_packwerk_options
+g:ale_ruby_packwerk_options
   Type: |String|
   Default: `''`
 
@@ -77,9 +92,11 @@ See |ale-javascript-prettier| for information about the available options.
 ===============================================================================
 rails_best_practices                            *ale-ruby-rails_best_practices*
 
-g:ale_ruby_rails_best_practices_executable
+                             *ale-options.ruby_rails_best_practices_executable*
                                    *g:ale_ruby_rails_best_practices_executable*
                                    *b:ale_ruby_rails_best_practices_executable*
+ruby_rails_best_practices_executable
+g:ale_ruby_rails_best_practices_executable
   Type: |String|
   Default: `'rails_best_practices'`
 
@@ -87,9 +104,11 @@ g:ale_ruby_rails_best_practices_executable
   invoke `'bundle` `exec` rails_best_practices'.
 
 
-g:ale_ruby_rails_best_practices_options
+                                *ale-options.ruby_rails_best_practices_options*
                                       *g:ale_ruby_rails_best_practices_options*
                                       *b:ale_ruby_rails_best_practices_options*
+ruby_rails_best_practices_options
+g:ale_ruby_rails_best_practices_options
   Type: |String|
   Default: `''`
 
@@ -99,26 +118,33 @@ g:ale_ruby_rails_best_practices_options
 ===============================================================================
 reek                                                            *ale-ruby-reek*
 
-g:ale_ruby_reek_executable                         *g:ale_ruby_reek_executable*
+                                             *ale-options.ruby_reek_executable*
+                                                   *g:ale_ruby_reek_executable*
                                                    *b:ale_ruby_reek_executable*
+ruby_reek_executable
+g:ale_ruby_reek_executable
   Type: |String|
   Default: `'reek'`
 
   Override the invoked reek binary. Set this to `'bundle'` to invoke
   `'bundle` `exec` reek'.
 
-
-g:ale_ruby_reek_show_context                     *g:ale_ruby_reek_show_context*
+                                           *ale-options.ruby_reek_show_context*
+                                                 *g:ale_ruby_reek_show_context*
                                                  *b:ale_ruby_reek_show_context*
+ruby_reek_show_context
+g:ale_ruby_reek_show_context
   Type: |Number|
   Default: `0`
 
   Controls whether context is included in the linter message. Defaults to off
   because context is usually obvious while viewing a file.
 
-
-g:ale_ruby_reek_show_wiki_link                 *g:ale_ruby_reek_show_wiki_link*
+                                         *ale-options.ruby_reek_show_wiki_link*
+                                               *g:ale_ruby_reek_show_wiki_link*
                                                *b:ale_ruby_reek_show_wiki_link*
+ruby_reek_show_wiki_link
+g:ale_ruby_reek_show_wiki_link
   Type: |Number|
   Default: `0`
 
@@ -129,25 +155,32 @@ g:ale_ruby_reek_show_wiki_link                 *g:ale_ruby_reek_show_wiki_link*
 ===============================================================================
 rubocop                                                      *ale-ruby-rubocop*
 
-g:ale_ruby_rubocop_executable                   *g:ale_ruby_rubocop_executable*
+                                          *ale-options.ruby_rubocop_executable*
+                                                *g:ale_ruby_rubocop_executable*
                                                 *b:ale_ruby_rubocop_executable*
+ruby_rubocop_executable
+g:ale_ruby_rubocop_executable
   Type: |String|
   Default: `'rubocop'`
 
   Override the invoked rubocop binary. Set this to `'bundle'` to invoke
   `'bundle` `exec` rubocop'.
 
-
-g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
+                                             *ale-options.ruby_rubocop_options*
+                                                   *g:ale_ruby_rubocop_options*
                                                    *b:ale_ruby_rubocop_options*
+ruby_rubocop_options
+g:ale_ruby_rubocop_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to rubocop.
 
-
-g:ale_ruby_rubocop_auto_correct_all       *g:ale_ruby_rubocop_auto_correct_all*
+                                    *ale-options.ruby_rubocop_auto_correct_all*
+                                          *g:ale_ruby_rubocop_auto_correct_all*
                                           *b:ale_ruby_rubocop_auto_correct_all*
+ruby_rubocop_auto_correct_all
+g:ale_ruby_rubocop_auto_correct_all
   Type: |Number|
   Default: `0`
 
@@ -157,8 +190,11 @@ g:ale_ruby_rubocop_auto_correct_all       *g:ale_ruby_rubocop_auto_correct_all*
 ===============================================================================
 ruby                                                            *ale-ruby-ruby*
 
-g:ale_ruby_ruby_executable                         *g:ale_ruby_ruby_executable*
+                                             *ale-options.ruby_ruby_executable*
+                                                   *g:ale_ruby_ruby_executable*
                                                    *b:ale_ruby_ruby_executable*
+ruby_ruby_executable
+g:ale_ruby_ruby_executable
   Type: |String|
   Default: `'ruby'`
 
@@ -168,8 +204,11 @@ g:ale_ruby_ruby_executable                         *g:ale_ruby_ruby_executable*
 ===============================================================================
 rufo                                                            *ale-ruby-rufo*
 
-g:ale_ruby_rufo_executable                         *g:ale_ruby_rufo_executable*
+                                             *ale-options.ruby_rufo_executable*
+                                                   *g:ale_ruby_rufo_executable*
                                                    *b:ale_ruby_rufo_executable*
+ruby_rufo_executable
+g:ale_ruby_rufo_executable
   Type: |String|
   Default: `'rufo'`
 
@@ -180,8 +219,11 @@ g:ale_ruby_rufo_executable                         *g:ale_ruby_rufo_executable*
 ===============================================================================
 solargraph                                                *ale-ruby-solargraph*
 
-g:ale_ruby_solargraph_executable             *g:ale_ruby_solargraph_executable*
+                                       *ale-options.ruby_solargraph_executable*
+                                             *g:ale_ruby_solargraph_executable*
                                              *b:ale_ruby_solargraph_executable*
+ruby_solargraph_executable
+g:ale_ruby_solargraph_executable
   Type: |String|
   Default: `'solargraph'`
 
@@ -192,25 +234,32 @@ g:ale_ruby_solargraph_executable             *g:ale_ruby_solargraph_executable*
 ===============================================================================
 sorbet                                                        *ale-ruby-sorbet*
 
-g:ale_ruby_sorbet_executable                     *g:ale_ruby_sorbet_executable*
+                                           *ale-options.ruby_sorbet_executable*
+                                                 *g:ale_ruby_sorbet_executable*
                                                  *b:ale_ruby_sorbet_executable*
+ruby_sorbet_executable
+g:ale_ruby_sorbet_executable
   Type: |String|
   Default: `'srb'`
 
   Override the invoked sorbet binary. Set this to `'bundle'` to invoke
   `'bundle` `exec` srb'.
 
-
-g:ale_ruby_sorbet_options                           *g:ale_ruby_sorbet_options*
+                                              *ale-options.ruby_sorbet_options*
+                                                    *g:ale_ruby_sorbet_options*
                                                     *b:ale_ruby_sorbet_options*
+ruby_sorbet_options
+g:ale_ruby_sorbet_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to sorbet.
 
-
-g:ale_ruby_sorbet_enable_watchman           *g:ale_ruby_sorbet_enable_watchman*
+                                      *ale-options.ruby_sorbet_enable_watchman*
+                                            *g:ale_ruby_sorbet_enable_watchman*
                                             *b:ale_ruby_sorbet_enable_watchman*
+ruby_sorbet_enable_watchman
+g:ale_ruby_sorbet_enable_watchman
   Type: |Number|
   Default: `0`
 
@@ -222,17 +271,22 @@ g:ale_ruby_sorbet_enable_watchman           *g:ale_ruby_sorbet_enable_watchman*
 ===============================================================================
 standardrb                                                *ale-ruby-standardrb*
 
-g:ale_ruby_standardrb_executable             *g:ale_ruby_standardrb_executable*
+                                       *ale-options.ruby_standardrb_executable*
+                                             *g:ale_ruby_standardrb_executable*
                                              *b:ale_ruby_standardrb_executable*
+ruby_standardrb_executable
+g:ale_ruby_standardrb_executable
   Type: |String|
   Default: `'standardrb'`
 
   Override the invoked standardrb binary. Set this to `'bundle'` to invoke
   `'bundle` `exec` standardrb'.
 
-
-g:ale_ruby_standardrb_options                   *g:ale_ruby_standardrb_options*
+                                          *ale-options.ruby_standardrb_options*
+                                                *g:ale_ruby_standardrb_options*
                                                 *b:ale_ruby_standardrb_options*
+ruby_standardrb_options
+g:ale_ruby_standardrb_options
   Type: |String|
   Default: `''`
 
@@ -242,35 +296,46 @@ g:ale_ruby_standardrb_options                   *g:ale_ruby_standardrb_options*
 ===============================================================================
 syntax_tree                                              *ale-ruby-syntax_tree*
 
-g:ale_ruby_syntax_tree_executable           *g:ale_ruby_syntax_tree_executable*
+                                      *ale-options.ruby_syntax_tree_executable*
+                                            *g:ale_ruby_syntax_tree_executable*
                                             *b:ale_ruby_syntax_tree_executable*
+ruby_syntax_tree_executable
+g:ale_ruby_syntax_tree_executable
   Type: |String|
   Default: `'stree'`
 
   Override the invoked SyntaxTree binary. Set this to `'bundle'` to invoke
   `'bundle` `exec` stree'.
 
-
-g:ale_ruby_syntax_tree_options                 *g:ale_ruby_syntax_tree_options*
+                                         *ale-options.ruby_syntax_tree_options*
+                                               *g:ale_ruby_syntax_tree_options*
                                                *b:ale_ruby_syntax_tree_options*
+ruby_syntax_tree_options
+g:ale_ruby_syntax_tree_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to SyntaxTree.
 
+
 ===============================================================================
 rubyfmt                                                       *ale-ruby-rubyfmt*
 
-g:ale_ruby_rubyfmt_executable                    *g:ale_ruby_rubyfmt_executable*
+                                          *ale-options.ruby_rubyfmt_executable*
+                                                *g:ale_ruby_rubyfmt_executable*
                                                  *b:ale_ruby_rubyfmt_executable*
+ruby_rubyfmt_executable
+g:ale_ruby_rubyfmt_executable
   Type: |String|
   Default: `'rubyfmt'`
 
   This option can be changed to change the path for `rubyfmt`.
 
-
-g:ale_ruby_rubyfmt_options                          *g:ale_ruby_rubyfmt_options*
+                                             *ale-options.ruby_rubyfmt_options*
+                                                   *g:ale_ruby_rubyfmt_options*
                                                     *b:ale_ruby_rubyfmt_options*
+ruby_rubyfmt_options
+g:ale_ruby_rubyfmt_options
   Type: |String|
   Default: `''`
 

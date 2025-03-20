@@ -1,11 +1,14 @@
 Before:
   Save g:ale_completion_delay
+  Save g:ale_completion_enabled
   Save g:ale_completion_max_suggestions
   Save g:ale_completion_info
+  Save g:ale_completion_autoimport
   Save &l:omnifunc
   Save &l:completeopt
 
-  let g:ale_completion_enabled = 1
+  let g:ale_completion_enabled = v:true
+  let g:ale_completion_autoimport = v:true
 
   call ale#test#SetDirectory('/testplugin/test/completion')
   call ale#test#SetFilename('dummy.txt')

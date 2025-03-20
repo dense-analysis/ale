@@ -5,16 +5,21 @@ ALE FusionScript Integration                                 *ale-fuse-options*
 ===============================================================================
 fusion-lint                                               *ale-fuse-fusionlint*
 
-g:ale_fusion_fusionlint_executable           *g:ale_fuse_fusionlint_executable*
+                                     *ale-options.fusion_fusionlint_executable*
+                                           *g:ale_fusion_fusionlint_executable*
                                              *b:ale_fuse_fusionlint_executable*
+fusion_fusionlint_executable
+g:ale_fusion_fusionlint_executable
   Type: |String|
   Default: `'fusion-lint'`
 
   This variable can be changed to change the path to fusion-lint.
 
-
-g:ale_fuse_fusionlint_options                   *g:ale_fuse_fusionlint_options*
+                                          *ale-options.fuse_fusionlint_options*
+                                                *g:ale_fuse_fusionlint_options*
                                                 *b:ale_fuse_fusionlint_options*
+fuse_fusionlint_options
+g:ale_fuse_fusionlint_options
   Type: |String|
   Default: `''`
 

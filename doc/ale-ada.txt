@@ -7,19 +7,25 @@ cspell                                                         *ale-ada-cspell*
 
 See |ale-cspell-options|
 
+
 ===============================================================================
 gcc                                                               *ale-ada-gcc*
 
-g:ale_ada_gcc_executable                             *g:ale_ada_gcc_executable*
+                                               *ale-options.ada_gcc_executable*
+                                                     *g:ale_ada_gcc_executable*
                                                      *b:ale_ada_gcc_executable*
+ada_gcc_executable
+g:ale_ada_gcc_executable
   Type: |String|
   Default: `'gcc'`
 
-This variable can be changed to use a different executable for gcc.
+  This variable can be changed to use a different executable for gcc.
 
-
-g:ale_ada_gcc_options                                   *g:ale_ada_gcc_options*
+                                                  *ale-options.ada_gcc_options*
+                                                        *g:ale_ada_gcc_options*
                                                         *b:ale_ada_gcc_options*
+ada_gcc_options
+g:ale_ada_gcc_options
   Type: |String|
   Default: `'-gnatwa -gnatq'`
 
@@ -29,8 +35,11 @@ g:ale_ada_gcc_options                                   *g:ale_ada_gcc_options*
 ===============================================================================
 gnatpp                                                         *ale-ada-gnatpp*
 
-g:ale_ada_gnatpp_options                             *g:ale_ada_gnatpp_options*
+                                               *ale-options.ada_gnatpp_options*
+                                                     *g:ale_ada_gnatpp_options*
                                                      *b:ale_ada_gnatpp_options*
+ada_gnatpp_options
+g:ale_ada_gnatpp_options
   Type: |String|
   Default: `''`
 
@@ -40,31 +49,38 @@ g:ale_ada_gnatpp_options                             *g:ale_ada_gnatpp_options*
 ===============================================================================
 ada-language-server                                   *ale-ada-language-server*
 
-g:ale_ada_adals_executable                         *g:ale_ada_adals_executable*
+                                             *ale-options.ada_adals_executable*
+                                                   *g:ale_ada_adals_executable*
                                                    *b:ale_ada_adals_executable*
+ada_adals_executable
+g:ale_ada_adals_executable
   Type: |String|
   Default: `'ada_language_server'`
 
   This variable can be changed to use a different executable for Ada Language
   Server.
 
-
-g:ale_ada_adals_project                               *g:ale_ada_adals_project*
+                                                *ale-options.ada_adals_project*
+                                                      *g:ale_ada_adals_project*
                                                       *b:ale_ada_adals_project*
+ada_adals_project
+g:ale_ada_adals_project
   Type: |String|
   Default: `'default.gpr'`
 
-This variable can be changed to use a different GPR file for
-Ada Language Server.
+  This variable can be changed to use a different GPR file for Ada Language
+  Server.
 
-
-g:ale_ada_adals_encoding                             *g:ale_ada_adals_encoding*
+                                               *ale-options.ada_adals_encoding*
+                                                     *g:ale_ada_adals_encoding*
                                                      *b:ale_ada_adals_encoding*
+ada_adals_encoding
+g:ale_ada_adals_encoding
   Type: |String|
   Default: `'utf-8'`
 
-This variable can be changed to use a different file encoding for
-Ada Language Server.
+  This variable can be changed to use a different file encoding for Ada
+  Language Server.
 
 
 ===============================================================================

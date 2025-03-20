@@ -5,19 +5,25 @@ ALE Packer Integration                                     *ale-packer-options*
 ===============================================================================
 packer-fmt-fixer                                         *ale-packer-fmt-fixer*
 
-g:ale_packer_fmt_executable                       *g:ale_packer_fmt_executable*
+                                            *ale-options.packer_fmt_executable*
+                                                  *g:ale_packer_fmt_executable*
                                                   *b:ale_packer_fmt_executable*
-
+packer_fmt_executable
+g:ale_packer_fmt_executable
   Type: |String|
   Default: `'packer'`
 
   This variable can be changed to use a different executable for packer.
 
-
-g:ale_packer_fmt_options                             *g:ale_packer_fmt_options*
+                                               *ale-options.packer_fmt_options*
+                                                     *g:ale_packer_fmt_options*
                                                      *b:ale_packer_fmt_options*
+packer_fmt_options
+g:ale_packer_fmt_options
   Type: |String|
   Default: `''`
+
+  This variable can be set to change command lines options for `packer fmt`
 
 
 ===============================================================================

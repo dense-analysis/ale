@@ -1,22 +1,24 @@
 ===============================================================================
 ALE OpenApi Integration                                     *ale-openapi-options*
 
+
 ===============================================================================
 ibm_validator                                        *ale-openapi-ibm-validator*
 
 Website: https://github.com/IBM/openapi-validator
 
 
-Installation
 -------------------------------------------------------------------------------
+Installation
 
 Install ibm-openapi-validator either globally or locally: >
 
   npm install ibm-openapi-validator -g  # global
   npm install ibm-openapi-validator     # local
 <
-Configuration
+
 -------------------------------------------------------------------------------
+Configuration
 
 OpenAPI files can be written in YAML or JSON so in order for ALE plugins to
 work with these files we must set the buffer |filetype| to either |openapi.yaml|
@@ -39,19 +41,24 @@ filetype to |openapi.yaml| or |openapi.json|:
 
   https://github.com/hsanson/vim-openapi
 
-Options
--------------------------------------------------------------------------------
 
-g:ale_openapi_ibm_validator_executable   *g:ale_openapi_ibm_validator_executable*
+-------------------------------------------------------------------------------
+Options
+                                 *ale-options.openapi_ibm_validator_executable*
+                                       *g:ale_openapi_ibm_validator_executable*
                                          *b:ale_openapi_ibm_validator_executable*
+openapi_ibm_validator_executable
+g:ale_openapi_ibm_validator_executable
   Type: |String|
   Default: `'lint-openapi'`
 
   This variable can be set to change the path to lint-openapi.
 
-
-g:ale_openapi_ibm_validator_options       *g:ale_openapi_ibm_validator_options*
+                                    *ale-options.openapi_ibm_validator_options*
+                                          *g:ale_openapi_ibm_validator_options*
                                           *b:ale_openapi_ibm_validator_options*
+openapi_ibm_validator_options
+g:ale_openapi_ibm_validator_options
   Type: |String|
   Default: `''`
 

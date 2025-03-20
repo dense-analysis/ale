@@ -6,8 +6,11 @@ ALE Gleam Integration                                       *ale-gleam-options*
 ===============================================================================
 gleam_format                                           *ale-gleam-gleam_format*
 
-g:ale_gleam_gleam_format_executable       *g:ale_gleam_gleam_format_executable*
+                                    *ale-options.gleam_gleam_format_executable*
+                                          *g:ale_gleam_gleam_format_executable*
                                           *b:ale_gleam_gleam_format_executable*
+gleam_gleam_format_executable
+g:ale_gleam_gleam_format_executable
   Type: |String|
   Default: `'gleam'`
 
@@ -18,8 +21,11 @@ g:ale_gleam_gleam_format_executable       *g:ale_gleam_gleam_format_executable*
 ===============================================================================
 gleamlsp                                                   *ale-gleam-gleamlsp*
 
-g:ale_gleam_gleamlsp_executable               *g:ale_gleam_gleamlsp_executable*
+                                        *ale-options.gleam_gleamlsp_executable*
+                                              *g:ale_gleam_gleamlsp_executable*
                                               *b:ale_gleam_gleamlsp_executable*
+gleam_gleamlsp_executable
+g:ale_gleam_gleamlsp_executable
   Type: |String|
   Default: `'gleam'`
 

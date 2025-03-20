@@ -11,17 +11,21 @@ ALE supports language server features for Angular. You can install it via `npm`:
 <
 Angular 11 and up are supported.
 
-
-g:ale_html_angular_executable                   *g:ale_html_angular_executable*
+                                          *ale-options.html_angular_executable*
+                                                *g:ale_html_angular_executable*
                                                 *b:ale_html_angular_executable*
+html_angular_executable
+g:ale_html_angular_executable
   Type: |String|
   Default: `'ngserver'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_html_angular_use_global                   *g:ale_html_angular_use_global*
+                                          *ale-options.html_angular_use_global*
+                                                *g:ale_html_angular_use_global*
                                                 *b:ale_html_angular_use_global*
+html_angular_use_global
+g:ale_html_angular_use_global
   Type: |String|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -33,22 +37,28 @@ cspell                                                        *ale-html-cspell*
 
 See |ale-cspell-options|
 
+
 ===============================================================================
 djlint                                                        *ale-html-djlint*
 
 `djlint` options for HTML are the same as the options for htmlangular,
 htmldjango, jinja, handlebars, nunjucks and gotmplhtml.
 
-g:ale_html_djlint_executable                     *g:ale_html_djlint_executable*
+                                           *ale-options.html_djlint_executable*
+                                                 *g:ale_html_djlint_executable*
                                                  *b:ale_html_djlint_executable*
+html_djlint_executable
+g:ale_html_djlint_executable
   Type: |String|
   Default: `'djlint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_html_djlint_options                            *g:ale_html_djlint_options*
-                                                     *b:ale_html_djlint_options*
+                                              *ale-options.html_djlint_options*
+                                                    *g:ale_html_djlint_options*
+                                                    *b:ale_html_djlint_options*
+html_djlint_options
+g:ale_html_djlint_options
   Type: |String|
   Default: `''`
 
@@ -67,24 +77,31 @@ See: |ale-javascript-fecs|.
 ===============================================================================
 html-beautify                                               *ale-html-beautify*
 
-g:ale_html_beautify_executable                 *g:ale_html_beautify_executable*
+                                         *ale-options.html_beautify_executable*
+                                               *g:ale_html_beautify_executable*
                                                *b:ale_html_beautify_executable*
+html_beautify_executable
+g:ale_html_beautify_executable
   Type: |String|
   Default: `'html-beautify'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_html_beautify_options                       *g:ale_html_beautify_options*
+                                            *ale-options.html_beautify_options*
+                                                  *g:ale_html_beautify_options*
                                                   *b:ale_html_beautify_options*
+html_beautify_options
+g:ale_html_beautify_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to html-beautify.
 
-
-g:ale_html_beautify_use_global                 *g:ale_html_beautify_use_global*
+                                         *ale-options.html_beautify_use_global*
+                                               *g:ale_html_beautify_use_global*
                                                *b:ale_html_beautify_use_global*
+html_beautify_use_global
+g:ale_html_beautify_use_global
   Type: |String|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -94,24 +111,31 @@ g:ale_html_beautify_use_global                 *g:ale_html_beautify_use_global*
 ===============================================================================
 htmlhint                                                    *ale-html-htmlhint*
 
-g:ale_html_htmlhint_executable                 *g:ale_html_htmlhint_executable*
+                                         *ale-options.html_htmlhint_executable*
+                                               *g:ale_html_htmlhint_executable*
                                                *b:ale_html_htmlhint_executable*
+html_htmlhint_executable
+g:ale_html_htmlhint_executable
   Type: |String|
   Default: `'htmlhint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
+                                            *ale-options.html_htmlhint_options*
+                                                  *g:ale_html_htmlhint_options*
                                                   *b:ale_html_htmlhint_options*
+html_htmlhint_options
+g:ale_html_htmlhint_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to HTMLHint.
 
-
-g:ale_html_htmlhint_use_global                 *g:ale_html_htmlhint_use_global*
+                                         *ale-options.html_htmlhint_use_global*
+                                               *g:ale_html_htmlhint_use_global*
                                                *b:ale_html_htmlhint_use_global*
+html_htmlhint_use_global
+g:ale_html_htmlhint_use_global
   Type: |String|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -127,16 +151,21 @@ See |ale-javascript-prettier| for information about the available options.
 ===============================================================================
 rustywind                                                  *ale-html-rustywind*
 
-g:ale_html_rustywind_executable               *g:ale_html_rustywind_executable*
+                                        *ale-options.html_rustywind_executable*
+                                              *g:ale_html_rustywind_executable*
                                               *b:ale_html_rustywind_executable*
+html_rustywind_executable
+g:ale_html_rustywind_executable
   Type: |String|
   Default: `'rustywind'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_html_rustywind_options                     *g:ale_html_rustywind_options*
+                                           *ale-options.html_rustywind_options*
+                                                 *g:ale_html_rustywind_options*
                                                  *b:ale_html_rustywind_options*
+html_rustywind_options
+g:ale_html_rustywind_options
   Type: |String|
   Default: `''`
 
@@ -146,24 +175,31 @@ g:ale_html_rustywind_options                     *g:ale_html_rustywind_options*
 ===============================================================================
 stylelint                                                  *ale-html-stylelint*
 
-g:ale_html_stylelint_executable               *g:ale_html_stylelint_executable*
+                                        *ale-options.html_stylelint_executable*
+                                              *g:ale_html_stylelint_executable*
                                               *b:ale_html_stylelint_executable*
+html_stylelint_executable
+g:ale_html_stylelint_executable
   Type: |String|
   Default: `'stylelint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_html_stylelint_options                     *g:ale_html_stylelint_options*
+                                           *ale-options.html_stylelint_options*
+                                                 *g:ale_html_stylelint_options*
                                                  *b:ale_html_stylelint_options*
+html_stylelint_options
+g:ale_html_stylelint_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to stylelint.
 
-
-g:ale_html_stylelint_use_global               *g:ale_html_stylelint_use_global*
+                                        *ale-options.html_stylelint_use_global*
+                                              *g:ale_html_stylelint_use_global*
                                               *b:ale_html_stylelint_use_global*
+html_stylelint_use_global
+g:ale_html_stylelint_use_global
   Type: |String|
   Default: `0`
 
@@ -188,16 +224,24 @@ To use `tidy` on macOS, please install the latest version with Homebrew:
 <
 `/usr/local/bin/tidy` is installed.
 
-g:ale_html_tidy_executable                         *g:ale_html_tidy_executable*
+
+-------------------------------------------------------------------------------
+Options
+                                             *ale-options.html_tidy_executable*
+                                                   *g:ale_html_tidy_executable*
                                                    *b:ale_html_tidy_executable*
+html_tidy_executable
+g:ale_html_tidy_executable
   Type: |String|
   Default: `'tidy'`
 
   This variable can be changed to change the path to tidy.
 
-
-g:ale_html_tidy_options                               *g:ale_html_tidy_options*
+                                                *ale-options.html_tidy_options*
+                                                      *g:ale_html_tidy_options*
                                                       *b:ale_html_tidy_options*
+html_tidy_options
+g:ale_html_tidy_options
   Type: |String|
   Default: `'-q -e -language en'`
 
@@ -211,9 +255,10 @@ g:ale_html_tidy_options                               *g:ale_html_tidy_options*
   cp850 (ibm858), cp932 (shiftjis), iso-2022-jp (iso-2022), latin1, macroman
   (mac), sjis (shiftjis), utf-16le, utf-16, utf-8
 
-
-g:ale_html_tidy_use_global                             *g:html_tidy_use_global*
-
+                                             *ale-options.html_tidy_use_global*
+                                                   *g:ale_html_tidy_use_global*
+html_tidy_use_global
+g:ale_html_tidy_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -225,8 +270,9 @@ vscodehtml                                                    *ale-html-vscode*
 
 Website: https://github.com/hrsh7th/vscode-langservers-extracted
 
-Installation
+
 -------------------------------------------------------------------------------
+Installation
 
 Install VSCode html language server either globally or locally: >
 
