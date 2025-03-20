@@ -68,7 +68,7 @@ function! ale#engine#IsExecutable(buffer, executable) abort
 
     " Cache the executable check if we found it, or if the option to cache
     " failing checks is on.
-    if l:result || get(g:, 'ale_cache_executable_check_failures', 0)
+    if l:result || get(g:, 'ale_cache_executable_check_failures')
         let s:executable_cache_map[a:executable] = l:result
     endif
 

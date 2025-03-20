@@ -1,20 +1,25 @@
 ===============================================================================
-ALE Nickel Integration                                      *ale-nickel-options*
+ALE Nickel Integration                                     *ale-nickel-options*
 
 
 ===============================================================================
-nickel_format                                         *ale-nickel-nickel-format*
+nickel_format                                        *ale-nickel-nickel-format*
 
-g:ale_nickel_nickel_format_executable    *g:ale_nickel_nickel_format_executable*
-                                         *b:ale_nickel_nickel_format_executable*
+                                  *ale-options.nickel_nickel_format_executable*
+                                        *g:ale_nickel_nickel_format_executable*
+                                        *b:ale_nickel_nickel_format_executable*
+nickel_nickel_format_executable
+g:ale_nickel_nickel_format_executable
   Type: |String|
   Default: `'nickel'`
 
   This option can be changed to change the path for `nickel`.
 
-
-g:ale_nickel_nickel_format_options          *g:ale_nickel_nickel_format_options*
-                                            *b:ale_nickel_nickel_format_options*
+                                     *ale-options.nickel_nickel_format_options*
+                                           *g:ale_nickel_nickel_format_options*
+                                           *b:ale_nickel_nickel_format_options*
+nickel_nickel_format_options
+g:ale_nickel_nickel_format_options
   Type: |String|
   Default: `''`
 

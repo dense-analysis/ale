@@ -5,25 +5,32 @@ ALE Fortran Integration                                   *ale-fortran-options*
 ===============================================================================
 gcc                                                           *ale-fortran-gcc*
 
-g:ale_fortran_gcc_executable                     *g:ale_fortran_gcc_executable*
+                                           *ale-options.fortran_gcc_executable*
+                                                 *g:ale_fortran_gcc_executable*
                                                  *b:ale_fortran_gcc_executable*
+fortran_gcc_executable
+g:ale_fortran_gcc_executable
   Type: |String|
   Default: `'gcc'`
 
   This variable can be changed to modify the executable used for checking
   Fortran code with GCC.
 
-
-g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
+                                              *ale-options.fortran_gcc_options*
+                                                    *g:ale_fortran_gcc_options*
                                                     *b:ale_fortran_gcc_options*
+fortran_gcc_options
+g:ale_fortran_gcc_options
   Type: |String|
   Default: `'-Wall'`
 
   This variable can be changed to modify flags given to gcc.
 
-
-g:ale_fortran_gcc_use_free_form               *g:ale_fortran_gcc_use_free_form*
+                                        *ale-options.fortran_gcc_use_free_form*
+                                              *g:ale_fortran_gcc_use_free_form*
                                               *b:ale_fortran_gcc_use_free_form*
+fortran_gcc_use_free_form
+g:ale_fortran_gcc_use_free_form
   Type: |Number|
   Default: `1`
 
@@ -33,18 +40,24 @@ g:ale_fortran_gcc_use_free_form               *g:ale_fortran_gcc_use_free_form*
 
 
 ===============================================================================
-language_server                                    *ale-fortran-language-server*
+language_server                                   *ale-fortran-language-server*
 
-g:ale_fortran_language_server_executable  *g:ale_fortran_language_server_executable*
-                                         *b:ale_fortran_language_server_executable*
+                               *ale-options.fortran_language_server_executable*
+                                     *g:ale_fortran_language_server_executable*
+                                     *b:ale_fortran_language_server_executable*
+fortran_language_server_executable
+g:ale_fortran_language_server_executable
   Type: |String|
   Default: `'fortls'`
 
   This variable can be changed to modify the executable used for the Fortran
   Language Server.
 
-g:ale_fortran_language_server_use_global  *g:ale_fortran_language_server_use_global*
-                                         *b:ale_fortran_language_server_use_global*
+                               *ale-options.fortran_language_server_use_global*
+                                     *g:ale_fortran_language_server_use_global*
+                                     *b:ale_fortran_language_server_use_global*
+fortran_language_server_use_global
+g:ale_fortran_language_server_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 

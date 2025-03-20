@@ -1,6 +1,5 @@
 ===============================================================================
 ALE JavaScript Integration                             *ale-javascript-options*
-
                                         *ale-eslint-nested-configuration-files*
 
 For fixing files with ESLint, nested configuration files with `root: false`
@@ -23,7 +22,6 @@ To this: >
   /path/foo/.eslintrc.js # extends: ["/path/foo/.base-eslintrc.js"]
   /path/foo/bar/.eslintrc.js # extends: ["/path/foo/.base-eslintrc.js"]
 <
-
 
 ===============================================================================
 biome                                                    *ale-javascript-biome*
@@ -59,33 +57,42 @@ See |ale-dprint-options| and https://dprint.dev/plugins/typescript
 ===============================================================================
 eslint                                                  *ale-javascript-eslint*
 
-g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
+                                     *ale-options.javascript_eslint_executable*
+                                           *g:ale_javascript_eslint_executable*
                                            *b:ale_javascript_eslint_executable*
+javascript_eslint_executable
+g:ale_javascript_eslint_executable
   Type: |String|
   Default: `'eslint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
+                                        *ale-options.javascript_eslint_options*
+                                              *g:ale_javascript_eslint_options*
                                               *b:ale_javascript_eslint_options*
+javascript_eslint_options
+g:ale_javascript_eslint_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to eslint.
 
-
-g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
+                                     *ale-options.javascript_eslint_use_global*
+                                           *g:ale_javascript_eslint_use_global*
                                            *b:ale_javascript_eslint_use_global*
+javascript_eslint_use_global
+g:ale_javascript_eslint_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
 
-g:ale_javascript_eslint_suppress_eslintignore
+                          *ale-options.javascript_eslint_suppress_eslintignore*
                                 *g:ale_javascript_eslint_suppress_eslintignore*
                                 *b:ale_javascript_eslint_suppress_eslintignore*
+javascript_eslint_suppress_eslintignore
+g:ale_javascript_eslint_suppress_eslintignore
   Type: |Number|
   Default: `0`
 
@@ -93,9 +100,11 @@ g:ale_javascript_eslint_suppress_eslintignore
   by eslint.
 
 
-g:ale_javascript_eslint_suppress_missing_config
+                        *ale-options.javascript_eslint_suppress_missing_config*
                               *g:ale_javascript_eslint_suppress_missing_config*
                               *b:ale_javascript_eslint_suppress_missing_config*
+javascript_eslint_suppress_missing_config
+g:ale_javascript_eslint_suppress_missing_config
   Type: |Number|
   Default: `0`
 
@@ -116,17 +125,21 @@ fecs                                                      *ale-javascript-fecs*
 And the configuration file is located at `./fecsrc`, see http://fecs.baidu.com
 for more options.
 
-
-g:ale_javascript_fecs_executable             *g:ale_javascript_fecs_executable*
+                                       *ale-options.javascript_fecs_executable*
+                                             *g:ale_javascript_fecs_executable*
                                              *b:ale_javascript_fecs_executable*
+javascript_fecs_executable
+g:ale_javascript_fecs_executable
   Type: |String|
   Default: `'fecs'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_fecs_use_global             *g:ale_javascript_fecs_use_global*
+                                       *ale-options.javascript_fecs_use_global*
+                                             *g:ale_javascript_fecs_use_global*
                                              *b:ale_javascript_fecs_use_global*
+javascript_fecs_use_global
+g:ale_javascript_fecs_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -136,16 +149,21 @@ g:ale_javascript_fecs_use_global             *g:ale_javascript_fecs_use_global*
 ===============================================================================
 flow                                                      *ale-javascript-flow*
 
-g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
+                                       *ale-options.javascript_flow_executable*
+                                             *g:ale_javascript_flow_executable*
                                              *b:ale_javascript_flow_executable*
+javascript_flow_executable
+g:ale_javascript_flow_executable
   Type: |String|
   Default: `'flow'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_flow_use_home_config   *g:ale_javascript_flow_use_home_config*
+                                  *ale-options.javascript_flow_use_home_config*
+                                        *g:ale_javascript_flow_use_home_config*
                                         *b:ale_javascript_flow_use_home_config*
+javascript_flow_use_home_config
+g:ale_javascript_flow_use_home_config
   Type: |Number|
   Default: `0`
 
@@ -154,18 +172,21 @@ g:ale_javascript_flow_use_home_config   *g:ale_javascript_flow_use_home_config*
   configuration files by default, as doing so can lead to Vim consuming all of
   your RAM and CPU power.
 
-
-g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
+                                       *ale-options.javascript_flow_use_global*
+                                             *g:ale_javascript_flow_use_global*
                                              *b:ale_javascript_flow_use_global*
+javascript_flow_use_global
+g:ale_javascript_flow_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_flow_use_respect_pragma
+                               *ale-options.javascript_flow_use_respect_pragma*
                                      *g:ale_javascript_flow_use_respect_pragma*
                                      *b:ale_javascript_flow_use_respect_pragma*
+javascript_flow_use_respect_pragma
+g:ale_javascript_flow_use_respect_pragma
   Type: |Number|
   Default: `1`
 
@@ -177,8 +198,11 @@ g:ale_javascript_flow_use_respect_pragma
 ===============================================================================
 importjs                                              *ale-javascript-importjs*
 
-g:ale_javascript_importjs_executable     *g:ale_javascript_importjs_executable*
+                                   *ale-options.javascript_importjs_executable*
+                                         *g:ale_javascript_importjs_executable*
                                          *b:ale_javascript_importjs_executable*
+javascript_importjs_executable
+g:ale_javascript_importjs_executable
   Type: |String|
   Default: `'importjs'`
 
@@ -186,16 +210,21 @@ g:ale_javascript_importjs_executable     *g:ale_javascript_importjs_executable*
 ===============================================================================
 jscs                                                      *ale-javascript-jscs*
 
-g:ale_javascript_jscs_executable             *g:ale_javascript_jscs_executable*
+                                       *ale-options.javascript_jscs_executable*
+                                             *g:ale_javascript_jscs_executable*
                                              *b:ale_javascript_jscs_executable*
+javascript_jscs_executable
+g:ale_javascript_jscs_executable
   Type: |String|
   Default: `'jscs'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_jscs_use_global             *g:ale_javascript_jscs_use_global*
+                                       *ale-options.javascript_jscs_use_global*
+                                             *g:ale_javascript_jscs_use_global*
                                              *b:ale_javascript_jscs_use_global*
+javascript_jscs_use_global
+g:ale_javascript_jscs_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -205,16 +234,21 @@ g:ale_javascript_jscs_use_global             *g:ale_javascript_jscs_use_global*
 ===============================================================================
 jshint                                                  *ale-javascript-jshint*
 
-g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
+                                     *ale-options.javascript_jshint_executable*
+                                           *g:ale_javascript_jshint_executable*
                                            *b:ale_javascript_jshint_executable*
+javascript_jshint_executable
+g:ale_javascript_jshint_executable
   Type: |String|
   Default: `'jshint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
+                                     *ale-options.javascript_jshint_use_global*
+                                           *g:ale_javascript_jshint_use_global*
                                            *b:ale_javascript_jshint_use_global*
+javascript_jshint_use_global
+g:ale_javascript_jshint_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -224,24 +258,31 @@ g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
 ===============================================================================
 prettier                                              *ale-javascript-prettier*
 
-g:ale_javascript_prettier_executable     *g:ale_javascript_prettier_executable*
+                                   *ale-options.javascript_prettier_executable*
+                                         *g:ale_javascript_prettier_executable*
                                          *b:ale_javascript_prettier_executable*
+javascript_prettier_executable
+g:ale_javascript_prettier_executable
   Type: |String|
   Default: `'prettier'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_prettier_options           *g:ale_javascript_prettier_options*
+                                      *ale-options.javascript_prettier_options*
+                                            *g:ale_javascript_prettier_options*
                                             *b:ale_javascript_prettier_options*
+javascript_prettier_options
+g:ale_javascript_prettier_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to prettier.
 
-
-g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
+                                   *ale-options.javascript_prettier_use_global*
+                                         *g:ale_javascript_prettier_use_global*
                                          *b:ale_javascript_prettier_use_global*
+javascript_prettier_use_global
+g:ale_javascript_prettier_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -251,27 +292,32 @@ g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
 ===============================================================================
 prettier-eslint                                *ale-javascript-prettier-eslint*
 
-g:ale_javascript_prettier_eslint_executable
+                            *ale-options.javascript_prettier_eslint_executable*
                                   *g:ale_javascript_prettier_eslint_executable*
                                   *b:ale_javascript_prettier_eslint_executable*
+javascript_prettier_eslint_executable
+g:ale_javascript_prettier_eslint_executable
   Type: |String|
   Default: `'prettier-eslint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_prettier_eslint_options
+                               *ale-options.javascript_prettier_eslint_options*
                                      *g:ale_javascript_prettier_eslint_options*
                                      *b:ale_javascript_prettier_eslint_options*
+javascript_prettier_eslint_options
+g:ale_javascript_prettier_eslint_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to prettier-eslint.
 
 
-g:ale_javascript_prettier_eslint_use_global
+                            *ale-options.javascript_prettier_eslint_use_global*
                                   *g:ale_javascript_prettier_eslint_use_global*
                                   *b:ale_javascript_prettier_eslint_use_global*
+javascript_prettier_eslint_use_global
+g:ale_javascript_prettier_eslint_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -282,56 +328,67 @@ g:ale_javascript_prettier_eslint_use_global
 prettier-standard                            *ale-javascript-prettier-standard*
 
 
-g:ale_javascript_prettier_standard_executable
+                          *ale-options.javascript_prettier_standard_executable*
                                 *g:ale_javascript_prettier_standard_executable*
                                 *b:ale_javascript_prettier_standard_executable*
+javascript_prettier_standard_executable
+g:ale_javascript_prettier_standard_executable
   Type: |String|
   Default: `'prettier-standard'`
 
   See |ale-integrations-local-executables|
 
 
-g:ale_javascript_prettier_standard_options
+                             *ale-options.javascript_prettier_standard_options*
                                    *g:ale_javascript_prettier_standard_options*
                                    *b:ale_javascript_prettier_standard_options*
+javascript_prettier_standard_options
+g:ale_javascript_prettier_standard_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to prettier-standard.
 
 
-g:ale_javascript_prettier_standard_use_global
+                          *ale-options.javascript_prettier_standard_use_global*
                                 *g:ale_javascript_prettier_standard_use_global*
                                 *b:ale_javascript_prettier_standard_use_global*
+javascript_prettier_standard_use_global
+g:ale_javascript_prettier_standard_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
 
-
-
 ===============================================================================
 standard                                              *ale-javascript-standard*
 
-g:ale_javascript_standard_executable     *g:ale_javascript_standard_executable*
+                                   *ale-options.javascript_standard_executable*
+                                         *g:ale_javascript_standard_executable*
                                          *b:ale_javascript_standard_executable*
+javascript_standard_executable
+g:ale_javascript_standard_executable
   Type: |String|
   Default: `'standard'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_standard_options           *g:ale_javascript_standard_options*
+                                      *ale-options.javascript_standard_options*
+                                            *g:ale_javascript_standard_options*
                                             *b:ale_javascript_standard_options*
+javascript_standard_options
+g:ale_javascript_standard_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to standard.
 
-
-g:ale_javascript_standard_use_global     *g:ale_javascript_standard_use_global*
+                                   *ale-options.javascript_standard_use_global*
+                                         *g:ale_javascript_standard_use_global*
                                          *b:ale_javascript_standard_use_global*
+javascript_standard_use_global
+g:ale_javascript_standard_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -341,24 +398,31 @@ g:ale_javascript_standard_use_global     *g:ale_javascript_standard_use_global*
 ===============================================================================
 xo                                                          *ale-javascript-xo*
 
-g:ale_javascript_xo_executable                 *g:ale_javascript_xo_executable*
+                                         *ale-options.javascript_xo_executable*
+                                               *g:ale_javascript_xo_executable*
                                                *b:ale_javascript_xo_executable*
+javascript_xo_executable
+g:ale_javascript_xo_executable
   Type: |String|
   Default: `'xo'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_xo_options                       *g:ale_javascript_xo_options*
+                                            *ale-options.javascript_xo_options*
+                                                  *g:ale_javascript_xo_options*
                                                   *b:ale_javascript_xo_options*
+javascript_xo_options
+g:ale_javascript_xo_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to xo.
 
-
-g:ale_javascript_xo_use_global                 *g:ale_javascript_xo_use_global*
+                                         *ale-options.javascript_xo_use_global*
+                                               *g:ale_javascript_xo_use_global*
                                                *b:ale_javascript_xo_use_global*
+javascript_xo_use_global
+g:ale_javascript_xo_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 

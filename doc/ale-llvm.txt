@@ -5,9 +5,11 @@ ALE LLVM Integration                                         *ale-llvm-options*
 ===============================================================================
 llc                                                              *ale-llvm-llc*
 
-g:ale_llvm_llc_executable                           *g:ale_llvm_llc_executable*
+                                              *ale-options.llvm_llc_executable*
+                                                    *g:ale_llvm_llc_executable*
                                                     *b:ale_llvm_llc_executable*
-
+llvm_llc_executable
+g:ale_llvm_llc_executable
   Type: |String|
   Default: `"llc"`
 

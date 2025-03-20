@@ -14,19 +14,22 @@ A possible configuration is to enable golangci-lint and `gofmt:
   " Enable all of the linters you want for Go.
   let g:ale_linters = {'go': ['golangci-lint', 'gofmt']}
 <
-
-g:ale_go_go_executable                                 *g:ale_go_go_executable*
+                                                 *ale-options.go_go_executable*
+                                                       *g:ale_go_go_executable*
                                                        *b:ale_go_go_executable*
-
+go_go_executable
+g:ale_go_go_executable
   Type: |String|
   Default: `'go'`
 
   The executable that will be run for the `gobuild` and `govet` linters, and
   the `gomod` fixer.
 
-
-g:ale_go_go111module                                     *g:ale_go_go111module*
+                                                   *ale-options.go_go111module*
+                                                         *g:ale_go_go111module*
                                                          *b:ale_go_go111module*
+go_go111module
+g:ale_go_go111module
   Type: |String|
   Default: `''`
 
@@ -37,16 +40,21 @@ g:ale_go_go111module                                     *g:ale_go_go111module*
 ===============================================================================
 bingo                                                            *ale-go-bingo*
 
-g:ale_go_bingo_executable                           *g:ale_go_bingo_executable*
+                                              *ale-options.go_bingo_executable*
+                                                    *g:ale_go_bingo_executable*
                                                     *b:ale_go_bingo_executable*
+go_bingo_executable
+g:ale_go_bingo_executable
   Type: |String|
   Default: `'bingo'`
 
   Location of the bingo binary file.
 
-
-g:ale_go_bingo_options                                 *g:ale_go_bingo_options*
+                                                 *ale-options.go_bingo_options*
+                                                       *g:ale_go_bingo_options*
                                                        *b:ale_go_bingo_options*
+go_bingo_options
+g:ale_go_bingo_options
   Type: |String|
   Default: `''`
 
@@ -56,11 +64,15 @@ cspell                                                          *ale-go-cspell*
 
 See |ale-cspell-options|
 
+
 ===============================================================================
 gobuild                                                        *ale-go-gobuild*
 
-g:ale_go_gobuild_options                             *g:ale_go_gobuild_options*
+                                               *ale-options.go_gobuild_options*
+                                                     *g:ale_go_gobuild_options*
                                                      *b:ale_go_gobuild_options*
+go_gobuild_options
+g:ale_go_gobuild_options
   Type: |String|
   Default: `''`
 
@@ -71,8 +83,11 @@ g:ale_go_gobuild_options                             *g:ale_go_gobuild_options*
 ===============================================================================
 gofmt                                                            *ale-go-gofmt*
 
-g:ale_go_gofmt_options                                 *g:ale_go_gofmt_options*
+                                                 *ale-options.go_gofmt_options*
+                                                       *g:ale_go_gofmt_options*
                                                        *b:ale_go_gofmt_options*
+go_gofmt_options
+g:ale_go_gofmt_options
   Type: |String|
   Default: `''`
 
@@ -82,15 +97,21 @@ g:ale_go_gofmt_options                                 *g:ale_go_gofmt_options*
 ===============================================================================
 gofumpt                                                        *ale-go-gofumpt*
 
-g:ale_go_gofumpt_executable                       *g:ale_go_gofumpt_executable*
+                                            *ale-options.go_gofumpt_executable*
+                                                  *g:ale_go_gofumpt_executable*
                                                   *b:ale_go_gofumpt_executable*
+go_gofumpt_executable
+g:ale_go_gofumpt_executable
   Type: |String|
   Default: `'gofumpt'`
 
   Executable to run to use as the gofumpt fixer.
 
-g:ale_go_gofumpt_options                             *g:ale_go_gofumpt_options*
+                                               *ale-options.go_gofumpt_options*
+                                                     *g:ale_go_gofumpt_options*
                                                      *b:ale_go_gofumpt_options*
+go_gofumpt_options
+g:ale_go_gofumpt_options
   Type: |String|
   Default: `''`
 
@@ -104,25 +125,32 @@ golangci-lint                                            *ale-go-golangci-lint*
 written to disk. This differs from the default behavior of linting the buffer.
 See: |ale-lint-file|
 
-g:ale_go_golangci_lint_executable           *g:ale_go_golangci_lint_executable*
+                                      *ale-options.go_golangci_lint_executable*
+                                            *g:ale_go_golangci_lint_executable*
                                             *b:ale_go_golangci_lint_executable*
+go_golangci_lint_executable
+g:ale_go_golangci_lint_executable
   Type: |String|
   Default: `'golangci-lint'`
 
   The executable that will be run for golangci-lint.
 
-
-g:ale_go_golangci_lint_options                 *g:ale_go_golangci_lint_options*
+                                         *ale-options.go_golangci_lint_options*
+                                               *g:ale_go_golangci_lint_options*
                                                *b:ale_go_golangci_lint_options*
+go_golangci_lint_options
+g:ale_go_golangci_lint_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to alter the command-line arguments to the
   golangci-lint invocation.
 
-
-g:ale_go_golangci_lint_package                 *g:ale_go_golangci_lint_package*
+                                         *ale-options.go_golangci_lint_package*
+                                               *g:ale_go_golangci_lint_package*
                                                *b:ale_go_golangci_lint_package*
+go_golangci_lint_package
+g:ale_go_golangci_lint_package
   Type: |Number|
   Default: `0`
 
@@ -133,16 +161,21 @@ g:ale_go_golangci_lint_package                 *g:ale_go_golangci_lint_package*
 ===============================================================================
 golangserver                                              *ale-go-golangserver*
 
-g:ale_go_langserver_executable                 *g:ale_go_langserver_executable*
+                                         *ale-options.go_langserver_executable*
+                                               *g:ale_go_langserver_executable*
                                                *b:ale_go_langserver_executable*
+go_langserver_executable
+g:ale_go_langserver_executable
   Type: |String|
   Default: `'go-langserver'`
 
   Location of the go-langserver binary file.
 
-
-g:ale_go_langserver_options                       *g:ale_go_langserver_options*
+                                            *ale-options.go_langserver_options*
+                                                  *g:ale_go_langserver_options*
                                                   *b:ale_go_langserver_options*
+go_langserver_options
+g:ale_go_langserver_options
   Type: |String|
   Default: `''`
 
@@ -154,15 +187,21 @@ g:ale_go_langserver_options                       *g:ale_go_langserver_options*
 ===============================================================================
 golines                                                        *ale-go-golines*
 
-g:ale_go_golines_executable                         *g:ale_go_lines_executable*
+                                            *ale-options.go_golines_executable*
+                                                  *g:ale_go_golines_executable*
                                                     *b:ale_go_lines_executable*
+go_golines_executable
+g:ale_go_golines_executable
   Type: |String|
   Default: `'golines'`
 
   Location of the golines binary file
 
-g:ale_go_golines_options                             *g:ale_go_golines_options*
+                                               *ale-options.go_golines_options*
+                                                     *g:ale_go_golines_options*
                                                      *b:ale_go_golines_options*
+go_golines_options
+g:ale_go_golines_options
   Type: |String|
   Default: `''`
 
@@ -187,8 +226,13 @@ do anything else. See the `gopls` README file for more information:
 https://github.com/golang/tools/blob/master/gopls/README.md
 
 
-g:ale_go_gopls_executable                           *g:ale_go_gopls_executable*
+-------------------------------------------------------------------------------
+Options
+                                              *ale-options.go_gopls_executable*
+                                                    *g:ale_go_gopls_executable*
                                                     *b:ale_go_gopls_executable*
+go_gopls_executable
+g:ale_go_gopls_executable
   Type: |String|
   Default: `'gopls'`
 
@@ -198,52 +242,64 @@ g:ale_go_gopls_executable                           *g:ale_go_gopls_executable*
   default, and fall back on a globally installed `gopls` if it can't be found
   otherwise.
 
-
-g:ale_go_gopls_options                                 *g:ale_go_gopls_options*
+                                                 *ale-options.go_gopls_options*
+                                                       *g:ale_go_gopls_options*
                                                        *b:ale_go_gopls_options*
+go_gopls_options
+g:ale_go_gopls_options
   Type: |String|
   Default: `''`
 
   Command-line options passed to the gopls executable. See `gopls -h`.
 
-
-g:ale_go_gopls_fix_executable                   *g:ale_go_gopls_fix_executable*
+                                          *ale-options.go_gopls_fix_executable*
+                                                *g:ale_go_gopls_fix_executable*
                                                 *b:ale_go_gopls_fix_executable*
+go_gopls_fix_executable
+g:ale_go_gopls_fix_executable
   Type: |String|
   Default: `'gopls'`
 
   Executable to run to use as the gopls fixer.
 
-g:ale_go_gopls_fix_options                         *g:ale_go_gopls_fix_options*
+                                             *ale-options.go_gopls_fix_options*
+                                                   *g:ale_go_gopls_fix_options*
                                                    *b:ale_go_gopls_fix_options*
+go_gopls_fix_options
+g:ale_go_gopls_fix_options
   Type: |String|
   Default: `''`
 
   Options to pass to the gopls fixer.
 
-
-g:ale_go_gopls_init_options                       *g:ale_go_gopls_init_options*
+                                            *ale-options.go_gopls_init_options*
+                                                  *g:ale_go_gopls_init_options*
                                                   *b:ale_go_gopls_init_options*
+go_gopls_init_options
+g:ale_go_gopls_init_options
   Type: |Dictionary|
   Default: `{}`
 
   LSP initialization options passed to gopls. This can be used to configure
   the behaviour of gopls.
 
-  Example: >
-  let g:ale_go_gopls_init_options = {'ui.diagnostic.analyses': {
-        \ 'composites': v:false,
-        \ 'unusedparams': v:true,
-        \ 'unusedresult': v:true,
-        \ }}
+  For example: >
+  let g:ale_go_gopls_init_options = {
+  \   'ui.diagnostic.analyses': {
+  \       'composites': v:false,
+  \       'unusedparams': v:true,
+  \       'unusedresult': v:true,
+  \   },
+  \}
 <
-
   For a full list of supported analyzers, see:
   https://github.com/golang/tools/blob/master/gopls/doc/analyzers.md
 
-
-g:ale_go_gopls_use_global                           *g:ale_go_gopls_use_global*
+                                              *ale-options.go_gopls_use_global*
+                                                    *g:ale_go_gopls_use_global*
                                                     *b:ale_go_gopls_use_global*
+go_gopls_use_global
+g:ale_go_gopls_use_global
   Type: |String|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -253,8 +309,11 @@ g:ale_go_gopls_use_global                           *g:ale_go_gopls_use_global*
 ===============================================================================
 govet                                                            *ale-go-govet*
 
-g:ale_go_govet_options                                 *g:ale_go_govet_options*
+                                                 *ale-options.go_govet_options*
+                                                       *g:ale_go_govet_options*
                                                        *b:ale_go_govet_options*
+go_govet_options
+g:ale_go_govet_options
   Type: |String|
   Default: `''`
 
@@ -264,16 +323,21 @@ g:ale_go_govet_options                                 *g:ale_go_govet_options*
 ===============================================================================
 revive                                                          *ale-go-revive*
 
-g:ale_go_revive_executable                         *g:ale_go_revive_executable*
+                                             *ale-options.go_revive_executable*
+                                                   *g:ale_go_revive_executable*
                                                    *b:ale_go_revive_executable*
+go_revive_executable
+g:ale_go_revive_executable
   Type: |String|
   Default: `'revive'`
 
   This variable can be set to change the revive executable path.
 
-
-g:ale_go_revive_options                               *g:ale_go_revive_options*
+                                                *ale-options.go_revive_options*
+                                                      *g:ale_go_revive_options*
                                                       *b:ale_go_revive_options*
+go_revive_options
+g:ale_go_revive_options
   Type: |String|
   Default: `''`
 
@@ -283,8 +347,11 @@ g:ale_go_revive_options                               *g:ale_go_revive_options*
 ===============================================================================
 staticcheck                                                *ale-go-staticcheck*
 
-g:ale_go_staticcheck_executable               *g:ale_go_staticcheck_executable*
+                                        *ale-options.go_staticcheck_executable*
+                                              *g:ale_go_staticcheck_executable*
                                               *b:ale_go_staticcheck_executable*
+go_staticcheck_executable
+g:ale_go_staticcheck_executable
   Type: |String|
   Default: `'staticcheck'`
 
@@ -294,27 +361,33 @@ g:ale_go_staticcheck_executable               *g:ale_go_staticcheck_executable*
   default, and fall back on a globally installed `staticcheck` if it can't be
   found otherwise.
 
-
-g:ale_go_staticcheck_options                     *g:ale_go_staticcheck_options*
+                                           *ale-options.go_staticcheck_options*
+                                                 *g:ale_go_staticcheck_options*
                                                  *b:ale_go_staticcheck_options*
+go_staticcheck_options
+g:ale_go_staticcheck_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to the staticcheck
   linter.
 
-
-g:ale_go_staticcheck_lint_package           *g:ale_go_staticcheck_lint_package*
+                                      *ale-options.go_staticcheck_lint_package*
+                                            *g:ale_go_staticcheck_lint_package*
                                             *b:ale_go_staticcheck_lint_package*
+go_staticcheck_lint_package
+g:ale_go_staticcheck_lint_package
   Type: |Number|
   Default: `1`
 
   When set to `1`, the whole Go package will be checked instead of only the
   current file.
 
-
-g:ale_go_staticcheck_use_global               *g:ale_go_staticcheck_use_global*
+                                        *ale-options.go_staticcheck_use_global*
+                                              *g:ale_go_staticcheck_use_global*
                                               *b:ale_go_staticcheck_use_global*
+go_staticcheck_use_global
+g:ale_go_staticcheck_use_global
   Type: |String|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 

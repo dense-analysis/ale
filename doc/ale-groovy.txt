@@ -12,24 +12,31 @@ Linting and fixing of Groovy files is enabled with the integration of
 ===============================================================================
 npm-groovy-lint                                    *ale-groovy-npm-groovy-lint*
 
-g:ale_groovy_npmgroovylint_executable   *g:ale_groovy_npmgroovylint_executable*
+                                  *ale-options.groovy_npmgroovylint_executable*
+                                        *g:ale_groovy_npmgroovylint_executable*
                                         *b:ale_groovy_npmgroovylint_executable*
+groovy_npmgroovylint_executable
+g:ale_groovy_npmgroovylint_executable
   Type: |String|
   Default: `'npm-groovy-lint'`
 
   Location of the npm-groovy-lint binary file.
 
-
-g:ale_groovy_npmgroovylint_options         *g:ale_groovy_npmgroovylint_options*
+                                     *ale-options.groovy_npmgroovylint_options*
+                                           *g:ale_groovy_npmgroovylint_options*
                                            *b:ale_groovy_npmgroovylint_options*
+groovy_npmgroovylint_options
+g:ale_groovy_npmgroovylint_options
   Type: |String|
   Default: `'--loglevel warning'`
 
   Additional npm-groovy-lint linter options.
 
-
-g:ale_groovy_npmgroovylint_fix_options *g:ale_groovy_npmgroovylint_fix_options*
+                                 *ale-options.groovy_npmgroovylint_fix_options*
+                                       *g:ale_groovy_npmgroovylint_fix_options*
                                        *b:ale_groovy_npmgroovylint_fix_options*
+groovy_npmgroovylint_fix_options
+g:ale_groovy_npmgroovylint_fix_options
   Type: |String|
   Default: `'--fix'`
 

@@ -4,18 +4,23 @@ ALE Hack Integration                                         *ale-hack-options*
 
   HHAST is disabled by default, as it executes code in the project root.
 
-  Currently linters must be enabled globally.  HHAST can be enabled with:
+  Currently linters must be enabled globally. HHAST can be enabled in ftplugin
+  files like so: >
 
->
-  let g:ale_linters = {'hack': ['hack', 'hhast']}
+  let b:ale_linters = ['hack', 'hhast']
+<
+  Or in Lua: >
+  require("ale").setup.buffer({linters = {"hack", "hhast"}})
 <
 
 ===============================================================================
 hack                                                            *ale-hack-hack*
 
-g:ale_hack_hack_executable                         *g:ale_hack_hack_executable*
+                                             *ale-options.hack_hack_executable*
+                                                   *g:ale_hack_hack_executable*
                                                    *b:ale_hack_hack_executable*
-
+hack_hack_executable
+g:ale_hack_hack_executable
   Type: |String|
   Default: `'hh_client'`
 
@@ -26,8 +31,11 @@ g:ale_hack_hack_executable                         *g:ale_hack_hack_executable*
 ===============================================================================
 hackfmt                                                      *ale-hack-hackfmt*
 
-g:ale_hack_hackfmt_options                         *g:ale_hack_hackfmt_options*
+                                             *ale-options.hack_hackfmt_options*
+                                                   *g:ale_hack_hackfmt_options*
                                                    *b:ale_hack_hackfmt_options*
+hack_hackfmt_options
+g:ale_hack_hackfmt_options
   Type: |String|
   Default: `''`
 
@@ -37,9 +45,11 @@ g:ale_hack_hackfmt_options                         *g:ale_hack_hackfmt_options*
 ===============================================================================
 hhast                                                          *ale-hack-hhast*
 
-g:ale_hack_hhast_executable                       *g:ale_hack_hhast_executable*
+                                            *ale-options.hack_hhast_executable*
+                                                  *g:ale_hack_hhast_executable*
                                                   *b:ale_hack_hhast_executable*
-
+hack_hhast_executable
+g:ale_hack_hhast_executable
   Type: |String|
   Default: `'vendor/bin/hhast-lint'`
 

@@ -57,26 +57,34 @@ You can install it using npm:
 <
 ALE provides fixjson integration as a fixer. See |ale-fix|.
 
-g:ale_json_fixjson_executable                   *g:ale_json_fixjson_executable*
+-------------------------------------------------------------------------------
+Options
+                                          *ale-options.json_fixjson_executable*
+                                                *g:ale_json_fixjson_executable*
                                                 *b:ale_json_fixjson_executable*
-
+json_fixjson_executable
+g:ale_json_fixjson_executable
   Type: |String|
   Default: `'fixjson'`
 
   The executable that will be run for fixjson.
 
-g:ale_json_fixjson_options                         *g:ale_json_fixjson_options*
+                                             *ale-options.json_fixjson_options*
+                                                   *g:ale_json_fixjson_options*
                                                    *b:ale_json_fixjson_options*
-
+json_fixjson_options
+g:ale_json_fixjson_options
   Type: |String|
   Default: `''`
 
   This variable can add extra options to the command executed for running
   fixjson.
 
-g:ale_json_fixjson_use_global                   *g:ale_json_fixjson_use_global*
+                                          *ale-options.json_fixjson_use_global*
+                                                *g:ale_json_fixjson_use_global*
                                                 *b:ale_json_fixjson_use_global*
-
+json_fixjson_use_global
+g:ale_json_fixjson_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -88,18 +96,22 @@ pytool                                                        *ale-json-pytool*
 
 Use python's json.tool module to reformat json.
 
-g:ale_json_pytool_executable                     *g:ale_json_pytool_executable*
+                                           *ale-options.json_pytool_executable*
+                                                 *g:ale_json_pytool_executable*
                                                  *b:ale_json_pytool_executable*
-
+json_pytool_executable
+g:ale_json_pytool_executable
   Type: |String|
   Default: `'python'`
 
   The python executable that run to use its json.tool module. This fixer
   requires python 3, which includes the json module.
 
-g:ale_json_pytool_options                           *g:ale_json_pytool_options*
+                                              *ale-options.json_pytool_options*
+                                                    *g:ale_json_pytool_options*
                                                     *b:ale_json_pytool_options*
-
+json_pytool_options
+g:ale_json_pytool_options
   Type: |String|
   Default: `''`
 
@@ -108,9 +120,11 @@ g:ale_json_pytool_options                           *g:ale_json_pytool_options*
 <  See docs for all options:
     https://docs.python.org/3/library/json.html#module-json.tool
 
-g:ale_json_pytool_use_global                     *g:ale_json_pytool_use_global*
+                                           *ale-options.json_pytool_use_global*
+                                                 *g:ale_json_pytool_use_global*
                                                  *b:ale_json_pytool_use_global*
-
+json_pytool_use_global
+g:ale_json_pytool_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -120,17 +134,21 @@ g:ale_json_pytool_use_global                     *g:ale_json_pytool_use_global*
 ===============================================================================
 jsonlint                                                    *ale-json-jsonlint*
 
-g:ale_json_jsonlint_executable                 *g:ale_json_jsonlint_executable*
+                                         *ale-options.json_jsonlint_executable*
+                                               *g:ale_json_jsonlint_executable*
                                                *b:ale_json_jsonlint_executable*
-
+json_jsonlint_executable
+g:ale_json_jsonlint_executable
   Type: |String|
   Default: `'jsonlint'`
 
   The executable that will be run for jsonlint.
 
-g:ale_json_jsonlint_use_global                  *g:ale_json_jsonlint_use_global*
-                                                *b:ale_json_jsonlint_use_global*
-
+                                         *ale-options.json_jsonlint_use_global*
+                                               *g:ale_json_jsonlint_use_global*
+                                               *b:ale_json_jsonlint_use_global*
+json_jsonlint_use_global
+g:ale_json_jsonlint_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -140,23 +158,32 @@ g:ale_json_jsonlint_use_global                  *g:ale_json_jsonlint_use_global*
 ===============================================================================
 jq                                                                *ale-json-jq*
 
-g:ale_json_jq_executable                             *g:ale_json_jq_executable*
+                                               *ale-options.json_jq_executable*
+                                                     *g:ale_json_jq_executable*
                                                      *b:ale_json_jq_executable*
+json_jq_executable
+g:ale_json_jq_executable
   Type: |String|
   Default: `'jq'`
 
   This option can be changed to change the path for `jq`.
 
 
-g:ale_json_jq_options                                   *g:ale_json_jq_options*
+                                                  *ale-options.json_jq_options*
+                                                        *g:ale_json_jq_options*
                                                         *b:ale_json_jq_options*
+json_jq_options
+g:ale_json_jq_options
   Type: |String|
   Default: `''`
 
   This option can be changed to pass extra options to `jq`.
 
-g:ale_json_jq_filters                                   *g:ale_json_jq_filters*
+                                                  *ale-options.json_jq_filters*
+                                                        *g:ale_json_jq_filters*
                                                         *b:ale_json_jq_filters*
+json_jq_filters
+g:ale_json_jq_filters
   Type: |String|
   Default: `'.'`
 
@@ -174,8 +201,9 @@ spectral                                                    *ale-json-spectral*
 
 Website: https://github.com/stoplightio/spectral
 
-Installation
+
 -------------------------------------------------------------------------------
+Installation
 
 Install spectral either globally or locally: >
 
@@ -183,30 +211,37 @@ Install spectral either globally or locally: >
   npm install @stoplight/spectral     # local
 <
 
-Options
 -------------------------------------------------------------------------------
+Options
 
-g:ale_json_spectral_executable                 *g:ale_json_spectral_executable*
+                                         *ale-options.json_spectral_executable*
+                                               *g:ale_json_spectral_executable*
                                                *b:ale_json_spectral_executable*
+json_spectral_executable
+g:ale_json_spectral_executable
   Type: |String|
   Default: `'spectral'`
 
   This variable can be set to change the path to spectral.
 
-g:ale_json_spectral_use_global                 *g:ale_json_spectral_use_global*
+                                         *ale-options.json_spectral_use_global*
+                                               *g:ale_json_spectral_use_global*
                                                *b:ale_json_spectral_use_global*
+json_spectral_use_global
+g:ale_json_spectral_use_global
   Type: |String|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
+
 
 ===============================================================================
 vscodejson                                                    *ale-json-vscode*
 
 Website: https://github.com/hrsh7th/vscode-langservers-extracted
 
-Installation
 -------------------------------------------------------------------------------
+Installation
 
 Install VSCode json language server either globally or locally: >
 

@@ -5,8 +5,11 @@ ALE QML Integration                                           *ale-qml-options*
 ===============================================================================
 qmlfmt                                                         *ale-qml-qmlfmt*
 
-g:ale_qml_qmlfmt_executable                       *g:ale_qml_qmlfmt_executable*
+                                            *ale-options.qml_qmlfmt_executable*
+                                                  *g:ale_qml_qmlfmt_executable*
                                                   *b:ale_qml_qmlfmt_executable*
+qml_qmlfmt_executable
+g:ale_qml_qmlfmt_executable
   Type: |String|
   Default: `'qmlfmt'`
 
@@ -15,4 +18,3 @@ g:ale_qml_qmlfmt_executable                       *g:ale_qml_qmlfmt_executable*
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
-

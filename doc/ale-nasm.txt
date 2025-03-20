@@ -5,17 +5,21 @@ ALE NASM Integration                                         *ale-nasm-options*
 ===============================================================================
 nasm                                                            *ale-nasm-nasm*
 
-g:ale_nasm_nasm_executable                         *g:ale_nasm_nasm_executable*
+                                             *ale-options.nasm_nasm_executable*
+                                                   *g:ale_nasm_nasm_executable*
                                                    *b:ale_nasm_nasm_executable*
-
+nasm_nasm_executable
+g:ale_nasm_nasm_executable
   Type: |String|
   Default `'nasm'`
 
   This variable can be changed to use different executable for NASM.
 
-
-g:ale_nasm_nasm_options                               *g:ale_nasm_nasm_options*
+                                                *ale-options.nasm_nasm_options*
+                                                      *g:ale_nasm_nasm_options*
                                                       *b:ale_nasm_nasm_options*
+nasm_nasm_options
+g:ale_nasm_nasm_options
   Type: |String|
   Default: `''`
 

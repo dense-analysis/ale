@@ -18,20 +18,22 @@ There are 3 options to enable linting and fixing with Apple's swift-format:
 Additionally, ALE tries to locate and use the nearest existing `.swift-format`
 configuration file.
 
-
-g:ale_swift_appleswiftformat_executable
+                                *ale-options.swift_appleswiftformat_executable*
                                       *g:ale_swift_appleswiftformat_executable*
                                       *b:ale_swift_appleswiftformat_executable*
+swift_appleswiftformat_executable
+g:ale_swift_appleswiftformat_executable
   Type: |String|
   Default: `'swift-format'`
 
   This variable can be modified to change the executable path for
   `swift-format`.
 
-
-g:ale_swift_appleswiftformat_use_swiftpm
+                               *ale-options.swift_appleswiftformat_use_swiftpm*
                                      *g:ale_swift_appleswiftformat_use_swiftpm*
                                      *b:ale_swift_appleswiftformat_use_swiftpm*
+swift_appleswiftformat_use_swiftpm
+g:ale_swift_appleswiftformat_use_swiftpm
   Type: |Number|
   Default: `0`
 
@@ -54,9 +56,11 @@ sourcekitlsp                                           *ale-swift-sourcekitlsp*
 To enable the SourceKit-LSP you need to install and build the executable as
 described here: https://github.com/apple/sourcekit-lsp#building-sourcekit-lsp
 
-
-g:ale_sourcekit_lsp_executable                 *g:ale_sourcekit_lsp_executable*
+                                         *ale-options.sourcekit_lsp_executable*
+                                               *g:ale_sourcekit_lsp_executable*
                                                *b:ale_sourcekit_lsp_executable*
+sourcekit_lsp_executable
+g:ale_sourcekit_lsp_executable
   Type: |String|
   Default: `'sourcekit-lsp'`
 

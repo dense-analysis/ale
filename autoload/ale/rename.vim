@@ -17,8 +17,8 @@ function! ale#rename#ClearLSPData() abort
     let s:rename_map = {}
 endfunction
 
-let g:ale_rename_tsserver_find_in_comments = get(g:, 'ale_rename_tsserver_find_in_comments')
-let g:ale_rename_tsserver_find_in_strings = get(g:, 'ale_rename_tsserver_find_in_strings')
+let g:ale_rename_tsserver_find_in_comments = get(g:, 'ale_rename_tsserver_find_in_comments', v:false)
+let g:ale_rename_tsserver_find_in_strings = get(g:, 'ale_rename_tsserver_find_in_strings', v:false)
 
 function! s:message(message) abort
     call ale#util#Execute('echom ' . string(a:message))

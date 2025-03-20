@@ -7,32 +7,36 @@ salt-lint                                                  *ale-salt-salt-lint*
 Website: https://github.com/warpnet/salt-lint
 
 
-Installation
 -------------------------------------------------------------------------------
+Installation
 
 Install salt-lint in your a virtualenv directory, locally, or globally: >
 
   pip install salt-lint # After activating virtualenv
   pip install --user salt-lint # Install to ~/.local/bin
   sudo pip install salt-lint # Install globally
-
+<
 See |g:ale_virtualenv_dir_names| for configuring how ALE searches for
 virtualenv directories.
 
 
-Options
 -------------------------------------------------------------------------------
-
-g:ale_salt_salt_lint_executable                *g:ale_salt_salt_lint_executable*
-                                               *b:ale_salt_salt_lint_executable*
+Options
+                                        *ale-options.salt_salt_lint_executable*
+                                              *g:ale_salt_salt_lint_executable*
+                                              *b:ale_salt_salt_lint_executable*
+salt_salt_lint_executable
+g:ale_salt_salt_lint_executable
   Type: |String|
   Default: `'salt-lint'`
 
   This variable can be set to change the path to salt-lint.
 
-
-g:ale_salt_salt_lint_options                      *g:ale_salt_salt_lint_options*
-                                                  *b:ale_salt_salt_lint_options*
+                                           *ale-options.salt_salt_lint_options*
+                                                 *g:ale_salt_salt_lint_options*
+                                                 *b:ale_salt_salt_lint_options*
+salt_salt_lint_options
+g:ale_salt_salt_lint_options
   Type: |String|
   Default: `''`
 
