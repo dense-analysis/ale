@@ -2,7 +2,9 @@ local module = {}
 
 module.start = function(config)
     -- Neovim's luaeval sometimes adds a Boolean key to table we need to remove.
-    if config.init_options[true] ~= nil then
+    if type(config.init_options) == "table"
+    and config.init_options[true] ~= nil
+    then
         config.init_options[true] = nil
     end
 

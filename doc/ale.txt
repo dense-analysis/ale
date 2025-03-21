@@ -4453,6 +4453,7 @@ Vim autocmd names `ale#Foo` are available in the Vim context, and functions
 documented with dot names `ale.foo` are available in Lua scripts.
 
 
+ale.env(variable_name, value)                                       *ale.env()*
 ale#Env(variable_name, value)                                       *ale#Env()*
 
   Given a variable name and a string value, produce a string for including in
@@ -4462,6 +4463,18 @@ ale#Env(variable_name, value)                                       *ale#Env()*
     :echo string(ale#Env('VAR', 'some value') . 'command')
     'VAR=''some value'' command'      # On Linux or Mac OSX
     'set VAR="some value" && command' # On Windows
+
+
+ale.escape(str)                                                  *ale.escape()*
+ale#Escape(str)                                                  *ale#Escape()*
+
+  Given a string, escape that string so it is ready for shell execution.
+
+  If the shell is detected to be `cmd.exe`, ALE will apply its own escaping
+  that tries to avoid escaping strings unless absolutely necessary to avoid
+  issues with Windows programs that do not properly handle quoted arguments.
+
+  In all other cases, ALE will call |shellescape|.
 
 
 ale#GetFilenameMappings(buffer, name)               *ale#GetFilenameMappings()*
@@ -4509,7 +4522,7 @@ ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
   is broken, or when developing ALE itself.
 
 
-ale.setup(config)                                                   *ale.setup*
+ale.setup(config)                                                 *ale.setup()*
 
   Configure ALE global settings, which are documented in |ale-options|. For
   example: >
@@ -4524,7 +4537,7 @@ ale.setup(config)                                                   *ale.setup*
   ALE is being configured in less ambiguous if you like.
 
 
-ale.setup.buffer(config)                                     *ale.setup.buffer*
+ale.setup.buffer(config)                                   *ale.setup.buffer()*
 
   Configure ALE buffer-local settings, which are documented in |ale-options|.
   For example: >
@@ -4533,6 +4546,18 @@ ale.setup.buffer(config)                                     *ale.setup.buffer*
       fixers = {"ruff"}
     })
 <
+
+ale.var(buffer, variable_name)                                      *ale.var()*
+ale#Var(buffer, variable_name)                                      *ale#Var()*
+
+  Given a buffer number and an ALE variable name return the value of that
+  if defined in the buffer, and if not defined in the buffer return the
+  global value. The `ale_` prefix will be added to the Vim variable name.
+
+  The `ale#Var` Vim function will return errors if the variable is not defined
+  in either the buffer or globally. The `ale.var` Lua function will return
+  `nil` if the variable is not defined in either the buffer or globally.
+
 
 ale#command#CreateDirectory(buffer)             *ale#command#CreateDirectory()*
 

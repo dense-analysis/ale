@@ -29,6 +29,7 @@ run_neovim_07_tests=1
 run_neovim_08_tests=1
 run_vim_80_tests=1
 run_vim_90_tests=1
+run_lua_tests=1
 run_linters=1
 
 while [ $# -ne 0 ]; do
@@ -46,12 +47,14 @@ while [ $# -ne 0 ]; do
         run_vim_90_tests=0
         run_neovim_07_tests=0
         run_neovim_08_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
     --neovim-only)
         run_vim_80_tests=0
         run_vim_90_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
@@ -59,6 +62,7 @@ while [ $# -ne 0 ]; do
         run_neovim_08_tests=0
         run_vim_80_tests=0
         run_vim_90_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
@@ -66,12 +70,14 @@ while [ $# -ne 0 ]; do
         run_neovim_07_tests=0
         run_vim_80_tests=0
         run_vim_90_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
     --vim-only)
         run_neovim_07_tests=0
         run_neovim_08_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
@@ -79,6 +85,7 @@ while [ $# -ne 0 ]; do
         run_neovim_07_tests=0
         run_neovim_08_tests=0
         run_vim_90_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
@@ -86,6 +93,7 @@ while [ $# -ne 0 ]; do
         run_neovim_07_tests=0
         run_neovim_08_tests=0
         run_vim_80_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
@@ -94,6 +102,15 @@ while [ $# -ne 0 ]; do
         run_vim_90_tests=0
         run_neovim_07_tests=0
         run_neovim_08_tests=0
+        run_lua_tests=0
+        shift
+    ;;
+    --lua-only)
+        run_vim_80_tests=0
+        run_vim_90_tests=0
+        run_neovim_07_tests=0
+        run_neovim_08_tests=0
+        run_linters=0
         shift
     ;;
     --fast)
@@ -119,6 +136,7 @@ while [ $# -ne 0 ]; do
         echo '  --vim-only        Run tests only for Vim'
         echo '  --vim-80-only     Run tests only for Vim 8.2'
         echo '  --vim-90-only     Run tests only for Vim 9.0'
+        echo '  --lua-only        Run only Lua tests'
         echo '  --linters-only    Run only Vint and custom checks'
         echo '  --fast            Run only the fastest Vim and custom checks'
         echo '  --help            Show this help text'
@@ -147,6 +165,7 @@ if [ $# -ne 0 ]; then
 
     # Don't run other tools when targeting tests.
     run_linters=0
+    run_lua_tests=0
 fi
 
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
@@ -249,6 +268,13 @@ for vim in $("$DOCKER" run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^n
         pid_list="$pid_list $!"
     fi
 done
+
+if ((run_lua_tests)); then
+    echo "Starting Lua tests..."
+    file_number=$((file_number+1))
+    test/script/run-lua-tests $quiet_flag > "$output_dir/$file_number" 2>&1 &
+    pid_list="$pid_list $!"
+fi
 
 if ((run_linters)); then
     echo "Starting Vint..."
