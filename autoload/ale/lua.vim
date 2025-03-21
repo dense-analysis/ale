@@ -4,6 +4,7 @@
 " Find project root for a Lua language server.
 function! ale#lua#FindProjectRoot(buffer) abort
     let l:possible_project_roots = [
+    \   '.luarc.json',
     \   '.git',
     \   bufname(a:buffer),
     \]
