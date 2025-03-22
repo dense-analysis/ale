@@ -114,4 +114,25 @@ ale.env = function(variable_name, value)
     return variable_name .. "=" .. ale.escape(value) .. " "
 end
 
+---Get an array of arrays for mapping paths to and from filesystems for an ALE
+---linter, as configured in the `filename_mappings` setting.
+---
+---The result can be used to instruct ALE how to map between filesystems.
+---@param buffer number The buffer number.
+---@param name string The linter name.
+---@return table mappings An array of arrays for mapping filenames.
+ale.get_filename_mappings = function(buffer, name)
+    local linter_mappings = ale.var(buffer, "filename_mappings")
+
+    if linter_mappings[1] ~= nil then
+        return linter_mappings
+    end
+
+    if linter_mappings[name] == nil then
+        name = "*"
+    end
+
+    return linter_mappings[name] or {}
+end
+
 return ale

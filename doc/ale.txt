@@ -4477,6 +4477,7 @@ ale#Escape(str)                                                  *ale#Escape()*
   In all other cases, ALE will call |shellescape|.
 
 
+ale.get_filename_mappings(buffer, name)           *ale.get_filename_mappings()*
 ale#GetFilenameMappings(buffer, name)               *ale#GetFilenameMappings()*
 
   Given a `buffer` and the `name` of either a linter for fixer, return a
