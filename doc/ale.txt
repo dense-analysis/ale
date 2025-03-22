@@ -14,14 +14,15 @@ CONTENTS                                                         *ale-contents*
     3.3 Other Sources.....................|ale-lint-other-sources|
   4. Fixing Problems......................|ale-fix|
   5. Language Server Protocol Support.....|ale-lsp|
-    5.1 Completion........................|ale-completion|
-    5.2 Go To Definition..................|ale-go-to-definition|
-    5.3 Go To Type Definition.............|ale-go-to-type-definition|
-    5.4 Go To Implementation..............|ale-go-to-implementation|
-    5.5 Find References...................|ale-find-references|
-    5.6 Hovering..........................|ale-hover|
-    5.7 Symbol Search.....................|ale-symbol-search|
-    5.8 Refactoring: Rename, Actions......|ale-refactor|
+    5.1 LSP Neovim Integration............|ale-lsp-neovim|
+    5.2 Completion........................|ale-completion|
+    5.3 Go To Definition..................|ale-go-to-definition|
+    5.4 Go To Type Definition.............|ale-go-to-type-definition|
+    5.5 Go To Implementation..............|ale-go-to-implementation|
+    5.6 Find References...................|ale-find-references|
+    5.7 Hovering..........................|ale-hover|
+    5.8 Symbol Search.....................|ale-symbol-search|
+    5.9 Refactoring: Rename, Actions......|ale-refactor|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
   7. Linter/Fixer Options.................|ale-integration-options|
@@ -34,6 +35,7 @@ CONTENTS                                                         *ale-contents*
   9. API..................................|ale-api|
   10. Special Thanks......................|ale-special-thanks|
   11. Contact.............................|ale-contact|
+
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -62,11 +64,33 @@ for the current buffer.
 If you are interested in contributing to the development of ALE, read the
 developer documentation. See |ale-development|
 
+For configuring ALE in Neovim, you can use the |ale.setup| function to
+configure ALE globally in `init.vim`. >
+
+  require("ale").setup({
+    completion_enabled = true,
+    maximum_file_size = 1024 * 1024,
+    warn_about_trailing_whitespace = false,
+  })
+<
+In |ftplugin| files you can customise behavior for different filetypes by
+using the |ale.setup.buffer| function. >
+
+  -- In ftplugin/python.lua in &runtimepath
+  require("ale").setup.buffer({
+    linters = {"ruff", "pyright"},
+    fixers = {"ruff"}
+  })
+<
+Buffer local settings override global settings for that buffer.
+
+
 ===============================================================================
 2. Supported Languages & Tools                                    *ale-support*
 
 ALE supports a wide variety of languages and tools. See |ale-supported-list|
 for the full list.
+
 
 ===============================================================================
 3. Linting                                                           *ale-lint*
@@ -88,12 +112,12 @@ of the file on disk. This allows you to check your code for errors before you
 have even saved your changes. ALE will check your code in the following
 circumstances, which can be configured with the associated options.
 
-* When you modify a buffer.                - |g:ale_lint_on_text_changed|
-* On leaving insert mode.                  - |g:ale_lint_on_insert_leave|
-* When you open a new or modified buffer.  - |g:ale_lint_on_enter|
-* When you save a buffer.                  - |g:ale_lint_on_save|
-* When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
-* If ALE is used to check code manually.   - |:ALELint|
+* When you modify a buffer                   - |g:ale_lint_on_text_changed|
+* On leaving insert mode                     - |g:ale_lint_on_insert_leave|
+* When you open a new or modified buffer     - |g:ale_lint_on_enter|
+* When you save a buffer                     - |g:ale_lint_on_save|
+* When the filetype changes for a buffer     - |g:ale_lint_on_filetype_changed|
+* If ALE is used to check code manually      - |:ALELint|
 
                                                  *ale-lint-settings-on-startup*
 
@@ -113,23 +137,23 @@ which behave this way are documented in the lists and tables of supported
 programs. ALE will only lint files with these programs in the following
 circumstances.
 
-* When you open a new or modified buffer.  - |g:ale_lint_on_enter|
-* When you save a buffer.                  - |g:ale_lint_on_save|
-* When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
-* If ALE is used to check code manually.   - |:ALELint|
+* When you open a new or modified buffer     - |g:ale_lint_on_enter|
+* When you save a buffer                     - |g:ale_lint_on_save|
+* When the filetype changes for a buffer     - |g:ale_lint_on_filetype_changed|
+* If ALE is used to check code manually      - |:ALELint|
 
 ALE will report problems with your code in the following ways, listed with
 their relevant options.
 
-* Via Neovim diagnostics (On in Neovim 0.7+)       - |g:ale_use_neovim_diagnostics_api|
-* By updating loclist. (On by default)             - |g:ale_set_loclist|
-* By updating quickfix. (Off by default)           - |g:ale_set_quickfix|
-* By setting error highlights.                     - |g:ale_set_highlights|
-* By creating signs in the sign column.            - |g:ale_set_signs|
-* By echoing messages based on your cursor.        - |g:ale_echo_cursor|
-* By inline text based on your cursor.             - |g:ale_virtualtext_cursor|
-* By displaying the preview based on your cursor.  - |g:ale_cursor_detail|
-* By showing balloons for your mouse cursor        - |g:ale_set_balloons|
+* Via Neovim diagnostics (On in Neovim 0.7+) - |g:ale_use_neovim_diagnostics_api|
+* By updating loclist (On by default)        - |g:ale_set_loclist|
+* By updating quickfix (Off by default)      - |g:ale_set_quickfix|
+* By setting error highlights                - |g:ale_set_highlights|
+* By creating signs in the sign column       - |g:ale_set_signs|
+* By echoing messages based on your cursor   - |g:ale_echo_cursor|
+* By showing virtual text at your cursor     - |g:ale_virtualtext_cursor|
+* By previewing details at your cursor       - |g:ale_cursor_detail|
+* By showing balloons for your mouse cursor  - |g:ale_set_balloons|
 
 Please consult the documentation for each option, which can reveal some other
 ways of tweaking the behavior of each way of displaying problems. You can
@@ -153,6 +177,7 @@ ALE offers several options for controlling which linters are run.
 
 You can stop ALE any currently running linters with the `:ALELintStop` command.
 Any existing problems will be kept.
+
 
 -------------------------------------------------------------------------------
 3.1 Linting On Other Machines                         *ale-lint-other-machines*
@@ -185,7 +210,6 @@ script like so. >
 
   exec docker run -i --rm -v "$(pwd):/data" cytopia/pylint "$@"
 <
-
 You will want to run Docker commands with `-i` in order to read from stdin.
 
 With the above script in mind, you might configure ALE to lint your Python
@@ -206,7 +230,6 @@ mappings which describe how to change between the two file systems in your
     \}
   endif
 <
-
 You might consider using a Vim plugin for loading Vim configuration files
 specific to each project, if you have a lot of projects to manage.
 
@@ -241,15 +264,15 @@ should define the address to connect to instead. >
   \   'project_root': '/path/to/root_of_project',
   \})
 <
-  Most of the options for a language server can be replaced with a |Funcref|
-  for a function accepting a buffer number for dynamically computing values
-  such as the executable path, the project path, the server address, etc,
-  most of which can also be determined based on executing some other
-  asynchronous task. See |ale#command#Run()| for computing linter options
-  based on asynchronous results.
+Most of the options for a language server can be replaced with a |Funcref| for
+a function accepting a buffer number for dynamically computing values such as
+the executable path, the project path, the server address, etc, most of which
+can also be determined based on executing some other asynchronous task. See
+|ale#command#Run()| for computing linter options based on asynchronous
+results.
 
-  See |ale#linter#Define()| for a detailed explanation of all of the options
-  for configuring linters.
+See |ale#linter#Define()| for a detailed explanation of all of the options for
+configuring linters.
 
 
 -------------------------------------------------------------------------------
@@ -273,7 +296,6 @@ ALE's loclist format. (See |ale-loclist-format|) For example: >
   \ {'text': 'Something went wrong', 'lnum': 13},
   \])
 <
-
 Other sources should use a unique name for identifying themselves. A single
 linter name can be used for all problems from another source, or a series of
 unique linter names can be used. Results can be cleared for that source by
@@ -446,22 +468,138 @@ server, etc. See |ale-lint-other-machines|.
 ===============================================================================
 5. Language Server Protocol Support                                   *ale-lsp*
 
-ALE offers some support for integrating with Language Server Protocol (LSP)
-servers. LSP linters can be used in combination with any other linter, and
-will automatically connect to LSP servers when needed. ALE also supports
-`tsserver` for TypeScript, which uses a different but very similar protocol.
+ALE integrates with Language Server Protocol (LSP) servers. LSP linters can be
+used in combination with any other linter, and will automatically connect to
+LSP servers when needed. ALE also supports `tsserver` for TypeScript, which
+uses a different but very similar protocol.
 
 If you want to use another plugin for LSP features and tsserver, you can use
 the |g:ale_disable_lsp| setting to disable ALE's own LSP integrations, or
-ignore particular linters with |g:ale_linters_ignore|.
+ignore particular linters with |g:ale_linters_ignore|. In ALE's default
+configuration ALE will attempt to avoid conflicting with `nvim-lspconfig`.
+
+ALE will integrate with Neovim's LSP client by default in Neovim 0.8+. This
+functionality can be controlled with the |g:ale_use_neovim_lsp_api| setting.
+See |ale-lsp-neovim| below for information about ALE's integration with
+Neovim's LSP client.
 
 If for any reason you want to stop a language server ALE starts, such as when
 a project configuration has significantly changed, or new files have been
 added the language server isn't aware of, use either `:ALEStopLSP` or
 `:ALEStopAllLSPs` to stop the server until ALE automatically starts it again.
 
+
 -------------------------------------------------------------------------------
-5.1 Completion                                                 *ale-completion*
+5.1 LSP Neovim Integration                                     *ale-lsp-neovim*
+
+In Neovim 0.8+ ALE will integrate with Neovim's native LSP client by default,
+unless disabled by setting |g:ale_use_neovim_lsp_api| to `0`. All built in
+functionality for Neovim's LSP client should work as expected, and this
+ensures ALE integrates well with other plugins that rely on Neovim's LSP
+client.
+
+NOTE: Neovim versions below `0.11.0` do not support socket connections to
+language servers when the `address` defined in ALE uses a hostname instead of
+an IP address. To work around this, configure language clients with an IP
+address instead of a hostname, or revert back to ALE's custom LSP client.
+
+See |lsp| for information on Neovim's built in LSP client.
+
+For diagnostics, for computing problems to show via ALE, ALE overrides the
+diagnostics handler for the LSP client launched by ALE, so all of the
+functionality in ALE will work as expected. By default ALE will send
+diagnostics back to Neovim's diagnostics API, which can be configured with the
+|g:ale_use_neovim_diagnostics_api| setting. This ensures that all of the
+functionality ALE adds on top for diagnostics will function, and that problems
+from linters that don't use LSP can be combined with LSP servers. See the
+diagram below. >
+
+  +-------------------+
+  |  Language Server  |  (Sends diagnostics)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Receives diagnostics)
+  +-------------------+
+           |
+  +-------------------+
+  |  ALE Processing   |  (Intercepts and processes diagnostics)
+  +-------------------+
+           |
+  +-------------------+
+  | Diagnostic engine |  (Either Neovim's diagnostics or ALE's custom code)
+  +-------------------+
+           |
+  +-------------------+
+  |      Neovim       |  (User sees formatted diagnostics)
+  +-------------------+
+<
+For LSP functionality executed via ALE's own functions, commands, and
+keybinds, ALE will intercept requests and handle them in an entirely custom
+way, ensuring ALE functionality should work largely the same between
+different Vim versions. See the diagram below. >
+
+  +-------------------+
+  |      Neovim       |  (User triggers LSP request via ALE)
+  +-------------------+
+           |
+  +-------------------+
+  |       ALE         |  (ALE sends request to Neovim client)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Forwards request to language server)
+  +-------------------+
+           |
+  +-------------------+
+  | Language Server   |  (Processes request and sends response)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Receives response)
+  +-------------------+
+           |
+  +-------------------+
+  |       ALE         |  (ALE Handles "raw" LSP response)
+  +-------------------+
+           |
+  +-------------------+
+  |      Neovim       |  (User sees result)
+  +-------------------+
+<
+For LSP functionality built-in to Neovim, such as the |gd| keybind for jumping
+to a definition, Neovim will bypass ALE entirely, ensuring that ALE does not
+interfere with LSP functionality as expected by built-in Neovim tools or other
+plugins. See the diagram below. >
+
+  +-------------------+
+  |      Neovim       |  (User triggers LSP request)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Directly handles the request)
+  +-------------------+
+           |
+  +-------------------+
+  | Language Server   |  (Processes request and sends response)
+  +-------------------+
+           |
+  +-------------------+
+  | Neovim LSP Client |  (Receives response and shows result)
+  +-------------------+
+           |
+  +-------------------+
+  |      Neovim       |  (User sees result)
+  +-------------------+
+<
+
+-------------------------------------------------------------------------------
+5.2 Completion                                                 *ale-completion*
+
+In Neovim 0.8+ ALE's integration with its native LSP client will make it
+possible to use other plugins that rely on Neovim's LSP client as a basis.
+`nvim-cmp` is recommended as a completion plugin worth trying in Neovim.
+See: https://github.com/hrsh7th/nvim-cmp
 
 ALE offers support for automatic completion of code while you type.
 Completion is only supported while at least one LSP linter is enabled. ALE
@@ -477,21 +615,24 @@ integration should not be combined with ALE's own implementation.
                                                  *ale-asyncomplete-integration*
 
 ALE additionally integrates with asyncomplete.vim for offering automatic
-completion data. ALE's asyncomplete source requires registration and should
-use the defaults provided by the |asyncomplete#sources#ale#get_source_options| function >
+completion data. ALE's asyncomplete source requires registration with
+defaults provided by the |asyncomplete#sources#ale#get_source_options| function >
 
   " Use ALE's function for asyncomplete defaults
-  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
-      \ 'priority': 10, " Provide your own overrides here
-      \ }))
+  " Provide your own overrides here.
+  au User asyncomplete_setup call asyncomplete#register_source(
+  \   asyncomplete#sources#ale#get_source_options({
+  \       'priority': 10,
+  \   })
+  \)
 >
 ALE also offers its own completion implementation, which does not require any
 other plugins. Suggestions will be made while you type after completion is
 enabled. ALE's own completion implementation can be enabled by setting
-|g:ale_completion_enabled| to `1`. This setting must be set to `1` before ALE
-is loaded. The delay for completion can be configured with
-|g:ale_completion_delay|. This setting should not be enabled if you wish to
-use ALE as a completion source for other plugins.
+|g:ale_completion_enabled| to `true` or `1`. This setting must be set to
+`true` or `1` before ALE is loaded. The delay for completion can be configured
+with |g:ale_completion_delay|. This setting should not be enabled if you wish
+to use ALE as a completion source for other plugins.
 
 ALE automatic completion will not work when 'paste' is active. Only set
 'paste' when you are copy and pasting text into your buffers.
@@ -621,8 +762,9 @@ would like to use. An example here shows the available options for symbols  >
   \ '<default>': 'v'
   \ }
 <
+
 -------------------------------------------------------------------------------
-5.2 Go To Definition                                     *ale-go-to-definition*
+5.3 Go To Definition                                     *ale-go-to-definition*
 
 ALE supports jumping to the files and locations where symbols are defined
 through any enabled LSP linters. The locations ALE will jump to depend on the
@@ -633,8 +775,9 @@ command for configuring how the location will be displayed.
 ALE will update Vim's |tagstack| automatically unless |g:ale_update_tagstack| is
 set to `0`.
 
+
 -------------------------------------------------------------------------------
-5.3 Go To Type Definition                           *ale-go-to-type-definition*
+5.4 Go To Type Definition                           *ale-go-to-type-definition*
 
 ALE supports jumping to the files and locations where symbols' types are
 defined through any enabled LSP linters. The locations ALE will jump to depend
@@ -643,8 +786,9 @@ command will jump to the definition of symbols under the cursor. See the
 documentation for the command for configuring how the location will be
 displayed.
 
+
 -------------------------------------------------------------------------------
-5.4 Go To Implementation                             *ale-go-to-implementation*
+5.5 Go To Implementation                             *ale-go-to-implementation*
 
 ALE supports jumping to the files and locations where symbols are implemented
 through any enabled LSP linters. The locations ALE will jump to depend on the
@@ -652,15 +796,17 @@ information returned by LSP servers. The `:ALEGoToImplementation` command will
 jump to the implementation of symbols under the cursor. See the documentation
 for the command for configuring how the location will be displayed.
 
+
 -------------------------------------------------------------------------------
-5.5 Find References                                       *ale-find-references*
+5.6 Find References                                       *ale-find-references*
 
 ALE supports finding references for symbols though any enabled LSP linters
 with the `:ALEFindReferences` command. See the documentation for the command
 for a full list of options.
 
+
 -------------------------------------------------------------------------------
-5.6 Hovering                                                        *ale-hover*
+5.7 Hovering                                                        *ale-hover*
 
 ALE supports "hover" information for printing brief information about symbols
 at the cursor taken from LSP linters. The following commands are supported:
@@ -671,24 +817,25 @@ Truncated information will be displayed when the cursor rests on a symbol by
 default, as long as there are no problems on the same line. You can disable
 this behavior by setting |g:ale_hover_cursor| to `0`.
 
-If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
-|balloon_show()| function, then "hover" information also show up when you move
-the mouse over a symbol in a buffer. Diagnostic information will take priority
-over hover information for balloons. If a line contains a problem, that
-problem will be displayed in a balloon instead of hover information.
+If |g:ale_set_balloons| is set to `true` or `1` and your version of Vim
+supports the |balloon_show()| function, then "hover" information also show up
+when you move the mouse over a symbol in a buffer. Diagnostic information will
+take priority over hover information for balloons. If a line contains a
+problem, that problem will be displayed in a balloon instead of hover
+information.
 
 Hover information can be displayed in the preview window instead by setting
-|g:ale_hover_to_preview| to `1`.
+|g:ale_hover_to_preview| to `true` or `1`.
 
 When using Neovim or Vim with |popupwin|, if |g:ale_hover_to_floating_preview|
-or |g:ale_floating_preview| is set to 1, the hover information will show in a
-floating window. The borders of the floating preview window can be customized
-by setting |g:ale_floating_window_border|.
+or |g:ale_floating_preview| is set to `true` or `1`, the hover information
+will show in a floating window. The borders of the floating preview window can
+be customized by setting |g:ale_floating_window_border|.
 
 For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
 |balloonexpr| commands in terminals can cause scrolling issues in terminals,
 so ALE will not attempt to show balloons unless |g:ale_set_balloons| is set to
-`1` before ALE is loaded.
+`true` or `1` before ALE is loaded.
 
 For enabling mouse support in terminals, you may have to change your mouse
 settings. For example: >
@@ -702,15 +849,17 @@ settings. For example: >
 Documentation for symbols at the cursor can be retrieved using the
 `:ALEDocumentation` command. This command is only available for `tsserver`.
 
+
 -------------------------------------------------------------------------------
-5.7 Symbol Search                                           *ale-symbol-search*
+5.8 Symbol Search                                           *ale-symbol-search*
 
 ALE supports searching for workspace symbols via LSP linters with the
 `:ALESymbolSearch` command. See the documentation for the command
 for a full list of options.
 
+
 -------------------------------------------------------------------------------
-5.8 Refactoring: Rename, Actions                                 *ale-refactor*
+5.9 Refactoring: Rename, Actions                                 *ale-refactor*
 
 ALE supports renaming symbols in code such as variables or class names with
 the `:ALERename` command.
@@ -739,12 +888,24 @@ You may wish to remove some other menu items you don't want to see: >
   silent! aunmenu PopUp.Select\ Blockwise
   silent! aunmenu PopUp.Select\ All
 <
+
 ===============================================================================
 6. Global Options                                                 *ale-options*
 
+Options documented here can be configured either Vim variables, or via the
+|ale.setup| and |ale.setup.buffer| functions in Lua. When configuring via
+the Lua functions in Lua scripts, ALE will bridge types to Vim script in the
+following ways.
 
-g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
+1. Strings, numbers, booleans, and `nil` will be represented exactly.
+2. Tables with no or only number keys will become a |List| in Vim.
+3. Keys other than strings and numbers in tables cannot be represented.
+4. Tables with special |metatable| properties cannot be represented.
+5. Options accepting functions as values will automatically have Vim functions
+   created that bridge the function calls to and from Lua code.
 
+                                             *g:airline#extensions#ale#enabled*
+g:airline#extensions#ale#enabled
   Type: |Number|
   Default: `1`
 
@@ -753,27 +914,29 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
   |airline#extensions#ale#error_symbol| and
   |airline#extensions#ale#warning_symbol|.
 
+                                  *ale-options.cache_executable_check_failures*
+                                        *g:ale_cache_executable_check_failures*
+cache_executable_check_failures
+g:ale_cache_executable_check_failures
+  Type: |Boolean| or |Number|
+  Default: `nil`
 
-g:ale_cache_executable_check_failures   *g:ale_cache_executable_check_failures*
+  When set to `true` or `1`, ALE will cache failing executable checks for
+  linters. By default, only executable checks which succeed will be cached.
 
-  Type: |Number|
-  Default: not set
+  When this option is set to `true` or `1`, Vim will have to be restarted
+  after new executables are installed for ALE to be able to run linters for
+  those executables.
 
-  When set to `1`, ALE will cache failing executable checks for linters. By
-  default, only executable checks which succeed will be cached.
+                                         *ale-options.change_sign_column_color*
+                                               *g:ale_change_sign_column_color*
+change_sign_column_color
+g:ale_change_sign_column_color
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-  When this option is set to `1`, Vim will have to be restarted after new
-  executables are installed for ALE to be able to run linters for those
-  executables.
-
-
-g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
-
-  Type: |Number|
-  Default: `0`
-
-  When set to `1`, this option will set different highlights for the sign
-  column itself when ALE reports problems with a file. This option can be
+  When set to `true` or `1`, this option will set different highlights for the
+  sign column itself when ALE reports problems with a file. This option can be
   combined with |g:ale_sign_column_always|.
 
   ALE uses the following highlight groups for highlighting the sign column:
@@ -785,23 +948,27 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
   might produce unexpected results if editing different files in split
   windows.
 
+                                          *ale-options.close_preview_on_insert*
+                                                *g:ale_close_preview_on_insert*
+close_preview_on_insert
+g:ale_close_preview_on_insert
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-g:ale_close_preview_on_insert                   *g:ale_close_preview_on_insert*
+  When this option is set to `true` or `1`, ALE's |preview-window| will be
+  automatically closed upon entering Insert Mode. This option can be used in
+  combination with |g:ale_cursor_detail| for automatically displaying the
+  preview window on problem lines, and automatically closing it again when
+  editing text.
 
-  Type: |Number|
-  Default: `0`
+  This setting must be set to `true` or `1` before ALE is loaded for this
+  behavior to be enabled. See |ale-lint-settings-on-startup|.
 
-  When this option is set to `1`, ALE's |preview-window| will be automatically
-  closed upon entering Insert Mode. This option can be used in combination
-  with |g:ale_cursor_detail| for automatically displaying the preview window
-  on problem lines, and automatically closing it again when editing text.
-
-  This setting must be set to `1` before ALE is loaded for this behavior
-  to be enabled. See |ale-lint-settings-on-startup|.
-
-
-g:ale_command_wrapper                                   *g:ale_command_wrapper*
+                                                  *ale-options.command_wrapper*
+                                                        *g:ale_command_wrapper*
                                                         *b:ale_command_wrapper*
+command_wrapper
+g:ale_command_wrapper
   Type: |String|
   Default: `''`
 
@@ -831,9 +998,10 @@ g:ale_command_wrapper                                   *g:ale_command_wrapper*
   be passed to the wrapper. `&&` is most commonly used in ALE to change the
   working directory before running a command.
 
-
-g:ale_completion_delay                                 *g:ale_completion_delay*
-
+                                                 *ale-options.completion_delay*
+                                                       *g:ale_completion_delay*
+completion_delay
+g:ale_completion_delay
   Type: |Number|
   Default: `100`
 
@@ -842,15 +1010,17 @@ g:ale_completion_delay                                 *g:ale_completion_delay*
 
   See |ale-completion|
 
-
-g:ale_completion_enabled                             *g:ale_completion_enabled*
+                                               *ale-options.completion_enabled*
+                                                     *g:ale_completion_enabled*
                                                      *b:ale_completion_enabled*
-  Type: |Number|
-  Default: `0`
+completion_enabled
+g:ale_completion_enabled
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-  When this option is set to `1`, completion support will be enabled.
+  When this option is set to `true` or `1`, completion support will be enabled.
 
-  This setting must be set to `1` before ALE is loaded for this behavior
+  This setting must be set to `true` or `1` before ALE is loaded for this behavior
   to be enabled.
 
   This setting should not be enabled if you wish to use ALE as a completion
@@ -865,22 +1035,24 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   See |ale-completion|
 
-
+                              *ale-options.completion_tsserver_remove_warnings*
                                     *g:ale_completion_tsserver_remove_warnings*
+completion_tsserver_remove_warnings
 g:ale_completion_tsserver_remove_warnings
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-  Type: |Number|
-  Default: `0`
+  When this option is set to `false` or `0`, ALE will return all completion
+  items from its built in completion engine, including those that are a
+  warning. Warnings can be excluded from completed items by setting it to
+  `true` or `1`.
 
-  When this option is set to `0`, ALE will return all completion items,
-  including those that are a warning. Warnings can be excluded from completed
-  items by setting it to `1`.
-
-
-g:ale_completion_autoimport                       *g:ale_completion_autoimport*
-
-  Type: |Number|
-  Default: `1`
+                                            *ale-options.completion_autoimport*
+                                                  *g:ale_completion_autoimport*
+completion_autoimport
+g:ale_completion_autoimport
+  Type: |Boolean| or |Number|
+  Default: `true`
 
   When this option is set to `1`, ALE will try to automatically import
   completion results from external modules. It can be disabled by setting it
@@ -888,9 +1060,11 @@ g:ale_completion_autoimport                       *g:ale_completion_autoimport*
   disabling automatic imports may drop some or all completion items returned
   by it (e.g. eclipselsp).
 
-
-g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
+                                        *ale-options.completion_excluded_words*
+                                              *g:ale_completion_excluded_words*
                                               *b:ale_completion_excluded_words*
+completion_excluded_words
+g:ale_completion_excluded_words
   Type: |List|
   Default: `[]`
 
@@ -906,9 +1080,10 @@ g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
   " Don't suggest `it` or `describe` so we can use snippets for those words.
   let b:ale_completion_excluded_words = ['it', 'describe']
 <
-
-g:ale_completion_symbols                             *g:ale_completion_symbols*
-
+                                               *ale-options.completion_symbols*
+                                                     *g:ale_completion_symbols*
+completion_symbols
+g:ale_completion_symbols
   Type: |Dictionary|
   Default: See `autoload/ale/completion.vim`
 
@@ -916,7 +1091,7 @@ g:ale_completion_symbols                             *g:ale_completion_symbols*
   |ale-symbols| for more information.
 
   By default, this mapping only uses built in Vim completion kinds, but it can
-  be updated to use any unicode character for the completion kind. For
+  be updated to use any Unicode character for the completion kind. For
   example: >
     let g:ale_completion_symbols = {
     \ 'text': '',
@@ -947,9 +1122,10 @@ g:ale_completion_symbols                             *g:ale_completion_symbols*
     \ '<default>': 'v'
     \ })
 <
-
-g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
-
+                                       *ale-options.completion_max_suggestions*
+                                             *g:ale_completion_max_suggestions*
+completion_max_suggestions
+g:ale_completion_max_suggestions
   Type: |Number|
   Default: `50`
 
@@ -964,16 +1140,18 @@ g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
   Adjust this option as needed, depending on the complexity of your codebase
   and your available processing power.
 
-
-g:ale_cursor_detail                                       *g:ale_cursor_detail*
-
+                                                    *ale-options.cursor_detail*
+                                                          *g:ale_cursor_detail*
+cursor_detail
+g:ale_cursor_detail
   Type: |Number|
-  Default: `0`
+  Default: `false`
 
-  When this option is set to `1`, ALE's |preview-window| will be automatically
-  opened when the cursor moves onto lines with problems. ALE will search for
-  problems using the same logic that |g:ale_echo_cursor| uses. The preview
-  window will be closed automatically when you move away from the line.
+  When this option is set to `true` or `1`, ALE's |preview-window| will be
+  automatically opened when the cursor moves onto lines with problems. ALE
+  will search for problems using the same logic that |g:ale_echo_cursor| uses.
+  The preview window will be closed automatically when you move away from the
+  line.
 
   Messages are only displayed after a short delay. See |g:ale_echo_delay|.
 
@@ -981,37 +1159,44 @@ g:ale_cursor_detail                                       *g:ale_cursor_detail*
   will stay in the same buffer as it currently is.
 
   The preview window can be closed automatically upon entering Insert mode
-  by setting |g:ale_close_preview_on_insert| to `1`.
+  by setting |g:ale_close_preview_on_insert| to `true` or `1`.
 
-  Either this setting or |g:ale_echo_cursor| must be set to `1` before ALE is
-  loaded for messages to be displayed. See |ale-lint-settings-on-startup|.
+  Either this setting or |g:ale_echo_cursor| must be set to `true` or  `1`
+  before ALE is loaded for messages to be displayed.
+  See |ale-lint-settings-on-startup|.
 
-
-g:ale_default_navigation                             *g:ale_default_navigation*
+                                               *ale-options.default_navigation*
+                                                     *g:ale_default_navigation*
                                                      *b:ale_default_navigation*
+default_navigation
+g:ale_default_navigation
   Type: |String|
   Default: `'buffer'`
 
   The default method for navigating away from the current buffer to another
   buffer, such as for `:ALEFindReferences` or `:ALEGoToDefinition`.
 
-
-g:ale_detail_to_floating_preview             *g:ale_detail_to_floating_preview*
+                                       *ale-options.detail_to_floating_preview*
+                                             *g:ale_detail_to_floating_preview*
                                              *b:ale_detail_to_floating_preview*
+detail_to_floating_preview
+g:ale_detail_to_floating_preview
   Type: |Number|
   Default: `0`
 
   When this option is set to `1`, Neovim or Vim with |popupwin| will use a
   floating window for ALEDetail output.
 
-
-g:ale_disable_lsp                                           *g:ale_disable_lsp*
+                                                      *ale-options.disable_lsp*
+                                                            *g:ale_disable_lsp*
                                                             *b:ale_disable_lsp*
+disable_lsp
+g:ale_disable_lsp
   Type: |Number| OR |String|
   Default: `'auto'`
 
   When this option is set to `'auto'`, ALE will automatically disable linters
-  that it detects as having already been configured with the nvim-lspconfig
+  that it detects as having already been configured with the `nvim-lspconfig`
   plugin. When this option is set to `1`, ALE ignores all linters powered by
   LSP, and also `tsserver`.
 
@@ -1020,9 +1205,10 @@ g:ale_disable_lsp                                           *g:ale_disable_lsp*
 
   Please see also |ale-lsp|.
 
-
-g:ale_echo_cursor                                           *g:ale_echo_cursor*
-
+                                                      *ale-options.echo_cursor*
+                                                            *g:ale_echo_cursor*
+echo_cursor
+g:ale_echo_cursor
   Type: |Number|
   Default: `1`
 
@@ -1036,12 +1222,15 @@ g:ale_echo_cursor                                           *g:ale_echo_cursor*
 
   The format of the message can be customized with |g:ale_echo_msg_format|.
 
-  Either this setting or |g:ale_cursor_detail| must be set to `1` before ALE
-  is loaded for messages to be displayed. See |ale-lint-settings-on-startup|.
+  Either this setting or |g:ale_cursor_detail| must be set to `true` or  `1`
+  before ALE is loaded for messages to be displayed. See
+  |ale-lint-settings-on-startup|.
 
-
-g:ale_echo_delay                                             *g:ale_echo_delay*
+                                                       *ale-options.echo_delay*
+                                                             *g:ale_echo_delay*
                                                              *b:ale_echo_delay*
+echo_delay
+g:ale_echo_delay
   Type: |Number|
   Default: `10`
 
@@ -1051,17 +1240,20 @@ g:ale_echo_delay                                             *g:ale_echo_delay*
   The value can be increased to decrease the amount of processing ALE will do
   for files displaying a large number of problems.
 
-
-g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
-
+                                               *ale-options.echo_msg_error_str*
+                                                     *g:ale_echo_msg_error_str*
+echo_msg_error_str
+g:ale_echo_msg_error_str
   Type: |String|
   Default: `'Error'`
 
   The string used for `%severity%` for errors. See |g:ale_echo_msg_format|
 
-
-g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
+                                                  *ale-options.echo_msg_format*
+                                                        *g:ale_echo_msg_format*
                                                         *b:ale_echo_msg_format*
+echo_msg_format
+g:ale_echo_msg_format
   Type: |String|
   Default: `'%code: %%s'`
 
@@ -1092,34 +1284,39 @@ g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
   so different formats can be used for different languages. (Say in ftplugin
   files.)
 
-
-g:ale_echo_msg_info_str                               *g:ale_echo_msg_info_str*
-
+                                                *ale-options.echo_msg_info_str*
+                                                      *g:ale_echo_msg_info_str*
+echo_msg_info_str
+g:ale_echo_msg_info_str
   Type: |String|
   Default: `'Info'`
 
   The string used for `%severity%` for info. See |g:ale_echo_msg_format|
 
-
-g:ale_echo_msg_log_str                                 *g:ale_echo_msg_log_str*
-
+                                                 *ale-options.echo_msg_log_str*
+                                                       *g:ale_echo_msg_log_str*
+echo_msg_log_str
+g:ale_echo_msg_log_str
   Type: |String|
   Default: `'Log'`
 
   The string used for `%severity%` for log, used only for handling LSP show
   message requests. See |g:ale_lsp_show_message_format|
 
-
-g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
-
+                                             *ale-options.echo_msg_warning_str*
+                                                   *g:ale_echo_msg_warning_str*
+echo_msg_warning_str
+g:ale_echo_msg_warning_str
   Type: |String|
   Default: `'Warning'`
 
   The string used for `%severity%` for warnings. See |g:ale_echo_msg_format|
 
-
-g:ale_enabled                                                   *g:ale_enabled*
+                                                          *ale-options.enabled*
+                                                                *g:ale_enabled*
                                                                 *b:ale_enabled*
+enabled
+g:ale_enabled
   Type: |Number|
   Default: `1`
 
@@ -1136,13 +1333,15 @@ g:ale_enabled                                                   *g:ale_enabled*
 <
   See |g:ale_pattern_options| for more information on that option.
 
-
-g:ale_exclude_highlights                             *g:ale_exclude_highlights*
+                                               *ale-options.exclude_highlights*
+                                                     *g:ale_exclude_highlights*
                                                      *b:ale_exclude_highlights*
+exclude_highlights
+g:ale_exclude_highlights
   Type: |List|
   Default: `[]`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   A list of regular expressions for matching against highlight messages to
   remove. For example: >
@@ -1152,9 +1351,11 @@ g:ale_exclude_highlights                             *g:ale_exclude_highlights*
 <
   See also: |g:ale_set_highlights|
 
-
-g:ale_fixers                                                     *g:ale_fixers*
+                                                           *ale-options.fixers*
+                                                                 *g:ale_fixers*
                                                                  *b:ale_fixers*
+fixers
+g:ale_fixers
   Type: |Dictionary|
   Default: `{}`
 
@@ -1173,9 +1374,11 @@ g:ale_fixers                                                     *g:ale_fixers*
     " Fix everything else with 'foo'.
     let g:ale_fixers = {'python': ['bar'], 'html': [], '*': ['foo']}
 <
-
-g:ale_fix_on_save                                           *g:ale_fix_on_save*
+                                                      *ale-options.fix_on_save*
+                                                            *g:ale_fix_on_save*
                                                             *b:ale_fix_on_save*
+fix_on_save
+g:ale_fix_on_save
   Type: |Number|
   Default: `0`
 
@@ -1194,9 +1397,11 @@ g:ale_fix_on_save                                           *g:ale_fix_on_save*
   Some fixers can be excluded from being run automatically when you save files
   with the |g:ale_fix_on_save_ignore| setting.
 
-
-g:ale_fix_on_save_ignore                             *g:ale_fix_on_save_ignore*
+                                               *ale-options.fix_on_save_ignore*
+                                                     *g:ale_fix_on_save_ignore*
                                                      *b:ale_fix_on_save_ignore*
+fix_on_save_ignore
+g:ale_fix_on_save_ignore
   Type: |Dictionary| or |List|
   Default: `{}`
 
@@ -1227,9 +1432,10 @@ g:ale_fix_on_save_ignore                             *g:ale_fix_on_save_ignore*
   " The lambda fixer will be ignored, as it will be found in the ignore list.
   let g:ale_fix_on_save_ignore = [g:AddBar]
 <
-
-g:ale_floating_preview                                 *g:ale_floating_preview*
-
+                                                 *ale-options.floating_preview*
+                                                       *g:ale_floating_preview*
+floating_preview
+g:ale_floating_preview
   Type: |Number|
   Default: `0`
 
@@ -1238,9 +1444,10 @@ g:ale_floating_preview                                 *g:ale_floating_preview*
   This is equivalent to setting |g:ale_hover_to_floating_preview| and
   |g:ale_detail_to_floating_preview| to `1`.
 
-
-g:ale_floating_preview_popup_opts           *g:ale_floating_preview_popup_opts*
-
+                                      *ale-options.floating_preview_popup_opts*
+                                            *g:ale_floating_preview_popup_opts*
+floating_preview_popup_opts
+g:ale_floating_preview_popup_opts
   Type: |String| or |Dictionary|
   Default: `''`
 
@@ -1263,9 +1470,10 @@ g:ale_floating_preview_popup_opts           *g:ale_floating_preview_popup_opts*
 
   let g:ale_floating_preview_popup_opts = 'g:CustomOpts'
 <
-
-g:ale_floating_window_border                     *g:ale_floating_window_border*
-
+                                           *ale-options.floating_window_border*
+                                                 *g:ale_floating_window_border*
+floating_window_border
+g:ale_floating_window_border
   Type: |List|
   Default: `['|', '-', '+', '+', '+', '+', '|', '-']`
 
@@ -1281,9 +1489,10 @@ g:ale_floating_window_border                     *g:ale_floating_window_border*
   elements for the right side and bottom, the left side and top will be used
   instead.
 
-
-g:ale_history_enabled                                   *g:ale_history_enabled*
-
+                                                  *ale-options.history_enabled*
+                                                        *g:ale_history_enabled*
+history_enabled
+g:ale_history_enabled
   Type: |Number|
   Default: `1`
 
@@ -1294,9 +1503,10 @@ g:ale_history_enabled                                   *g:ale_history_enabled*
 
   This option can be disabled if storing a command history is not desired.
 
-
-g:ale_history_log_output                             *g:ale_history_log_output*
-
+                                               *ale-options.history_log_output*
+                                                     *g:ale_history_log_output*
+history_log_output
+g:ale_history_log_output
   Type: |Number|
   Default: `1`
 
@@ -1311,9 +1521,10 @@ g:ale_history_log_output                             *g:ale_history_log_output*
   out what went wrong with linters, and for bug reports. Turn this option off
   if you want to save on some memory usage.
 
-
-g:ale_hover_cursor                                         *g:ale_hover_cursor*
-
+                                                     *ale-options.hover_cursor*
+                                                           *g:ale_hover_cursor*
+hover_cursor
+g:ale_hover_cursor
   Type: |Number|
   Default: `1`
 
@@ -1330,36 +1541,44 @@ g:ale_hover_cursor                                         *g:ale_hover_cursor*
   This setting must be set to `1` before ALE is loaded for this behavior
   to be enabled. See |ale-lint-settings-on-startup|.
 
-
-g:ale_hover_to_preview                                 *g:ale_hover_to_preview*
+                                                 *ale-options.hover_to_preview*
+                                                       *g:ale_hover_to_preview*
                                                        *b:ale_hover_to_preview*
+hover_to_preview
+g:ale_hover_to_preview
   Type: |Number|
   Default: `0`
 
   If set to `1`, hover messages will be displayed in the preview window,
   instead of in balloons or the message line.
 
-
-g:ale_hover_to_floating_preview               *g:ale_hover_to_floating_preview*
+                                        *ale-options.hover_to_floating_preview*
+                                              *g:ale_hover_to_floating_preview*
                                               *b:ale_hover_to_floating_preview*
+hover_to_floating_preview
+g:ale_hover_to_floating_preview
   Type: |Number|
   Default: `0`
 
   If set to `1`, Neovim or Vim with |popupwin| will use floating windows for
   hover messages.
 
-
-g:ale_info_default_mode                               *g:ale_info_default_mode*
+                                                *ale-options.info_default_mode*
+                                                      *g:ale_info_default_mode*
                                                       *b:ale_info_default_mode*
+info_default_mode
+g:ale_info_default_mode
   Type: |String|
   Default: `'preview'`
 
   Changes the default mode used for `:ALEInfo`. See documentation for `:ALEInfo`
   for more information.
 
-
-g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
+                                            *ale-options.keep_list_window_open*
+                                                  *g:ale_keep_list_window_open*
                                                   *b:ale_keep_list_window_open*
+keep_list_window_open
+g:ale_keep_list_window_open
   Type: |Number|
   Default: `0`
 
@@ -1370,9 +1589,11 @@ g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
 
   See |g:ale_open_list|
 
-
-g:ale_list_window_size                                 *g:ale_list_window_size*
+                                                 *ale-options.list_window_size*
+                                                       *g:ale_list_window_size*
                                                        *b:ale_list_window_size*
+list_window_size
+g:ale_list_window_size
   Type: |Number|
   Default: `10`
 
@@ -1383,9 +1604,11 @@ g:ale_list_window_size                                 *g:ale_list_window_size*
   See |g:ale_open_list| for information on automatically opening windows
   for quickfix or the loclist.
 
-
-g:ale_lint_delay                                             *g:ale_lint_delay*
+                                                       *ale-options.lint_delay*
+                                                             *g:ale_lint_delay*
                                                              *b:ale_lint_delay*
+lint_delay
+g:ale_lint_delay
   Type: |Number|
   Default: `200`
 
@@ -1396,9 +1619,10 @@ g:ale_lint_delay                                             *g:ale_lint_delay*
   A buffer-local option, `b:ale_lint_delay`, can be set to change the delay
   for different buffers, such as in |ftplugin| files.
 
-
-g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
-
+                                                    *ale-options.lint_on_enter*
+                                                          *g:ale_lint_on_enter*
+lint_on_enter
+g:ale_lint_on_enter
   Type: |Number|
   Default: `1`
 
@@ -1413,9 +1637,10 @@ g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
   You should set this setting once before ALE is loaded, and restart Vim if
   you want to change your preferences. See |ale-lint-settings-on-startup|.
 
-
-g:ale_lint_on_filetype_changed                 *g:ale_lint_on_filetype_changed*
-
+                                         *ale-options.lint_on_filetype_changed*
+                                               *g:ale_lint_on_filetype_changed*
+lint_on_filetype_changed
+g:ale_lint_on_filetype_changed
   Type: |Number|
   Default: `1`
 
@@ -1427,9 +1652,10 @@ g:ale_lint_on_filetype_changed                 *g:ale_lint_on_filetype_changed*
   You should set this setting once before ALE is loaded, and restart Vim if
   you want to change your preferences. See |ale-lint-settings-on-startup|.
 
-
-g:ale_lint_on_save                                         *g:ale_lint_on_save*
-
+                                                     *ale-options.lint_on_save*
+                                                           *g:ale_lint_on_save*
+lint_on_save
+g:ale_lint_on_save
   Type: |Number|
   Default: `1`
 
@@ -1439,19 +1665,20 @@ g:ale_lint_on_save                                         *g:ale_lint_on_save*
   make ALE only check files after that have been saved, if that is what is
   desired.
 
-
-g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
-
-  Type: |String|
+                                             *ale-options.lint_on_text_changed*
+                                                   *g:ale_lint_on_text_changed*
+lint_on_text_changed
+g:ale_lint_on_text_changed
+  Type: |Boolean| or |Number| or |String|
   Default: `'normal'`
 
   This option controls how ALE will check your files as you make changes.
   The following values can be used.
 
-  `'always'`, `'1'`, or `1` - Check buffers on |TextChanged| or |TextChangedI|.
-  `'normal'`            - Check buffers only on |TextChanged|.
-  `'insert'`            - Check buffers only on |TextChangedI|.
-  `'never'`, `'0'`, or `0`  - Never check buffers on changes.
+  `'always'`, `'1'`, `true`, or `1`  - Check buffers on |TextChanged| or |TextChangedI|.
+  `'normal'`                   - Check buffers only on |TextChanged|.
+  `'insert'`                   - Check buffers only on |TextChangedI|.
+  `'never'`, `'0'`, `false`, or `0`  - Never check buffers on changes.
 
   ALE will check buffers after a short delay, with a timer which resets on
   each change. The delay can be configured by adjusting the |g:ale_lint_delay|
@@ -1466,11 +1693,13 @@ g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
   You should set this setting once before ALE is loaded, and restart Vim if
   you want to change your preferences. See |ale-lint-settings-on-startup|.
 
-
-g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
+                                             *ale-options.lint_on_insert_leave*
+                                                   *g:ale_lint_on_insert_leave*
                                                    *b:ale_lint_on_insert_leave*
-  Type: |Number|
-  Default: `1`
+lint_on_insert_leave
+g:ale_lint_on_insert_leave
+  Type: |Boolean| or |Number|
+  Default: `true`
 
   When set to `1` in your vimrc file, this option will cause ALE to run
   linters when you leave insert mode.
@@ -1489,10 +1718,12 @@ g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
   You should set this setting once before ALE is loaded, and restart Vim if
   you want to change your preferences. See |ale-lint-settings-on-startup|.
 
-
-g:ale_linter_aliases                                     *g:ale_linter_aliases*
+                                                   *ale-options.linter_aliases*
+                                                         *g:ale_linter_aliases*
                                                          *b:ale_linter_aliases*
-  Type: |Dictionary|
+linter_aliases
+g:ale_linter_aliases
+  Type: |Dictionary| or |List| or |String|
   Default: `{}`
 
   The |g:ale_linter_aliases| option can be used to set aliases from one
@@ -1526,6 +1757,10 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
 
   let g:ale_linter_aliases = {'foobar': 'php'}
 <
+  Or in Lua: >
+
+  require("ale").setup({linter_aliases = {foobar = "php"}})
+<
   When combined with the |g:ale_linters| option, the original filetype
   (`'foobar'`) will be used for determining which linters to run,
   not the aliased type (`'php'`). This allows an aliased type to run a
@@ -1533,10 +1768,14 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
 
   Passing a list of filetypes is also supported. Say you want to lint
   javascript and css embedded in HTML (using linters that support that).
-  You could alias `html` like so:
+  You could alias `html` like so: >
 
   `let g:ale_linter_aliases = {'html': ['html', 'javascript', 'css']}`
+<
+  Or in Lua: >
 
+  require("ale").setup({linter_aliases = {html = {"html", "javascript", "css"}})
+<
   Note that `html` itself was included as an alias. That is because aliases
   will override the original linters for the aliased filetype.
 
@@ -1551,11 +1790,19 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   " OR, Alias a filetype to only a single filetype with a String.
   let b:ale_linter_aliases = 'javascript'
 <
+  Or in Lua: >
+
+  require("ale").setup.buffer({linter_aliases = {"html", "javascript", "css"}})
+  -- OR, Alias a filetype to only a single filetype with a String.
+  require("ale").setup.buffer({linter_aliases = "javascript"})
+<
   No linters will be loaded when the buffer's filetype is empty.
 
-
-g:ale_filename_mappings                               *g:ale_filename_mappings*
+                                                *ale-options.filename_mappings*
+                                                      *g:ale_filename_mappings*
                                                       *b:ale_filename_mappings*
+filename_mappings
+g:ale_filename_mappings
   Type: |Dictionary| or |List|
   Default: `{}`
 
@@ -1573,6 +1820,16 @@ g:ale_filename_mappings                               *g:ale_filename_mappings*
   \       ['/home/john/proj', '/data'],
   \   ],
   \}
+<
+  Or in Lua: >
+
+  require("ale").setup({
+      filename_mappings = {
+        pylint = {
+            {"/home/john/proj", "/data"},
+        },
+      },
+  })
 <
   With the above configuration, a filename such as `/home/john/proj/foo.py`
   will be provided to the linter/fixer as `/data/foo.py`, and paths parsed
@@ -1600,6 +1857,14 @@ g:ale_filename_mappings                               *g:ale_filename_mappings*
   let g:ale_filename_mappings = [
   \   ['/home/john/proj', '/data'],
   \]
+<
+  Or in Lua: >
+
+  require("ale").setup({
+      filename_mappings = {
+          {"/home/john/proj", "/data"},
+      },
+  })
 <
   You can provide many such filename paths for multiple projects. Paths are
   matched by checking if the start of a file path matches the given strings,
@@ -1635,10 +1900,12 @@ g:ale_filename_mappings                               *g:ale_filename_mappings*
   You can inspect the filename mappings ALE will use with the
   |ale#GetFilenameMappings()| function.
 
-
-g:ale_linters                                                   *g:ale_linters*
+                                                          *ale-options.linters*
+                                                                *g:ale_linters*
                                                                 *b:ale_linters*
-  Type: |Dictionary|
+linters
+g:ale_linters
+  Type: |Dictionary| or |List|
   Default: `{}`
 
   The |g:ale_linters| option sets a |Dictionary| mapping a filetype to a
@@ -1678,16 +1945,28 @@ g:ale_linters                                                   *g:ale_linters*
 
   let g:ale_linters = {'javascript': ['eslint']}
 <
+  Or in Lua: >
+
+  require("ale").setup({linters = {javascript = {"eslint"}}})
+<
   If you want to disable all linters for a particular filetype, you can pass
   an empty list of linters as the value: >
 
   let g:ale_linters = {'javascript': []}
+<
+  Or in Lua: >
+
+  require("ale").setup({linters = {javascript = {}}})
 <
   All linters will be run for unspecified filetypes. All available linters can
   be enabled explicitly for a given filetype by passing the string `'all'`,
   instead of a List. >
 
   let g:ale_linters = {'c': 'all'}
+<
+  Or in Lua: >
+
+  require("ale").setup({linters = {c = "all"}})
 <
   Linters can be configured in each buffer with buffer-local variables. ALE
   will first look for linters for filetypes in the `b:ale_linters` variable,
@@ -1707,22 +1986,34 @@ g:ale_linters                                                   *g:ale_linters*
   " Explicitly enable all available linters for the filetype.
   let b:ale_linters = 'all'
 <
+  In Lua: >
+
+  require("ale").setup.buffer({
+    linters = {javascript = {"eslint"}, html = {"tidy"}},
+  })
+  require("ale").setup.buffer({linters = {"eslint", "tidy"}})
+  require("ale").setup.buffer({linters = {}})
+  require("ale").setup.buffer({linters = "all"})
+<
   ALE can be configured to disable all linters unless otherwise specified with
   `g:ale_enabled` or `b:ale_enabled` with the option |g:ale_linters_explicit|.
 
+                                                 *ale-options.linters_explicit*
+                                                       *g:ale_linters_explicit*
+linters_explicit
+g:ale_linters_explicit
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-g:ale_linters_explicit                                 *g:ale_linters_explicit*
+  When set to `true` or `1`, only the linters from |g:ale_linters| and
+  |b:ale_linters| will be enabled. The default behavior for ALE is to enable
+  as many linters as possible, unless otherwise specified.
 
-  Type: |Number|
-  Default: `0`
-
-  When set to `1`, only the linters from |g:ale_linters| and |b:ale_linters|
-  will be enabled. The default behavior for ALE is to enable as many linters
-  as possible, unless otherwise specified.
-
-
-g:ale_linters_ignore                                     *g:ale_linters_ignore*
+                                                   *ale-options.linters_ignore*
+                                                         *g:ale_linters_ignore*
                                                          *b:ale_linters_ignore*
+linters_ignore
+g:ale_linters_ignore
   Type: |Dictionary| or |List|
   Default: `{}`
 
@@ -1737,6 +2028,13 @@ g:ale_linters_ignore                                     *g:ale_linters_ignore*
   let g:ale_linters = {'python': ['flake8', 'pylint']}
   let g:ale_linters_ignore = {'python': ['pylint']}
 <
+  Or in Lua: >
+
+  require("ale").setup({
+    linters = {"python": {"flake8", "pylint"}},
+    linters_ignore = {"python": {"pylint"}},
+  })
+<
   This setting can be set to simply a |List| of linter names, which is
   especially more convenient when using the setting in ftplugin files for
   particular buffers. >
@@ -1745,30 +2043,42 @@ g:ale_linters_ignore                                     *g:ale_linters_ignore*
   let b:ale_linters = ['flake8', 'pylint']
   let b:ale_linters_ignore = ['pylint']
 <
+  Or in Lua: >
 
-g:ale_list_vertical                                       *g:ale_list_vertical*
+  require("ale").setup.buffer({
+    linters = {"flake8", "pylint"},
+    linters_ignore = {"pylint"},
+  })
+<
+                                                    *ale-options.list_vertical*
+                                                          *g:ale_list_vertical*
                                                           *b:ale_list_vertical*
-  Type: |Number|
-  Default: `0`
+list_vertical
+g:ale_list_vertical
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-  When set to `1`, this will cause ALE to open any windows (loclist or
-  quickfix) vertically instead of horizontally (|vert| |lopen|) or (|vert|
+  When set to `true` or `1`, this will cause ALE to open any windows (loclist
+  or quickfix) vertically instead of horizontally (|vert| |lopen|) or (|vert|
   |copen|)
 
-
-g:ale_loclist_msg_format                             *g:ale_loclist_msg_format*
+                                               *ale-options.loclist_msg_format*
+                                                     *g:ale_loclist_msg_format*
                                                      *b:ale_loclist_msg_format*
+loclist_msg_format
+g:ale_loclist_msg_format
   Type: |String|
-  Default: `g:ale_echo_msg_format`
+  Default: `g:ale_echo_msg_format` (`echo_msg_format`)
 
   This option is the same as |g:ale_echo_msg_format|, but for formatting the
   message used for the loclist and the quickfix list.
 
   The strings for configuring `%severity%` are also used for this option.
 
-
-g:ale_lsp_show_message_format                   *g:ale_lsp_show_message_format*
-
+                                          *ale-options.lsp_show_message_format*
+                                                *g:ale_lsp_show_message_format*
+lsp_show_message_format
+g:ale_lsp_show_message_format
   Type: |String|
   Default: `'%severity%:%linter%: %s'`
 
@@ -1788,9 +2098,10 @@ g:ale_lsp_show_message_format                   *g:ale_lsp_show_message_format*
   Please note that |g:ale_lsp_show_message_format| *can not* be configured
   separately for each buffer like |g:ale_echo_msg_format| can.
 
-
-g:ale_lsp_show_message_severity               *g:ale_lsp_show_message_severity*
-
+                                        *ale-options.lsp_show_message_severity*
+                                              *g:ale_lsp_show_message_severity*
+lsp_show_message_severity
+g:ale_lsp_show_message_severity
   Type: |String|
   Default: `'error'`
 
@@ -1806,18 +2117,20 @@ g:ale_lsp_show_message_severity               *g:ale_lsp_show_message_severity*
   `'log'`         - Same as `'information'`
   `'disabled'`    - Doesn't display any information at all.
 
+                                                  *ale-options.lsp_suggestions*
+                                                        *g:ale_lsp_suggestions*
+lsp_suggestions
+g:ale_lsp_suggestions
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-g:ale_lsp_suggestions                                   *g:ale_lsp_suggestions*
-
-  Type: |Number|
-  Default: `0`
-
-  If set to `1`, show hints/suggestions from LSP servers or tsserver, in
+  If set to `true` or ``1`, show suggestions from LSP servers or tsserver, in
   addition to warnings and errors.
 
-
-g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
-
+                                          *ale-options.max_buffer_history_size*
+                                                *g:ale_max_buffer_history_size*
+max_buffer_history_size
+g:ale_max_buffer_history_size
   Type: |Number|
   Default: `20`
 
@@ -1828,13 +2141,15 @@ g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
 
   History can be disabled completely with |g:ale_history_enabled|.
 
-
-g:ale_max_signs                                               *g:ale_max_signs*
+                                                        *ale-options.max_signs*
+                                                              *g:ale_max_signs*
                                                               *b:ale_max_signs*
+max_signs
+g:ale_max_signs
   Type: |Number|
   Default: `-1`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   When set to any positive integer, ALE will not render any more than the
   given number of signs for any one buffer.
@@ -1847,26 +2162,30 @@ g:ale_max_signs                                               *g:ale_max_signs*
 
   For disabling sign processing, see |g:ale_set_signs|.
 
-
-g:ale_maximum_file_size                               *g:ale_maximum_file_size*
+                                                *ale-options.maximum_file_size*
+                                                      *g:ale_maximum_file_size*
                                                       *b:ale_maximum_file_size*
+maximum_file_size
+g:ale_maximum_file_size
   Type: |Number|
-  Default: not set
+  Default: `nil`
 
   A maximum file size in bytes for ALE to check. If set to any positive
   number, ALE will skip checking files larger than the given size.
 
-
-g:ale_open_list                                               *g:ale_open_list*
+                                                        *ale-options.open_list*
+                                                              *g:ale_open_list*
                                                               *b:ale_open_list*
-  Type: |Number| or |String|
-  Default: `0`
+open_list
+g:ale_open_list
+  Type: |Boolean| |Number| or |String|
+  Default: `false`
 
-  When set to `1`, this will cause ALE to automatically open a window for the
-  loclist (|lopen|) or for the quickfix list instead if |g:ale_set_quickfix|
-  is `1`. (|copen|)
+  When set to `true` or `1`, this will cause ALE to automatically open a
+  window for the loclist (|lopen|) or for the quickfix list instead if
+  |g:ale_set_quickfix| is `true` or `1`. (|copen|)
 
-  When set to any higher numberical value, ALE will only open the window when
+  When set to any higher numerical value, ALE will only open the window when
   the number of warnings or errors are at least that many.
 
   When set to `'on_save'`, ALE will only open the loclist after buffers have
@@ -1875,8 +2194,8 @@ g:ale_open_list                                               *g:ale_open_list*
 
   The window will be kept open until all warnings or errors are cleared,
   including those not set by ALE, unless |g:ale_keep_list_window_open| is set
-  to `1`, in which case the window will be kept open when no problems are
-  found.
+  to `true` or `1`, in which case the window will be kept open when no
+  problems are found.
 
   The window size can be configured with |g:ale_list_window_size|.
 
@@ -1889,12 +2208,16 @@ g:ale_open_list                                               *g:ale_open_list*
     autocmd!
     autocmd QuitPre * if empty(&buftype) | lclose | endif
   augroup END
-
 <
-g:ale_pattern_options                                   *g:ale_pattern_options*
-
+                                                        *g:ale_pattern_options*
+g:ale_pattern_options
   Type: |Dictionary|
-  Default: not set
+  Default: `nil`
+
+  NOTE: This option is not available through |ale.setup| in Lua as the options
+  named here would require separate translation to the equivalent Vim options.
+  You should instead use conditions in ftplugin files to configure options
+  based on filename patterns.
 
   This option maps regular expression patterns to |Dictionary| values for
   buffer variables. This option can be set to automatically configure
@@ -1919,53 +2242,57 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
   pattern keys sorted in alphabetical order. Options for `'zebra'` will
   override the options for `'alpha'` for a filename `alpha-zebra`.
 
-
-g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
-
-  Type: |Number|
-  Default: not set
+                                          *ale-options.pattern_options_enabled*
+                                                *g:ale_pattern_options_enabled*
+pattern_options_enabled
+g:ale_pattern_options_enabled
+  Type: |Boolean| or |Number|
+  Default: `nil`
 
   This option can be used for disabling pattern options. If set to `0`, ALE
   will not set buffer variables per |g:ale_pattern_options|.
 
-
-g:ale_popup_menu_enabled                             *g:ale_popup_menu_enabled*
-
-  Type: |Number|
+                                               *ale-options.popup_menu_enabled*
+                                                     *g:ale_popup_menu_enabled*
+popup_menu_enabled
+g:ale_popup_menu_enabled
+  Type: |Boolean| or |Number|
   Default: `has('gui_running')`
 
-  When this option is set to `1`, ALE will show code actions and rename
-  capabilities in the right click mouse menu when there's a LSP server or
-  tsserver available. See |ale-refactor|.
+  When this option is set to `true` or `1`, ALE will show code actions and
+  rename capabilities in the right click mouse menu when there's a LSP server
+  or tsserver available. See |ale-refactor|.
 
   This feature is only supported in GUI versions of Vim.
 
-  This setting must be set to `1` before ALE is loaded for this behavior
-  to be enabled. See |ale-lint-settings-on-startup|.
+  This setting must be set to `true` or `1` before ALE is loaded for this
+  behavior to be enabled. See |ale-lint-settings-on-startup|.
 
+                                 *ale-options.rename_tsserver_find_in_comments*
+                                       *g:ale_rename_tsserver_find_in_comments*
+rename_tsserver_find_in_comments
+g:ale_rename_tsserver_find_in_comments
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-g:ale_rename_tsserver_find_in_comments *g:ale_rename_tsserver_find_in_comments*
+  If set to `true` or `1`, this option will tell tsserver to find and replace
+  text in comments when calling `:ALERename`.
 
-  Type: |Number|
-  Default: `0`
+                                  *ale-options.rename_tsserver_find_in_strings*
+                                        *g:ale_rename_tsserver_find_in_strings*
+rename_tsserver_find_in_strings
+g:ale_rename_tsserver_find_in_strings
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-  If enabled, this option will tell tsserver to find and replace text in
-  comments when calling `:ALERename`. It can be enabled by settings the value
-  to `1`.
+  If set to `true` or `1`, this option will tell tsserver to find and replace
+  text in strings when calling `:ALERename`.
 
-
-g:ale_rename_tsserver_find_in_strings   *g:ale_rename_tsserver_find_in_strings*
-
-  Type: |Number|
-  Default: `0`
-
-  If enabled, this option will tell tsserver to find and replace text in
-  strings when calling `:ALERename`. It can be enabled by settings the value to
-  `1`.
-
-
-g:ale_root                                                         *g:ale_root*
+                                                             *ale-options.root*
+                                                                   *g:ale_root*
                                                                    *b:ale_root*
+root
+g:ale_root
   Type: |Dictionary| or |String|
   Default: `{}`
 
@@ -1981,24 +2308,27 @@ g:ale_root                                                         *g:ale_root*
   detect a project root. If this, too, yields no result, and the linter is an
   LSP linter, it will not run.
 
+                                                      *ale-options.save_hidden*
+                                                            *g:ale_save_hidden*
+save_hidden
+g:ale_save_hidden
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-g:ale_save_hidden                                           *g:ale_save_hidden*
-
-  Type: |Number|
-  Default: `0`
-
-  When set to `1`, save buffers when 'hidden' is set when applying code
-  actions or rename operations, such as through `:ALERename` or
+  When set to `true` or `1`, save buffers when 'hidden' is set when applying
+  code actions or rename operations, such as through `:ALERename` or
   `:ALEOrganizeImports`.
 
-
-g:ale_set_balloons                                         *g:ale_set_balloons*
+                                                     *ale-options.set_balloons*
+                                                           *g:ale_set_balloons*
                                                            *b:ale_set_balloons*
-  Type: |Number| or |String|
+set_balloons
+g:ale_set_balloons
+  Type: |Boolean| or |Number| or |String|
   Default: `has('balloon_eval') && has('gui_running')`
 
-  When this option is set to `1`, balloon messages will be displayed for
-  problems or hover information if available.
+  When this option is set to `true` or `1`, balloon messages will be displayed
+  for problems or hover information if available.
 
   Problems nearest to the line the mouse cursor is over will be displayed. If
   there are no problems to show, and one of the linters is an LSP linter
@@ -2021,35 +2351,40 @@ g:ale_set_balloons                                         *g:ale_set_balloons*
   Balloons cannot be enabled for a specific buffer when not initially enabled
   globally.
 
-  Balloons will not be shown when |g:ale_enabled| or |b:ale_enabled| is `0`.
+  Balloons will not be shown when |g:ale_enabled| or |b:ale_enabled| is not
+  `true` or `1`.
 
-
-g:ale_set_balloons_legacy_echo                 *g:ale_set_balloons_legacy_echo*
+                                         *ale-options.set_balloons_legacy_echo*
+                                               *g:ale_set_balloons_legacy_echo*
                                                *b:ale_set_balloons_legacy_echo*
-  Type: |Number|
-  Default: not set
+set_balloons_legacy_echo
+g:ale_set_balloons_legacy_echo
+  Type: |Boolean| or |Number|
+  Default: `nil`
 
-  If set to `1`, moving your mouse over documents in Vim will make ALE ask
-  `tsserver` or `LSP` servers for information about the symbol where the mouse
-  cursor is, and print that information into Vim's echo line. This is an
-  option for supporting older versions of Vim which do not properly support
-  balloons in an asynchronous manner.
+  If set to `true` or `1`, moving your mouse over documents in Vim will make
+  ALE ask `tsserver` or `LSP` servers for information about the symbol where
+  the mouse cursor is, and print that information into Vim's echo line. This
+  is an option for supporting older versions of Vim which do not properly
+  support balloons in an asynchronous manner.
 
   If your version of Vim supports the |balloon_show| function, then this
   option does nothing meaningful.
 
-
-g:ale_set_highlights                                     *g:ale_set_highlights*
-
-  Type: |Number|
+                                                   *ale-options.set_highlights*
+                                                         *g:ale_set_highlights*
+set_highlights
+g:ale_set_highlights
+  Type: |Boolean| or |Number|
   Default: `has('syntax')`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
-  In addition, ALE's highlight groups will not be used when setting
-  highlights through Neovim's diagnostics API. See |diagnostic-highlights| for
-  how to configure Neovim diagnostic highlighting.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
-  When this option is set to `1`, highlights will be set for problems.
+  ALE's highlight groups will not be used when setting highlights through
+  Neovim's diagnostics API. See |diagnostic-highlights| for how to configure
+  Neovim diagnostic highlighting.
+
+  When this option is set to `true` or `1`, highlights will be presented.
 
   ALE will use the following highlight groups for problems:
 
@@ -2061,8 +2396,8 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
   ALEStyleWarning  items with `'type': 'W'` and
                               `'sub_type': 'style'`    |hl-ALEStyleWarning|
 
-  When |g:ale_set_signs| is set to `0`, the following highlights for entire
-  lines will be set.
+  When |g:ale_set_signs| is not set to `true` or `1`, the following highlights
+  for entire lines will be set.
 
   ALEErrorLine     all items with `'type': 'E'`        |hl-ALEErrorLine|
   ALEWarningLine   all items with `'type': 'W'`        |hl-ALEWarningLine|
@@ -2074,25 +2409,29 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
 
   Highlights can be excluded with the |g:ale_exclude_highlights| option.
 
+                                                      *ale-options.set_loclist*
+                                                            *g:ale_set_loclist*
+set_loclist
+g:ale_set_loclist
+  Type: |Boolean| or |Number|
+  Default: `true`
 
-g:ale_set_loclist                                           *g:ale_set_loclist*
+  When this option is set to `true` or `1`, the |location-list| will be
+  populated with any warnings and errors which are found by ALE. This feature
+  can be used to implement jumping between errors through typical use of
+  `:lnext` and `:lprev`.
 
-  Type: |Number|
-  Default: `1`
+                                                     *ale-options.set_quickfix*
+                                                           *g:ale_set_quickfix*
+set_quickfix
+g:ale_set_quickfix
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-  When this option is set to `1`, the |location-list| will be populated with
-  any warnings and errors which are found by ALE. This feature can be used to
-  implement jumping between errors through typical use of `:lnext` and `:lprev`.
-
-
-g:ale_set_quickfix                                         *g:ale_set_quickfix*
-
-  Type: |Number|
-  Default: `0`
-
-  When this option is set to `1`, the |quickfix| list will be populated with
-  any problems which are found by ALE, instead of the |location-list|. The
-  loclist will never be populated when this option is on.
+  When this option is set to `true` or `1`, the |quickfix| list will be
+  populated with any problems which are found by ALE, instead of the
+  |location-list|. The loclist will never be populated when this option is
+  enabled.
 
   Problems from every buffer ALE has checked will be included in the quickfix
   list, which can be checked with `:copen`. Problems will be de-duplicated.
@@ -2102,14 +2441,15 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   pretty frequently. If you wish to use such tools, you should populate the
   loclist or use `:ALEPopulateQuickfix` instead.
 
-
-g:ale_set_signs                                               *g:ale_set_signs*
-
-  Type: |Number|
+                                                        *ale-options.set_signs*
+                                                              *g:ale_set_signs*
+set_signs
+g:ale_set_signs
+  Type: |Boolean| or |Number|
   Default: `has('signs')`
 
-  When this option is set to `1`, the |sign| column will be populated with
-  signs marking where problems appear in the file.
+  When this option is set to `true` or `1`, the |sign| column will be
+  populated with signs marking where problems appear in the file.
 
   When |g:ale_use_neovim_diagnostics_api| is `1`, the only other setting that
   will be respected for signs is |g:ale_sign_priority|. ALE's highlight groups
@@ -2146,7 +2486,7 @@ g:ale_set_signs                                               *g:ale_set_signs*
                              `'sub_type': 'style'`   |hl-ALEStyleWarningSignLineNr|
 
   To enable line number highlighting |g:ale_sign_highlight_linenrs| must be
-  set to `1` before ALE is loaded.
+  set to `true` or `1` before ALE is loaded.
 
   The markers for the highlights can be customized with the following options:
 
@@ -2161,9 +2501,10 @@ g:ale_set_signs                                               *g:ale_set_signs*
 
   To limit the number of signs ALE will set, see |g:ale_max_signs|.
 
-
-g:ale_sign_priority                                       *g:ale_sign_priority*
-
+                                                    *ale-options.sign_priority*
+                                                          *g:ale_sign_priority*
+sign_priority
+g:ale_sign_priority
   Type: |Number|
   Default: `30`
 
@@ -2171,11 +2512,13 @@ g:ale_sign_priority                                       *g:ale_sign_priority*
   larger this value is, the higher priority ALE signs have over other plugin
   signs. See |sign-priority| for further details on how priority works.
 
-
-g:ale_shell                                                       *g:ale_shell*
+                                                            *ale-options.shell*
+                                                                  *g:ale_shell*
                                                                   *b:ale_shell*
+shell
+g:ale_shell
   Type: |String|
-  Default: not set
+  Default: `nil`
 
   Override the shell used by ALE for executing commands. ALE uses 'shell' by
   default, but falls back in `/bin/sh` if the default shell looks like `fish`
@@ -2188,76 +2531,84 @@ g:ale_shell                                                       *g:ale_shell*
 
   NOTE: Consider setting |g:ale_shell_arguments| if this option is defined.
 
-
-g:ale_shell_arguments                                   *g:ale_shell_arguments*
+                                                  *ale-options.shell_arguments*
+                                                        *g:ale_shell_arguments*
                                                         *b:ale_shell_arguments*
+shell_arguments
+g:ale_shell_arguments
   Type: |String|
-  Default: not set
+  Default: `nil`
 
   This option specifies the arguments to use for executing a command with a
   custom shell, per |g:ale_shell|. If this option is not set, 'shellcmdflag'
   will be used instead.
 
+                                               *ale-options.sign_column_always*
+                                                     *g:ale_sign_column_always*
+sign_column_always
+g:ale_sign_column_always
+  Type: |Boolean| or |Number|
+  Default: `v:false`
 
-g:ale_sign_column_always                             *g:ale_sign_column_always*
-
-  Type: |Number|
-  Default: `0`
-
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   By default, the sign gutter will disappear when all warnings and errors have
   been fixed for a file. When this option is set to `1`, the sign column will
   remain open. This can be preferable if you don't want the text in your file
   to move around as you edit a file.
 
-
-g:ale_sign_error                                             *g:ale_sign_error*
-
+                                                       *ale-options.sign_error*
+                                                             *g:ale_sign_error*
+sign_error
+g:ale_sign_error
   Type: |String|
   Default: `'E'`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   The sign for errors in the sign gutter.
 
-
-g:ale_sign_info                                               *g:ale_sign_info*
-
+                                                        *ale-options.sign_info*
+                                                              *g:ale_sign_info*
+sign_info
+g:ale_sign_info
   Type: |String|
   Default: `'I'`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   The sign for "info" markers in the sign gutter.
 
-
-g:ale_sign_style_error                                 *g:ale_sign_style_error*
-
+                                                 *ale-options.sign_style_error*
+                                                       *g:ale_sign_style_error*
+sign_style_error
+g:ale_sign_style_error
   Type: |String|
   Default: `g:ale_sign_error`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   The sign for style errors in the sign gutter.
 
-
-g:ale_sign_style_warning                             *g:ale_sign_style_warning*
-
+                                               *ale-options.sign_style_warning*
+                                                     *g:ale_sign_style_warning*
+sign_style_warning
+g:ale_sign_style_warning
   Type: |String|
   Default: `g:ale_sign_warning`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   The sign for style warnings in the sign gutter.
 
-
-g:ale_sign_offset                                           *g:ale_sign_offset*
-
+                                                      *ale-options.sign_offset*
+                                                            *g:ale_sign_offset*
+sign_offset
+g:ale_sign_offset
   Type: |Number|
   Default: `1000000`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   This variable controls offset from which numeric IDs will be generated for
   new signs. Signs cannot share the same ID values, so when two Vim plugins
@@ -2267,39 +2618,46 @@ g:ale_sign_offset                                           *g:ale_sign_offset*
   plugins will work together. See |sign-place| for more information on how
   signs are set.
 
-
-g:ale_sign_warning                                         *g:ale_sign_warning*
-
+                                                     *ale-options.sign_warning*
+                                                           *g:ale_sign_warning*
+sign_warning
+g:ale_sign_warning
   Type: |String|
   Default: `'W'`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   The sign for warnings in the sign gutter.
 
+                                           *ale-options.sign_highlight_linenrs*
+                                                 *g:ale_sign_highlight_linenrs*
+sign_highlight_linenrs
+g:ale_sign_highlight_linenrs
+  Type: |Boolean| or |Number|
+  Default: `false`
 
-g:ale_sign_highlight_linenrs                     *g:ale_sign_highlight_linenrs*
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
-  Type: |Number|
-  Default: `0`
+  When set to `true` or `1`, this option enables highlighting problems on the
+  'number' column in Vim versions that support `numhl` highlights. This option
+  must be configured before ALE is loaded.
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
-
-  When set to `1`, this option enables highlighting problems on the 'number'
-  column in Vim versions that support `numhl` highlights. This option must be
-  configured before ALE is loaded.
-
-
-g:ale_update_tagstack                                   *g:ale_update_tagstack*
+                                                  *ale-options.update_tagstack*
+                                                        *g:ale_update_tagstack*
                                                         *b:ale_update_tagstack*
-  Type: |Number|
-  Default: `1`
+update_tagstack
+g:ale_update_tagstack
+  Type: |Boolean| or |Number|
+  Default: `v:true`
 
-  This option can be set to disable updating Vim's |tagstack| automatically.
-
-
-g:ale_type_map                                                 *g:ale_type_map*
+  When set to `true` or `1`, ALE will update Vims |tagstack| automatically
+  when jumping to a location through ALE's commands, so users can jump back to
+  where they came from.
+                                                         *ale-options.type_map*
+                                                               *g:ale_type_map*
                                                                *b:ale_type_map*
+type_map
+g:ale_type_map
   Type: |Dictionary|
   Default: `{}`
 
@@ -2319,18 +2677,28 @@ g:ale_type_map                                                 *g:ale_type_map*
 
   let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 <
+  Or in Lua: >
+
+  require("ale").setup(type_map = {flake8 = {ES = "WS", E = "W"}})
+<
   If you wanted to turn style errors and warnings into regular errors and
   warnings, you can write the following: >
 
   let g:ale_type_map = {'flake8': {'ES': 'E', 'WS': 'W'}}
 <
-  Type maps can be set per-buffer with `b:ale_type_map`.
+  Or in Lua: >
 
+  require("ale").setup(type_map = {flake8 = {ES = "E", WS = "W"}})
+<
+  Type maps can be set per-buffer with `b:ale_type_map`, or in Lua with
+  |ale.setup.buffer|.
 
-g:ale_use_global_executables                     *g:ale_use_global_executables*
-
+                                           *ale-options.use_global_executables*
+                                                 *g:ale_use_global_executables*
+use_global_executables
+g:ale_use_global_executables
   Type: |Number|
-  Default: not set
+  Default: `nil`
 
   This option can be set to change the default for all `_use_global` options.
   This option must be set before ALE is loaded, preferably in a vimrc file.
@@ -2338,27 +2706,44 @@ g:ale_use_global_executables                     *g:ale_use_global_executables*
   See |ale-integrations-local-executables| for more information on those
   options.
 
-
-g:ale_use_neovim_diagnostics_api             *g:ale_use_neovim_diagnostics_api*
-
-  Type: |Number|
+                                       *ale-options.use_neovim_diagnostics_api*
+                                             *g:ale_use_neovim_diagnostics_api*
+use_neovim_diagnostics_api
+g:ale_use_neovim_diagnostics_api
+  Type: |Boolean| or |Number|
   Default: `has('nvim-0.7')`
 
-  If enabled, this option will disable ALE's standard UI, and instead send
-  all linter output to Neovim's diagnostics API. This allows you to collect
-  errors from nvim-lsp, ALE, and anything else that uses diagnostics all in
-  one place. Many options for configuring how problems appear on the screen
-  will not apply when the API is enabled.
-
-  To enable this option, set the value to `1`.
+  If set to `true` or `1`, disable ALE's standard UI, and instead send all
+  linter output to Neovim's diagnostics API. This allows you to collect
+  problems using ALE and other plugins together all in one place. Many
+  options for configuring how problems appear on the screen will not apply
+  when the API is enabled.
 
   This option requires Neovim 0.7+, as that version introduces the diagnostics
   API.
 
+                                               *ale-options.use_neovim_lsp_api*
+                                                     *g:ale_use_neovim_lsp_api*
+use_neovim_lsp_api
+g:ale_use_neovim_lsp_api
+  Type: |Boolean| or |Number|
+  Default: `has('nvim-0.8')`
 
-g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
+  If set to `true` or `1`, ALE will use Neovim's native LSP client API for LSP
+  functionality. This makes it possible to use Neovim's built in LSP commands
+  and keybinds, and improves integration with other Neovim plugins that
+  integrate with Neovim's LSP client.
 
-  Type: |Number|
+  See |ale-lsp-neovim| for more information about ALE's integration with
+  Neovim's LSP client.
+
+  This option requires Neovim 0.8+.
+
+                                               *ale-options.virtualtext_cursor*
+                                                     *g:ale_virtualtext_cursor*
+virtualtext_cursor
+g:ale_virtualtext_cursor
+  Type: |Number| or |String|
   Default: `'all'` (if supported, otherwise `'disabled'`)
 
   This option controls how ALE will display problems using |virtual-text|.
@@ -2388,13 +2773,15 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
   ALEVirtualTextStyleWarning items with `'type': 'W'` and
                              `'sub_type': 'style'`     |hl-ALEVirtualTextStyleWarning|
 
-
-g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
+                                                *ale-options.virtualtext_delay*
+                                                      *g:ale_virtualtext_delay*
                                                       *b:ale_virtualtext_delay*
+virtualtext_delay
+g:ale_virtualtext_delay
   Type: |Number|
   Default: `10`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   Given any integer, this option controls the number of milliseconds before
   ALE will show a message for a problem near the cursor.
@@ -2402,13 +2789,15 @@ g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
   The value can be increased to decrease the amount of processing ALE will do
   for files displaying a large number of problems.
 
-
-g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
+                                               *ale-options.virtualtext_prefix*
+                                                     *g:ale_virtualtext_prefix*
                                                      *b:ale_virtualtext_prefix*
+virtualtext_prefix
+g:ale_virtualtext_prefix
   Type: |String|
   Default: `'%comment% %type%: '`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   Prefix to be used with |g:ale_virtualtext_cursor|.
 
@@ -2423,15 +2812,20 @@ g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
   part before `%s`, with whitespace trimmed. If comment syntax cannot be
   pulled from 'commentstring', ALE will default to `'#'`.
 
-
-g:ale_virtualtext_column                             *g:ale_virtualtext_column*
+                                               *ale-options.virtualtext_column*
+                                                     *g:ale_virtualtext_column*
                                                      *b:ale_virtualtext_column*
-g:ale_virtualtext_maxcolumn                       *g:ale_virtualtext_maxcolumn*
+                                            *ale-options.virtualtext_maxcolumn*
+                                                  *g:ale_virtualtext_maxcolumn*
                                                   *b:ale_virtualtext_maxcolumn*
+virtualtext_column
+virtualtext_maxcolumn
+g:ale_virtualtext_column
+g:ale_virtualtext_maxcolumn
   Type: |String| or |Number|
   Default: `0`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   Virtualtext column range, from `column` to `maxcolumn`.  If a line is
   `column` or less characters long, the virtualtext message is shifted right
@@ -2448,13 +2842,15 @@ g:ale_virtualtext_maxcolumn                       *g:ale_virtualtext_maxcolumn*
   When `column` is set to zero, column positioning is disabled, when `maxcolumn`
   is set to zero, no maximum line length is enforced.
 
-
-g:ale_virtualtext_single                             *g:ale_virtualtext_single*
+                                               *ale-options.virtualtext_single*
+                                                     *g:ale_virtualtext_single*
                                                      *b:ale_virtualtext_single*
-  Type: |Number|
-  Default: `1`
+virtualtext_single
+g:ale_virtualtext_single
+  Type: |Boolean| or |Number|
+  Default: `true`
 
-  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   Enable or disable concatenation of multiple virtual text messages on a single
   line. By default, if a line has multiple errors or warnings, each will be
@@ -2465,9 +2861,11 @@ g:ale_virtualtext_single                             *g:ale_virtualtext_single*
   printed. If two problems exist on a line of equal severity, the problem at
   the left-most position will be printed.
 
-
-g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
+                                             *ale-options.virtualenv_dir_names*
+                                                   *g:ale_virtualenv_dir_names*
                                                    *b:ale_virtualenv_dir_names*
+virtualenv_dir_names
+g:ale_virtualenv_dir_names
   Type: |List|
   Default: `['.venv', 'env', 've', 'venv', 'virtualenv', '.env']`
 
@@ -2478,9 +2876,11 @@ g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
   (`foo\Scripts\activate\` on Windows) in all directories on and above the
   directory containing the Python file to find virtualenv paths.
 
-
-g:ale_warn_about_trailing_blank_lines   *g:ale_warn_about_trailing_blank_lines*
+                                  *ale-options.warn_about_trailing_blank_lines*
+                                        *g:ale_warn_about_trailing_blank_lines*
                                         *b:ale_warn_about_trailing_blank_lines*
+warn_about_trailing_blank_lines
+g:ale_warn_about_trailing_blank_lines
   Type: |Number|
   Default: `1`
 
@@ -2489,9 +2889,11 @@ g:ale_warn_about_trailing_blank_lines   *g:ale_warn_about_trailing_blank_lines*
 
   This option behaves similarly to |g:ale_warn_about_trailing_whitespace|.
 
-
-g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
+                                   *ale-options.warn_about_trailing_whitespace*
+                                         *g:ale_warn_about_trailing_whitespace*
                                          *b:ale_warn_about_trailing_whitespace*
+warn_about_trailing_whitespace
+g:ale_warn_about_trailing_whitespace
   Type: |Number|
   Default: `1`
 
@@ -2505,9 +2907,11 @@ g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 
   This option may be configured on a per buffer basis.
 
-
-g:ale_windows_node_executable_path         *g:ale_windows_node_executable_path*
+                                     *ale-options.windows_node_executable_path*
+                                           *g:ale_windows_node_executable_path*
                                            *b:ale_windows_node_executable_path*
+windows_node_executable_path
+g:ale_windows_node_executable_path
   Type: |String|
   Default: `'node.exe'`
 
@@ -2731,8 +3135,8 @@ If you prefer to use global executables for those tools, set the relevant
   let g:ale_python_flake8_executable = '/foo/bar/flake8'
   let g:ale_python_flake8_use_global = 1
 <
-|g:ale_use_global_executables| can be set to `1` in your vimrc file to make
-ALE use global executables for all linters by default.
+|g:ale_use_global_executables| can be set to `true` or  `1` in your init or
+vimrc file to make ALE use global executables for all linters by default.
 
 The option |g:ale_virtualenv_dir_names| controls the local virtualenv paths
 ALE will use to search for Python executables.
@@ -2744,16 +3148,21 @@ ALE will use to search for Python executables.
 The options for `alex` are shared between all filetypes, so options can be
 configured once.
 
-g:ale_alex_executable                                   *g:ale_alex_executable*
+                                                  *ale-options.alex_executable*
+                                                        *g:ale_alex_executable*
                                                         *b:ale_alex_executable*
+alex_executable
+g:ale_alex_executable
   Type: |String|
   Default: `'alex'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_alex_use_global                                   *g:ale_alex_use_global*
+                                                  *ale-options.alex_use_global*
+                                                        *g:ale_alex_use_global*
                                                         *b:ale_alex_use_global*
+alex_use_global
+g:ale_alex_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -2766,24 +3175,31 @@ g:ale_alex_use_global                                   *g:ale_alex_use_global*
 The options for `cspell` are shared between all filetypes, so options can be
 configured only once.
 
-g:ale_cspell_executable                               *g:ale_cspell_executable*
+                                                *ale-options.cspell_executable*
+                                                      *g:ale_cspell_executable*
                                                       *b:ale_cspell_executable*
+cspell_executable
+g:ale_cspell_executable
   Type: |String|
   Default: `'cspell'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_cspell_options                                     *g:ale_cspell_options*
+                                                   *ale-options.cspell_options*
+                                                         *g:ale_cspell_options*
                                                          *b:ale_cspell_options*
+cspell_options
+g:ale_cspell_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to `cspell`.
 
-
-g:ale_cspell_use_global                               *g:ale_cspell_use_global*
+                                                *ale-options.cspell_use_global*
+                                                      *g:ale_cspell_use_global*
                                                       *b:ale_cspell_use_global*
+cspell_use_global
+g:ale_cspell_use_global
   Type: |Number|
   Default: `get(g: 'ale_use_global_executables', 0)`
 
@@ -2797,16 +3213,21 @@ g:ale_cspell_use_global                               *g:ale_cspell_use_global*
 json(c?), markdown, and more. See https://dprint.dev/plugins for an up-to-date
 list of supported plugins and their configuration options.
 
-g:ale_dprint_executable                               *g:ale_dprint_executable*
+                                                *ale-options.dprint_executable*
+                                                      *g:ale_dprint_executable*
                                                       *b:ale_dprint_executable*
+dprint_executable
+g:ale_dprint_executable
   Type: |String|
   Default: `'dprint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_dprint_config                                       *g:ale_dprint_config*
+                                                    *ale-options.dprint_config*
+                                                          *g:ale_dprint_config*
                                                           *b:ale_dprint_config*
+dprint_config
+g:ale_dprint_config
   Type: |String|
   Default: `'dprint.json'`
 
@@ -2816,17 +3237,21 @@ g:ale_dprint_config                                       *g:ale_dprint_config*
 
   See https://dprint.dev/config and https://plugins.dprint.dev
 
-
-g:ale_dprint_options                                     *g:ale_dprint_options*
+                                                   *ale-options.dprint_options*
+                                                         *g:ale_dprint_options*
                                                          *b:ale_dprint_options*
+dprint_options
+g:ale_dprint_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to `dprint`.
 
-
-g:ale_dprint_use_global                               *g:ale_dprint_use_global*
+                                                *ale-options.dprint_use_global*
+                                                      *g:ale_dprint_use_global*
                                                       *b:ale_dprint_use_global*
+dprint_use_global
+g:ale_dprint_use_global
   Type: |Number|
   Default: `get(g: 'ale_use_global_executables', 0)`
 
@@ -2836,17 +3261,21 @@ g:ale_dprint_use_global                               *g:ale_dprint_use_global*
 -------------------------------------------------------------------------------
 7.4. Options for languagetool                        *ale-languagetool-options*
 
-g:ale_languagetool_executable                   *g:ale_languagetool_executable*
+                                          *ale-options.languagetool_executable*
+                                                *g:ale_languagetool_executable*
                                                 *b:ale_languagetool_executable*
-
+languagetool_executable
+g:ale_languagetool_executable
   Type: |String|
   Default: `'languagetool'`
 
   The executable to run for languagetool.
 
-
-g:ale_languagetool_options                         *g:ale_languagetool_options*
+                                             *ale-options.languagetool_options*
+                                                   *g:ale_languagetool_options*
                                                    *b:ale_languagetool_options*
+languagetool_options
+g:ale_languagetool_options
   Type: |String|
   Default: `'--autoDetect'`
 
@@ -2859,24 +3288,31 @@ g:ale_languagetool_options                         *g:ale_languagetool_options*
 The options for `write-good` are shared between all filetypes, so options can
 be configured once.
 
-g:ale_writegood_executable                         *g:ale_writegood_executable*
+                                             *ale-options.writegood_executable*
+                                                   *g:ale_writegood_executable*
                                                    *b:ale_writegood_executable*
+writegood_executable
+g:ale_writegood_executable
   Type: |String|
   Default: `'writegood'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_writegood_options                               *g:ale_writegood_options*
+                                                *ale-options.writegood_options*
+                                                      *g:ale_writegood_options*
                                                       *b:ale_writegood_options*
+writegood_options
+g:ale_writegood_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to writegood.
 
-
-g:ale_writegood_use_global                         *g:ale_writegood_use_global*
+                                             *ale-options.writegood_use_global*
+                                                   *g:ale_writegood_use_global*
                                                    *b:ale_writegood_use_global*
+writegood_use_global
+g:ale_writegood_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -3568,6 +4004,7 @@ documented in additional help files.
 
     imap <C-Space> <Plug>(ale_complete)
 <
+
 :ALEDocumentation                                           *:ALEDocumentation*
 
   Similar to the `:ALEHover` command, retrieve documentation information for
@@ -3632,7 +4069,7 @@ documented in additional help files.
   See |ale-fix| for more information.
 
 
-:ALEGoToDefinition [options]                                *:ALEGoToDefinition*
+:ALEGoToDefinition [options]                               *:ALEGoToDefinition*
 
   Jump to the definition of a symbol under the cursor using the enabled LSP
   linters for the buffer. ALE will jump to a definition if an LSP server
@@ -3761,7 +4198,7 @@ documented in additional help files.
   prompt will open to request a new name.
 
   The rename operation will not save modified buffers when 'hidden' is on
-  unless |g:ale_save_hidden| is 1.
+  unless |g:ale_save_hidden| is `true` or `1`.
 
 
 :ALEFileRename                                                 *:ALEFileRename*
@@ -4011,9 +4448,12 @@ documented in additional help files.
 
 ALE offers a number of functions for running linters or fixers, or defining
 them. The following functions are part of the publicly documented part of that
-API, and should be expected to continue to work.
+API, and should be expected to continue to work. Functions documented with
+Vim autocmd names `ale#Foo` are available in the Vim context, and functions
+documented with dot names `ale.foo` are available in Lua scripts.
 
 
+ale.env(variable_name, value)                                       *ale.env()*
 ale#Env(variable_name, value)                                       *ale#Env()*
 
   Given a variable name and a string value, produce a string for including in
@@ -4025,6 +4465,19 @@ ale#Env(variable_name, value)                                       *ale#Env()*
     'set VAR="some value" && command' # On Windows
 
 
+ale.escape(str)                                                  *ale.escape()*
+ale#Escape(str)                                                  *ale#Escape()*
+
+  Given a string, escape that string so it is ready for shell execution.
+
+  If the shell is detected to be `cmd.exe`, ALE will apply its own escaping
+  that tries to avoid escaping strings unless absolutely necessary to avoid
+  issues with Windows programs that do not properly handle quoted arguments.
+
+  In all other cases, ALE will call |shellescape|.
+
+
+ale.get_filename_mappings(buffer, name)           *ale.get_filename_mappings()*
 ale#GetFilenameMappings(buffer, name)               *ale#GetFilenameMappings()*
 
   Given a `buffer` and the `name` of either a linter for fixer, return a
@@ -4034,40 +4487,83 @@ ale#GetFilenameMappings(buffer, name)               *ale#GetFilenameMappings()*
   See |g:ale_filename_mappings| for details on filename mapping.
 
 
+ale.has(feature)                                                    *ale.has()*
 ale#Has(feature)                                                    *ale#Has()*
 
-  Return `1` if ALE supports a given feature, like |has()| for Vim features.
+  In Vim, `ale#Has` returns `1` if ALE supports a given feature, like |has()|
+  for Vim features. In Lua `ale.has` returns `true` instead, and `false` if a
+  feature is not supported.
 
   ALE versions can be checked with version strings in the format
   `ale#Has('ale-x.y.z')`, such as `ale#Has('ale-2.4.0')`.
 
 
-ale#Pad(string)                                                     *ale#Pad()*
+ale.pad(str)                                                        *ale.pad()*
+ale#Pad(str)                                                        *ale#Pad()*
 
   Given a string or any |empty()| value, return either the string prefixed
   with a single space, or an empty string. This function can be used to build
   parts of a command from variables.
 
 
-ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
+ale.queue(delay, [linting_flag, buffer])                          *ale.queue()*
+ale#Queue(delay, [linting_flag, buffer])                          *ale#Queue()*
 
   Run linters for the current buffer, based on the filetype of the buffer,
   with a given `delay`. A `delay` of `0` will run the linters immediately.
   The linters will always be run in the background. Calling this function
-  again from the same buffer
+  several times will reset an internal timer so ALE doesn't check buffers too
+  often.
 
   An optional `linting_flag` argument can be given. If `linting_flag` is
   `'lint_file'`, then linters where the `lint_file` option evaluates to `1`
   will be run. Otherwise, those linters will not be run.
 
-  An optional `buffer_number` argument can be given for specifying the buffer
-  to check. The active buffer (`bufnr('')`) will be checked by default.
+  An optional `buffer` argument can be given for specifying the buffer to
+  check. The active buffer (`bufnr('')`) will be checked by default.
 
                                                                 *ale-cool-down*
   If an exception is thrown when queuing/running ALE linters, ALE will enter
   a cool down period where it will stop checking anything for a short period
   of time. This is to prevent ALE from seriously annoying users if a linter
   is broken, or when developing ALE itself.
+
+
+ale.setup(config)                                                 *ale.setup()*
+
+  Configure ALE global settings, which are documented in |ale-options|. For
+  example: >
+
+    require("ale").setup({
+      completion_enabled = true,
+      maximum_file_size = 1024 * 1024,
+      warn_about_trailing_whitespace = false,
+    })
+<
+  You can also call this function with `ale.setup.global` to make what context
+  ALE is being configured in less ambiguous if you like.
+
+
+ale.setup.buffer(config)                                   *ale.setup.buffer()*
+
+  Configure ALE buffer-local settings, which are documented in |ale-options|.
+  For example: >
+    require("ale").setup.buffer({
+      linters = {"ruff", "pyright"},
+      fixers = {"ruff"}
+    })
+<
+
+ale.var(buffer, variable_name)                                      *ale.var()*
+ale#Var(buffer, variable_name)                                      *ale#Var()*
+
+  Given a buffer number and an ALE variable name return the value of that
+  if defined in the buffer, and if not defined in the buffer return the
+  global value. The `ale_` prefix will be added to the Vim variable name.
+
+  The `ale#Var` Vim function will return errors if the variable is not defined
+  in either the buffer or globally. The `ale.var` Lua function will return
+  `nil` if the variable is not defined in either the buffer or globally.
 
 
 ale#command#CreateDirectory(buffer)             *ale#command#CreateDirectory()*
@@ -4185,7 +4681,6 @@ ale#command#Run(buffer, command, callback, [options])       *ale#command#Run()*
                         The default is `[]`.
 
 
-
 ale#command#EscapeCommandPart(command_part)   *ale#command#EscapeCommandPart()*
 
   Given a |String|, return a |String| with all `%` characters replaced with
@@ -4246,9 +4741,8 @@ ale#engine#IsCheckingBuffer(buffer)             *ale#engine#IsCheckingBuffer()*
 
   This function can be used for status lines, tab names, etc.
 
-
-ale#fix#registry#Add(name, func, filetypes, desc, [aliases])
                                                        *ale#fix#registry#Add()*
+ale#fix#registry#Add(name, func, filetypes, desc, [aliases])
 
   Given a |String| `name` for a name to add to the registry, a |String| `func`
   for a function name, a |List| `filetypes` for a list of filetypes to
@@ -4664,9 +5158,8 @@ ale#linter#PreventLoading(filetype)               *ale#linter#PreventLoading()*
   |runtimepath| for that filetype. This function can be called from vimrc or
   similar to prevent ALE from loading linters.
 
-
-ale#lsp_linter#SendRequest(buffer, linter_name, message, [Handler])
                                                  *ale#lsp_linter#SendRequest()*
+ale#lsp_linter#SendRequest(buffer, linter_name, message, [Handler])
 
   Send a custom request to an LSP linter. The arguments are defined as
   follows:
@@ -4690,9 +5183,8 @@ ale#lsp_linter#SendRequest(buffer, linter_name, message, [Handler])
                  received, and takes as unique argument a dictionary
                  representing the response obtained from the server.
 
-
-ale#other_source#ShowResults(buffer, linter_name, loclist)
                                                *ale#other_source#ShowResults()*
+ale#other_source#ShowResults(buffer, linter_name, loclist)
 
   Show results from another source of information.
 
@@ -4701,9 +5193,8 @@ ale#other_source#ShowResults(buffer, linter_name, loclist)
   where the problems in a buffer are, and should be provided in the format ALE
   uses for regular linter results. See |ale-loclist-format|.
 
-
-ale#other_source#StartChecking(buffer, linter_name)
                                              *ale#other_source#StartChecking()*
+ale#other_source#StartChecking(buffer, linter_name)
 
   Tell ALE that another source of information has started checking a buffer.
 
@@ -4757,11 +5248,11 @@ g:ale_want_results_buffer                           *g:ale_want_results_buffer*
 
   `g:ale_want_results_buffer` is set to the number of the buffer being checked
   when the |ALEWantResults| event is signaled. This variable should be read to
-  figure out which buffer other sources should lint.
+  figure out which buffer other sources should lint. This variable can be read
+  in Lua scripts in the usual way via `vim.g.ale_want_results_buffer`.
 
-
-ALECompletePost                                       *ALECompletePost-autocmd*
-                                                              *ALECompletePost*
+                                                      *ALECompletePost-autocmd*
+ALECompletePost                                               *ALECompletePost*
 
   This |User| autocmd is triggered after ALE inserts an item on
   |CompleteDone|. This event can be used to run commands after a buffer
@@ -4776,15 +5267,14 @@ ALECompletePost                                       *ALECompletePost-autocmd*
       autocmd User ALEFixPre ALELintStop
   augroup END
 <
-
-ALELintPre                                                 *ALELintPre-autocmd*
-                                                                   *ALELintPre*
-ALELintPost                                               *ALELintPost-autocmd*
-                                                                  *ALELintPost*
-ALEFixPre                                                   *ALEFixPre-autocmd*
-                                                                    *ALEFixPre*
-ALEFixPost                                                 *ALEFixPost-autocmd*
-                                                                   *ALEFixPost*
+                                                           *ALELintPre-autocmd*
+ALELintPre                                                         *ALELintPre*
+                                                          *ALELintPost-autocmd*
+ALELintPost                                                       *ALELintPost*
+                                                            *ALEFixPre-autocmd*
+ALEFixPre                                                           *ALEFixPre*
+                                                           *ALEFixPost-autocmd*
+ALEFixPost                                                         *ALEFixPost*
 
   These |User| autocommands are triggered before and after every lint or fix
   cycle. They can be used to update statuslines, send notifications, etc.
@@ -4792,43 +5282,41 @@ ALEFixPost                                                 *ALEFixPost-autocmd*
   echoing messages.
 
   For example to change the color of the statusline while the linter is
-  running:
->
-    augroup ALEProgress
-        autocmd!
-        autocmd User ALELintPre  hi Statusline ctermfg=darkgrey
-        autocmd User ALELintPost hi Statusline ctermfg=NONE
-    augroup END
-<
-  Or to display the progress in the statusline:
->
-    let s:ale_running = 0
-    let l:stl .= '%{s:ale_running ? "[linting]" : ""}'
-    augroup ALEProgress
-        autocmd!
-        autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
-        autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
-    augroup END
+  running: >
 
+  augroup ALEProgress
+      autocmd!
+      autocmd User ALELintPre  hi Statusline ctermfg=darkgrey
+      autocmd User ALELintPost hi Statusline ctermfg=NONE
+  augroup END
 <
-ALEJobStarted                                           *ALEJobStarted-autocmd*
-                                                                *ALEJobStarted*
+  Or to display the progress in the statusline: >
+
+  let s:ale_running = 0
+  let l:stl .= '%{s:ale_running ? "[linting]" : ""}'
+  augroup ALEProgress
+      autocmd!
+      autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
+      autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
+  augroup END
+<
+                                                        *ALEJobStarted-autocmd*
+ALEJobStarted                                                   *ALEJobStarted*
 
   This |User| autocommand is triggered immediately after a job is successfully
   run. This provides better accuracy for checking linter status with
   |ale#engine#IsCheckingBuffer()| over |ALELintPre-autocmd|, which is actually
   triggered before any linters are executed.
 
-ALELSPStarted                                           *ALELSPStarted-autocmd*
-                                                                *ALELSPStarted*
+                                                        *ALELSPStarted-autocmd*
+ALELSPStarted                                                   *ALELSPStarted*
 
   This |User| autocommand is triggered immediately after an LSP connection is
   successfully initialized. This provides a way to perform any additional
   initialization work, such as setting up buffer-level mappings.
 
-
-ALEWantResults                                         *ALEWantResults-autocmd*
-                                                               *ALEWantResults*
+                                                       *ALEWantResults-autocmd*
+ALEWantResults                                                 *ALEWantResults*
 
   This |User| autocommand is triggered before ALE begins a lint cycle. Another
   source can respond by calling |ale#other_source#StartChecking()|, and
@@ -4849,6 +5337,7 @@ ALEWantResults                                         *ALEWantResults-autocmd*
 Special thanks to Mark Grealish (https://www.bhalash.com/) for providing ALE's
 snazzy looking ale glass logo. Cheers, Mark!
 
+
 ===============================================================================
 11. Contact                                                       *ale-contact*
 
@@ -4860,6 +5349,7 @@ free to send an email to devw0rp@gmail.com.
 
 Please drink responsibly, or not at all, which is ironically the preference
 of w0rp, who is teetotal.
+
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

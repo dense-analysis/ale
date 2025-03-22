@@ -11,17 +11,21 @@ See |ale-cspell-options|
 ===============================================================================
 opacheck                                                   *ale-rego-opa-check*
 
-g:ale_rego_opacheck_executable                     *g:rego_opacheck_executable*
-                                                   *b:rego_opacheck_executable*
-
+                                         *ale-options.rego_opacheck_executable*
+                                               *g:ale_rego_opacheck_executable*
+                                               *b:ale_rego_opacheck_executable*
+rego_opacheck_executable
+g:ale_rego_opacheck_executable
   Type: |String|
   Default: `'opa'`
 
   This variable can be changed to use a different executable for opa.
 
-
-g:rego_opacheck_options                               *g:rego_opacheck_options*
+                                            *ale-options.rego_opacheck_options*
+                                                      *g:rego_opacheck_options*
                                                       *b:rego_opacheck_options*
+rego_opacheck_options
+g:ale_rego_opacheck_options
   Type: |String|
   Default: `''`
 
@@ -31,17 +35,21 @@ g:rego_opacheck_options                               *g:rego_opacheck_options*
 ===============================================================================
 opafmt                                                 *ale-rego-opa-fmt-fixer*
 
-g:ale_opa_fmt_executable                             *g:ale_opa_fmt_executable*
+                                               *ale-options.opa_fmt_executable*
+                                                     *g:ale_opa_fmt_executable*
                                                      *b:ale_opa_fmt_executable*
-
+opa_fmt_executable
+g:ale_opa_fmt_executable
   Type: |String|
   Default: `'opa'`
 
   This variable can be changed to use a different executable for opa.
 
-
-g:ale_opa_fmt_options                                   *g:ale_opa_fmt_options*
+                                                  *ale-options.opa_fmt_options*
+                                                        *g:ale_opa_fmt_options*
                                                         *b:ale_opa_fmt_options*
+opa_fmt_options
+g:ale_opa_fmt_options
   Type: |String|
   Default: `''`
 

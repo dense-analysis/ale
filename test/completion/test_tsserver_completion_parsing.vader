@@ -1,7 +1,9 @@
 Before:
+  Save g:ale_completion_autoimport
   Save g:ale_completion_tsserver_remove_warnings
 
-  let g:ale_completion_tsserver_remove_warnings = 0
+  let g:ale_completion_autoimport = v:true
+  let g:ale_completion_tsserver_remove_warnings = v:false
 
 After:
   Restore
@@ -91,7 +93,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'kind': 'v',
   \     'icase': 1,
   \     'user_data': json_encode({'_ale_completion_item': 1}),
-  \     'dup': g:ale_completion_autoimport,
+  \     'dup': g:ale_completion_autoimport + 0,
   \   },
   \   {
   \     'word': 'def',
@@ -100,7 +102,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'kind': 'v',
   \     'icase': 1,
   \     'user_data': json_encode({'_ale_completion_item': 1}),
-  \     'dup': g:ale_completion_autoimport,
+  \     'dup': g:ale_completion_autoimport + 0,
   \   },
   \   {
   \     'word': 'ghi',
@@ -109,7 +111,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'kind': 'v',
   \     'icase': 1,
   \     'user_data': json_encode({'_ale_completion_item': 1}),
-  \     'dup': g:ale_completion_autoimport,
+  \     'dup': g:ale_completion_autoimport + 0,
   \   },
   \ ],
   \ ale#completion#ParseTSServerCompletionEntryDetails({
@@ -188,7 +190,7 @@ Execute(Entries without details should be included in the responses):
   \             'changes': [],
   \         }],
   \     }),
-  \     'dup': g:ale_completion_autoimport,
+  \     'dup': g:ale_completion_autoimport + 0,
   \   },
   \   {
   \     'word': 'def',
@@ -197,7 +199,7 @@ Execute(Entries without details should be included in the responses):
   \     'kind': 'v',
   \     'icase': 1,
   \     'user_data': json_encode({'_ale_completion_item': 1}),
-  \     'dup': g:ale_completion_autoimport,
+  \     'dup': g:ale_completion_autoimport + 0,
   \   },
   \   {
   \     'word': 'xyz',
@@ -272,7 +274,7 @@ Execute(Default imports should be handled correctly):
   \             'changes': [],
   \         }],
   \     }),
-  \     'dup': g:ale_completion_autoimport,
+  \     'dup': g:ale_completion_autoimport + 0,
   \   },
   \ ],
   \ ale#completion#ParseTSServerCompletionEntryDetails({

@@ -5,17 +5,21 @@ ALE Mercury Integration                                   *ale-mercury-options*
 ===============================================================================
 mmc                                                           *ale-mercury-mmc*
 
-
-g:ale_mercury_mmc_executable                     *g:ale_mercury_mmc_executable*
+                                           *ale-options.mercury_mmc_executable*
+                                                 *g:ale_mercury_mmc_executable*
                                                  *b:ale_mercury_mmc_executable*
+mercury_mmc_executable
+g:ale_mercury_mmc_executable
   Type: |String|
   Default: `'mmc'`
 
   This variable can be changed to use a different executable for mmc.
 
-
-g:ale_mercury_mmc_options                           *g:ale_mercury_mmc_options*
+                                              *ale-options.mercury_mmc_options*
+                                                    *g:ale_mercury_mmc_options*
                                                     *b:ale_mercury_mmc_options*
+mercury_mmc_options
+g:ale_mercury_mmc_options
   Type: |String|
   Default: `'--make --output-compile-error-lines 100'`
 

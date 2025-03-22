@@ -39,7 +39,7 @@ Before:
   let g:ale_linters = {'foobar': ['dummy_linter']}
 
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
-    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', 'foobar', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
     let l:details = {
     \ 'command': 'foobar',

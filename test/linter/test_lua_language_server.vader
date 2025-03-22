@@ -14,3 +14,8 @@ Execute(lua-language-server should be configurable):
 
   AssertLinter 'billy', ale#Escape('billy')
   AssertLSPConfig {'x': 'y'}
+
+Execute(lua-language-server should detect the project root using .luarc.json):
+  call ale#test#SetFilename('../lua/dummy.lua')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../lua')

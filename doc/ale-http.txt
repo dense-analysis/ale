@@ -5,8 +5,11 @@ ALE HTTP Integration                                         *ale-http-options*
 ===============================================================================
 kulala_fmt                                                *ale-http-kulala_fmt*
 
-g:ale_http_kulala_fmt                        *g:ale_http_kulala_fmt_executable*
+                                       *ale-options.http_kulala_fmt_executable*
+                                             *g:ale_http_kulala_fmt_executable*
                                              *b:ale_http_kulala_fmt_executable*
+http_kulala_fmt
+g:ale_http_kulala_fmt
   Type: |String|
   Default: `'kulala_fmt'`
 

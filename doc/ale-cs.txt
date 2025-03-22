@@ -1,7 +1,6 @@
 ===============================================================================
 ALE C# Integration                                             *ale-cs-options*
 
-
 In addition to the linters that are provided with ALE, C# code can be checked
 with the OmniSharp plugin. See here: https://github.com/OmniSharp/omnisharp-vim
 
@@ -16,34 +15,39 @@ Note that the C options are also used for C#.
 ===============================================================================
 csc                                                                *ale-cs-csc*
 
-  The |ale-cs-csc| linter checks for semantic errors when files are opened or
-  saved.
+The |ale-cs-csc| linter checks for semantic errors when files are opened or
+saved.
 
-  See |ale-lint-file-linters| for more information on linters which do not
-  check for problems while you type.
+See |ale-lint-file-linters| for more information on linters which do not check
+for problems while you type.
 
-  The csc linter uses the mono csc compiler, providing full C# 7 and newer
-  support, to generate a temporary module target file (/t:module). The module
-  includes all '*.cs' files contained in the directory tree rooted at the path
-  defined by the |g:ale_cs_csc_source| or |b:ale_cs_csc_source| variable and
-  all sub directories.
+The csc linter uses the mono csc compiler, providing full C# 7 and newer
+support, to generate a temporary module target file (/t:module). The module
+includes all '*.cs' files contained in the directory tree rooted at the path
+defined by the |g:ale_cs_csc_source| or |b:ale_cs_csc_source| variable and all
+sub directories.
 
-  It will in future replace the |ale-cs-mcs| and |ale-cs-mcsc| linters as both
-  utilize the mcsc compiler which, according to the mono project, is no longer
-  actively developed, and only receives maintenance updates. However, because
-  the csc compiler does not support the -syntax option, this linter does not
-  offer any as-you-type syntax checking, similar to the |ale-cs-mcsc| linter.
+It will in future replace the |ale-cs-mcs| and |ale-cs-mcsc| linters as both
+utilize the mcsc compiler which, according to the mono project, is no longer
+actively developed, and only receives maintenance updates. However, because
+the csc compiler does not support the -syntax option, this linter does not
+offer any as-you-type syntax checking, similar to the |ale-cs-mcsc| linter.
 
-  The paths to search for additional assembly files can be specified using the
-  |g:ale_cs_csc_assembly_path| or |b:ale_cs_csc_assembly_path| variables.
+The paths to search for additional assembly files can be specified using the
+|g:ale_cs_csc_assembly_path| or |b:ale_cs_csc_assembly_path| variables.
 
-  NOTE: ALE will not find any errors in files apart from syntax errors if any
-  one of the source files contains a syntax error. Syntax errors must be fixed
-  first before other errors will be shown.
+NOTE: ALE will not find any errors in files apart from syntax errors if any
+one of the source files contains a syntax error. Syntax errors must be fixed
+first before other errors will be shown.
 
 
-g:ale_cs_csc_options                                     *g:ale_cs_csc_options*
+-------------------------------------------------------------------------------
+Options
+                                                   *ale-options.cs_csc_options*
+                                                         *g:ale_cs_csc_options*
                                                          *b:ale_cs_csc_options*
+cs_csc_options
+g:ale_cs_csc_options
   Type: |String|
   Default: `''`
 
@@ -55,9 +59,11 @@ g:ale_cs_csc_options                                     *g:ale_cs_csc_options*
 <
   NOTE: the `/unsafe` option is always passed to `csc`.
 
-
-g:ale_cs_csc_source                                       *g:ale_cs_csc_source*
+                                                    *ale-options.cs_csc_source*
+                                                          *g:ale_cs_csc_source*
                                                           *b:ale_cs_csc_source*
+cs_csc_source
+g:ale_cs_csc_source
   Type: |String|
   Default: `''`
 
@@ -68,9 +74,11 @@ g:ale_cs_csc_source                                       *g:ale_cs_csc_source*
   NOTE: Currently it is not possible to specify sub directories and
   directory sub trees which shall not be searched for *.cs files.
 
-
-g:ale_cs_csc_assembly_path                         *g:ale_cs_csc_assembly_path*
+                                             *ale-options.cs_csc_assembly_path*
+                                                   *g:ale_cs_csc_assembly_path*
                                                    *b:ale_cs_csc_assembly_path*
+cs_csc_assembly_path
+g:ale_cs_csc_assembly_path
   Type: |List|
   Default: `[]`
 
@@ -78,9 +86,11 @@ g:ale_cs_csc_assembly_path                         *g:ale_cs_csc_assembly_path*
   assembly files. The list is passed to the csc compiler using the `/lib:`
   flag.
 
-
-g:ale_cs_csc_assemblies                               *g:ale_cs_csc_assemblies*
+                                                *ale-options.cs_csc_assemblies*
+                                                      *g:ale_cs_csc_assemblies*
                                                       *b:ale_cs_csc_assemblies*
+cs_csc_assemblies
+g:ale_cs_csc_assemblies
   Type: |List|
   Default: `[]`
 
@@ -90,11 +100,11 @@ g:ale_cs_csc_assemblies                               *g:ale_cs_csc_assemblies*
 
   For example: >
 
-    " Compile C# programs with the Unity engine DLL file on Mac.
-    let g:ale_cs_mcsc_assemblies = [
-    \ '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
-    \ 'path-to-unityproject/obj/Debug',
-    \]
+  " Compile C# programs with the Unity engine DLL file on Mac.
+  let g:ale_cs_mcsc_assemblies = [
+  \ '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
+  \ 'path-to-unityproject/obj/Debug',
+  \]
 <
 
 ===============================================================================
@@ -106,8 +116,9 @@ See |ale-cspell-options|
 ===============================================================================
 dotnet-format                                            *ale-cs-dotnet-format*
 
-Installation
+
 -------------------------------------------------------------------------------
+Installation
 
 Installing .NET SDK should probably ensure that `dotnet` is in your `$PATH`.
 For .NET 6 the `dotnet format` tool is already included in the .NET SDK. For
@@ -115,20 +126,24 @@ For .NET 6 the `dotnet format` tool is already included in the .NET SDK. For
 from listed in this repository: https://github.com/dotnet/format
 
 
-Options
 -------------------------------------------------------------------------------
-
-g:ale_cs_dotnet_format_executable           *g:ale_cs_dotnet_format_executable*
+Options
+                                      *ale-options.cs_dotnet_format_executable*
+                                            *g:ale_cs_dotnet_format_executable*
                                             *b:ale_cs_dotnet_format_executable*
+cs_dotnet_format_executable
+g:ale_cs_dotnet_format_executable
   Type: |String|
   Default: `'dotnet'`
 
   This variable can be set to specify an absolute path to the
   `dotnet` executable (or to specify an alternate executable).
 
-
-g:ale_cs_dotnet_format_options                 *g:ale_cs_dotnet_format_options*
+                                         *ale-options.cs_dotnet_format_options*
+                                               *g:ale_cs_dotnet_format_options*
                                                *b:ale_cs_dotnet_format_options*
+cs_dotnet_format_options
+g:ale_cs_dotnet_format_options
   Type: |String|
   Default: `''`
 
@@ -139,15 +154,19 @@ g:ale_cs_dotnet_format_options                 *g:ale_cs_dotnet_format_options*
 ===============================================================================
 mcs                                                                *ale-cs-mcs*
 
-  The `mcs` linter looks only for syntax errors while you type. See
-  |ale-cs-mcsc| for the separately configured linter for checking for semantic
-   errors.
+The `mcs` linter looks only for syntax errors while you type. See
+|ale-cs-mcsc| for the separately configured linter for checking for semantic
+errors.
 
 
-g:ale_cs_mcs_options                                     *g:ale_cs_mcs_options*
+-------------------------------------------------------------------------------
+Options
+                                                   *ale-options.cs_mcs_options*
+                                                         *g:ale_cs_mcs_options*
                                                          *b:ale_cs_mcs_options*
-
-  Type: String
+cs_mcs_options
+g:ale_cs_mcs_options
+  Type: |String|
   Default: `''`
 
   This variable can be changed to pass additional flags given to mcs.
@@ -160,26 +179,31 @@ g:ale_cs_mcs_options                                     *g:ale_cs_mcs_options*
 ===============================================================================
 mcsc                                                              *ale-cs-mcsc*
 
-  The mcsc linter checks for semantic errors when files are opened or saved
-  See |ale-lint-file-linters| for more information on linters which do not
-  check for problems while you type.
+The mcsc linter checks for semantic errors when files are opened or saved See
+|ale-lint-file-linters| for more information on linters which do not check for
+problems while you type.
 
-  The mcsc linter uses the mono mcs compiler to generate a temporary module
-  target file (-t:module). The module includes including all '*.cs' files
-  contained in the directory tree rooted at the path defined by the
-  |g:ale_cs_mcsc_source| or |b:ale_cs_mcsc_source| variable.
-  variable and all sub directories.
+The mcsc linter uses the mono mcs compiler to generate a temporary module
+target file (-t:module). The module includes including all '*.cs' files
+contained in the directory tree rooted at the path defined by the
+|g:ale_cs_mcsc_source| or |b:ale_cs_mcsc_source| variable.  variable and all
+sub directories.
 
-  The paths to search for additional assembly files can be specified using the
-  |g:ale_cs_mcsc_assembly_path| or |b:ale_cs_mcsc_assembly_path| variables.
+The paths to search for additional assembly files can be specified using the
+|g:ale_cs_mcsc_assembly_path| or |b:ale_cs_mcsc_assembly_path| variables.
 
-  NOTE: ALE will not find any errors in files apart from syntax errors if any
-  one of the source files contains a syntax error. Syntax errors must be fixed
-  first before other errors will be shown.
+NOTE: ALE will not find any errors in files apart from syntax errors if any
+one of the source files contains a syntax error. Syntax errors must be fixed
+first before other errors will be shown.
 
 
-g:ale_cs_mcsc_options                                   *g:ale_cs_mcsc_options*
+-------------------------------------------------------------------------------
+Options
+                                                  *ale-options.cs_mcsc_options*
+                                                        *g:ale_cs_mcsc_options*
                                                         *b:ale_cs_mcsc_options*
+cs_mcsc_options
+g:ale_cs_mcsc_options
   Type: |String|
   Default: `''`
 
@@ -187,13 +211,15 @@ g:ale_cs_mcsc_options                                   *g:ale_cs_mcsc_options*
 
   For example, to add the dotnet package which is not added per default: >
 
-      let g:ale_cs_mcs_options = '-pkg:dotnet'
+  let g:ale_cs_mcs_options = '-pkg:dotnet'
 <
   NOTE: the `-unsafe` option is always passed to `mcs`.
 
-
-g:ale_cs_mcsc_source                                     *g:ale_cs_mcsc_source*
+                                                   *ale-options.cs_mcsc_source*
+                                                         *g:ale_cs_mcsc_source*
                                                          *b:ale_cs_mcsc_source*
+cs_mcsc_source
+g:ale_cs_mcsc_source
   Type: |String|
   Default: `''`
 
@@ -204,9 +230,11 @@ g:ale_cs_mcsc_source                                     *g:ale_cs_mcsc_source*
   NOTE: Currently it is not possible to specify sub directories and
   directory sub trees which shall not be searched for *.cs files.
 
-
-g:ale_cs_mcsc_assembly_path                       *g:ale_cs_mcsc_assembly_path*
+                                            *ale-options.cs_mcsc_assembly_path*
+                                                  *g:ale_cs_mcsc_assembly_path*
                                                   *b:ale_cs_mcsc_assembly_path*
+cs_mcsc_assembly_path
+g:ale_cs_mcsc_assembly_path
   Type: |List|
   Default: `[]`
 
@@ -214,9 +242,11 @@ g:ale_cs_mcsc_assembly_path                       *g:ale_cs_mcsc_assembly_path*
   assembly files. The list is passed to the mcs compiler using the `-lib:`
   flag.
 
-
-g:ale_cs_mcsc_assemblies                             *g:ale_cs_mcsc_assemblies*
+                                               *ale-options.cs_mcsc_assemblies*
+                                                     *g:ale_cs_mcsc_assemblies*
                                                      *b:ale_cs_mcsc_assemblies*
+cs_mcsc_assemblies
+g:ale_cs_mcsc_assemblies
   Type: |List|
   Default: `[]`
 
@@ -226,11 +256,11 @@ g:ale_cs_mcsc_assemblies                             *g:ale_cs_mcsc_assemblies*
 
   For example: >
 
-    " Compile C# programs with the Unity engine DLL file on Mac.
-    let g:ale_cs_mcsc_assemblies = [
-    \ '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
-    \ 'path-to-unityproject/obj/Debug',
-    \]
+  " Compile C# programs with the Unity engine DLL file on Mac.
+  let g:ale_cs_mcsc_assemblies = [
+  \ '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
+  \ 'path-to-unityproject/obj/Debug',
+  \]
 <
 
 ===============================================================================

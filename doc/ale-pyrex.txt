@@ -5,16 +5,21 @@ ALE Pyrex (Cython) Integration                              *ale-pyrex-options*
 ===============================================================================
 cython                                                       *ale-pyrex-cython*
 
-g:ale_pyrex_cython_executable                   *g:ale_pyrex_cython_executable*
+                                          *ale-options.pyrex_cython_executable*
+                                                *g:ale_pyrex_cython_executable*
                                                 *b:ale_pyrex_cython_executable*
+pyrex_cython_executable
+g:ale_pyrex_cython_executable
   Type: |String|
   Default: `'cython'`
 
   This variable can be changed to use a different executable for cython.
 
-
-g:ale_pyrex_cython_options                         *g:ale_pyrex_cython_options*
+                                             *ale-options.pyrex_cython_options*
+                                                   *g:ale_pyrex_cython_options*
                                                    *b:ale_pyrex_cython_options*
+pyrex_cython_options
+g:ale_pyrex_cython_options
   Type: |String|
   Default: `'--warning-extra --warning-errors'`
 

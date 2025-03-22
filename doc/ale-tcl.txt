@@ -5,16 +5,21 @@ ALE Tcl Integration                                           *ale-tcl-options*
 ===============================================================================
 nagelfar                                                     *ale-tcl-nagelfar*
 
-g:ale_tcl_nagelfar_executable                   *g:ale_tcl_nagelfar_executable*
+                                          *ale-options.tcl_nagelfar_executable*
+                                                *g:ale_tcl_nagelfar_executable*
                                                 *b:ale_tcl_nagelfar_executable*
+tcl_nagelfar_executable
+g:ale_tcl_nagelfar_executable
   Type: |String|
   Default: `'nagelfar.tcl'`
 
   This variable can be changed to change the path to nagelfar.
 
-
-g:ale_tcl_nagelfar_options                         *g:ale_tcl_nagelfar_options*
+                                             *ale-options.tcl_nagelfar_options*
+                                                   *g:ale_tcl_nagelfar_options*
                                                    *b:ale_tcl_nagelfar_options*
+tcl_nagelfar_options
+g:ale_tcl_nagelfar_options
   Type: |String|
   Default: `''`
 

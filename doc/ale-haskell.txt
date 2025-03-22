@@ -5,8 +5,11 @@ ALE Haskell Integration                                   *ale-haskell-options*
 ===============================================================================
 brittany                                                 *ale-haskell-brittany*
 
-g:ale_haskell_brittany_executable           *g:ale_haskell_brittany_executable*
+                                      *ale-options.haskell_brittany_executable*
+                                            *g:ale_haskell_brittany_executable*
                                             *b:ale_haskell_brittany_executable*
+haskell_brittany_executable
+g:ale_haskell_brittany_executable
   Type: |String|
   Default: `'brittany'`
 
@@ -22,8 +25,11 @@ See |ale-cspell-options|
 ===============================================================================
 floskell                                                 *ale-haskell-floskell*
 
-g:ale_haskell_floskell_executable           *g:ale_haskell_floskell_executable*
+                                      *ale-options.haskell_floskell_executable*
+                                            *g:ale_haskell_floskell_executable*
                                             *b:ale_haskell_floskell_executable*
+haskell_floskell_executable
+g:ale_haskell_floskell_executable
   Type: |String|
   Default: `'floskell'`
 
@@ -33,8 +39,11 @@ g:ale_haskell_floskell_executable           *g:ale_haskell_floskell_executable*
 ===============================================================================
 ghc                                                           *ale-haskell-ghc*
 
-g:ale_haskell_ghc_options                           *g:ale_haskell_ghc_options*
+                                              *ale-options.haskell_ghc_options*
+                                                    *g:ale_haskell_ghc_options*
                                                     *b:ale_haskell_ghc_options*
+haskell_ghc_options
+g:ale_haskell_ghc_options
   Type: |String|
   Default: `'-fno-code -v0'`
 
@@ -44,8 +53,11 @@ g:ale_haskell_ghc_options                           *g:ale_haskell_ghc_options*
 ===============================================================================
 ghc-mod                                                   *ale-haskell-ghc-mod*
 
-g:ale_haskell_ghc_mod_executable             *g:ale_haskell_ghc_mod_executable*
+                                       *ale-options.haskell_ghc_mod_executable*
+                                             *g:ale_haskell_ghc_mod_executable*
                                              *b:ale_haskell_ghc_mod_executable*
+haskell_ghc_mod_executable
+g:ale_haskell_ghc_mod_executable
   Type: |String|
   Default: `'ghc-mod'`
 
@@ -55,8 +67,11 @@ g:ale_haskell_ghc_mod_executable             *g:ale_haskell_ghc_mod_executable*
 ===============================================================================
 cabal-ghc                                               *ale-haskell-cabal-ghc*
 
-g:ale_haskell_cabal_ghc_options               *g:ale_haskell_cabal_ghc_options*
+                                        *ale-options.haskell_cabal_ghc_options*
+                                              *g:ale_haskell_cabal_ghc_options*
                                               *b:ale_haskell_cabal_ghc_options*
+haskell_cabal_ghc_options
+g:ale_haskell_cabal_ghc_options
   Type: |String|
   Default: `'-fno-code -v0'`
 
@@ -67,16 +82,21 @@ g:ale_haskell_cabal_ghc_options               *g:ale_haskell_cabal_ghc_options*
 ===============================================================================
 hdevtools                                               *ale-haskell-hdevtools*
 
-g:ale_haskell_hdevtools_executable         *g:ale_haskell_hdevtools_executable*
+                                     *ale-options.haskell_hdevtools_executable*
+                                           *g:ale_haskell_hdevtools_executable*
                                            *b:ale_haskell_hdevtools_executable*
+haskell_hdevtools_executable
+g:ale_haskell_hdevtools_executable
   Type: |String|
   Default: `'hdevtools'`
 
   This variable can be changed to use a different executable for hdevtools.
 
-
-g:ale_haskell_hdevtools_options               *g:ale_haskell_hdevtools_options*
+                                        *ale-options.haskell_hdevtools_options*
+                                              *g:ale_haskell_hdevtools_options*
                                               *b:ale_haskell_hdevtools_options*
+haskell_hdevtools_options
+g:ale_haskell_hdevtools_options
   Type: |String|
   Default: `get(g:, 'hdevtools_options', '-g -Wall')`
 
@@ -91,8 +111,11 @@ g:ale_haskell_hdevtools_options               *g:ale_haskell_hdevtools_options*
 ===============================================================================
 hfmt                                                         *ale-haskell-hfmt*
 
-g:ale_haskell_hfmt_executable                   *g:ale_haskell_hfmt_executable*
+                                          *ale-options.haskell_hfmt_executable*
+                                                *g:ale_haskell_hfmt_executable*
                                                 *b:ale_haskell_hfmt_executable*
+haskell_hfmt_executable
+g:ale_haskell_hfmt_executable
   Type: |String|
   Default: `'hfmt'`
 
@@ -102,8 +125,11 @@ g:ale_haskell_hfmt_executable                   *g:ale_haskell_hfmt_executable*
 ===============================================================================
 hindent                                                   *ale-haskell-hindent*
 
-g:ale_haskell_hindent_executable             *g:ale_haskell_hindent_executable*
+                                       *ale-options.haskell_hindent_executable*
+                                             *g:ale_haskell_hindent_executable*
                                              *b:ale_haskell_hindent_executable*
+haskell_hindent_executable
+g:ale_haskell_hindent_executable
   Type: |String|
   Default: `'hindent'`
 
@@ -113,16 +139,21 @@ g:ale_haskell_hindent_executable             *g:ale_haskell_hindent_executable*
 ===============================================================================
 hlint                                                       *ale-haskell-hlint*
 
-g:ale_haskell_hlint_executable                 *g:ale_haskell_hlint_executable*
+                                         *ale-options.haskell_hlint_executable*
+                                               *g:ale_haskell_hlint_executable*
                                                *b:ale_haskell_hlint_executable*
+haskell_hlint_executable
+g:ale_haskell_hlint_executable
   Type: |String|
   Default: `'hlint'`
 
   This variable can be changed to use a different executable for hlint.
 
-
-g:ale_haskell_hlint_options                       g:ale_haskell_hlint_options
-                                                  b:ale_haskell_hlint_options
+                                            *ale-options.haskell_hlint_options*
+                                                  *g:ale_haskell_hlint_options*
+                                                  *b:ale_haskell_hlint_options*
+haskell_hlint_options
+g:ale_haskell_hlint_options
   Type: |String|
   Default: `''`
 
@@ -133,17 +164,22 @@ g:ale_haskell_hlint_options                       g:ale_haskell_hlint_options
 ===============================================================================
 hls                                                           *ale-haskell-hls*
 
-g:ale_haskell_hls_executable                     *g:ale_haskell_hls_executable*
+                                           *ale-options.haskell_hls_executable*
+                                                 *g:ale_haskell_hls_executable*
                                                  *b:ale_haskell_hls_executable*
+haskell_hls_executable
+g:ale_haskell_hls_executable
   Type: |String|
   Default: `'haskell-language-server-wrapper'`
 
   This variable can be changed to use a different executable for the haskell
   language server.
 
-
-g:ale_haskell_hls_config                             *g:ale_haskell_hls_config*
+                                               *ale-options.haskell_hls_config*
+                                                     *g:ale_haskell_hls_config*
                                                      *b:ale_haskell_hls_config*
+haskell_hls_config
+g:ale_haskell_hls_config
   Type: |Dictionary|
   Default: `{}`
 
@@ -159,8 +195,11 @@ g:ale_haskell_hls_config                             *g:ale_haskell_hls_config*
 ===============================================================================
 stack-build                                           *ale-haskell-stack-build*
 
-g:ale_haskell_stack_build_options           *g:ale_haskell_stack_build_options*
+                                      *ale-options.haskell_stack_build_options*
+                                            *g:ale_haskell_stack_build_options*
                                             *b:ale_haskell_stack_build_options*
+haskell_stack_build_options
+g:ale_haskell_stack_build_options
   Type: |String|
   Default: `'--fast'`
 
@@ -171,8 +210,11 @@ g:ale_haskell_stack_build_options           *g:ale_haskell_stack_build_options*
 ===============================================================================
 stack-ghc                                               *ale-haskell-stack-ghc*
 
-g:ale_haskell_stack_ghc_options               *g:ale_haskell_stack_ghc_options*
+                                        *ale-options.haskell_stack_ghc_options*
+                                              *g:ale_haskell_stack_ghc_options*
                                               *b:ale_haskell_stack_ghc_options*
+haskell_stack_ghc_options
+g:ale_haskell_stack_ghc_options
   Type: |String|
   Default: `'-fno-code -v0'`
 
@@ -183,9 +225,11 @@ g:ale_haskell_stack_ghc_options               *g:ale_haskell_stack_ghc_options*
 ===============================================================================
 stylish-haskell                                   *ale-haskell-stylish-haskell*
 
-g:ale_haskell_stylish_haskell_executable
+                               *ale-options.haskell_stylish_haskell_executable*
                                      *g:ale_haskell_stylish_haskell_executable*
                                      *b:ale_haskell_stylish_haskell_executable*
+haskell_stylish_haskell_executable
+g:ale_haskell_stylish_haskell_executable
   Type: |String|
   Default: `'stylish-haskell'`
 
@@ -195,8 +239,11 @@ g:ale_haskell_stylish_haskell_executable
 ===============================================================================
 hie                                                           *ale-haskell-hie*
 
-g:ale_haskell_hie_executable                     *g:ale_haskell_hie_executable*
+                                           *ale-options.haskell_hie_executable*
+                                                 *g:ale_haskell_hie_executable*
                                                  *b:ale_haskell_hie_executable*
+haskell_hie_executable
+g:ale_haskell_hie_executable
   Type: |String|
   Default: `'hie'`
 
@@ -207,16 +254,21 @@ g:ale_haskell_hie_executable                     *g:ale_haskell_hie_executable*
 ===============================================================================
 ormolu                                                     *ale-haskell-ormolu*
 
-g:ale_haskell_ormolu_executable               *g:ale_haskell_ormolu_executable*
+                                        *ale-options.haskell_ormolu_executable*
+                                              *g:ale_haskell_ormolu_executable*
                                               *b:ale_haskell_ormolu_executable*
+haskell_ormolu_executable
+g:ale_haskell_ormolu_executable
   Type: |String|
   Default: `'ormolu'`
 
   This variable can be changed to use a different executable for ormolu.
 
-
-g:ale_haskell_ormolu_options                     *g:ale_haskell_ormolu_options*
+                                           *ale-options.haskell_ormolu_options*
+                                                 *g:ale_haskell_ormolu_options*
                                                  *b:ale_haskell_ormolu_options*
+haskell_ormolu_options
+g:ale_haskell_ormolu_options
   Type: |String|
   Default: `''`
 
@@ -227,16 +279,21 @@ g:ale_haskell_ormolu_options                     *g:ale_haskell_ormolu_options*
 ===============================================================================
 fourmolu                                                 *ale-haskell-fourmolu*
 
-g:ale_haskell_fourmolu_executable           *g:ale_haskell_fourmolu_executable*
+                                      *ale-options.haskell_fourmolu_executable*
+                                            *g:ale_haskell_fourmolu_executable*
                                             *b:ale_haskell_fourmolu_executable*
+haskell_fourmolu_executable
+g:ale_haskell_fourmolu_executable
   Type: |String|
   Default: `'fourmolu'`
 
   This variable can be changed to use a different executable for fourmolu.
 
-
-g:ale_haskell_fourmolu_options                 *g:ale_haskell_fourmolu_options*
+                                         *ale-options.haskell_fourmolu_options*
+                                               *g:ale_haskell_fourmolu_options*
                                                *b:ale_haskell_fourmolu_options*
+haskell_fourmolu_options
+g:ale_haskell_fourmolu_options
   Type: |String|
   Default: `''`
 

@@ -68,7 +68,7 @@ function! ale#engine#IsExecutable(buffer, executable) abort
 
     " Cache the executable check if we found it, or if the option to cache
     " failing checks is on.
-    if l:result || get(g:, 'ale_cache_executable_check_failures', 0)
+    if l:result || get(g:, 'ale_cache_executable_check_failures')
         let s:executable_cache_map[a:executable] = l:result
     endif
 
@@ -259,7 +259,7 @@ function! ale#engine#SendResultsToNeovimDiagnostics(buffer, loclist) abort
 
     " Keep the Lua surface area really small in the VimL part of ALE,
     " and just require the diagnostics.lua module on demand.
-    let l:SendDiagnostics = luaeval('require("ale.diagnostics").sendAleResultsToDiagnostics')
+    let l:SendDiagnostics = luaeval('require("ale.diagnostics").send')
     call l:SendDiagnostics(a:buffer, a:loclist)
 endfunction
 

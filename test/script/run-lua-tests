@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+
+docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin/test/lua "$DOCKER_RUN_IMAGE")
+
+quiet=0
+
+while [ $# -ne 0 ]; do
+    case $1 in
+    -q)
+        quiet=1
+        shift
+    ;;
+    --)
+        shift
+        break
+    ;;
+    -?*)
+        echo "Invalid argument: $1" 1>&2
+        exit 1
+    ;;
+    *)
+        break
+    ;;
+    esac
+done
+
+function filter-busted-output() {
+    local hit_failure_line=0
+
+    while read -r; do
+        if ((quiet)); then
+            # If we're using the quiet flag, the filter out lines until we hit
+            # the first line with "Failure" and then print the rest.
+            if ((hit_failure_line)); then
+                echo "$REPLY"
+            elif [[ "$REPLY" = *'Failure'* ]]; then
+                hit_failure_line=1
+                echo "$REPLY"
+            fi
+        else
+            echo "$REPLY"
+        fi
+    done
+}
+
+exit_code=0
+
+set -o pipefail
+"$DOCKER" run -a stdout "${docker_flags[@]}" /usr/bin/busted-5.1 \
+    -m '../../lua/?.lua;../../lua/?/init.lua' . \
+    --output utfTerminal | filter-busted-output || exit_code=$?
+set +o pipefail
+
+exit "$exit_code"

@@ -14,24 +14,27 @@ metals                                                       *ale-scala-metals*
 `metals` requires either an SBT project, a Mill project, or a running Bloop
 server.
 
-
-g:ale_scala_metals_executable                    *g:ale_scala_metals_executable*
+                                          *ale-options.scala_metals_executable*
+                                                *g:ale_scala_metals_executable*
                                                  *b:ale_scala_metals_executable*
+scala_metals_executable
+g:ale_scala_metals_executable
   Type: |String|
   Default: `'metals-vim'`
 
   Override the invoked `metals` binary.
 
-
-g:ale_scala_metals_project_root                *g:ale_scala_metals_project_root*
+                                        *ale-options.scala_metals_project_root*
+                                              *g:ale_scala_metals_project_root*
                                                *b:ale_scala_metals_project_root*
+scala_metals_project_root
+g:ale_scala_metals_project_root
   Type: |String|
   Default: `''`
 
   By default the project root is found by searching upwards for `build.sbt`,
-  `build.sc`, `.bloop` or `.metals`.
-  If the project root is elsewhere, you can override the project root
-  directory.
+  `build.sc`, `.bloop` or `.metals`. If the project root is elsewhere, you
+  can override the project root directory.
 
 
 ===============================================================================
@@ -45,9 +48,11 @@ to the right socket:
 
 `serverConnectionType := ConnectionType.Tcp` and `serverPort := 4273`
 
-
-g:ale_scala_sbtserver_address                   *g:ale_scala_sbtserver_address*
+                                          *ale-options.scala_sbtserver_address*
+                                                *g:ale_scala_sbtserver_address*
                                                 *b:ale_scala_sbtserver_address*
+scala_sbtserver_address
+g:ale_scala_sbtserver_address
   Type: |String|
   Default: `'127.0.0.1:4273'`
 
@@ -56,9 +61,11 @@ g:ale_scala_sbtserver_address                   *g:ale_scala_sbtserver_address*
   around this is to configure sbt to always connect to the same port, which
   the instructions above describe.
 
-
-g:ale_scala_sbtserver_project_root         *g:ale_scala_sbtserver_project_root*
+                                     *ale-options.scala_sbtserver_project_root*
+                                           *g:ale_scala_sbtserver_project_root*
                                            *b:ale_scala_sbtserver_project_root*
+scala_sbtserver_project_root
+g:ale_scala_sbtserver_project_root
   Type: |String|
   Default: `''`
 
@@ -71,20 +78,25 @@ g:ale_scala_sbtserver_project_root         *g:ale_scala_sbtserver_project_root*
 scalafmt                                                   *ale-scala-scalafmt*
 
 If Nailgun is used, override `g:ale_scala_scalafmt_executable` like so: >
+
   let g:ale_scala_scalafmt_executable = 'ng'
-
-
-g:ale_scala_scalafmt_executable               *g:ale_scala_scalafmt_executable*
+<
+                                        *ale-options.scala_scalafmt_executable*
+                                              *g:ale_scala_scalafmt_executable*
                                               *b:ale_scala_scalafmt_executable*
+scala_scalafmt_executable
+g:ale_scala_scalafmt_executable
   Type: |String|
   Default: `'scalafmt'`
 
   Override the invoked `scalafmt` binary. This is useful for running `scalafmt`
   with Nailgun.
 
-
-g:ale_scala_scalafmt_options                     *g:ale_scala_scalafmt_options*
+                                           *ale-options.scala_scalafmt_options*
+                                                 *g:ale_scala_scalafmt_options*
                                                  *b:ale_scala_scalafmt_options*
+scala_scalafmt_options
+g:ale_scala_scalafmt_options
   Type: |String|
   Default: `''`
 
@@ -100,14 +112,16 @@ configuration file can be found, ALE will report a problem saying that a
 configuration file is required at line 1.
 
 To disable `scalastyle` globally, use |g:ale_linters| like so: >
+
   let g:ale_linters = {'scala': ['scalac']} " Enable only scalac instead
 <
-
 See |g:ale_linters| for more information on disabling linters.
 
-
-g:ale_scala_scalastyle_config                   *g:ale_scala_scalastyle_config*
+                                          *ale-options.scala_scalastyle_config*
+                                                *g:ale_scala_scalastyle_config*
                                                 *b:ale_scala_scalastyle_config*
+scala_scalastyle_config
+g:ale_scala_scalastyle_config
   Type: |String|
   Default: `''`
 
@@ -117,9 +131,11 @@ g:ale_scala_scalastyle_config                   *g:ale_scala_scalastyle_config*
   `scalastyle_config.xml` or `scalastyle-config.xml` in the current file's
   directory or parent directories.
 
-
-g:ale_scala_scalastyle_options                 *g:ale_scala_scalastyle_options*
+                                         *ale-options.scala_scalastyle_options*
+                                               *g:ale_scala_scalastyle_options*
                                                *b:ale_scala_scalastyle_options*
+scala_scalastyle_options
+g:ale_scala_scalastyle_options
   Type: |String|
   Default: `''`
 

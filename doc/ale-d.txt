@@ -1,25 +1,32 @@
 ===============================================================================
 ALE D Integration                                               *ale-d-options*
 
+
 ===============================================================================
 dfmt                                                               *ale-d-dfmt*
 
-g:ale_d_dfmt_options                                     *g:ale_d_dfmt_options*
+                                                   *ale-options.d_dfmt_options*
+                                                         *g:ale_d_dfmt_options*
                                                          *b:ale_d_dfmt_options*
+d_dfmt_options
+g:ale_d_dfmt_options
   Type: |String|
   Default: `''`
 
-This variable can be set to pass additional options to the dfmt fixer.
+  This variable can be set to pass additional options to the dfmt fixer.
 
 ===============================================================================
 dls                                                                 *ale-d-dls*
 
-g:ale_d_dls_executable                                 *g:ale_d_dls_executable*
+                                                 *ale-options.d_dls_executable*
+                                                       *g:ale_d_dls_executable*
                                                        *b:ale_d_dls_executable*
+d_dls_executable
+g:ale_d_dls_executable
   Type: |String|
   Default: `dls`
 
-See |ale-integrations-local-executables|
+  See |ale-integrations-local-executables|
 
 
 ===============================================================================

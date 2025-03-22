@@ -5,17 +5,21 @@ ALE AVRA Integration                                         *ale-avra-options*
 ===============================================================================
 avra                                                            *ale-avra-avra*
 
-g:ale_avra_avra_executable                         *g:ale_avra_avra_executable*
+                                             *ale-options.avra_avra_executable*
+                                                   *g:ale_avra_avra_executable*
                                                    *b:ale_avra_avra_executable*
-
+avra_avra_executable
+g:ale_avra_avra_executable
   Type: |String|
   Default `'avra'`
 
   This variable can be changed to use different executable for AVRA.
 
-
-g:ale_avra_avra_options                               *g:ale_avra_avra_options*
+                                                *ale-options.avra_avra_options*
+                                                      *g:ale_avra_avra_options*
                                                       *b:ale_avra_avra_options*
+avra_avra_options
+g:ale_avra_avra_options
   Type: |String|
   Default: `''`
 

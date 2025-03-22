@@ -11,16 +11,21 @@ See |ale-javascript-prettier| for information about the available options.
 ===============================================================================
 svelteserver                                          *ale-svelte-svelteserver*
 
-g:ale_svelte_svelteserver_executable     *g:ale_svelte_svelteserver_executable*
+                                   *ale-options.svelte_svelteserver_executable*
+                                         *g:ale_svelte_svelteserver_executable*
                                          *b:ale_svelte_svelteserver_executable*
+svelte_svelteserver_executable
+g:ale_svelte_svelteserver_executable
   Type: |String|
   Default: `'svelteserver'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_svelte_svelteserver_use_global      *g:ale_svelte_svelteserver_use_global*
-                                          *b:ale_svelte_svelteserver_use_global*
+                                   *ale-options.svelte_svelteserver_use_global*
+                                         *g:ale_svelte_svelteserver_use_global*
+                                         *b:ale_svelte_svelteserver_use_global*
+svelte_svelteserver_use_global
+g:ale_svelte_svelteserver_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 

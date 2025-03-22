@@ -59,7 +59,7 @@ let g:ale_filetype_blacklist = [
 " This Dictionary configures which linters are enabled for which languages.
 let g:ale_linters = get(g:, 'ale_linters', {})
 " This option can be changed to only enable explicitly selected linters.
-let g:ale_linters_explicit = get(g:, 'ale_linters_explicit', 0)
+let g:ale_linters_explicit = get(g:, 'ale_linters_explicit', v:false)
 " Ignoring linters, for disabling some, or ignoring LSP diagnostics.
 let g:ale_linters_ignore = get(g:, 'ale_linters_ignore', {})
 " Disabling all language server functionality.
@@ -82,26 +82,26 @@ let g:ale_lint_delay = get(g:, 'ale_lint_delay', 200)
 " changed in both normal and insert mode, or only in insert mode respectively.
 let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 'normal')
 
-" This flag can be set to 1 to enable linting when leaving insert mode.
-let g:ale_lint_on_insert_leave = get(g:, 'ale_lint_on_insert_leave', 1)
+" This flag can be set to true or 1 to enable linting when leaving insert mode.
+let g:ale_lint_on_insert_leave = get(g:, 'ale_lint_on_insert_leave', v:true)
 
-" This flag can be set to 0 to disable linting when the buffer is entered.
-let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
+" When true or 1 linting is done when a buffer is entered.
+let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', v:true)
 
-" This flag can be set to 1 to enable linting when a buffer is written.
-let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
+" When true or 1 linting is done when a buffer is written.
+let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', v:true)
 
-" This flag can be set to 1 to enable linting when the filetype is changed.
-let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
+" When true or 1 linting is done when the filetype changes.
+let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', v:true)
 
-" If set to 1, hints and suggestion from LSP servers and tsserver will be shown.
-let g:ale_lsp_suggestions = get(g:, 'ale_lsp_suggestions', 0)
+" If set to true or 1, suggestions from LSP servers and tsserver will be shown.
+let g:ale_lsp_suggestions = get(g:, 'ale_lsp_suggestions', v:false)
 
-" This flag can be set to 1 to enable automatically fixing files on save.
-let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0)
+" When true or 1 files are automatically fixed on save.
+let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', v:false)
 
-" This flag may be set to 0 to disable ale. After ale is loaded, :ALEToggle
-" should be used instead.
+" When true or 1 ALE linting is enabled.
+" Disabling ALE linting does not disable fixing of files.
 let g:ale_enabled = get(g:, 'ale_enabled', 1)
 
 " A Dictionary mapping linter or fixer names to Arrays of two-item Arrays
@@ -113,105 +113,120 @@ let g:ale_root = get(g:, 'ale_root', {})
 
 " These flags dictates if ale uses the quickfix or the loclist (loclist is the
 " default, quickfix overrides loclist).
-let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)
-let g:ale_set_quickfix = get(g:, 'ale_set_quickfix', 0)
+let g:ale_set_loclist = get(g:, 'ale_set_loclist', v:true)
+let g:ale_set_quickfix = get(g:, 'ale_set_quickfix', v:false)
 
 " This flag can be set to 0 to disable setting signs.
 " This is enabled by default only if the 'signs' feature exists.
-let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))
+let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs') ? v:true : v:false)
 
 " This flag can be set to 0 to disable setting error highlights.
-let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
+let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax') ? v:true : v:false)
 
 " This List can be configured to exclude particular highlights.
 let g:ale_exclude_highlights = get(g:, 'ale_exclude_highlights', [])
 
-" This flag can be set to 0 to disable echoing when the cursor moves.
-let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
+" When set to true or 1 problems on lines are echoed when the cursor moves.
+let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', v:true)
 
-" This flag can be set to 1 to automatically show errors in the preview window.
-let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
+" If set to true or 1 automatically show errors in the preview window.
+let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', v:false)
 
 " This flag can be changed to disable/enable virtual text.
 let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', (has('nvim-0.3.2') || has('patch-9.0.0297') && has('textprop') && has('popupwin')) ? 'all' : 'disabled')
 
-" This flag can be set to 1 to enable LSP hover messages at the cursor.
-let g:ale_hover_cursor = get(g:, 'ale_hover_cursor', 1)
+" When set to true or 1 LSP hover messages are shown at the cursor.
+let g:ale_hover_cursor = get(g:, 'ale_hover_cursor', v:true)
 
-" This flag can be set to 1 to automatically close the preview window upon
-" entering Insert Mode.
-let g:ale_close_preview_on_insert = get(g:, 'ale_close_preview_on_insert', 0)
+" When true or 1 to close the preview window on entering Insert Mode.
+let g:ale_close_preview_on_insert = get(g:, 'ale_close_preview_on_insert', v:false)
 
-" This flag can be set to 0 to disable balloon support.
-let g:ale_set_balloons = get(g:, 'ale_set_balloons', has('balloon_eval') && has('gui_running'))
+" When set to true or 1 balloon support is enabled.
+let g:ale_set_balloons = get(g:, 'ale_set_balloons', (has('balloon_eval') && has('gui_running')) ? v:true : v:false)
 
-" Use preview window for hover messages.
-let g:ale_hover_to_preview = get(g:, 'ale_hover_to_preview', 0)
+" When set to true or 1 use the preview window for showing hover messages.
+let g:ale_hover_to_preview = get(g:, 'ale_hover_to_preview', v:false)
 
-" Float preview windows in Neovim
-let g:ale_floating_preview = get(g:, 'ale_floating_preview', 0)
+" When set to true or 1 use floating preview windows in Neovim.
+let g:ale_floating_preview = get(g:, 'ale_floating_preview', v:false)
 
-" Hovers use floating windows in Neovim
-let g:ale_hover_to_floating_preview = get(g:, 'ale_hover_to_floating_preview', 0)
+" When set to true or 1 show hove messages in floating windows in Neovim.
+let g:ale_hover_to_floating_preview = get(g:, 'ale_hover_to_floating_preview', v:false)
 
-" Detail uses floating windows in Neovim
-let g:ale_detail_to_floating_preview = get(g:, 'ale_detail_to_floating_preview', 0)
+" When set to true or 1 details are shown in floating windows in Neovim.
+let g:ale_detail_to_floating_preview = get(g:, 'ale_detail_to_floating_preview', v:false)
 
 " Border setting for floating preview windows
+"
 " The elements in the list set the characters for the left, top, top-left,
 " top-right, bottom-right, bottom-left, right, and bottom of the border
 " respectively
 let g:ale_floating_window_border = get(g:, 'ale_floating_window_border', ['|', '-', '+', '+', '+', '+', '|', '-'])
 
-" This flag can be set to 0 to disable warnings for trailing whitespace
-let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whitespace', 1)
-" This flag can be set to 0 to disable warnings for trailing blank lines
-let g:ale_warn_about_trailing_blank_lines = get(g:, 'ale_warn_about_trailing_blank_lines', 1)
+" When set to true or 1 warnings for trailing whitespace are shown.
+let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whitespace', v:true)
+" When set to true or 1 warnings for trailing blank lines are shown.
+let g:ale_warn_about_trailing_blank_lines = get(g:, 'ale_warn_about_trailing_blank_lines', v:true)
 
-" A flag for enabling or disabling the command history.
-let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
+" When set to true or 1 the command history is logged.
+let g:ale_history_enabled = get(g:, 'ale_history_enabled', v:true)
 
-" A flag for storing the full output of commands in the history.
-let g:ale_history_log_output = get(g:, 'ale_history_log_output', 1)
+" When set to true or 1 the full output of commands is logged.
+let g:ale_history_log_output = get(g:, 'ale_history_log_output', v:true)
 
-" Enable automatic completion with LSP servers and tsserver
-let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', 0)
+" When set to true or 1 enable ALE's built-in autocompletion functionality.
+let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', v:false)
 
-" Enable automatic detection of pipenv for Python linters.
-let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', 0)
+" When set to true or 1 enable automatic detection of pipenv for Python.
+let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', v:false)
 
-" Enable automatic detection of poetry for Python linters.
-let g:ale_python_auto_poetry = get(g:, 'ale_python_auto_poetry', 0)
+" When set to true or 1 enable automatic detection of poetry for Python.
+let g:ale_python_auto_poetry = get(g:, 'ale_python_auto_poetry', v:false)
 
-" Enable automatic detection of uv for Python linters.
-let g:ale_python_auto_uv = get(g:, 'ale_python_auto_uv', 0)
+" When set to true or 1 enable automatic detection of uv for Python.
+let g:ale_python_auto_uv = get(g:, 'ale_python_auto_uv', v:false)
 
-" Enable automatic adjustment of environment variables for Python linters.
+" When set to true or 1 enable automatically updating environment variables
+" for running Python linters from virtualenv directories.
+"
 " The variables are set based on ALE's virtualenv detection.
-let g:ale_python_auto_virtualenv = get(g:, 'ale_python_auto_virtualenv', 0)
+let g:ale_python_auto_virtualenv = get(g:, 'ale_python_auto_virtualenv', v:false)
 
 " This variable can be overridden to set the GO111MODULE environment variable.
 let g:ale_go_go111module = get(g:, 'ale_go_go111module', '')
 
-" Default executable for deno, needed set before plugin start
+" The default executable for deno. Must be set before ALE lints any buffers.
 let g:ale_deno_executable = get(g:, 'ale_deno_executable', 'deno')
 
-" If 1, enable a popup menu for commands.
-let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui_running'))
+" If true or 1, enable a popup menu for commands.
+let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui_running') ? v:true : v:false)
 
-" If 0, save hidden files when code actions are applied.
-let g:ale_save_hidden = get(g:, 'ale_save_hidden', 0)
+" If true or 1, save hidden files when code actions are applied.
+let g:ale_save_hidden = get(g:, 'ale_save_hidden', v:false)
 
-" If 1, disables ALE's built in error display. Instead, all errors are piped
-" to the diagnostics API.
-let g:ale_use_neovim_diagnostics_api = get(g:, 'ale_use_neovim_diagnostics_api', has('nvim-0.7'))
+" If true or 1, disables ALE's built in error display.
+"
+" Instead, all errors are piped to the Neovim diagnostics API.
+let g:ale_use_neovim_diagnostics_api = get(g:, 'ale_use_neovim_diagnostics_api', has('nvim-0.7') ? v:true : v:false)
 
 if g:ale_use_neovim_diagnostics_api && !has('nvim-0.7')
     " no-custom-checks
-    echoerr('Setting g:ale_use_neovim_diagnostics_api to 1 requires Neovim 0.7+.')
+    echoerr('Setting g:ale_use_neovim_diagnostics_api to true or 1 requires Neovim 0.7+.')
 endif
 
-if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'
+" If true or 1, uses Neovim's built-in LSP client to integrate with LSP, which
+" improves ALE's integration with built-in Neovim tools and other plugins.
+let g:ale_use_neovim_lsp_api = get(g:, 'ale_use_neovim_lsp_api', has('nvim-0.8') ? v:true : v:false)
+
+" If 1, replaces ALE's use of jobs and channels to connect to language
+" servers, plus the custom code, and instead hooks ALE into Neovim's built-in
+" language server tools.
+if g:ale_use_neovim_lsp_api && !has('nvim-0.8')
+    " no-custom-checks
+    echoerr('Setting g:ale_use_neovim_lsp_api to true or 1 requires Neovim 0.8+.')
+endif
+
+if g:ale_set_balloons || g:ale_set_balloons is# 'hover'
     call ale#balloon#Enable()
 endif
 

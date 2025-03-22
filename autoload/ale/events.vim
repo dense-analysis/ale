@@ -173,7 +173,9 @@ function! ale#events#Init() abort
         autocmd BufWritePost * call ale#events#SaveEvent(str2nr(expand('<abuf>')))
 
         if g:ale_enabled
-            if l:text_changed is? 'always' || l:text_changed is# '1'
+            if l:text_changed is? 'always'
+            \|| l:text_changed is# '1'
+            \|| g:ale_lint_on_text_changed is v:true
                 autocmd TextChanged,TextChangedI * call ale#Queue(ale#Var(str2nr(expand('<abuf>')), 'lint_delay'))
             elseif l:text_changed is? 'normal'
                 autocmd TextChanged * call ale#Queue(ale#Var(str2nr(expand('<abuf>')), 'lint_delay'))

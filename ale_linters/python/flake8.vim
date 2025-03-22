@@ -63,7 +63,7 @@ function! ale_linters#python#flake8#GetCwd(buffer) abort
     endif
 
     if (l:change_directory is# 'project' && empty(l:cwd))
-    \|| l:change_directory is# 1
+    \|| l:change_directory
     \|| l:change_directory is# 'file'
         let l:cwd = '%s:h'
     endif

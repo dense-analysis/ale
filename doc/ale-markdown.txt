@@ -17,17 +17,22 @@ See |ale-dprint-options| and https://dprint.dev/plugins/markdown
 ===============================================================================
 markdownlint                                        *ale-markdown-markdownlint*
 
-g:ale_markdown_markdownlint_executable *g:ale_markdown_markdownlint_executable*
+                                 *ale-options.markdown_markdownlint_executable*
+                                       *g:ale_markdown_markdownlint_executable*
                                        *b:ale_markdown_markdownlint_executable*
+markdown_markdownlint_executable
+g:ale_markdown_markdownlint_executable
   Type: |String|
   Default: `'markdownlint'`
 
   Override the invoked `markdownlint` binary. You can use other binaries such as
   `markdownlint-cli2`.
 
-
-g:ale_markdown_markdownlint_options       *g:ale_markdown_markdownlint_options*
+                                    *ale-options.markdown_markdownlint_options*
+                                          *g:ale_markdown_markdownlint_options*
                                           *b:ale_markdown_markdownlint_options*
+markdown_markdownlint_options
+g:ale_markdown_markdownlint_options
   Type: |String|
   Default: `''`
 
@@ -37,8 +42,11 @@ g:ale_markdown_markdownlint_options       *g:ale_markdown_markdownlint_options*
 ===============================================================================
 marksman                                                *ale-markdown-marksman*
 
-g:ale_markdown_marksman_executable         *g:ale_markdown_marksman_executable*
+                                     *ale-options.markdown_marksman_executable*
+                                           *g:ale_markdown_marksman_executable*
                                            *b:ale_markdown_marksman_executable*
+markdown_marksman_executable
+g:ale_markdown_marksman_executable
   Type: |String|
   Default: `'marksman'`
 
@@ -48,17 +56,22 @@ g:ale_markdown_marksman_executable         *g:ale_markdown_marksman_executable*
 ===============================================================================
 mdl                                                          *ale-markdown-mdl*
 
-g:ale_markdown_mdl_executable                   *g:ale_markdown_mdl_executable*
+                                          *ale-options.markdown_mdl_executable*
+                                                *g:ale_markdown_mdl_executable*
                                                 *b:ale_markdown_mdl_executable*
+markdown_mdl_executable
+g:ale_markdown_mdl_executable
   Type: |String|
   Default: `'mdl'`
 
   Override the invoked mdl binary. This is useful for running mdl from
   binstubs or a bundle.
 
-
-g:ale_markdown_mdl_options                         *g:ale_markdown_mdl_options*
+                                             *ale-options.markdown_mdl_options*
+                                                   *g:ale_markdown_mdl_options*
                                                    *b:ale_markdown_mdl_options*
+markdown_mdl_options
+g:ale_markdown_mdl_options
   Type: |String|
   Default: `''`
 
@@ -68,20 +81,26 @@ g:ale_markdown_mdl_options                         *g:ale_markdown_mdl_options*
 ===============================================================================
 pandoc                                                    *ale-markdown-pandoc*
 
-g:ale_markdown_pandoc_executable             *g:ale_markdown_pandoc_executable*
+                                       *ale-options.markdown_pandoc_executable*
+                                             *g:ale_markdown_pandoc_executable*
                                              *b:ale_markdown_pandoc_executable*
+markdown_pandoc_executable
+g:ale_markdown_pandoc_executable
   Type: |String|
   Default: `'pandoc'`
 
   This variable can be set to specify where to find the pandoc executable
 
-
-g:ale_markdown_pandoc_options                   *g:ale_markdown_pandoc_options*
+                                          *ale-options.markdown_pandoc_options*
+                                                *g:ale_markdown_pandoc_options*
                                                 *b:ale_markdown_pandoc_options*
+markdown_pandoc_options
+g:ale_markdown_pandoc_options
   Type: |String|
   Default: `'-f gfm -t gfm -s -'`
 
   This variable can be set to change the default options passed to pandoc
+
 
 ===============================================================================
 prettier                                                *ale-markdown-prettier*
@@ -92,8 +111,11 @@ See |ale-javascript-prettier| for information about the available options.
 ===============================================================================
 pymarkdown                                            *ale-markdown-pymarkdown*
 
-g:ale_markdown_pymarkdown_executable       *g:ale_markdown_pymarkdown_executable*
+                                   *ale-options.markdown_pymarkdown_executable*
+                                         *g:ale_markdown_pymarkdown_executable*
                                           *b:ale_markdown_pymarkdown_executable*
+markdown_pymarkdown_executable
+g:ale_markdown_pymarkdown_executable
   Type: |String|
   Default: `'pymarkdown'`
 
@@ -102,44 +124,54 @@ g:ale_markdown_pymarkdown_executable       *g:ale_markdown_pymarkdown_executable
   Set this to `'pipenv'` to invoke `'pipenv` `run` `pymarkdown'`.
   Set this to `'poetry'` to invoke `'poetry` `run` `pymarkdown'`.
 
-
-g:ale_markdown_pymarkdown_options             *g:ale_markdown_pymarkdown_options*
+                                      *ale-options.markdown_pymarkdown_options*
+                                            *g:ale_markdown_pymarkdown_options*
                                              *b:ale_markdown_pymarkdown_options*
+markdown_pymarkdown_options
+g:ale_markdown_pymarkdown_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to add command-line arguments to the
   pymarkdown invocation.
 
-
-g:ale_markdown_pymarkdown_use_global       *g:ale_markdown_pymarkdown_use_global*
+                                   *ale-options.markdown_pymarkdown_use_global*
+                                         *g:ale_markdown_pymarkdown_use_global*
                                           *b:ale_markdown_pymarkdown_use_global*
+markdown_pymarkdown_use_global
+g:ale_markdown_pymarkdown_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_markdown_pymarkdown_auto_pipenv     *g:ale_markdown_pymarkdown_auto_pipenv*
+                                  *ale-options.markdown_pymarkdown_auto_pipenv*
+                                        *g:ale_markdown_pymarkdown_auto_pipenv*
                                          *b:ale_markdown_pymarkdown_auto_pipenv*
+markdown_pymarkdown_auto_pipenv
+g:ale_markdown_pymarkdown_auto_pipenv
   Type: |Number|
   Default: `0`
 
   Detect whether the file is inside a pipenv, and set the executable to `pipenv`
   if true. This is overridden by a manually-set executable.
 
-
-g:ale_markdown_pymarkdown_auto_poetry     *g:ale_markdown_pymarkdown_auto_poetry*
+                                  *ale-options.markdown_pymarkdown_auto_poetry*
+                                        *g:ale_markdown_pymarkdown_auto_poetry*
                                          *b:ale_markdown_pymarkdown_auto_poetry*
+markdown_pymarkdown_auto_poetry
+g:ale_markdown_pymarkdown_auto_poetry
   Type: |Number|
   Default: `0`
 
   Detect whether the file is inside a poetry, and set the executable to `poetry`
   if true. This is overridden by a manually-set executable.
 
-
-g:ale_markdown_pymarkdown_auto_uv             *g:ale_markdown_pymarkdown_auto_uv*
+                                      *ale-options.markdown_pymarkdown_auto_uv*
+                                            *g:ale_markdown_pymarkdown_auto_uv*
                                              *b:ale_markdown_pymarkdown_auto_uv*
+markdown_pymarkdown_auto_uv
+g:ale_markdown_pymarkdown_auto_uv
   Type: |Number|
   Default: `0`
 
@@ -150,24 +182,31 @@ g:ale_markdown_pymarkdown_auto_uv             *g:ale_markdown_pymarkdown_auto_uv
 ===============================================================================
 remark-lint                                          *ale-markdown-remark-lint*
 
-g:ale_markdown_remark_lint_executable   *g:ale_markdown_remark_lint_executable*
+                                  *ale-options.markdown_remark_lint_executable*
+                                        *g:ale_markdown_remark_lint_executable*
                                         *b:ale_markdown_remark_lint_executable*
+markdown_remark_lint_executable
+g:ale_markdown_remark_lint_executable
   Type: |String|
   Default: `'remark'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_markdown_remark_lint_options         *g:ale_markdown_remark_lint_options*
+                                     *ale-options.markdown_remark_lint_options*
+                                           *g:ale_markdown_remark_lint_options*
                                            *b:ale_markdown_remark_lint_options*
+markdown_remark_lint_options
+g:ale_markdown_remark_lint_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to remark-lint.
 
-
-g:ale_markdown_remark_lint_use_global   *g:ale_markdown_remark_lint_use_global*
+                                  *ale-options.markdown_remark_lint_use_global*
+                                        *g:ale_markdown_remark_lint_use_global*
                                         *b:ale_markdown_remark_lint_use_global*
+markdown_remark_lint_use_global
+g:ale_markdown_remark_lint_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 

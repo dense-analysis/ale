@@ -12,15 +12,21 @@ and https://github.com/dprint/dprint-plugin-sql/releases
 ===============================================================================
 pgformatter                                               *ale-sql-pgformatter*
 
-g:ale_sql_pgformatter_executable             *g:ale_sql_pgformatter_executable*
+                                       *ale-options.sql_pgformatter_executable*
+                                             *g:ale_sql_pgformatter_executable*
                                              *b:ale_sql_pgformatter_executable*
+sql_pgformatter_executable
+g:ale_sql_pgformatter_executable
   Type: |String|
   Default: `'pg_format'`
 
   This variable sets executable used for pgformatter.
 
-g:ale_sql_pgformatter_options                   *g:ale_sql_pgformatter_options*
+                                          *ale-options.sql_pgformatter_options*
+                                                *g:ale_sql_pgformatter_options*
                                                 *b:ale_sql_pgformatter_options*
+sql_pgformatter_options
+g:ale_sql_pgformatter_options
   Type: |String|
   Default: `''`
 
@@ -30,36 +36,44 @@ g:ale_sql_pgformatter_options                   *g:ale_sql_pgformatter_options*
 ===============================================================================
 sqlfluff                                                     *ale-sql-sqlfluff*
 
-g:ale_sql_sqlfluff_executable                   *g:ale_sql_sqlfluff_executable*
+                                          *ale-options.sql_sqlfluff_executable*
+                                                *g:ale_sql_sqlfluff_executable*
                                                 *b:ale_sql_sqlfluff_executable*
+sql_sqlfluff_executable
+g:ale_sql_sqlfluff_executable
   Type: |String|
   Default: `'sqlfluff'`
 
   This variable sets executable used for sqlfluff.
 
-g:ale_sql_sqlfluff_options                         *g:ale_sql_sqlfluff_options*
+                                             *ale-options.sql_sqlfluff_options*
+                                                   *g:ale_sql_sqlfluff_options*
                                                    *b:ale_sql_sqlfluff_options*
+sql_sqlfluff_options
+g:ale_sql_sqlfluff_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to the sqlfluff linter.
 
-
-===============================================================================
-
-
 ===============================================================================
 sqlfmt                                                         *ale-sql-sqlfmt*
 
-g:ale_sql_sqlfmt_executable                       *g:ale_sql_sqlfmt_executable*
+                                            *ale-options.sql_sqlfmt_executable*
+                                                  *g:ale_sql_sqlfmt_executable*
                                                   *b:ale_sql_sqlfmt_executable*
+sql_sqlfmt_executable
+g:ale_sql_sqlfmt_executable
   Type: |String|
   Default: `'sqlfmt'`
 
   This variable sets executable used for sqlfmt.
 
-g:ale_sql_sqlfmt_options                             *g:ale_sql_sqlfmt_options*
+                                               *ale-options.sql_sqlfmt_options*
+                                                     *g:ale_sql_sqlfmt_options*
                                                      *b:ale_sql_sqlfmt_options*
+sql_sqlfmt_options
+g:ale_sql_sqlfmt_options
   Type: |String|
   Default: `''`
 
@@ -70,15 +84,21 @@ g:ale_sql_sqlfmt_options                             *g:ale_sql_sqlfmt_options*
 ===============================================================================
 sqlformat                                                   *ale-sql-sqlformat*
 
-g:ale_sql_sqlformat_executable                 *g:ale_sql_sqlformat_executable*
+                                         *ale-options.sql_sqlformat_executable*
+                                               *g:ale_sql_sqlformat_executable*
                                                *b:ale_sql_sqlformat_executable*
+sql_sqlformat_executable
+g:ale_sql_sqlformat_executable
   Type: |String|
   Default: `'sqlformat'`
 
   This variable sets executable used for sqlformat.
 
-g:ale_sql_sqlformat_options                       *g:ale_sql_sqlformat_options*
+                                            *ale-options.sql_sqlformat_options*
+                                                  *g:ale_sql_sqlformat_options*
                                                   *b:ale_sql_sqlformat_options*
+sql_sqlformat_options
+g:ale_sql_sqlformat_options
   Type: |String|
   Default: `''`
 

@@ -4,6 +4,8 @@
 let g:ale_set_lists_synchronously = 1
 " Disable Neovim diagnostics by default for CI tests.
 let g:ale_use_neovim_diagnostics_api = 0
+" Disable Neovim native LSP API by default for CI tests.
+let g:ale_use_neovim_lsp_api = 0
 
 " This lowercase highlight definition is needed for highlight tests.
 hi link aleerrorline spellbad

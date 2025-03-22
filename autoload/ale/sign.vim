@@ -7,7 +7,7 @@ scriptencoding utf8
 let g:ale_max_signs = get(g:, 'ale_max_signs', -1)
 " This flag can be set to 1 to enable changing the sign column colors when
 " there are errors.
-let g:ale_change_sign_column_color = get(g:, 'ale_change_sign_column_color', 0)
+let g:ale_change_sign_column_color = get(g:, 'ale_change_sign_column_color', v:false)
 " These variables dictate what signs are used to indicate errors and warnings.
 let g:ale_sign_error = get(g:, 'ale_sign_error', 'E')
 let g:ale_sign_style_error = get(g:, 'ale_sign_style_error', g:ale_sign_error)
@@ -20,8 +20,8 @@ let g:ale_sign_priority = get(g:, 'ale_sign_priority', 30)
 " The dummy sign will use the ID exactly equal to the offset.
 let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
 " This flag can be set to 1 to keep sign gutter always open
-let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
-let g:ale_sign_highlight_linenrs = get(g:, 'ale_sign_highlight_linenrs', 0)
+let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', v:false)
+let g:ale_sign_highlight_linenrs = get(g:, 'ale_sign_highlight_linenrs', v:false)
 
 let s:supports_sign_groups = has('nvim-0.4.2') || has('patch-8.1.614')
 

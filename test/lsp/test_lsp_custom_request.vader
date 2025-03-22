@@ -39,7 +39,7 @@ Before:
 
   " Replace the StartLSP function to mock an LSP linter
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
-    let g:conn_id = ale#lsp#Register(g:executable_or_address, g:project_root, {})
+    let g:conn_id = ale#lsp#Register(g:executable_or_address, g:project_root, '', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
     call ale#lsp#HandleMessage(g:conn_id, Encode({'method': 'initialize'}))
 

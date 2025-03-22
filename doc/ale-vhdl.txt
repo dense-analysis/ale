@@ -45,16 +45,21 @@ handle mixed language (VHDL, Verilog, SystemVerilog) designs.
 ===============================================================================
 ghdl                                                            *ale-vhdl-ghdl*
 
-g:ale_vhdl_ghdl_executable                         *g:ale_vhdl_ghdl_executable*
+                                             *ale-options.vhdl_ghdl_executable*
+                                                   *g:ale_vhdl_ghdl_executable*
                                                    *b:ale_vhdl_ghdl_executable*
+vhdl_ghdl_executable
+g:ale_vhdl_ghdl_executable
   Type: |String|
   Default: `'ghdl'`
 
   This variable can be changed to the path to the 'ghdl' executable.
 
-
-g:ale_vhdl_ghdl_options                               *g:ale_vhdl_ghdl_options*
+                                                *ale-options.vhdl_ghdl_options*
+                                                      *g:ale_vhdl_ghdl_options*
                                                       *b:ale_vhdl_ghdl_options*
+vhdl_ghdl_options
+g:ale_vhdl_ghdl_options
   Type: |String|
   Default: `'--std=08'`
 
@@ -82,27 +87,32 @@ following methods, in order:
    a folder named `'.git'
 3. If no such folder is found, use the directory of the current buffer
 
-
-g:ale_hdl_checker_executable
+                                           *ale-options.hdl_checker_executable*
                                                  *g:ale_hdl_checker_executable*
                                                  *b:ale_hdl_checker_executable*
+hdl_checker_executable
+g:ale_hdl_checker_executable
   Type: |String|
   Default: `'hdl_checker'`
 
   This variable can be changed to the path to the 'hdl_checker' executable.
 
-
-g:ale_hdl_checker_options                           *g:ale_hdl_checker_options*
+                                              *ale-options.hdl_checker_options*
+                                                    *g:ale_hdl_checker_options*
                                                     *b:ale_hdl_checker_options*
+hdl_checker_options
+g:ale_hdl_checker_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify the flags/options passed to the
   'hdl_checker' server startup command.
 
-
-g:ale_hdl_checker_config_file                   *g:ale_hdl_checker_config_file*
+                                          *ale-options.hdl_checker_config_file*
+                                                *g:ale_hdl_checker_config_file*
                                                 *b:ale_hdl_checker_config_file*
+hdl_checker_config_file
+g:ale_hdl_checker_config_file
   Type: |String|
   Default: `'.hdl_checker.config'` (Unix),
            `'_hdl_checker.config'` (Windows)
@@ -118,16 +128,21 @@ g:ale_hdl_checker_config_file                   *g:ale_hdl_checker_config_file*
 ===============================================================================
 vcom                                                            *ale-vhdl-vcom*
 
-g:ale_vhdl_vcom_executable                         *g:ale_vhdl_vcom_executable*
+                                             *ale-options.vhdl_vcom_executable*
+                                                   *g:ale_vhdl_vcom_executable*
                                                    *b:ale_vhdl_vcom_executable*
+vhdl_vcom_executable
+g:ale_vhdl_vcom_executable
   Type: |String|
   Default: `'vcom'`
 
   This variable can be changed to the path to the 'vcom' executable.
 
-
-g:ale_vhdl_vcom_options                               *g:ale_vhdl_vcom_options*
+                                                *ale-options.vhdl_vcom_options*
+                                                      *g:ale_vhdl_vcom_options*
                                                       *b:ale_vhdl_vcom_options*
+vhdl_vcom_options
+g:ale_vhdl_vcom_options
   Type: |String|
   Default: `'-2008 -quiet -lint'`
 
@@ -137,16 +152,21 @@ g:ale_vhdl_vcom_options                               *g:ale_vhdl_vcom_options*
 ===============================================================================
 xvhdl                                                          *ale-vhdl-xvhdl*
 
-g:ale_vhdl_xvhdl_executable                       *g:ale_vhdl_xvhdl_executable*
+                                            *ale-options.vhdl_xvhdl_executable*
+                                                  *g:ale_vhdl_xvhdl_executable*
                                                   *b:ale_vhdl_xvhdl_executable*
+vhdl_xvhdl_executable
+g:ale_vhdl_xvhdl_executable
   Type: |String|
   Default: `'xvhdl'`
 
   This variable can be changed to the path to the 'xvhdl' executable.
 
-
-g:ale_vhdl_xvhdl_options                             *g:ale_vhdl_xvhdl_options*
+                                               *ale-options.vhdl_xvhdl_options*
+                                                     *g:ale_vhdl_xvhdl_options*
                                                      *b:ale_vhdl_xvhdl_options*
+vhdl_xvhdl_options
+g:ale_vhdl_xvhdl_options
   Type: |String|
   Default: `'--2008'`
 

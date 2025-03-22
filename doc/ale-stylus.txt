@@ -5,24 +5,31 @@ ALE Stylus Integration                                     *ale-stylus-options*
 ===============================================================================
 stylelint                                                *ale-stylus-stylelint*
 
-g:ale_stylus_stylelint_executable           *g:ale_stylus_stylelint_executable*
+                                      *ale-options.stylus_stylelint_executable*
+                                            *g:ale_stylus_stylelint_executable*
                                             *b:ale_stylus_stylelint_executable*
+stylus_stylelint_executable
+g:ale_stylus_stylelint_executable
   Type: |String|
   Default: `'stylelint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_stylus_stylelint_options                 *g:ale_stylus_stylelint_options*
+                                         *ale-options.stylus_stylelint_options*
+                                               *g:ale_stylus_stylelint_options*
                                                *b:ale_stylus_stylelint_options*
+stylus_stylelint_options
+g:ale_stylus_stylelint_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to stylelint.
 
-
-g:ale_stylus_stylelint_use_global           *g:ale_stylus_stylelint_use_global*
+                                      *ale-options.stylus_stylelint_use_global*
+                                            *g:ale_stylus_stylelint_use_global*
                                             *b:ale_stylus_stylelint_use_global*
+stylus_stylelint_use_global
+g:ale_stylus_stylelint_use_global
   Type: |String|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 

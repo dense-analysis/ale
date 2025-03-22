@@ -5,16 +5,21 @@ ALE Chef Integration                                         *ale-chef-options*
 ===============================================================================
 cookstyle                                                  *ale-chef-cookstyle*
 
-g:ale_chef_cookstyle_options                     *g:ale_chef_cookstyle_options*
+                                           *ale-options.chef_cookstyle_options*
+                                                 *g:ale_chef_cookstyle_options*
                                                  *b:ale_chef_cookstyle_options*
+chef_cookstyle_options
+g:ale_chef_cookstyle_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to cookstyle.
 
-
-g:ale_chef_cookstyle_executable               *g:ale_chef_cookstyle_executable*
+                                        *ale-options.chef_cookstyle_executable*
+                                              *g:ale_chef_cookstyle_executable*
                                               *b:ale_chef_cookstyle_executable*
+chef_cookstyle_executable
+g:ale_chef_cookstyle_executable
   Type: |String|
   Default: `'cookstyle'`
 
@@ -25,16 +30,21 @@ g:ale_chef_cookstyle_executable               *g:ale_chef_cookstyle_executable*
 ===============================================================================
 foodcritic                                                *ale-chef-foodcritic*
 
-g:ale_chef_foodcritic_options                   *g:ale_chef_foodcritic_options*
+                                          *ale-options.chef_foodcritic_options*
+                                                *g:ale_chef_foodcritic_options*
                                                 *b:ale_chef_foodcritic_options*
+chef_foodcritic_options
+g:ale_chef_foodcritic_options
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to foodcritic.
 
-
-g:ale_chef_foodcritic_executable             *g:ale_chef_foodcritic_executable*
+                                       *ale-options.chef_foodcritic_executable*
+                                             *g:ale_chef_foodcritic_executable*
                                              *b:ale_chef_foodcritic_executable*
+chef_foodcritic_executable
+g:ale_chef_foodcritic_executable
   Type: |String|
   Default: `'foodcritic'`
 

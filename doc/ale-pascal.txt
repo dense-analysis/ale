@@ -1,23 +1,29 @@
 ===============================================================================
 ALE Pascal Integration                                     *ale-pascal-options*
 
+
 ===============================================================================
 ptop                                                          *ale-pascal-ptop*
 
-g:ale_pascal_ptop_executable                     *g:ale_pascal_ptop_executable*
+                                           *ale-options.pascal_ptop_executable*
+                                                 *g:ale_pascal_ptop_executable*
                                                  *b:ale_pascal_ptop_executable*
+pascal_ptop_executable
+g:ale_pascal_ptop_executable
   Type: |String|
   Default: `'ptop'`
 
   This variable can be changed to specify the ptop executable.
 
-
-g:ale_pascal_ptop_options                           *g:ale_pascal_ptop_options*
+                                              *ale-options.pascal_ptop_options*
+                                                    *g:ale_pascal_ptop_options*
                                                     *b:ale_pascal_ptop_options*
+pascal_ptop_options
+g:ale_pascal_ptop_options
   Type: |String|
   Default: `''`
 
-This variable can be set to pass additional options to the ptop fixer.
+  This variable can be set to pass additional options to the ptop fixer.
 
 
 ===============================================================================

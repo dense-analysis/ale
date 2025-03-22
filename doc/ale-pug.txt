@@ -16,24 +16,31 @@ filename automatically. Configuration files will be loaded in this order:
 You might need to create a configuration file for your project to get
 meaningful results.
 
-g:ale_pug_puglint_executable                     *g:ale_pug_puglint_executable*
+                                           *ale-options.pug_puglint_executable*
+                                                 *g:ale_pug_puglint_executable*
                                                  *b:ale_pug_puglint_executable*
+pug_puglint_executable
+g:ale_pug_puglint_executable
   Type: |String|
   Default: `'pug-lint'`
 
   See |ale-integrations-local-executables|
 
-
-g:ale_pug_puglint_options                           *g:ale_pug_puglint_options*
+                                              *ale-options.pug_puglint_options*
+                                                    *g:ale_pug_puglint_options*
                                                     *b:ale_pug_puglint_options*
+pug_puglint_options
+g:ale_pug_puglint_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to pug-lint.
 
-
-g:ale_pug_puglint_use_global                     *g:ale_pug_puglint_use_global*
+                                           *ale-options.pug_puglint_use_global*
+                                                 *g:ale_pug_puglint_use_global*
                                                  *b:ale_pug_puglint_use_global*
+pug_puglint_use_global
+g:ale_pug_puglint_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 

@@ -219,7 +219,7 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
         call s:HandleTSServerDiagnostics(a:response, 'syntax')
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'suggestionDiag'
-    \&& get(g:, 'ale_lsp_suggestions', '1') == 1
+    \&& get(g:, 'ale_lsp_suggestions')
         call s:HandleTSServerDiagnostics(a:response, 'suggestion')
     endif
 endfunction
@@ -306,11 +306,10 @@ function! ale#lsp_linter#OnInit(linter, details, Callback) abort
     let l:command = a:details.command
 
     let l:config = ale#lsp_linter#GetConfig(l:buffer, a:linter)
-    let l:language_id = ale#linter#GetLanguage(l:buffer, a:linter)
 
     call ale#lsp#UpdateConfig(l:conn_id, l:buffer, l:config)
 
-    if ale#lsp#OpenDocument(l:conn_id, l:buffer, l:language_id)
+    if ale#lsp#OpenDocument(l:conn_id, l:buffer)
         if g:ale_history_enabled && !empty(l:command)
             call ale#history#Add(l:buffer, 'started', l:conn_id, l:command)
         endif
@@ -357,11 +356,21 @@ function! s:StartLSP(options, address, executable, command) abort
     let l:init_options = ale#lsp_linter#GetOptions(l:buffer, l:linter)
 
     if l:linter.lsp is# 'socket'
-        let l:conn_id = ale#lsp#Register(a:address, l:root, l:init_options)
+        let l:conn_id = ale#lsp#Register(
+        \   a:address,
+        \   l:root,
+        \   l:linter.language,
+        \   l:init_options
+        \)
         let l:ready = ale#lsp#ConnectToAddress(l:conn_id, a:address)
         let l:command = ''
     else
-        let l:conn_id = ale#lsp#Register(a:executable, l:root, l:init_options)
+        let l:conn_id = ale#lsp#Register(
+        \   a:executable,
+        \   l:root,
+        \   l:linter.language,
+        \   l:init_options
+        \)
 
         " tsserver behaves differently, so tell the LSP API that it is tsserver.
         if l:linter.lsp is# 'tsserver'
@@ -511,17 +520,16 @@ function! s:CheckWithLSP(linter, details) abort
         if l:notified
             call ale#engine#MarkLinterActive(l:info, a:linter)
         endif
-    else
+    elseif !g:ale_use_neovim_lsp_api
         let l:notified = ale#lsp#NotifyForChanges(l:id, l:buffer)
-    endif
 
-    " If this was a file save event, also notify the server of that.
-    if a:linter.lsp isnot# 'tsserver'
-    \&& getbufvar(l:buffer, 'ale_save_event_fired', 0)
-    \&& ale#lsp#HasCapability(l:id, 'did_save')
-        let l:include_text = ale#lsp#HasCapability(l:id, 'includeText')
-        let l:save_message = ale#lsp#message#DidSave(l:buffer, l:include_text)
-        let l:notified = ale#lsp#Send(l:id, l:save_message) != 0
+        " If this was a file save event, also notify the server of that.
+        if getbufvar(l:buffer, 'ale_save_event_fired', 0)
+        \&& ale#lsp#HasCapability(l:id, 'did_save')
+            let l:include_text = ale#lsp#HasCapability(l:id, 'includeText')
+            let l:save_message = ale#lsp#message#DidSave(l:buffer, l:include_text)
+            let l:notified = ale#lsp#Send(l:id, l:save_message) != 0
+        endif
     endif
 endfunction
 

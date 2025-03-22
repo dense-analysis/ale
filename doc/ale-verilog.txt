@@ -29,8 +29,8 @@ ALE can use seven different linters for Verilog HDL:
 By default, both 'verilog' and 'systemverilog' filetypes are checked.
 
 You can limit 'systemverilog' files to be checked using only 'verilator' by
-defining 'g:ale_linters' variable:
->
+defining 'g:ale_linters' variable: >
+
     au FileType systemverilog
     \ let g:ale_linters = {'systemverilog' : ['verilator'],}
 <
@@ -70,18 +70,25 @@ iverilog                                                 *ale-verilog-iverilog*
 ===============================================================================
 slang                                                       *ale-verilog-slang*
 
-g:ale_verilog_slang_option                        *g:ale_verilog_slang_options*
+                                             *ale-options.verilog_slang_option*
+                                                   *g:ale_verilog_slang_option*
                                                   *b:ale_verilog_slang_options*
-  Type: String
-  Default: ''
+verilog_slang_option
+g:ale_verilog_slang_option
+  Type: |String|
+  Default: `''`
 
   This variable can be changed to modify 'slang' command arguments.
+
 
 ===============================================================================
 verilator                                               *ale-verilog-verilator*
 
-g:ale_verilog_verilator_options               *g:ale_verilog_verilator_options*
+                                        *ale-options.verilog_verilator_options*
+                                              *g:ale_verilog_verilator_options*
                                               *b:ale_verilog_verilator_options*
+verilog_verilator_options
+g:ale_verilog_verilator_options
   Type: |String|
   Default: `''`
 
@@ -94,16 +101,21 @@ g:ale_verilog_verilator_options               *g:ale_verilog_verilator_options*
 ===============================================================================
 vlog                                                         *ale-verilog-vlog*
 
-g:ale_verilog_vlog_executable                   *g:ale_verilog_vlog_executable*
+                                          *ale-options.verilog_vlog_executable*
+                                                *g:ale_verilog_vlog_executable*
                                                 *b:ale_verilog_vlog_executable*
+verilog_vlog_executable
+g:ale_verilog_vlog_executable
   Type: |String|
   Default: `'vlog'`
 
   This variable can be changed to the path to the 'vlog' executable.
 
-
-g:ale_verilog_vlog_options                         *g:ale_verilog_vlog_options*
+                                             *ale-options.verilog_vlog_options*
+                                                   *g:ale_verilog_vlog_options*
                                                    *b:ale_verilog_vlog_options*
+verilog_vlog_options
+g:ale_verilog_vlog_options
   Type: |String|
   Default: `'-quiet -lint'`
 
@@ -113,16 +125,21 @@ g:ale_verilog_vlog_options                         *g:ale_verilog_vlog_options*
 ===============================================================================
 xvlog                                                       *ale-verilog-xvlog*
 
-g:ale_verilog_xvlog_executable                 *g:ale_verilog_xvlog_executable*
+                                         *ale-options.verilog_xvlog_executable*
+                                               *g:ale_verilog_xvlog_executable*
                                                *b:ale_verilog_xvlog_executable*
+verilog_xvlog_executable
+g:ale_verilog_xvlog_executable
   Type: |String|
   Default: `'xvlog'`
 
   This variable can be changed to the path to the 'xvlog' executable.
 
-
-g:ale_verilog_xvlog_options                       *g:ale_verilog_xvlog_options*
+                                            *ale-options.verilog_xvlog_options*
+                                                  *g:ale_verilog_xvlog_options*
                                                   *b:ale_verilog_xvlog_options*
+verilog_xvlog_options
+g:ale_verilog_xvlog_options
   Type: |String|
   Default: `''`
 
@@ -132,16 +149,21 @@ g:ale_verilog_xvlog_options                       *g:ale_verilog_xvlog_options*
 ===============================================================================
 yosys                                                       *ale-verilog-yosys*
 
-g:ale_verilog_yosys_executable                 *g:ale_verilog_yosys_executable*
+                                         *ale-options.verilog_yosys_executable*
+                                               *g:ale_verilog_yosys_executable*
                                                *b:ale_verilog_yosys_executable*
+verilog_yosys_executable
+g:ale_verilog_yosys_executable
   Type: |String|
   Default: `'yosys'`
 
   This variable can be changed to the path to the 'yosys' executable.
 
-
-g:ale_verilog_yosys_options                       *g:ale_verilog_yosys_options*
+                                            *ale-options.verilog_yosys_options*
+                                                  *g:ale_verilog_yosys_options*
                                                   *b:ale_verilog_yosys_options*
+verilog_yosys_options
+g:ale_verilog_yosys_options
   Type: |String|
   Default: `'-Q -T -p ''read_verilog %s'''`
 

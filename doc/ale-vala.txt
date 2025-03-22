@@ -11,16 +11,19 @@ See |ale-c-uncrustify| for information about the available options.
 ===============================================================================
 Vala-Lint                                                  *ale-vala-vala-lint*
 
-g:vala_vala_lint_executable                       *g:vala_vala_lint_executable*
-                                                  *b:vala_vala_lint_executable*
+                                        *ale-options.vala_vala_lint_executable*
+                                              *g:ale_vala_vala_lint_executable*
+                                              *b:ale_vala_vala_lint_executable*
+g:ale_vala_vala_lint_executable
   Type: |String|
   Default: `'io.elementary.vala-lint'`
 
   This variable can be set to specify a Vala-Lint executable file.
 
-
-g:vala_vala_lint_config_filename             *g:vala_vala_lint_config_filename*
-                                             *b:vala_vala_lint_config_filename*
+                                   *ale-options.vala_vala_lint_config_filename*
+                                         *g:ale_vala_vala_lint_config_filename*
+                                         *b:ale_vala_vala_lint_config_filename*
+g:ale_vala_vala_lint_config_filename
   Type: |String|
   Default: `'vala-lint.conf'`
 

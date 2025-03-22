@@ -8,9 +8,11 @@ Integration Information
 `v` is V's build tool. `vfmt` (called as `v fmt` from the same
 executable that does the builds) is the autoformatter/fixer.
 
-g:ale_v_v_executable                                     *g:ale_v_v_executable*
+                                                   *ale-options.v_v_executable*
+                                                         *g:ale_v_v_executable*
                                                          *b:ale_v_v_executable*
-
+v_v_executable
+g:ale_v_v_executable
   Type: |String|
   Default: `'v'`
 
@@ -20,8 +22,11 @@ g:ale_v_v_executable                                     *g:ale_v_v_executable*
 ===============================================================================
 v                                                                     *ale-v-v*
 
-g:ale_v_v_options                                           *g:ale_v_v_options*
+                                                      *ale-options.v_v_options*
+                                                            *g:ale_v_v_options*
                                                             *b:ale_v_v_options*
+v_v_options
+g:ale_v_v_options
   Type: |String|
   Default: `''`
 
@@ -32,8 +37,11 @@ g:ale_v_v_options                                           *g:ale_v_v_options*
 ===============================================================================
 vfmt                                                               *ale-v-vfmt*
 
-g:ale_v_vfmt_options                                     *g:ale_v_vfmt_options*
+                                                   *ale-options.v_vfmt_options*
+                                                         *g:ale_v_vfmt_options*
                                                          *b:ale_v_vfmt_options*
+v_vfmt_options
+g:ale_v_vfmt_options
   Type: |String|
   Default: `''`
 

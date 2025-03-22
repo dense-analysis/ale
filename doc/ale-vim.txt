@@ -9,48 +9,54 @@ vimls                                                           *ale-vim-vimls*
   using the Language Server Protocol.  See the installation instructions:
   https://github.com/iamcco/vim-language-server#install
 
-g:ale_vim_vimls_executable                         *g:ale_vim_vimls_executable*
+                                             *ale-options.vim_vimls_executable*
+                                                   *g:ale_vim_vimls_executable*
                                                    *b:ale_vim_vimls_executable*
+vim_vimls_executable
+g:ale_vim_vimls_executable
   Type: |String|
   Default: `'vim-language-server'`
 
   This option can be set to change the executable path for vimls.
 
-
-g:ale_vim_vimls_config                                 *g:ale_vim_vimls_config*
+                                                 *ale-options.vim_vimls_config*
+                                                       *g:ale_vim_vimls_config*
                                                        *b:ale_vim_vimls_config*
+vim_vimls_config
+g:ale_vim_vimls_config
   Type: |Dictionary|
   Default: `{}`
 
   Dictionary containing configuration settings that will be passed to the
   language server. For example: >
-    {
-    \  'vim': {
-    \    'iskeyword': '@,48-57,_,192-255,-#',
-    \    'vimruntime': '',
-    \    'runtimepath': '',
-    \    'diagnostic': {
-    \      'enable': v:true
-    \    },
-    \    'indexes': {
-    \      'runtimepath': v:true,
-    \      'gap': 100,
-    \      'count': 3,
-    \      'projectRootPatterns' : ['.git', 'autoload', 'plugin']
-    \    },
-    \    'suggest': {
-    \      'fromVimruntime': v:true,
-    \      'fromRuntimepath': v:false
-    \    },
-    \  }
-    \}
+
+  let g:ale_vim_vimls_config = {
+  \   'vim': {
+  \       'iskeyword': '@,48-57,_,192-255,-#',
+  \       'vimruntime': '',
+  \       'runtimepath': '',
+  \       'diagnostic': {'enable': v:true},
+  \       'indexes': {
+  \           'runtimepath': v:true,
+  \           'gap': 100,
+  \           'count': 3,
+  \           'projectRootPatterns': ['.git', 'autoload', 'plugin'],
+  \       },
+  \       'suggest': {
+  \           'fromVimruntime': v:true,
+  \           'fromRuntimepath': v:false,
+  \       },
+  \   },
+  \}
 <
   Consult the vim-language-server documentation for more information about
   settings.
 
-
-g:ale_vim_vimls_use_global                         *g:ale_vim_vimls_use_global*
+                                             *ale-options.vim_vimls_use_global*
+                                                   *g:ale_vim_vimls_use_global*
                                                    *b:ale_vim_vimls_use_global*
+vim_vimls_use_global
+g:ale_vim_vimls_use_global
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -60,16 +66,21 @@ g:ale_vim_vimls_use_global                         *g:ale_vim_vimls_use_global*
 ===============================================================================
 vint                                                             *ale-vim-vint*
 
-g:ale_vim_vint_executable                           *g:ale_vim_vint_executable*
+                                              *ale-options.vim_vint_executable*
+                                                    *g:ale_vim_vint_executable*
                                                     *b:ale_vim_vint_executable*
+vim_vint_executable
+g:ale_vim_vint_executable
   Type: |String|
   Default: `'vint'`
 
   This option can be set to change the executable path for Vint.
 
-
-g:ale_vim_vint_show_style_issues             *g:ale_vim_vint_show_style_issues*
+                                       *ale-options.vim_vint_show_style_issues*
+                                             *g:ale_vim_vint_show_style_issues*
                                              *b:ale_vim_vint_show_style_issues*
+vim_vint_show_style_issues
+g:ale_vim_vint_show_style_issues
   Type: |Number|
   Default: `1`
 

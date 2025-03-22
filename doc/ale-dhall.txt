@@ -1,13 +1,21 @@
 ===============================================================================
 ALE Dhall Integration                                       *ale-dhall-options*
 
-g:ale_dhall_executable                                 *g:ale_dhall_executable*
+Dhall - https://dhall-lang.org/
+
+                                                 *ale-options.dhall_executable*
+                                                       *g:ale_dhall_executable*
                                                        *b:ale_dhall_executable*
+dhall_executable
+g:ale_dhall_executable
   Type: |String|
   Default: `'dhall'`
 
-g:ale_dhall_options                                       *g:ale_dhall_options*
+                                                    *ale-options.dhall_options*
+                                                          *g:ale_dhall_options*
                                                           *b:ale_dhall_options*
+dhall_options
+g:ale_dhall_options
   Type: |String|
   Default: `''`
 
@@ -20,18 +28,18 @@ g:ale_dhall_options                                       *g:ale_dhall_options*
 ===============================================================================
 dhall-format                                                 *ale-dhall-format*
 
-Dhall
-  (https://dhall-lang.org/)
-
 
 ===============================================================================
 dhall-freeze                                                 *ale-dhall-freeze*
 
-Dhall
-  (https://dhall-lang.org/)
 
-g:ale_dhall_freeze_options                         *g:ale_dhall_freeze_options*
+-------------------------------------------------------------------------------
+Options
+                                             *ale-options.dhall_freeze_options*
+                                                   *g:ale_dhall_freeze_options*
                                                    *b:ale_dhall_freeze_options*
+dhall_freeze_options
+g:ale_dhall_freeze_options
   Type: |String|
   Default: `''`
 
@@ -43,9 +51,6 @@ g:ale_dhall_freeze_options                         *g:ale_dhall_freeze_options*
 
 ===============================================================================
 dhall-lint                                                     *ale-dhall-lint*
-
-Dhall
-  (https://dhall-lang.org/)
 
 
 ===============================================================================

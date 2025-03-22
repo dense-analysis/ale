@@ -56,6 +56,7 @@ linting and fixing of code in Vim. ALE offers the following.
 * Near-zero configuration with custom code for better defaults
 * Highly customizable and well-documented (`:help ale-options`)
 * Breaking changes for the plugin are extremely rare
+* Integrates with Neovim's LSP client (0.8+) and diagnostics (0.7+)
 * Support for older Vim and Neovim versions
 * Windows support
 * Well-integrated with other plugins
@@ -140,6 +141,12 @@ ALE offers some support for completion via hijacking of omnicompletion while you
 type. All of ALE's completion information must come from Language Server
 Protocol linters, or from `tsserver` for TypeScript.
 
+When running ALE in Neovim 0.8+, ALE will integrate with Neovim's LSP client by
+default, and any auto-completion plugin that uses the native LSP client will
+work when ALE runs language servers.
+[nvim-cmp](https://github.com/hrsh7th/nvim-cmp) is recommended as a
+completion plugin worth trying in Neovim.
+
 ALE integrates with [Deoplete](https://github.com/Shougo/deoplete.nvim) as a
 completion source, named `'ale'`. You can configure Deoplete to only use ALE as
 the source of completion information, or mix it with other sources.
@@ -186,7 +193,8 @@ LSP servers (e.g. eclipselsp). See `:help ale-completion` for more information.
 
 ALE supports jumping to the definition of words under your cursor with the
 `:ALEGoToDefinition` command using any enabled Language Server Protocol linters
-and `tsserver`.
+and `tsserver`. In Neovim 0.8+, you can also use Neovim's built in `gd` keybind
+and more.
 
 See `:help ale-go-to-definition` for more information.
 

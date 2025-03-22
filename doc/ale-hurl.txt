@@ -5,8 +5,11 @@ ALE Hurl Integration                                         *ale-hurl-options*
 ===============================================================================
 hurlfmt                                                      *ale-hurl-hurlfmt*
 
-g:ale_hurl_hurlfmt_executable                   *g:ale_hurl_hurlfmt_executable*
+                                          *ale-options.hurl_hurlfmt_executable*
+                                                *g:ale_hurl_hurlfmt_executable*
                                                 *b:ale_hurl_hurlfmt_executable*
+hurl_hurlfmt_executable
+g:ale_hurl_hurlfmt_executable
   Type: |String|
   Default: `'hurlfmt'`
 

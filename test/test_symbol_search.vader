@@ -18,7 +18,7 @@ Before:
   runtime autoload/ale/preview.vim
 
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
-    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', '', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
     let l:details = {
     \ 'buffer': a:buffer,

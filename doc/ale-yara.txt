@@ -11,8 +11,11 @@ Integration Information
 ===============================================================================
 yls                                                              *ale-yara-yls*
 
-g:ale_yara_yls_executable                           *g:ale_yara_yls_executable*
+                                              *ale-options.yara_yls_executable*
+                                                    *g:ale_yara_yls_executable*
                                                     *b:ale_yara_yls_executable*
+yara_yls_executable
+g:ale_yara_yls_executable
   Type: |String|
   Default: `'yls'`
 

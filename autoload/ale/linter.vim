@@ -446,9 +446,3 @@ function! ale#linter#GetAddress(buffer, linter) abort
 
     return type(l:Address) is v:t_func ? l:Address(a:buffer) : l:Address
 endfunction
-
-function! ale#linter#GetLanguage(buffer, linter) abort
-    let l:Language = a:linter.language
-
-    return type(l:Language) is v:t_func ? l:Language(a:buffer) : l:Language
-endfunction

@@ -2,16 +2,15 @@
 ALE Inko Integration                                         *ale-inko-options*
                                                          *ale-integration-inko*
 
-===============================================================================
-Integration Information
-
-  Currently, the only supported linter for Inko is the Inko compiler itself.
 
 ===============================================================================
 inko                                                            *ale-inko-inko*
 
-g:ale_inko_inko_executable                         *g:ale_inko_inko_executable*
+                                             *ale-options.inko_inko_executable*
+                                                   *g:ale_inko_inko_executable*
                                                    *b:ale_inko_inko_executable*
+inko_inko_executable
+g:ale_inko_inko_executable
   Type: |String|
   Default: `'inko'`
 

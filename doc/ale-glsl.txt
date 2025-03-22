@@ -16,16 +16,21 @@ Integration Information
 ===============================================================================
 glslang                                                      *ale-glsl-glslang*
 
-g:ale_glsl_glslang_executable                   *g:ale_glsl_glslang_executable*
+                                          *ale-options.glsl_glslang_executable*
+                                                *g:ale_glsl_glslang_executable*
                                                 *b:ale_glsl_glslang_executable*
+glsl_glslang_executable
+g:ale_glsl_glslang_executable
   Type: |String|
   Default: `'glslangValidator'`
 
   This variable can be changed to change the path to glslangValidator.
 
-
-g:ale_glsl_glslang_options                         *g:ale_glsl_glslang_options*
+                                             *ale-options.glsl_glslang_options*
+                                                   *g:ale_glsl_glslang_options*
                                                    *b:ale_glsl_glslang_options*
+glsl_glslang_options
+g:ale_glsl_glslang_options
   Type: |String|
   Default: `''`
 
@@ -35,16 +40,22 @@ g:ale_glsl_glslang_options                         *g:ale_glsl_glslang_options*
 ===============================================================================
 glslls                                                        *ale-glsl-glslls*
 
-g:ale_glsl_glslls_executable                     *g:ale_glsl_glslls_executable*
+                                           *ale-options.glsl_glslls_executable*
+                                                 *g:ale_glsl_glslls_executable*
                                                  *b:ale_glsl_glslls_executable*
+glsl_glslls_executable
+g:ale_glsl_glslls_executable
   Type: |String|
   Default: `'glslls'`
 
   This variable can be changed to change the path to glslls.
   See |ale-integrations-local-executables|
 
-g:ale_glsl_glslls_logfile                           *g:ale_glsl_glslls_logfile*
+                                              *ale-options.glsl_glslls_logfile*
+                                                    *g:ale_glsl_glslls_logfile*
                                                     *b:ale_glsl_glslls_logfile*
+glsl_glslls_logfile
+g:ale_glsl_glslls_logfile
   Type: |String|
   Default: `''`
 
