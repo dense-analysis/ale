@@ -4486,9 +4486,12 @@ ale#GetFilenameMappings(buffer, name)               *ale#GetFilenameMappings()*
   See |g:ale_filename_mappings| for details on filename mapping.
 
 
+ale.has(feature)                                                    *ale.has()*
 ale#Has(feature)                                                    *ale#Has()*
 
-  Return `1` if ALE supports a given feature, like |has()| for Vim features.
+  In Vim, `ale#Has` returns `1` if ALE supports a given feature, like |has()|
+  for Vim features. In Lua `ale.has` returns `true` instead, and `false` if a
+  feature is not supported.
 
   ALE versions can be checked with version strings in the format
   `ale#Has('ale-x.y.z')`, such as `ale#Has('ale-2.4.0')`.

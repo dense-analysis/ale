@@ -55,6 +55,15 @@ ale.setup = setmetatable({
     end,
 })
 
+---Check if ALE supports a given feature.
+---
+---The ALE version can be checked with ale.has("ale-1.0.0"), etc.
+---@param feature string The feature to test for.
+---@return boolean supported If the feature is supported.
+ale.has = function(feature)
+    return vim.fn["ale#Has"](feature) == 1
+end
+
 ---Get an ALE variable for a buffer (first) or globally (second)
 ---@param buffer number The buffer number to retreive the variable for.
 ---@param variable_name string The variable to retrieve.
