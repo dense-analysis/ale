@@ -55,6 +55,21 @@ ale.setup = setmetatable({
     end,
 })
 
+---Run ALE linters on a buffer after a delay.
+---
+---If a delay in milliseconds multiple times, the internal timer used by ALE
+---will be reset, so ALE doesn't lint too often.
+---
+---If the `linting_flag` is not 'lint_file' then linters that require files to
+---be saved will no be run.
+---@param delay number Milliseconds to wait for. A delay of 0 lints immediately.
+---@param linting_flag string|nil If set to 'lint_file', run all linters.
+---@param buffer number|nil The buffer to check. Defaults to the current buffer.
+---@return nil
+ale.queue = function(delay, linting_flag, buffer)
+    vim.fn["ale#Queue"](delay, linting_flag, buffer)
+end
+
 ---Check if ALE supports a given feature.
 ---
 ---The ALE version can be checked with ale.has("ale-1.0.0"), etc.
