@@ -4506,19 +4506,21 @@ ale#Pad(str)                                                        *ale#Pad()*
   parts of a command from variables.
 
 
-ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
+ale.queue(delay, [linting_flag, buffer])                          *ale.queue()*
+ale#Queue(delay, [linting_flag, buffer])                          *ale#Queue()*
 
   Run linters for the current buffer, based on the filetype of the buffer,
   with a given `delay`. A `delay` of `0` will run the linters immediately.
   The linters will always be run in the background. Calling this function
-  again from the same buffer
+  several times will reset an internal timer so ALE doesn't check buffers too
+  often.
 
   An optional `linting_flag` argument can be given. If `linting_flag` is
   `'lint_file'`, then linters where the `lint_file` option evaluates to `1`
   will be run. Otherwise, those linters will not be run.
 
-  An optional `buffer_number` argument can be given for specifying the buffer
-  to check. The active buffer (`bufnr('')`) will be checked by default.
+  An optional `buffer` argument can be given for specifying the buffer to
+  check. The active buffer (`bufnr('')`) will be checked by default.
 
                                                                 *ale-cool-down*
   If an exception is thrown when queuing/running ALE linters, ALE will enter
