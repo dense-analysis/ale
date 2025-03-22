@@ -64,6 +64,21 @@ ale.has = function(feature)
     return vim.fn["ale#Has"](feature) == 1
 end
 
+---Prefix a string with a single space if it is not empty.
+---nil will be treated the same as an empty string.
+---
+---This function is a convenience for chaining options for commands together
+---without adding redundant whitespace.
+---@param str string|nil A value to pad with whitespace.
+---@return string padded A value padded with whitespace.
+ale.pad = function(str)
+    if str == nil or str == "" then
+        return ""
+    end
+
+    return " " .. str
+end
+
 ---Get an ALE variable for a buffer (first) or globally (second)
 ---@param buffer number The buffer number to retreive the variable for.
 ---@param variable_name string The variable to retrieve.

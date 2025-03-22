@@ -4498,7 +4498,8 @@ ale#Has(feature)                                                    *ale#Has()*
   `ale#Has('ale-x.y.z')`, such as `ale#Has('ale-2.4.0')`.
 
 
-ale#Pad(string)                                                     *ale#Pad()*
+ale.pad(str)                                                        *ale.pad()*
+ale#Pad(str)                                                        *ale#Pad()*
 
   Given a string or any |empty()| value, return either the string prefixed
   with a single space, or an empty string. This function can be used to build
