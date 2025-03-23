@@ -193,6 +193,10 @@ Before:
       \             'dynamicRegistration': v:false,
       \             'linkSupport': v:false,
       \           },
+      \           'diagnostic': {
+      \             'dynamicRegistration': v:true,
+      \             'relatedDocumentSupport': v:true,
+      \           },
       \           'publishDiagnostics': {
       \             'relatedInformation': v:true,
       \           },

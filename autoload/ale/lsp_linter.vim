@@ -23,6 +23,26 @@ function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
     let s:lsp_linter_map = a:replacement_map
 endfunction
 
+" A map for tracking URIs for diagnostic request IDs
+if !has_key(s:, 'diagnostic_uri_map')
+    let s:diagnostic_uri_map = {}
+endif
+
+" For internal use only.
+function! ale#lsp_linter#ClearDiagnosticURIMap() abort
+    let s:diagnostic_uri_map = {}
+endfunction
+
+" For internal use only.
+function! ale#lsp_linter#GetDiagnosticURIMap() abort
+    return s:diagnostic_uri_map
+endfunction
+
+" Just for tests.
+function! ale#lsp_linter#SetDiagnosticURIMap(replacement_map) abort
+    let s:diagnostic_uri_map = a:replacement_map
+endfunction
+
 " Get all enabled LSP linters.
 " This list still includes linters ignored with `ale_linters_ignore`.
 "
@@ -77,14 +97,17 @@ function! s:ShouldIgnoreDiagnostics(buffer, linter) abort
     return 0
 endfunction
 
-function! s:HandleLSPDiagnostics(conn_id, response) abort
+" Handle LSP diagnostics for a given URI.
+" The special value 'unchanged' can be used for diagnostics to indicate
+" that diagnostics haven't changed since we last checked.
+function! s:HandleLSPDiagnostics(conn_id, uri, diagnostics) abort
     let l:linter = get(s:lsp_linter_map, a:conn_id)
 
     if empty(l:linter)
         return
     endif
 
-    let l:filename = ale#util#ToResource(a:response.params.uri)
+    let l:filename = ale#util#ToResource(a:uri)
     let l:escaped_name = escape(
     \   fnameescape(l:filename),
     \   has('win32') ? '^' : '^,}]'
@@ -100,9 +123,12 @@ function! s:HandleLSPDiagnostics(conn_id, response) abort
         return
     endif
 
-    let l:loclist = ale#lsp#response#ReadDiagnostics(a:response)
-
-    call ale#engine#HandleLoclist(l:linter.name, l:buffer, l:loclist, 0)
+    if a:diagnostics is# 'unchanged'
+        call ale#engine#MarkLinterInactive(l:info, l:linter)
+    else
+        let l:loclist = ale#lsp#response#ReadDiagnostics(a:diagnostics)
+        call ale#engine#HandleLoclist(l:linter.name, l:buffer, l:loclist, 0)
+    endif
 endfunction
 
 function! s:HandleTSServerDiagnostics(response, error_type) abort
@@ -204,7 +230,17 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
 
         call s:HandleLSPErrorMessage(l:linter, a:response)
     elseif l:method is# 'textDocument/publishDiagnostics'
-        call s:HandleLSPDiagnostics(a:conn_id, a:response)
+        let l:uri = a:response.params.uri
+        let l:diagnostics = a:response.params.diagnostics
+
+        call s:HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
+    elseif has_key(s:diagnostic_uri_map, get(a:response, 'id'))
+        let l:uri = remove(s:diagnostic_uri_map, a:response.id)
+        let l:diagnostics = a:response.result.kind is# 'unchanged'
+        \   ? 'unchanged'
+        \   : a:response.result.items
+
+        call s:HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
     elseif l:method is# 'window/showMessage'
         call ale#lsp_window#HandleShowMessage(
         \   s:lsp_linter_map[a:conn_id].name,
@@ -529,6 +565,23 @@ function! s:CheckWithLSP(linter, details) abort
             let l:include_text = ale#lsp#HasCapability(l:id, 'includeText')
             let l:save_message = ale#lsp#message#DidSave(l:buffer, l:include_text)
             let l:notified = ale#lsp#Send(l:id, l:save_message) != 0
+        endif
+
+        let l:diagnostic_request_id = 0
+
+        " If the document is updated and we can pull diagnostics, try to.
+        if ale#lsp#HasCapability(l:id, 'pull_model')
+            let l:diagnostic_message = ale#lsp#message#Diagnostic(l:buffer)
+
+            let l:diagnostic_request_id = ale#lsp#Send(l:id, l:diagnostic_message)
+        endif
+
+        " If we are going to pull diagnostics, then mark the linter as active,
+        " and remember the URI we sent the request for.
+        if l:diagnostic_request_id
+            call ale#engine#MarkLinterActive(l:info, a:linter)
+            let s:diagnostic_uri_map[l:diagnostic_request_id] =
+            \   l:diagnostic_message[2].textDocument.uri
         endif
     endif
 endfunction

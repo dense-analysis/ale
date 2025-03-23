@@ -21,14 +21,14 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle errors):
   \     'code': 'some-error',
   \   }
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'severity': 1,
   \     'range': Range(2, 10, 4, 15),
   \     'code': 'some-error',
   \     'message': 'Something went wrong!',
   \   },
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadDiagnostics() should handle warnings):
   AssertEqual [
@@ -42,14 +42,14 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle warnings):
   \     'code': 'some-warning',
   \   }
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'severity': 2,
   \     'range': Range(1, 3, 1, 3),
   \     'code': 'some-warning',
   \     'message': 'Something went wrong!',
   \   },
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadDiagnostics() should treat messages with missing severity as errors):
   AssertEqual [
@@ -63,13 +63,13 @@ Execute(ale#lsp#response#ReadDiagnostics() should treat messages with missing se
   \     'code': 'some-error',
   \   }
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'range': Range(2, 10, 4, 15),
   \     'code': 'some-error',
   \     'message': 'Something went wrong!',
   \   },
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes):
   AssertEqual [
@@ -82,12 +82,12 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes)
   \     'end_col': 15,
   \   }
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'range': Range(2, 10, 4, 15),
   \     'message': 'Something went wrong!',
   \   },
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadDiagnostics() should include sources in detail):
   AssertEqual [
@@ -101,13 +101,13 @@ Execute(ale#lsp#response#ReadDiagnostics() should include sources in detail):
   \     'end_col': 22,
   \   }
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'range': Range(9, 14, 11, 22),
   \     'message': 'Something went wrong!',
   \     'source': 'tslint',
   \   }
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadDiagnostics() should keep detail with line breaks but replace with spaces in text):
   AssertEqual [
@@ -121,13 +121,13 @@ Execute(ale#lsp#response#ReadDiagnostics() should keep detail with line breaks b
   \     'end_col': 22,
   \   }
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'range': Range(9, 14, 11, 22),
   \     'message': "cannot borrow `cap` as mutable\r\nmore than once at a time\n\nmutable borrow starts here\rin previous iteration of loop",
   \     'source': 'rustc',
   \   }
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadDiagnostics() should consider -1 to be a meaningless code):
   AssertEqual [
@@ -140,13 +140,13 @@ Execute(ale#lsp#response#ReadDiagnostics() should consider -1 to be a meaningles
   \     'end_col': 15,
   \   }
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'range': Range(2, 10, 4, 15),
   \     'message': 'Something went wrong!',
   \     'code': -1,
   \   },
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   AssertEqual [
@@ -167,7 +167,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \     'end_col': 4,
   \   },
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'range': Range(0, 2, 0, 2),
   \     'message': 'Something went wrong!',
@@ -177,7 +177,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \     'range': Range(1, 4, 1, 4),
   \     'message': 'A warning',
   \   },
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for detail):
   AssertEqual [
@@ -191,7 +191,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for det
   \     'detail': "Something went wrong!\n/tmp/someotherfile.txt:43:80:\n\tmight be this"
   \   }
   \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \ ale#lsp#response#ReadDiagnostics([
   \   {
   \     'range': Range(0, 2, 0, 2),
   \     'message': 'Something went wrong!',
@@ -206,7 +206,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for det
   \         }
   \     }]
   \   }
-  \ ]}})
+  \ ])
 
 Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle tsserver responses):
   AssertEqual
