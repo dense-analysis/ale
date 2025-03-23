@@ -100,7 +100,7 @@ endfunction
 " Handle LSP diagnostics for a given URI.
 " The special value 'unchanged' can be used for diagnostics to indicate
 " that diagnostics haven't changed since we last checked.
-function! s:HandleLSPDiagnostics(conn_id, uri, diagnostics) abort
+function! ale#lsp_linter#HandleLSPDiagnostics(conn_id, uri, diagnostics) abort
     let l:linter = get(s:lsp_linter_map, a:conn_id)
 
     if empty(l:linter)
@@ -233,14 +233,14 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
         let l:uri = a:response.params.uri
         let l:diagnostics = a:response.params.diagnostics
 
-        call s:HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
+        call ale#lsp_linter#HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
     elseif has_key(s:diagnostic_uri_map, get(a:response, 'id'))
         let l:uri = remove(s:diagnostic_uri_map, a:response.id)
         let l:diagnostics = a:response.result.kind is# 'unchanged'
         \   ? 'unchanged'
         \   : a:response.result.items
 
-        call s:HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
+        call ale#lsp_linter#HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
     elseif l:method is# 'window/showMessage'
         call ale#lsp_window#HandleShowMessage(
         \   s:lsp_linter_map[a:conn_id].name,

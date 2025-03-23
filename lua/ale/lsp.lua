@@ -38,13 +38,36 @@ module.start = function(config)
         -- functions so all of the functionality in ALE works.
         ["textDocument/publishDiagnostics"] = function(err, result, _, _)
             if err == nil then
-                vim.fn["ale#lsp_linter#HandleLSPResponse"](config.name, {
-                    jsonrpc = "2.0",
-                    method = "textDocument/publishDiagnostics",
-                    params = result
-                })
+                vim.fn["ale#lsp_linter#HandleLSPDiagnostics"](
+                    config.name,
+                    result.uri,
+                    result.diagnostics
+                )
             end
-        end
+        end,
+        -- Handle pull model diagnostic data.
+        ["textDocument/diagnostic"] = function(err, result, request, _)
+            if err == nil then
+                local diagnostics
+
+                if result.kind == "unchanged" then
+                    diagnostics = "unchanged"
+                else
+                    diagnostics = result.items
+                end
+
+                vim.fn["ale#lsp_linter#HandleLSPDiagnostics"](
+                    config.name,
+                    request.params.textDocument.uri,
+                    diagnostics
+                )
+            end
+        end,
+        -- When the pull model is enabled we have to handle and return
+        -- some kind of data for a server diagnostic refresh request.
+        ["workspace/diagnostic/refresh"] = function()
+            return {}
+        end,
     }
 
     config.on_init = function(client, _)
@@ -70,6 +93,16 @@ module.start = function(config)
         return vim.fn["ale#lsp#GetLanguage"](config.name, bufnr)
     end
 
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+    -- Language servers like Pyright do not enable the diagnostics pull model
+    -- unless dynamicRegistration is enabled for diagnostics.
+    if capabilities.textDocument.diagnostic ~= nil then
+        capabilities.textDocument.diagnostic.dynamicRegistration = true
+        config.capabilities = capabilities
+    end
+
+    ---@diagnostic disable-next-line: missing-fields
     return vim.lsp.start(config, {
         attach = false,
         silent = true,
@@ -92,6 +125,10 @@ end
 --         >= 1 with the message ID when a response is expected.
 module.send_message = function(args)
     local client = vim.lsp.get_client_by_id(args.client_id)
+
+    if client == nil then
+        return 0
+    end
 
     if args.is_notification then
         -- For notifications we send a request and expect no direct response.
