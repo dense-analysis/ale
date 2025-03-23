@@ -6,6 +6,7 @@ describe("ale.lsp.start", function()
     local rpc_connect_calls
     local vim_fn_calls
     local defer_calls
+    local nvim_default_capabilities
 
     setup(function()
         _G.vim = {
@@ -21,7 +22,7 @@ describe("ale.lsp.start", function()
                             return "python"
                         end
 
-                        if key ~= "ale#lsp_linter#HandleLSPResponse"
+                        if key ~= "ale#lsp_linter#HandleLSPDiagnostics"
                         and key ~= "ale#lsp#UpdateCapabilities"
                         and key ~= "ale#lsp#CallInitCallbacks"
                         then
@@ -49,6 +50,11 @@ describe("ale.lsp.start", function()
 
                     return 42
                 end,
+                protocol = {
+                    make_client_capabilities = function()
+                        return nvim_default_capabilities
+                    end,
+                },
             },
         }
     end)
@@ -62,6 +68,9 @@ describe("ale.lsp.start", function()
         rpc_connect_calls = {}
         vim_fn_calls = {}
         defer_calls = {}
+        nvim_default_capabilities = {
+            textDocument = {},
+        }
     end)
 
     it("should start lsp programs with the correct arguments", function()
@@ -148,6 +157,24 @@ describe("ale.lsp.start", function()
         eq({{"ale#lsp#GetLanguage", "server:/code", 347}}, vim_fn_calls)
     end)
 
+    it("should enable dynamicRegistration for the pull model", function()
+        nvim_default_capabilities = {textDocument = {diagnostic = {}}}
+
+        lsp.start({name = "server:/code"})
+        eq(1, #start_calls)
+
+        eq(
+            {
+                textDocument = {
+                    diagnostic = {
+                        dynamicRegistration = true,
+                    },
+                },
+            },
+            start_calls[1][1].capabilities
+        )
+    end)
+
     it("should initialize clients with ALE correctly", function()
         lsp.start({name = "server:/code"})
 
@@ -185,39 +212,150 @@ describe("ale.lsp.start", function()
             handler_names[key] = true
         end
 
-        eq({["textDocument/publishDiagnostics"] = true}, handler_names)
+        eq({
+            ["textDocument/publishDiagnostics"] = true,
+            ["textDocument/diagnostic"] = true,
+            ["workspace/diagnostic/refresh"] = true,
+        }, handler_names)
+    end)
+
+    it("should handle push model published diagnostics", function()
+        lsp.start({name = "server:/code"})
+
+        eq(1, #start_calls)
+
+        local handlers = start_calls[1][1].handlers
+
+        eq("function", type(handlers["textDocument/publishDiagnostics"]))
 
         handlers["textDocument/publishDiagnostics"](nil, {
-            {
-                lnum = 1,
-                end_lnum = 2,
-                col = 3,
-                end_col = 5,
-                severity = 1,
-                code = "123",
-                message = "Warning message",
+            uri = "file://code/foo.py",
+            diagnostics = {
+                {
+                    lnum = 1,
+                    end_lnum = 2,
+                    col = 3,
+                    end_col = 5,
+                    severity = 1,
+                    code = "123",
+                    message = "Warning message",
+                }
             },
         })
 
         eq({
             {
-                "ale#lsp_linter#HandleLSPResponse",
+                "ale#lsp_linter#HandleLSPDiagnostics",
                 "server:/code",
+                "file://code/foo.py",
                 {
-                    jsonrpc = "2.0",
-                    method = "textDocument/publishDiagnostics",
-                    params = {
-                        {
-                            lnum = 1,
-                            end_lnum = 2,
-                            col = 3,
-                            end_col = 5,
-                            severity = 1,
-                            code = "123",
-                            message = "Warning message",
-                        },
+                    {
+                        lnum = 1,
+                        end_lnum = 2,
+                        col = 3,
+                        end_col = 5,
+                        severity = 1,
+                        code = "123",
+                        message = "Warning message",
+                    },
+                },
+            },
+        }, vim_fn_calls)
+    end)
+
+    it("should respond to workspace diagnostic refresh requests", function()
+        lsp.start({name = "server:/code"})
+
+        eq(1, #start_calls)
+
+        local handlers = start_calls[1][1].handlers
+
+        eq("function", type(handlers["workspace/diagnostic/refresh"]))
+
+        eq({}, handlers["workspace/diagnostic/refresh"]())
+    end)
+
+    it("should handle pull model diagnostics", function()
+        lsp.start({name = "server:/code"})
+
+        eq(1, #start_calls)
+
+        local handlers = start_calls[1][1].handlers
+
+        eq("function", type(handlers["textDocument/diagnostic"]))
+
+        handlers["textDocument/diagnostic"](
+            nil,
+            {
+                kind = "full",
+                items = {
+                    {
+                        lnum = 1,
+                        end_lnum = 2,
+                        col = 3,
+                        end_col = 5,
+                        severity = 1,
+                        code = "123",
+                        message = "Warning message",
                     }
-                }
+                },
+            },
+            {
+                params = {
+                    textDocument = {
+                        uri = "file://code/foo.py",
+                    },
+                },
+            }
+        )
+
+        eq({
+            {
+                "ale#lsp_linter#HandleLSPDiagnostics",
+                "server:/code",
+                "file://code/foo.py",
+                {
+                    {
+                        lnum = 1,
+                        end_lnum = 2,
+                        col = 3,
+                        end_col = 5,
+                        severity = 1,
+                        code = "123",
+                        message = "Warning message",
+                    },
+                },
+            },
+        }, vim_fn_calls)
+    end)
+
+    it("should handle unchanged pull model diagnostics", function()
+        lsp.start({name = "server:/code"})
+
+        eq(1, #start_calls)
+
+        local handlers = start_calls[1][1].handlers
+
+        eq("function", type(handlers["textDocument/diagnostic"]))
+
+        handlers["textDocument/diagnostic"](
+            nil,
+            {kind = "unchanged"},
+            {
+                params = {
+                    textDocument = {
+                        uri = "file://code/foo.py",
+                    },
+                },
+            }
+        )
+
+        eq({
+            {
+                "ale#lsp_linter#HandleLSPDiagnostics",
+                "server:/code",
+                "file://code/foo.py",
+                "unchanged",
             },
         }, vim_fn_calls)
     end)
