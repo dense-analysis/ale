@@ -410,6 +410,130 @@ Execute(LSP errors should mark linters no longer active):
 
   AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
 
+Execute(LSP pull model diagnostic responses should be handled):
+  let b:ale_linters = ['eclipselsp']
+  runtime ale_linters/java/eclipselsp.vim
+
+  if has('win32')
+    call ale#test#SetFilename('filename,[]^$.ts')
+  else
+    call ale#test#SetFilename('filename*?,{}[]^$.java')
+  endif
+
+  call ale#engine#InitBufferInfo(bufnr(''))
+  let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('eclipselsp')
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'eclipselsp', 'aliases': [], 'lsp': 'stdio'}})
+  call ale#lsp_linter#SetDiagnosticURIMap({'347': ale#util#ToURI(expand('%:p'))})
+
+  if has('win32')
+    AssertEqual 'filename,[]^$.ts', expand('%:p:t')
+  else
+    AssertEqual 'filename*?,{}[]^$.java', expand('%:p:t')
+  endif
+
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'jsonrpc':'2.0',
+  \ 'id': 347,
+  \ 'result': {
+  \   'kind': 'full',
+  \   'items': [
+  \     {
+  \       'range': {
+  \         'start': {
+  \           'line': 0,
+  \           'character':0
+  \         },
+  \         'end': {
+  \           'line': 0,
+  \           'character':0
+  \         }
+  \       },
+  \       'severity': 2,
+  \       'code': "",
+  \       'source': 'Java',
+  \       'message': 'Missing JRE 1-8'
+  \     }
+  \   ]
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr(''),
+  \     'col': 1,
+  \     'pattern': '',
+  \     'valid': 1,
+  \     'vcol': 0,
+  \     'nr': -1,
+  \     'type': 'W',
+  \     'text': 'Missing JRE 1-8'
+  \    }
+  \ ],
+  \ ale#test#GetLoclistWithoutNewerKeys()
+  AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
+
+Execute(LSP pull model diagnostic responses that are 'unchanged' should be handled):
+  let b:ale_linters = ['eclipselsp']
+  runtime ale_linters/java/eclipselsp.vim
+
+  if has('win32')
+    call ale#test#SetFilename('filename,[]^$.ts')
+  else
+    call ale#test#SetFilename('filename*?,{}[]^$.java')
+  endif
+
+  call ale#engine#InitBufferInfo(bufnr(''))
+  let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('eclipselsp')
+  let g:ale_buffer_info[bufnr('')].loclist = [
+  \ {
+  \   'lnum': 1,
+  \   'bufnr': bufnr(''),
+  \   'col': 1,
+  \   'pattern': '',
+  \   'valid': 1,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'type': 'W',
+  \   'text': 'Missing JRE 1-8'
+  \ },
+  \]
+
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'eclipselsp', 'aliases': [], 'lsp': 'stdio'}})
+  call ale#lsp_linter#SetDiagnosticURIMap({'347': ale#util#ToURI(expand('%:p'))})
+
+  if has('win32')
+    AssertEqual 'filename,[]^$.ts', expand('%:p:t')
+  else
+    AssertEqual 'filename*?,{}[]^$.java', expand('%:p:t')
+  endif
+
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'jsonrpc':'2.0',
+  \ 'id': 347,
+  \ 'result': {
+  \     'kind': 'unchanged',
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr(''),
+  \     'col': 1,
+  \     'pattern': '',
+  \     'valid': 1,
+  \     'vcol': 0,
+  \     'nr': -1,
+  \     'type': 'W',
+  \     'text': 'Missing JRE 1-8'
+  \    }
+  \ ],
+  \ g:ale_buffer_info[bufnr('')].loclist
+  AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
+
 Execute(LSP errors should be logged in the history):
   call ale#lsp_linter#SetLSPLinterMap({'347': {'name': 'foobar', 'aliases': [], 'lsp': 'stdio'}})
   call ale#lsp_linter#HandleLSPResponse(347, {

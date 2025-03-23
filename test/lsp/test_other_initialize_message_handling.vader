@@ -90,6 +90,7 @@ Execute(Capabilities should be set up correctly):
   \   'includeText': 0,
   \   'references': 1,
   \   'rename': 1,
+  \   'pull_model': 0,
   \   'symbol_search': 1,
   \   'typeDefinition': 0,
   \ },
@@ -122,6 +123,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \     'definitionProvider': v:false,
   \     'experimental': {},
   \     'documentHighlightProvider': v:true,
+  \     'diagnosticProvider': {},
   \   },
   \ },
   \})
@@ -140,6 +142,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \   'includeText': 0,
   \   'references': 0,
   \   'rename': 0,
+  \   'pull_model': 0,
   \   'symbol_search': 0,
   \   'typeDefinition': 0,
   \ },
@@ -182,6 +185,9 @@ Execute(Capabilities should be enabled when sent as Dictionaries):
   \     'implementationProvider': {},
   \     'experimental': {},
   \     'documentHighlightProvider': v:true,
+  \     'diagnosticProvider': {
+  \       'interFileDependencies': v:false,
+  \     },
   \     'workspaceSymbolProvider': {}
   \   },
   \ },
@@ -201,6 +207,7 @@ Execute(Capabilities should be enabled when sent as Dictionaries):
   \   'includeText': 1,
   \   'references': 1,
   \   'rename': 1,
+  \   'pull_model': 1,
   \   'symbol_search': 1,
   \   'typeDefinition': 1,
   \ },

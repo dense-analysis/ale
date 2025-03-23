@@ -47,6 +47,7 @@ function! ale#lsp#Register(executable_or_address, project, language, init_option
         \       'definition': 0,
         \       'typeDefinition': 0,
         \       'implementation': 0,
+        \       'pull_model': 0,
         \       'symbol_search': 0,
         \       'code_actions': 0,
         \       'did_save': 0,
@@ -276,6 +277,13 @@ function! ale#lsp#UpdateCapabilities(conn_id, capabilities) abort
         let l:conn.capabilities.implementation = 1
     endif
 
+    " Check if the language server supports pull model diagnostics.
+    if type(get(a:capabilities, 'diagnosticProvider')) is v:t_dict
+        if type(get(a:capabilities.diagnosticProvider, 'interFileDependencies')) is v:t_bool
+            let l:conn.capabilities.pull_model = 1
+        endif
+    endif
+
     if get(a:capabilities, 'workspaceSymbolProvider') is v:true
         let l:conn.capabilities.symbol_search = 1
     endif
@@ -485,6 +493,10 @@ function! s:SendInitMessage(conn) abort
     \               'implementation': {
     \                   'dynamicRegistration': v:false,
     \                   'linkSupport': v:false,
+    \               },
+    \               'diagnostic': {
+    \                   'dynamicRegistration': v:true,
+    \                   'relatedDocumentSupport': v:true,
     \               },
     \               'publishDiagnostics': {
     \                   'relatedInformation': v:true,

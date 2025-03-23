@@ -248,6 +248,19 @@ Execute(ale#lsp#message#DidChangeConfiguration() should return correct messages)
   \ ],
   \ ale#lsp#message#DidChangeConfiguration(bufnr(''), g:ale_lsp_configuration)
 
+Execute(ale#lsp#message#Diagnostic() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'textDocument/diagnostic',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToFileURI(g:dir . '/foo/bar.ts'),
+  \     },
+  \   }
+  \ ],
+  \ ale#lsp#message#Diagnostic(bufnr(''))
+
 Execute(ale#lsp#tsserver_message#Open() should return correct messages):
   AssertEqual
   \ [
