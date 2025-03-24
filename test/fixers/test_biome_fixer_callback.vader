@@ -17,7 +17,7 @@ Execute(The default biome command should be correct):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('biome')
-  \     . ' check --apply %t'
+  \     . ' check --write %t'
   \ }
 
 Execute(Unsafe fixes can be applied via an option):
@@ -28,7 +28,7 @@ Execute(Unsafe fixes can be applied via an option):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('biome')
-  \     . ' check --apply-unsafe %t'
+  \     . ' check --write --unsafe %t'
   \ }
 
 Execute(The fixer should accept options):
@@ -39,5 +39,5 @@ Execute(The fixer should accept options):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('biome')
-  \     . ' check --apply --foobar %t',
+  \     . ' check --write --foobar %t',
   \ }
