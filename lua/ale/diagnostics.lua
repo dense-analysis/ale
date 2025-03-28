@@ -67,7 +67,7 @@ module.send = function(buffer, loclist)
         local local_cfg = { priority = sign_priority }
         local global_cfg = vim.diagnostic.config().signs
 
-        if type(global_cfg) == "boolean" then
+        if global_cfg == false or global_cfg == true or global_cfg == nil then
             signs = local_cfg
         elseif type(global_cfg) == "table" then
             signs = vim.tbl_extend("force", global_cfg, local_cfg)

@@ -7,7 +7,8 @@
     "test"
   ],
   "workspace.library": [
-    "/usr/share/nvim/runtime/lua"
+    "/usr/share/nvim/runtime/lua",
+    "/opt/homebrew/share/nvim/runtime/lua"
   ],
   "runtime.pathStrict": true,
   "runtime.path": [

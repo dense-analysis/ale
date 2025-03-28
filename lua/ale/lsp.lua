@@ -150,12 +150,14 @@ module.send_message = function(args)
     success, request_id = client.request(
         args.method,
         args.params,
+        ---@diagnostic disable-next-line: param-type-mismatch
         function(_, result, _, _)
             vim.fn["ale#lsp#HandleResponse"](client.name, {
                 id = request_id,
                 result = result,
             })
         end,
+        ---@diagnostic disable-next-line: param-type-mismatch
         -1
     )
 
