@@ -4,6 +4,9 @@ Before:
   call ale#assert#SetUpLinterTest('go', 'golangci_lint')
   call ale#test#SetFilename('test.go')
 
+  " Test with version 1.64.8 by default
+  GivenCommandOutput ['golangci-lint has version 1.64.8 built with go1.23.0']
+
 After:
   Restore
 
@@ -16,12 +19,32 @@ Execute(The golangci-lint defaults should be correct):
   AssertLinter 'golangci-lint',
   \ ale#Escape('golangci-lint') . ' run  --out-format=json --show-stats=0'
 
+Execute(The golangci-lint defaults should be correct with no version info):
+  GivenCommandOutput []
+  AssertLinterCwd '%s:h',
+  AssertLinter 'golangci-lint',
+  \ ale#Escape('golangci-lint') . ' run  --out-format=json --show-stats=0'
+
+Execute(The golangci-lint defaults should be correct with version 2):
+  GivenCommandOutput ['golangci-lint has version 2.0.2 built with go1.24.0']
+  AssertLinterCwd '%s:h',
+  AssertLinter 'golangci-lint',
+  \ ale#Escape('golangci-lint') . ' run  --output.json.path stdout --output.text.path stderr --show-stats=0'
+
 Execute(The golangci-lint callback should use a configured executable):
   let b:ale_go_golangci_lint_executable = 'something else'
 
   AssertLinter 'something else',
   \ ale#Escape('something else')
   \   . ' run  --out-format=json --show-stats=0'
+
+Execute(The golangci-lint callback should use a configured version 2 executable):
+  GivenCommandOutput ['golangci-lint has version 2.0.0 built with go1.22.0']
+  let b:ale_go_golangci_lint_executable = 'something else'
+
+  AssertLinter 'something else',
+  \ ale#Escape('something else')
+  \   . ' run  --output.json.path stdout --output.text.path stderr --show-stats=0'
 
 Execute(The golangci-lint callback should use configured options):
   let b:ale_go_golangci_lint_options = '--foobar'
