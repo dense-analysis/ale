@@ -706,7 +706,7 @@ function! ale#lsp#Send(conn_id, message) abort
         throw 'LSP server not initialized yet!'
     endif
 
-    if g:ale_use_neovim_lsp_api
+    if g:ale_use_neovim_lsp_api && !l:conn.is_tsserver
         return luaeval('require("ale.lsp").send_message(_A)', {
         \   'client_id': l:conn.client_id,
         \   'is_notification': a:message[0] == 1 ? v:true : v:false,
