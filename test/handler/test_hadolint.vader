@@ -17,7 +17,7 @@ Execute(The hadolint handler should handle a normal example):
   \     'col': 0,
   \     'type': 'W',
   \     'code': 'DL3006',
-  \     'text': "DL3006: Always tag the version of an image explicitly",
+  \     'text': 'Always tag the version of an image explicitly',
   \     'detail': "DL3006 ( https://github.com/hadolint/hadolint/wiki/DL3006 )\n\nAlways tag the version of an image explicitly",
   \   },
   \   {
@@ -25,7 +25,7 @@ Execute(The hadolint handler should handle a normal example):
   \     'col': 0,
   \     'type': 'W',
   \     'code': 'DL3033',
-  \     'text': "DL3033: Specify version with `yum install -y <package>-<version>`.",
+  \     'text': 'Specify version with `yum install -y <package>-<version>`.',
   \     'detail': "DL3033 ( https://github.com/hadolint/hadolint/wiki/DL3033 )\n\nSpecify version with `yum install -y <package>-<version>`.",
   \   },
   \   {
@@ -33,7 +33,7 @@ Execute(The hadolint handler should handle a normal example):
   \     'col': 0,
   \     'type': 'W',
   \     'code': 'SC2039',
-  \     'text': "SC2039: In POSIX sh, brace expansion is undefined.",
+  \     'text': 'In POSIX sh, brace expansion is undefined.',
   \     'detail': "SC2039 ( https://github.com/koalaman/shellcheck/wiki/SC2039 )\n\nIn POSIX sh, brace expansion is undefined.",
   \   },
   \ ],
