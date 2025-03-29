@@ -49,7 +49,6 @@ function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
         if l:match[5] isnot# ''
             let l:code = l:match[4] . l:match[5]
             let l:link = ' ( ' . l:domain . l:code . ' )'
-            let l:text = l:code . ': ' . l:detail
             let l:detail = l:code . l:link . "\n\n" . l:detail
         else
             let l:type = 'E'
