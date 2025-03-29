@@ -5,26 +5,38 @@ call ale#Set('go_golangci_lint_options', '')
 call ale#Set('go_golangci_lint_executable', 'golangci-lint')
 call ale#Set('go_golangci_lint_package', 1)
 
-function! ale_linters#go#golangci_lint#GetCommand(buffer) abort
+function! ale_linters#go#golangci_lint#GetExecutable(buffer) abort
+    let l:executable = ale#Var(a:buffer, 'go_golangci_lint_executable')
+
+    return l:executable
+endfunction
+
+function! ale_linters#go#golangci_lint#GetCommand(buffer, version) abort
     let l:filename = expand('#' . a:buffer . ':t')
     let l:options = ale#Var(a:buffer, 'go_golangci_lint_options')
     let l:lint_package = ale#Var(a:buffer, 'go_golangci_lint_package')
 
+    if ale#semver#GTE(a:version, [2, 0, 0])
+        let l:options = l:options
+        \ . ' --output.json.path stdout'
+        \ . ' --output.text.path stderr'
+        \ . ' --show-stats=0'
+    else
+        let l:options = l:options
+        \   . ' --out-format=json'
+        \   . ' --show-stats=0'
+    endif
 
     if l:lint_package
         return ale#go#EnvString(a:buffer)
         \   . '%e run '
         \   .  l:options
-        \   . ' --out-format=json'
-        \   . ' --show-stats=0'
     endif
 
     return ale#go#EnvString(a:buffer)
     \   . '%e run '
     \   . ale#Escape(l:filename)
     \   . ' ' . l:options
-    \   . ' --out-format=json'
-    \   . ' --show-stats=0'
 endfunction
 
 function! ale_linters#go#golangci_lint#Handler(buffer, lines) abort
@@ -58,9 +70,14 @@ endfunction
 
 call ale#linter#Define('go', {
 \   'name': 'golangci-lint',
-\   'executable': {b -> ale#Var(b, 'go_golangci_lint_executable')},
+\   'executable': function('ale_linters#go#golangci_lint#GetExecutable'),
 \   'cwd': '%s:h',
-\   'command': function('ale_linters#go#golangci_lint#GetCommand'),
+\   'command': {buffer -> ale#semver#RunWithVersionCheck(
+\       buffer,
+\       ale_linters#go#golangci_lint#GetExecutable(buffer),
+\       '%e --version',
+\       function('ale_linters#go#golangci_lint#GetCommand'),
+\   )},
 \   'callback': 'ale_linters#go#golangci_lint#Handler',
 \   'lint_file': 1,
 \})
