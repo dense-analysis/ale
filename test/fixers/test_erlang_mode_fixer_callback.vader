@@ -33,6 +33,9 @@ Execute(Emacs executable should be configurable):
   let b:ale_erlang_erlang_mode_emacs_executable = '/path/to/emacs'
   AssertEqual 0, stridx(Fixer('command'), ale#Escape('/path/to/emacs'))
 
+Execute(enable-local-variables should be :safe):
+  Assert Fixer('command') =~# '\m\<enable-local-variables :safe\>'
+
 Execute(erlang-indent-level should be 4 by default):
   Assert Fixer('command') =~# '\m\<erlang-indent-level 4\>'
 
