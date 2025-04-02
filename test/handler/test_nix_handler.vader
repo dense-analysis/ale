@@ -39,7 +39,7 @@ Execute(The nix handler should parse nix-instantiate error messages with ANSI co
   \
   \ ],
   \ ale_linters#nix#nix#Handle(bufnr(''), [
-  \   "@nix {\"line\":3,\"column\":5,\"raw_msg\":\"undefined variable '\u001b[35;1mfoo\u001b[0m'\"}",
+  \   "@nix {\"line\":3,\"column\":5,\"raw_msg\":\"undefined variable '\\u001b[35;1mfoo\\u001b[0m'\"}",
   \   "@nix {\"unrelated\":\"message\"}"
   \ ])
 
