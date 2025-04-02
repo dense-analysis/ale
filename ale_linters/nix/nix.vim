@@ -29,7 +29,7 @@ function! ale_linters#nix#nix#Handle(buffer, lines) abort
                     \     'type': 'E',
                     \     'lnum': l:result.line,
                     \     'col': l:result.column,
-                    \     'text': l:result.raw_msg
+                    \     'text': substitute(l:result.raw_msg, '\e\[[0-9;]*m', '', 'g'),
                     \})
                 endif
             endif
