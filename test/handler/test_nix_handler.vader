@@ -27,6 +27,22 @@ Execute(The nix handler should parse nix-instantiate error messages correctly):
   \   "@nix {\"unrelated\":\"message\"}"
   \ ])
 
+Execute(The nix handler should parse nix-instantiate error messages with ANSI color codes correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'col': 5,
+  \     'type': 'E',
+  \     'text': "undefined variable 'foo'",
+  \   },
+  \
+  \ ],
+  \ ale_linters#nix#nix#Handle(bufnr(''), [
+  \   "@nix {\"line\":3,\"column\":5,\"raw_msg\":\"undefined variable '\\u001b[35;1mfoo\\u001b[0m'\"}",
+  \   "@nix {\"unrelated\":\"message\"}"
+  \ ])
+
 Execute(The nix handler should parse message from old nix-instantiate correctly):
   AssertEqual
   \ [
