@@ -1735,6 +1735,7 @@ g:ale_linter_aliases
 
   {
   \   'Dockerfile': 'dockerfile',
+  \   'bash': 'sh',
   \   'csh': 'sh',
   \   'javascriptreact': ['javascript', 'jsx'],
   \   'plaintex': 'tex',

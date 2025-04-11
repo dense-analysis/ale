@@ -11,6 +11,7 @@ let s:linters = {}
 " NOTE: Update the g:ale_linter_aliases documentation when modifying this.
 let s:default_ale_linter_aliases = {
 \   'Dockerfile': 'dockerfile',
+\   'bash': 'sh',
 \   'csh': 'sh',
 \   'javascriptreact': ['javascript', 'jsx'],
 \   'plaintex': 'tex',
