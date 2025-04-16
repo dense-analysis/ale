@@ -45,7 +45,8 @@ Execute(The clangformat callback should include style options as well):
   \ {
   \   'command': ale#Escape(g:ale_c_clangformat_executable)
   \     . ' --assume-filename=' . ale#Escape(bufname(bufnr('')))
-  \     . ' --some-option' . " -style='{BasedOnStyle: Microsoft, ColumnLimit:80,}'",
+  \     . ' --some-option'
+  \     . ' -style=' . ale#Escape(g:ale_c_clangformat_style_option)
   \ },
   \ ale#fixers#clangformat#Fix(bufnr(''))
 

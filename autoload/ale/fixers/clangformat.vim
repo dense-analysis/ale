@@ -22,7 +22,7 @@ function! ale#fixers#clangformat#Fix(buffer) abort
     let l:use_local_file = ale#Var(a:buffer, 'c_clangformat_use_local_file')
 
     if l:style_option isnot# ''
-        let l:style_option = '-style=' . "'" . l:style_option . "'"
+        let l:style_option = '-style=' . ale#Escape(l:style_option)
     endif
 
     if l:use_local_file
