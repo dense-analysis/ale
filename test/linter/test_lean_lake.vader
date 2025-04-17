@@ -1,0 +1,27 @@
+Before:
+  call ale#assert#SetUpLinterTest('lean', 'lake')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'lake', ale#Escape('lake') . ' serve'
+
+Execute(The project root should be detected correctly without a lakefile):
+  AssertLSPProject '.'
+
+Execute(The project root should be detected correctly from .toml):
+  call ale#test#SetFilename('../test-files/lean/lakefile_toml/lakefile.toml')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/lean/lakefile_toml')
+
+Execute(The project root should be detected correctly from .lean):
+  call ale#test#SetFilename('../test-files/lean/lakefile_lean/lakefile.lean')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/lean/lakefile_lean')
+
+Execute(The LSP values should be set correctly):
+  call ale#test#SetFilename('../test-files/lean/lakefile_lean/Main.lean')
+
+  AssertLSPLanguage 'lean'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/lean/lakefile_lean')

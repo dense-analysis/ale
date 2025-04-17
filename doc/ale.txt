@@ -3632,6 +3632,8 @@ documented in additional help files.
     cspell................................|ale-latex-cspell|
     write-good............................|ale-latex-write-good|
     textlint..............................|ale-latex-textlint|
+  lean....................................|ale-lean-options|
+    lake..................................|ale-lean-lake|
   less....................................|ale-less-options|
     lessc.................................|ale-less-lessc|
     prettier..............................|ale-less-prettier|
