@@ -1,0 +1,29 @@
+===============================================================================
+ALE Lean Integration                                         *ale-lean-options*
+                                                         *ale-integration-lean*
+
+===============================================================================
+Integration Information
+
+  Currently, the only supported LSP for Lean 4 is lake.
+
+===============================================================================
+lake                                                            *ale-lean-lake*
+
+g:ale_lean_lake_executable                         *g:ale_lean_lake_executable*
+                                                   *b:ale_lean_lake_executable*
+  Type: |String|
+  Default: `'lake'`
+
+  This variable can be modified to change the executable path for `lake`.
+
+
+g:ale_lean_lake_config                                 *g:ale_lean_lake_config*
+                                                       *b:ale_lean_lake_config*
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary with configuration settings for lake.
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

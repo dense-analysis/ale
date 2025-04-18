@@ -379,6 +379,8 @@ formatting.
   * [textlint](https://textlint.github.io/)
   * [vale](https://github.com/ValeLint/vale)
   * [write-good](https://github.com/btford/write-good)
+* Lean 4
+  * [lake](https://github.com/leanprover/lean4)
 * Less
   * [lessc](https://www.npmjs.com/package/less)
   * [prettier](https://github.com/prettier/prettier)

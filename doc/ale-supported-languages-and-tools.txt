@@ -370,6 +370,8 @@ Notes:
   * `textlint`
   * `vale`
   * `write-good`
+* Lean 4
+  * `lake`
 * Less
   * `lessc`
   * `prettier`
