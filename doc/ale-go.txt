@@ -144,7 +144,7 @@ g:ale_go_golangci_lint_options
   Default: `''`
 
   This variable can be changed to alter the command-line arguments to the
-  golangci-lint invocation.
+  golangci-lint run invocation.
 
                                          *ale-options.go_golangci_lint_package*
                                                *g:ale_go_golangci_lint_package*
@@ -157,6 +157,30 @@ g:ale_go_golangci_lint_package
   When set to `1`, the whole Go package will be checked instead of only the
   current file.
 
+golangci_lint can also be user as a fixer to format go source files. In this
+case the following configuration variables can be used to configure the
+formatters:
+
+                                    *ale-options.go_golangci_formatter_executable*
+                                          *g:ale_go_golangci_formatter_executable*
+                                          *b:ale_go_golangci_formatter_executable*
+go_golangci_formatter_executable
+g:ale_go_golangci_formatter_executable
+  Type: |String|
+  Default: `'golangci-lint'`
+
+  The executable that will be run for golangci-lint.
+
+                                      *ale-options.go_golangci_formatter_options*
+                                            *g:ale_go_golangci_formatter_options*
+                                            *b:ale_go_golangci_formatter_options*
+go_golangci_formatter_options
+g:ale_go_golangci_formatter_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to alter the command-line arguments to the
+  golangci-lint fmt invocation.
 
 ===============================================================================
 golangserver                                              *ale-go-golangserver*
