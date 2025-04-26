@@ -1,6 +1,7 @@
 ---
 name: Suggest a new linter or fixer
 labels: new tool
+type: Task
 about: Suggest a new tool ALE can officially integrate with.
 
 ---
