@@ -60,6 +60,8 @@ Notes:
   * `bibclean`
 * Bicep
   * `bicep`
+* Bindzone
+  * `checkzone` (named-checkzone)
 * BitBake
   * `oelint-adv`
 * Bourne Shell
