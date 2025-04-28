@@ -25,7 +25,7 @@ function! ale_linters#solidity#solc#Handle(buffer, lines) abort
                 \   'lnum': l:match[2] + 0,
                 \   'col': l:match[3] + 0,
                 \   'text': l:text,
-                \   'type': l:type is? "Error" ? 'E' : 'W',
+                \   'type': l:type is? 'Error' ? 'E' : 'W',
                 \})
             endif
         else
