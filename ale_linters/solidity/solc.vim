@@ -20,6 +20,7 @@ function! ale_linters#solidity#solc#Handle(buffer, lines) abort
 
         if len(l:match) == 0
             let l:match = matchlist(l:line, l:line_and_column_pattern)
+
             if len(l:match) > 0 && l:type isnot# 'Note' && l:match[1] is# l:buffer_name
                 call add(l:output, {
                 \   'lnum': l:match[2] + 0,
