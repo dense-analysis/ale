@@ -13,7 +13,7 @@ function! ale_linters#solidity#solc#Handle(buffer, lines) abort
     let l:line_and_column_pattern = '\v--\> (.*\.sol):(\d+):(\d+):'
     let l:output = []
     let l:type = "Note"
-    let l:text = ""
+    let l:text = ''
 
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
