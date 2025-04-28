@@ -12,7 +12,7 @@ function! ale_linters#solidity#solc#Handle(buffer, lines) abort
     let l:pattern = '\v(Error|Warning|Note): (.*)$'
     let l:line_and_column_pattern = '\v--\> (.*\.sol):(\d+):(\d+):'
     let l:output = []
-    let l:type = "Note"
+    let l:type = 'Note'
     let l:text = ''
 
     for l:line in a:lines
