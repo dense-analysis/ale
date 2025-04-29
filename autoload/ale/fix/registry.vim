@@ -722,6 +722,16 @@ let s:default_registry = {
 \       'suggested_filetypes': ['typst'],
 \       'description': 'A formatter for Typst files',
 \   },
+\   'roc_format': {
+\       'function': 'ale#fixers#roc_format#Fix',
+\       'suggested_filetypes': ['roc'],
+\       'description': 'Formats Roc files.',
+\   },
+\   'roc_annotate': {
+\       'function': 'ale#fixers#roc_annotate#Fix',
+\       'suggested_filetypes': ['roc'],
+\       'description': 'Annotates all top-level definitions in Roc files.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
