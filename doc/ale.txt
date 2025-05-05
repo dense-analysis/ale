@@ -2396,6 +2396,7 @@ g:ale_set_highlights
                               `'sub_type': 'style'`    |hl-ALEStyleError|
   ALEStyleWarning  items with `'type': 'W'` and
                               `'sub_type': 'style'`    |hl-ALEStyleWarning|
+  ALEHint          items with `'type': 'H'`            |hl-ALEHint|
 
   When |g:ale_set_signs| is not set to `true` or `1`, the following highlights
   for entire lines will be set.
@@ -2403,6 +2404,7 @@ g:ale_set_highlights
   ALEErrorLine     all items with `'type': 'E'`        |hl-ALEErrorLine|
   ALEWarningLine   all items with `'type': 'W'`        |hl-ALEWarningLine|
   ALEInfoLine      all items with `'type': 'I'`        |hl-ALEInfoLine|
+  ALEHintLine      all items with `'type': 'H'`        |hl-ALEHintLine|
 
   Vim can only highlight the characters up to the last column in a buffer for
   match highlights, whereas the line highlights when signs are enabled will
@@ -2467,6 +2469,7 @@ g:ale_set_signs
                                  `'sub_type': 'style'` |hl-ALEStyleErrorSign|
   ALEStyleWarningSign items with `'type': 'W'` and
                                  `'sub_type': 'style'` |hl-ALEStyleWarningSign|
+  ALEHintSign         items with `'type': 'H'`         |hl-ALEHintSign|
 
   In addition to the style of the signs, the style of lines where signs appear
   can be configured with the following highlights:
@@ -2474,6 +2477,7 @@ g:ale_set_signs
   ALEErrorLine        all items with `'type': 'E'`     |hl-ALEErrorLine|
   ALEWarningLine      all items with `'type': 'W'`     |hl-ALEWarningLine|
   ALEInfoLine         all items with `'type': 'I'`     |hl-ALEInfoLine|
+  ALEHintLine         all items with `'type': 'H'`     |hl-ALEHintLine|
 
   With Neovim 0.3.2 or higher, ALE can use the `numhl` option to highlight the
   'number' column. It uses the following highlight groups.
@@ -2485,6 +2489,7 @@ g:ale_set_signs
                              `'sub_type': 'style'`   |hl-ALEStyleErrorSignLineNr|
   ALEStyleWarningSignLineNr items with `'type': 'W'` and
                              `'sub_type': 'style'`   |hl-ALEStyleWarningSignLineNr|
+  ALEHintSignLineNr         items with `'type': 'H'` |hl-ALEHintSignLineNr|
 
   To enable line number highlighting |g:ale_sign_highlight_linenrs| must be
   set to `true` or `1` before ALE is loaded.
@@ -2496,6 +2501,7 @@ g:ale_set_signs
   |g:ale_sign_info|
   |g:ale_sign_style_error|
   |g:ale_sign_style_warning|
+  |g:ale_sign_hint|
 
   When multiple problems exist on the same line, the signs will take
   precedence in the order above, from highest to lowest.
@@ -2601,6 +2607,17 @@ g:ale_sign_style_warning
   This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
 
   The sign for style warnings in the sign gutter.
+
+                                                  *ale-options.sign_style_hint*
+                                                        *g:ale_sign_style_hint*
+sign_style_hint
+g:ale_sign_style_hint
+  Type: |String|
+  Default: `g:ale_sign_hint`
+
+  This has no effect when |g:ale_use_neovim_diagnostics_api| is `true` or `1`.
+
+  The sign for style hints in the sign gutter.
 
                                                       *ale-options.sign_offset*
                                                             *g:ale_sign_offset*

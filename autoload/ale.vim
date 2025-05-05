@@ -5,6 +5,7 @@
 " Strings used for severity in the echoed message
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
 let g:ale_echo_msg_info_str = get(g:, 'ale_echo_msg_info_str', 'Info')
+let g:ale_echo_msg_hint_str = get(g:, 'ale_echo_msg_hint_str', 'Hint')
 let g:ale_echo_msg_log_str = get(g:, 'ale_echo_msg_log_str', 'Log')
 let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 

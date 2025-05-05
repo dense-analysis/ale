@@ -22,6 +22,10 @@ if !hlexists('ALEInfo')
     highlight link ALEInfo ALEWarning
 endif
 
+if !hlexists('ALEHint')
+    highlight link ALEHint SpellRare
+endif
+
 " The maximum number of items for the second argument of matchaddpos()
 let s:MAX_POS_VALUES = 8
 let s:MAX_COL_SIZE = 1073741824 " pow(2, 30)
@@ -74,7 +78,7 @@ function! ale#highlight#RemoveHighlights() abort
         call ale#highlight#nvim_buf_clear_namespace(bufnr(''), s:ns_id, 0, -1)
     else
         for l:match in getmatches()
-            if l:match.group =~? '\v^ALE(Style)?(Error|Warning|Info)(Line)?$'
+            if l:match.group =~? '\v^ALE(Style)?(Error|Warning|Info|Hint)(Line)?$'
                 call matchdelete(l:match.id)
             endif
         endfor
@@ -149,6 +153,8 @@ function! ale#highlight#UpdateHighlights() abort
             endif
         elseif l:item.type is# 'I'
             let l:group = 'ALEInfo'
+        elseif l:item.type is# 'H'
+            let l:group = 'ALEHint'
         elseif get(l:item, 'sub_type', '') is# 'style'
             let l:group = 'ALEStyleError'
         else
@@ -171,6 +177,7 @@ function! ale#highlight#UpdateHighlights() abort
         let l:available_groups = {
         \   'ALEWarningLine': hlexists('ALEWarningLine'),
         \   'ALEInfoLine': hlexists('ALEInfoLine'),
+        \   'ALEHintLine': hlexists('ALEHintLine'),
         \   'ALEErrorLine': hlexists('ALEErrorLine'),
         \}
 
@@ -179,6 +186,8 @@ function! ale#highlight#UpdateHighlights() abort
                 let l:group = 'ALEWarningLine'
             elseif l:item.type is# 'I'
                 let l:group = 'ALEInfoLine'
+            elseif l:item.type is# 'H'
+                let l:group = 'ALEHintLine'
             else
                 let l:group = 'ALEErrorLine'
             endif
