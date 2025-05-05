@@ -274,6 +274,7 @@ function! s:RemapItemTypes(type_map, loclist) abort
         \|| l:new_key is# 'W'
         \|| l:new_key is# 'WS'
         \|| l:new_key is# 'I'
+        \|| l:new_key is# 'H'
             let l:item.type = l:new_key[0]
 
             if l:new_key is# 'ES' || l:new_key is# 'WS'
