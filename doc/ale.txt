@@ -3361,6 +3361,8 @@ documented in additional help files.
   bicep...................................|ale-bicep-options|
     bicep.................................|ale-bicep-bicep|
     az_bicep..............................|ale-bicep-az_bicep|
+  bindzone................................|ale-bindzone-options|
+    checkzone.............................|ale-bindzone-checkzone|
   bitbake.................................|ale-bitbake-options|
     oelint-adv............................|ale-bitbake-oelint_adv|
   c.......................................|ale-c-options|

@@ -69,6 +69,8 @@ formatting.
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
 * Bicep
   * [bicep](https://github.com/Azure/bicep) :floppy_disk:
+* Bindzone
+  * [checkzone](https://bind9.readthedocs.io/en/stable/manpages.html#named-checkzone-zone-file-validation-tool)
 * BitBake
   * [oelint-adv](https://github.com/priv-kweihmann/oelint-adv)
 * Bourne Shell

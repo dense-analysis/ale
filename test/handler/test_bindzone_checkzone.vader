@@ -1,0 +1,26 @@
+Before:
+  runtime ale_linters/bindzone/checkzone.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The checkzone handler should handle basic warnings):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'type': 'E',
+  \     'text': 'unknown RR type ''fasd''',
+  \   },
+  \   {
+  \     'lnum': 0,
+  \     'type': 'W',
+  \     'text': '_some_srv._tcp.example.com/SRV ''some.example.com'' (out of zone) has no addresses records (A or AAAA)',
+  \   },
+  \ ],
+  \ ale_linters#bindzone#checkzone#Handle(1, [
+  \   'zone example.com/IN: _some_srv._tcp.example.com/SRV ''some.example.com'' (out of zone) has no addresses records (A or AAAA)',
+  \   'zone example.com/IN: loaded serial 2025050400',
+  \   'zone example.com/IN: not loaded due to errors',
+  \   '/tmp/vb3wXsu/2/example.com:2: unknown RR type ''fasd''',
+  \ ])
