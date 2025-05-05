@@ -3820,6 +3820,10 @@ documented in additional help files.
     write-good............................|ale-restructuredtext-write-good|
   robot...................................|ale-robot-options|
     rflint................................|ale-robot-rflint|
+  roc.....................................|ale-roc-options|
+    roc_language_server...................|ale-roc-roc-language-server|
+    roc_format............................|ale-roc-roc-format|
+    roc_annotate..........................|ale-roc-roc-annotate|
   ruby....................................|ale-ruby-options|
     brakeman..............................|ale-ruby-brakeman|
     cspell................................|ale-ruby-cspell|

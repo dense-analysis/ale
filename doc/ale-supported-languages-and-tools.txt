@@ -586,6 +586,10 @@ Notes:
   * `write-good`
 * Robot
   * `rflint`
+* Roc
+  * roc_annotate
+  * roc_format
+  * roc_language_server
 * RPM spec
   * `rpmlint`
 * Ruby

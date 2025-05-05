@@ -1,0 +1,79 @@
+===============================================================================
+ALE Roc Integration                                           *ale-roc-options*
+                                                          *ale-integration-roc*
+
+===============================================================================
+roc_language_server                               *ale-roc-roc-language-server*
+
+                               *ale-options.roc_roc_language_server_executable*
+                                     *g:ale_roc_roc_language_server_executable*
+                                     *b:ale_roc_roc_language_server_executable*
+roc_roc_language_server_executable
+g:ale_roc_roc_language_server_executable
+  Type: |String|
+  Default: `'roc_language_server'`
+
+  This variable can be modified to change the executable path for
+  `roc_language_server`.
+
+                                   *ale-options.roc_roc_language_server_config*
+                                         *g:ale_roc_roc_language_server_config*
+                                         *b:ale_roc_roc_language_server_config*
+roc_roc_language_server_config
+g:ale_roc_roc_language_server_config
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary with configuration settings for roc_language_server.
+
+
+===============================================================================
+roc_format                                                 *ale-roc-roc-format*
+
+                                        *ale-options.roc_roc_format_executable*
+                                              *g:ale_roc_roc_format_executable*
+                                              *b:ale_roc_roc_format_executable*
+roc_roc_format_executable
+g:ale_roc_roc_format_executable
+  Type: |String|
+  Default: `'roc'`
+
+  This variable can be modified to change the executable path for `roc`.
+
+                                           *ale-options.roc_roc_format_options*
+                                                 *g:ale_roc_roc_format_options*
+                                                 *b:ale_roc_roc_format_options*
+roc_roc_format_options
+g:ale_roc_roc_format_options
+  Type: String
+  Default: `''`
+
+  Additional flags for `roc format`.
+
+
+===============================================================================
+roc_annotate                                             *ale-roc-roc-annotate*
+
+                                      *ale-options.roc_roc_annotate_executable*
+                                            *g:ale_roc_roc_annotate_executable*
+                                            *b:ale_roc_roc_annotate_executable*
+roc_roc_annotate_executable
+g:ale_roc_roc_annotate_executable
+  Type: |String|
+  Default: `'roc'`
+
+  This variable can be modified to change the executable path for `roc`.
+
+                                         *ale-options.roc_roc_annotate_options*
+                                               *g:ale_roc_roc_annotate_options*
+                                               *b:ale_roc_roc_annotate_options*
+roc_roc_annotate_options
+g:ale_roc_roc_annotate_options
+  Type: String
+  Default: `''`
+
+  Additional flags for `roc format annotate`.
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

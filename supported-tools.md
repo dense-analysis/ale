@@ -595,6 +595,10 @@ formatting.
   * [write-good](https://github.com/btford/write-good)
 * Robot
   * [rflint](https://github.com/boakley/robotframework-lint)
+* Roc
+  * [roc_annotate](https://github.com/roc-lang/roc)
+  * [roc_format](https://github.com/roc-lang/roc)
+  * [roc_language_server](https://github.com/roc-lang/roc)
 * RPM spec
   * [rpmlint](https://github.com/rpm-software-management/rpmlint) :warning: (see `:help ale-integration-spec`)
 * Ruby

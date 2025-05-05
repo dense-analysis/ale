@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpFixerTest('roc', 'roc_format')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The roc format callback should return the correct default values):
+  AssertFixer {
+  \    'command': 'roc format %t',
+  \    'read_temporary_file': 1,
+  \}
+
+Execute(The roc format callback should allow a custom executable):
+  let g:ale_roc_roc_format_executable = 'foo/bar'
+
+  AssertFixer {
+  \    'command': 'foo/bar format %t',
+  \    'read_temporary_file': 1,
+  \}
+
