@@ -14,7 +14,7 @@ Before:
   let g:ale_completion_enabled = 0
   let g:ale_completion_autoimport = 0
   let g:ale_completion_max_suggestions = 50
-  let g:ale_linters = {'typescript': ['tsserver'], 'python': ['pyre']}
+  let g:ale_linters = {'typescript': ['tsserver'], 'python': ['pyrefly']}
   unlet! b:ale_linters
 
   let g:server_started_value = 1

@@ -554,6 +554,7 @@ formatting.
   * [pylint](https://www.pylint.org/) :floppy_disk:
   * [pylsp](https://github.com/python-lsp/python-lsp-server) :warning:
   * [pyre](https://github.com/facebook/pyre-check) :warning:
+  * [pyrefly](https://github.com/facebook/pyrefly) :warning:
   * [pyright](https://github.com/microsoft/pyright)
   * [refurb](https://github.com/dosisod/refurb) :floppy_disk:
   * [reorder-python-imports](https://github.com/asottile/reorder_python_imports)
