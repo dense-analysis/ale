@@ -3485,6 +3485,8 @@ documented in additional help files.
   fountain................................|ale-fountain-options|
   fusionscript............................|ale-fuse-options|
     fusion-lint...........................|ale-fuse-fusionlint|
+  generic.................................|ale-generic-options|
+    astgrep...............................|ale-generic-astgrep|
   git commit..............................|ale-gitcommit-options|
     gitlint...............................|ale-gitcommit-gitlint|
   gleam...................................|ale-gleam-options|
