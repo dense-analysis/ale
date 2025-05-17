@@ -1,0 +1,69 @@
+Before:
+  call ale#assert#SetUpLinterTest('python', 'pyrefly')
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  unlet! b:bin_dir
+  unlet! b:executable
+  call ale#assert#TearDownLinterTest()
+
+Execute(The pyrefly command callback should return default string):
+  call ale#test#SetFilename('./foo.py')
+
+  AssertLinter 'pyrefly', ale#Escape('pyrefly') . ' lsp'
+
+Execute(The pyrefly executable should be configurable):
+  let g:ale_python_pyrefly_executable = '~/.local/bin/pyrefly'
+
+  AssertLinter '~/.local/bin/pyrefly',
+  \ ale#Escape('~/.local/bin/pyrefly') . ' lsp'
+
+Execute(The pyrefly executable should be run from the virtualenv path):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let b:executable = ale#path#Simplify(
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/pyrefly'
+  \)
+
+  AssertLinter b:executable, ale#Escape(b:executable) . ' lsp'
+
+Execute(You should be able to override the pyrefly virtualenv lookup):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let g:ale_python_pyrefly_use_global = 1
+
+  AssertLinter 'pyrefly', ale#Escape('pyrefly') . ' lsp'
+
+Execute(Setting executable to 'pipenv' appends 'run pyrefly'):
+  let g:ale_python_pyrefly_executable = 'path/to/pipenv'
+  call ale#test#SetFilename('../test-files/dummy')
+
+  AssertLinter 'path/to/pipenv',
+  \ ale#Escape('path/to/pipenv') . ' run pyrefly lsp'
+
+Execute(Pipenv is detected when python_pyrefly_auto_pipenv is set):
+  let g:ale_python_pyrefly_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run pyrefly lsp'
+
+Execute(Setting executable to 'poetry' appends 'run pyrefly lsp'):
+  let g:ale_python_pyrefly_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run pyrefly lsp'
+
+Execute(Poetry is detected when python_pyrefly_auto_poetry is set):
+  let g:ale_python_pyrefly_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pyrefly lsp'
+
+Execute(uv is detected when python_pyrefly_auto_uv is set):
+  let g:ale_python_pyrefly_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run pyrefly lsp'

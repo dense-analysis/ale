@@ -545,6 +545,7 @@ Notes:
   * `pylint`!!
   * `pylsp`
   * `pyre`
+  * `pyrefly`
   * `pyright`
   * `refurb`
   * `reorder-python-imports`

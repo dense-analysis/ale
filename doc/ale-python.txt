@@ -1617,6 +1617,69 @@ g:ale_python_pyre_auto_uv
 
 
 ===============================================================================
+pyrefly                                                    *ale-python-pyrefly*
+
+`pyrefly` will be run from a detected project root, per |ale-python-root|.
+
+                                        *ale-options.python_pyrefly_executable*
+                                              *g:ale_python_pyrefly_executable*
+                                              *b:ale_python_pyrefly_executable*
+python_pyrefly_executable
+g:ale_python_pyrefly_executable
+  Type: |String|
+  Default: `'pyrefly'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `pyrefly'`.
+  Set this to `'poetry'` to invoke `'poetry` `run` `pyrefly'`.
+  Set this to `'uv'` to invoke `'uv` `run` `pyrefly'`.
+
+                                        *ale-options.python_pyrefly_use_global*
+                                              *g:ale_python_pyrefly_use_global*
+                                              *b:ale_python_pyrefly_use_global*
+python_pyrefly_use_global
+g:ale_python_pyrefly_use_global
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+                                       *ale-options.python_pyrefly_auto_pipenv*
+                                             *g:ale_python_pyrefly_auto_pipenv*
+                                             *b:ale_python_pyrefly_auto_pipenv*
+python_pyrefly_auto_pipenv
+g:ale_python_pyrefly_auto_pipenv
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
+                                       *ale-options.python_pyrefly_auto_poetry*
+                                             *g:ale_python_pyrefly_auto_poetry*
+                                             *b:ale_python_pyrefly_auto_poetry*
+python_pyrefly_auto_poetry
+g:ale_python_pyrefly_auto_poetry
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a poetry, and set the executable to `poetry`
+  if true. This is overridden by a manually-set executable.
+
+                                           *ale-options.python_pyrefly_auto_uv*
+                                                 *g:ale_python_pyrefly_auto_uv*
+                                                 *b:ale_python_pyrefly_auto_uv*
+python_pyrefly_auto_uv
+g:ale_python_pyrefly_auto_uv
+  Type: |Number|
+  Default: `0`
+
+  Set the executable to `uv` if true. This is overridden by a manually-set
+  executable.
+
+
+===============================================================================
 pyright                                                    *ale-python-pyright*
 
 The `pyright` linter requires a recent version of `pyright` which includes

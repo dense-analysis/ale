@@ -3788,6 +3788,7 @@ documented in additional help files.
     pylint................................|ale-python-pylint|
     pylsp.................................|ale-python-pylsp|
     pyre..................................|ale-python-pyre|
+    pyrefly...............................|ale-python-pyrefly|
     pyright...............................|ale-python-pyright|
     refurb................................|ale-python-refurb|
     reorder-python-imports................|ale-python-reorder_python_imports|
