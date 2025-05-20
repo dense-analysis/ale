@@ -6,6 +6,7 @@ Before:
   let g:ale_ruby_sorbet_executable = 'srb'
   let g:ale_ruby_sorbet_options = ''
   let g:ale_ruby_sorbet_enable_watchman = 0
+  let g:ale_ruby_sorbet_initialization_options = { 'highlightUntyped': v:false }
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -32,3 +33,11 @@ Execute(Setting bundle appends 'exec srb tc'):
   AssertLinter 'path to/bundle', ale#Escape('path to/bundle')
   \   . ' exec srb'
   \   . ' tc --lsp --disable-watchman'
+
+Execute(Should use predetermined initialization_options by default):
+  AssertLSPOptions { 'highlightUntyped': v:false }
+
+Execute(Should be able to set custom initialization_options):
+  let g:ale_ruby_sorbet_initialization_options = {'enableTypedFalse': v:true}
+
+  AssertLSPOptions {'enableTypedFalse': v:true}

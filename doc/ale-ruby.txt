@@ -267,6 +267,23 @@ g:ale_ruby_sorbet_enable_watchman
   to files from outside of vim. Defaults to disable watchman because it
   requires watchman to be installed separately from sorbet.
 
+                               *ale-options.ruby_sorbet_initialization_options*
+                                     *g:ale_ruby_sorbet_initialization_options*
+                                     *b:ale_ruby_sorbet_initialization_options*
+ruby_sorbet_initialization_options
+g:ale_ruby_sorbet_initialization_options
+  Type: |Dictionary|
+  Default: `{ 'highlightUntyped': v:false }`
+
+  This variable can be changed to modify initialization options provided to
+  the Sorbet language server. By default, a minimal object with defaults is
+  provided to ensure proper LSP initialization.
+
+  Setting this variable to a an empty object will cause sorbet LSP to
+  fail during initialization.
+
+  See https://sorbet.org/docs/lsp#initialize-request for available options.
+
 
 ===============================================================================
 standardrb                                                *ale-ruby-standardrb*
