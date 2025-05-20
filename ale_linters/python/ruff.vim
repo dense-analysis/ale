@@ -72,20 +72,31 @@ function! ale_linters#python#ruff#Handle(buffer, lines) abort
         try
             let l:item = json_decode(l:line)
         catch
-            let l:item = v:null
+            " If we can't decode a line, skip it.
+            continue
         endtry
 
-        if !empty(l:item)
-            call add(l:output, {
-            \   'lnum': l:item.location.row,
-            \   'col': l:item.location.column,
-            \   'end_lnum': l:item.end_location.row,
-            \   'end_col': l:item.end_location.column - 1,
-            \   'code': l:item.code,
-            \   'text': l:item.message,
-            \   'type': l:item.code =~? '\vE\d+' ? 'E' : 'W',
-            \})
+        if (l:item.code is# 'W291' || l:item.code is# 'W293')
+        \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+            " Skip warnings for trailing whitespace if the option is off.
+            continue
         endif
+
+        if l:item.code is# 'W391'
+        \&& !ale#Var(a:buffer, 'warn_about_trailing_blank_lines')
+            " Skip warnings for trailing blank lines if the option is off
+            continue
+        endif
+
+        call add(l:output, {
+        \   'lnum': l:item.location.row,
+        \   'col': l:item.location.column,
+        \   'end_lnum': l:item.end_location.row,
+        \   'end_col': l:item.end_location.column - 1,
+        \   'code': l:item.code,
+        \   'text': l:item.message,
+        \   'type': l:item.code =~? '\vE\d+' ? 'E' : 'W',
+        \})
     endfor
 
     return l:output
