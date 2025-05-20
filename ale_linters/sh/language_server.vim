@@ -25,6 +25,7 @@ endfunction
 
 call ale#linter#Define('sh', {
 \   'name': 'language_server',
+\   'aliases': ['bash-language-server'],
 \   'lsp': 'stdio',
 \   'executable': function('ale_linters#sh#language_server#GetExecutable'),
 \   'command': function('ale_linters#sh#language_server#GetCommand'),
