@@ -108,17 +108,21 @@ function! ale#definition#FormatLSPResponse(response_item, options) abort
         let l:column = a:response_item.range.start.character + 1
     endif
 
+    let l:filename = ale#util#ToResource(l:uri)
+    let l:content = readfile(l:filename, '', l:line)[-1]
     if get(a:options, 'open_in') is# 'quickfix'
         return {
-        \ 'filename': ale#util#ToResource(l:uri),
+        \ 'filename': l:filename,
         \ 'lnum': l:line,
         \ 'col': l:column,
+        \ 'text': l:content,
         \}
     else
         return {
-        \ 'filename': ale#util#ToResource(l:uri),
+        \ 'filename': l:filename,
         \ 'line': l:line,
         \ 'column': l:column,
+        \ 'match': l:content,
         \}
     endif
 endfunction
