@@ -67,7 +67,7 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
 endfunction
 
 function! ale#references#FormatLSPResponseItem(response_item, options) abort
-    let l:filename = ale#util#ToResource(a:resposne_item.uri)
+    let l:filename = ale#util#ToResource(a:response_item.uri)
     let l:content = readfile(l:filename, '', a:response_item.range.start.line+1)[-1]
     if get(a:options, 'open_in') is# 'quickfix'
         return {
