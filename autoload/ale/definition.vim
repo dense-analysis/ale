@@ -242,6 +242,7 @@ function! s:OnReady(line, column, options, capability, linter, lsp_details) abor
     let l:request_id = ale#lsp#Send(l:id, l:message)
 
     let s:go_to_definition_map[l:request_id] = {
+    \   'use_relative_paths': get(a:options, 'use_relative_paths', 0),
     \   'open_in': get(a:options, 'open_in', 'current-buffer'),
     \}
 endfunction
@@ -281,7 +282,9 @@ function! ale#definition#GoToCommandHandler(command, ...) abort
 
     if len(a:000) > 0
         for l:option in a:000
-            if l:option is? '-tab'
+            if l:option is? '-relative'
+                let l:options.use_relative_paths = 1
+            elseif l:option is? '-tab'
                 let l:options.open_in = 'tab'
             elseif l:option is? '-split'
                 let l:options.open_in = 'split'
