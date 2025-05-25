@@ -68,19 +68,22 @@ endfunction
 
 function! ale#references#FormatLSPResponseItem(response_item, options) abort
     let l:filename = ale#util#ToResource(a:response_item.uri)
-    let l:content = readfile(l:filename, '', a:response_item.range.start.line+1)[-1]
+    let l:line = a:response_item.range.start.line + 1
+    let l:col = a:response_item.range.start.character + 1
+    let l:content = ale#util#SafeReadFileLine(l:filename, l:line)
+
     if get(a:options, 'open_in') is# 'quickfix'
         return {
         \ 'filename': l:filename,
-        \ 'lnum': a:response_item.range.start.line + 1,
-        \ 'col': a:response_item.range.start.character + 1,
+        \ 'lnum': l:line,
+        \ 'col': l:col,
         \ 'text': l:content,
         \}
     else
         return {
         \ 'filename': l:filename,
-        \ 'line': a:response_item.range.start.line + 1,
-        \ 'column': a:response_item.range.start.character + 1,
+        \ 'line': l:line,
+        \ 'column': l:col,
         \ 'match': l:content,
         \}
     endif

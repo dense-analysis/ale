@@ -109,7 +109,8 @@ function! ale#definition#FormatLSPResponse(response_item, options) abort
     endif
 
     let l:filename = ale#util#ToResource(l:uri)
-    let l:content = readfile(l:filename, '', l:line)[-1]
+    let l:content = ale#util#SafeReadFileLine(l:filename, l:line)
+
     if get(a:options, 'open_in') is# 'quickfix'
         return {
         \ 'filename': l:filename,
