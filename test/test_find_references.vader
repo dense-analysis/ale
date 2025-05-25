@@ -378,11 +378,13 @@ Execute(LSP reference responses should be handled):
   \     'filename': ale#path#Simplify(g:dir . '/completion_dummy_file'),
   \     'line': 3,
   \     'column': 8,
+  \     'match': '',
   \   },
   \   {
   \     'filename': ale#path#Simplify(g:dir . '/other_file'),
   \     'line': 8,
   \     'column': 16,
+  \     'match': '',
   \   },
   \ ],
   \ g:item_list
