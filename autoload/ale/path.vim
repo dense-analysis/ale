@@ -115,12 +115,11 @@ endfunction
 
 " Return 1 if a path is an absolute path.
 function! ale#path#IsAbsolute(filename) abort
-    if has('win32') && a:filename[:0] is# '\'
-        return 1
+    if has('win32')
+        return a:filename[:0] =~# '[\\/]' || a:filename[0:2] =~? '[A-Z]:[/\\]'
+    else
+        return a:filename[:0] is# '/'
     endif
-
-    " Check for /foo and C:\foo, etc.
-    return a:filename[:0] is# '/' || a:filename[1:2] is# ':\'
 endfunction
 
 let s:temp_dir = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h'))
