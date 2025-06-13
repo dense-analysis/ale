@@ -14,6 +14,7 @@ let g:ale_sign_style_error = get(g:, 'ale_sign_style_error', g:ale_sign_error)
 let g:ale_sign_warning = get(g:, 'ale_sign_warning', 'W')
 let g:ale_sign_style_warning = get(g:, 'ale_sign_style_warning', g:ale_sign_warning)
 let g:ale_sign_info = get(g:, 'ale_sign_info', 'I')
+let g:ale_sign_hint = get(g:, 'ale_sign_hint', 'H')
 let g:ale_sign_priority = get(g:, 'ale_sign_priority', 30)
 " This variable sets an offset which can be set for sign IDs.
 " This ID can be changed depending on what IDs are set for other plugins.
@@ -43,6 +44,10 @@ endif
 
 if !hlexists('ALEInfoSign')
     highlight link ALEInfoSign ALEWarningSign
+endif
+
+if !hlexists('ALEHintSign')
+    highlight link ALEHintSign ALEWarningSign
 endif
 
 if !hlexists('ALESignColumnWithErrors')
@@ -85,6 +90,8 @@ execute 'sign define ALEStyleWarningSign text=' . s:EscapeSignText(g:ale_sign_st
 \   . ' texthl=ALEStyleWarningSign linehl=ALEWarningLine'
 execute 'sign define ALEInfoSign text=' . s:EscapeSignText(g:ale_sign_info)
 \   . ' texthl=ALEInfoSign linehl=ALEInfoLine'
+execute 'sign define ALEHintSign text=' . s:EscapeSignText(g:ale_sign_hint)
+\   . ' texthl=ALEHintSign linehl=ALEHintLine'
 sign define ALEDummySign text=\  texthl=SignColumn
 
 if g:ale_sign_highlight_linenrs && (has('nvim-0.3.2') || has('patch-8.2.3874'))
@@ -108,15 +115,20 @@ if g:ale_sign_highlight_linenrs && (has('nvim-0.3.2') || has('patch-8.2.3874'))
         highlight link ALEInfoSignLineNr CursorLineNr
     endif
 
+    if !hlexists('ALEHintSignLineNr')
+        highlight link ALEHintSignLineNr CursorLineNr
+    endif
+
     sign define ALEErrorSign numhl=ALEErrorSignLineNr
     sign define ALEStyleErrorSign numhl=ALEStyleErrorSignLineNr
     sign define ALEWarningSign numhl=ALEWarningSignLineNr
     sign define ALEStyleWarningSign numhl=ALEStyleWarningSignLineNr
     sign define ALEInfoSign numhl=ALEInfoSignLineNr
+    sign define ALEHintSign numhl=ALEHintSignLineNr
 endif
 
 function! ale#sign#GetSignName(sublist) abort
-    let l:priority = g:ale#util#style_warning_priority
+    let l:priority = g:ale#util#hint_priority
 
     " Determine the highest priority item for the line.
     for l:item in a:sublist
@@ -145,6 +157,10 @@ function! ale#sign#GetSignName(sublist) abort
 
     if l:priority is# g:ale#util#info_priority
         return 'ALEInfoSign'
+    endif
+
+    if l:priority is# g:ale#util#hint_priority
+        return 'ALEHintSign'
     endif
 
     " Use the error sign for invalid severities.

@@ -125,8 +125,13 @@ let g:ale#util#warning_priority = 4
 let g:ale#util#info_priority = 3
 let g:ale#util#style_error_priority = 2
 let g:ale#util#style_warning_priority = 1
+let g:ale#util#hint_priority = 0
 
 function! ale#util#GetItemPriority(item) abort
+    if a:item.type is# 'H'
+        return g:ale#util#hint_priority
+    endif
+
     if a:item.type is# 'I'
         return g:ale#util#info_priority
     endif
