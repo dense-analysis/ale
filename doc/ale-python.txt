@@ -63,7 +63,6 @@ ALE will look for configuration files with the following filenames. >
 
   MANIFEST.in
   setup.cfg
-  pytest.ini
   tox.ini
   .pyre_configuration.local
   mypy.ini
@@ -81,6 +80,7 @@ ALE will look for configuration files with the following filenames. >
   poetry.lock
   pyproject.toml
   .tool-versions
+  uv.lock
 <
 
 The first directory containing any of the files named above will be used.
