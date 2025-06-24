@@ -13,6 +13,15 @@ Execute(Relative paths should be resolved correctly):
     AssertEqual
     \ 'C:\foo\bar\baz\whatever.txt',
     \ ale#path#GetAbsPath('C:\foo\bar\baz\xyz', '../whatever.txt')
+    AssertEqual
+    \ 'C:\foo\bar\baz\whatever.txt',
+    \ ale#path#GetAbsPath('C:\foo\bar\baz\xyz', '..\whatever.txt')
+    AssertEqual
+    \ 'C:\foo\bar\baz\whatever.txt',
+    \ ale#path#GetAbsPath('C:/foo/bar/baz/xyz', '../whatever.txt')
+    AssertEqual
+    \ 'C:\foo\bar\baz\whatever.txt',
+    \ ale#path#GetAbsPath('C:/foo/bar/baz/xyz', '..\whatever.txt')
   endif
 
 Execute(Absolute paths should be resolved correctly):
@@ -26,4 +35,12 @@ Execute(Absolute paths should be resolved correctly):
 
   if has('win32')
     AssertEqual '\ding', ale#path#GetAbsPath('/foo/bar/xyz', '\\ding')
+    AssertEqual 'c:\ding', ale#path#GetAbsPath('/foo/bar/xyz', 'c:/ding')
+    AssertEqual 'c:\ding', ale#path#GetAbsPath('/foo/bar/xyz', 'c:\ding')
+    AssertEqual 'c:\ding', ale#path#GetAbsPath('\foo\bar\xyz', 'c:/ding')
+    AssertEqual 'c:\ding', ale#path#GetAbsPath('\foo\bar\xyz', 'c:\ding')
+    AssertEqual 'c:\ding', ale#path#GetAbsPath('c:/foo/bar/xyz', 'c:/ding')
+    AssertEqual 'c:\ding', ale#path#GetAbsPath('c:/foo/bar/xyz', 'c:\ding')
+    AssertEqual 'c:\ding', ale#path#GetAbsPath('c:\foo\bar\xyz', 'c:/ding')
+    AssertEqual 'c:\ding', ale#path#GetAbsPath('c:\foo\bar\xyz', 'c:\ding')
   endif
