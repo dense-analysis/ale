@@ -1,0 +1,27 @@
+Before:
+  Save g:ale_root
+  Save b:ale_root
+  call ale#test#SetDirectory('/testplugin/test')
+
+After:
+  Restore
+  call ale#test#RestoreDirectory()
+
+Execute(The global setting is used as the project root):
+  let g:ale_root = '/foo/python'
+  call ale#test#SetFilename('test-files/python/no_virtualenv/subdir/foo/bar.py')
+  AssertEqual '/foo/python', ale#python#FindProjectRoot(bufnr(''))
+
+Execute(The buffer setting overrides the global setting):
+  let g:ale_root = '/foo/python'
+  let b:ale_root = '/bar/python'
+  call ale#test#SetFilename('test-files/python/no_virtualenv/subdir/foo/bar.py')
+  AssertEqual '/bar/python', ale#python#FindProjectRoot(bufnr(''))
+
+Execute(Fallback to searching when no setting is used):
+  unlet! g:ale_root
+  unlet! b:ale_root
+  call ale#test#SetFilename('test-files/python/no_virtualenv/subdir/foo/bar.py')
+  AssertEqual \
+  \ ale#path#Simplify(g:dir . '/../test-files/python/no_virtualenv/subdir'),
+  \ ale#python#FindProjectRoot(bufnr(''))

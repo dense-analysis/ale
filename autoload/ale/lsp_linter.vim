@@ -296,44 +296,6 @@ function! ale#lsp_linter#GetConfig(buffer, linter) abort
     return {}
 endfunction
 
-function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
-    let l:buffer_ale_root = getbufvar(a:buffer, 'ale_root', {})
-
-    if type(l:buffer_ale_root) is v:t_string
-        return l:buffer_ale_root
-    endif
-
-    " Try to get a buffer-local setting for the root
-    if has_key(l:buffer_ale_root, a:linter.name)
-        let l:Root = l:buffer_ale_root[a:linter.name]
-
-        if type(l:Root) is v:t_func
-            return l:Root(a:buffer)
-        else
-            return l:Root
-        endif
-    endif
-
-    " Try to get a global setting for the root
-    if has_key(g:ale_root, a:linter.name)
-        let l:Root = g:ale_root[a:linter.name]
-
-        if type(l:Root) is v:t_func
-            return l:Root(a:buffer)
-        else
-            return l:Root
-        endif
-    endif
-
-    " Fall back to the linter-specific configuration
-    if has_key(a:linter, 'project_root')
-        let l:Root = a:linter.project_root
-
-        return type(l:Root) is v:t_func ? l:Root(a:buffer) : l:Root
-    endif
-
-    return ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
-endfunction
 
 " This function is accessible so tests can call it.
 function! ale#lsp_linter#OnInit(linter, details, Callback) abort
@@ -504,7 +466,7 @@ endfunction
 function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
     let l:command = ''
     let l:address = ''
-    let l:root = ale#lsp_linter#FindProjectRoot(a:buffer, a:linter)
+    let l:root = ale#linter#GetRoot(a:buffer, a:linter)
 
     if empty(l:root) && a:linter.lsp isnot# 'tsserver'
         " If there's no project root, then we can't check files with LSP,

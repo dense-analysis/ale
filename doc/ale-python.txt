@@ -55,6 +55,9 @@ For some linters, ALE will search for a Python project root by looking at the
 files in directories on or above where a file being checked is. ALE applies
 the following methods, in order:
 
+If |g:ale_root| or |b:ale_root| provides a value, that value is used as the
+project root instead and the searching described below is skipped.
+
 1. Find the first directory containing a common Python configuration file.
 2. If no configuration file can be found, use the first directory which does
    not contain a readable file named `__init__.py`.

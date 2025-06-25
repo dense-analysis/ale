@@ -13,7 +13,7 @@ function! ale_linters#python#pyright#GetCwd(buffer) abort
     \   'name': 'pyright',
     \   'project_root': function('ale#python#FindProjectRoot'),
     \}
-    let l:root = ale#lsp_linter#FindProjectRoot(a:buffer, l:fake_linter)
+    let l:root = ale#linter#GetRoot(a:buffer, l:fake_linter)
 
     return !empty(l:root) ? l:root : v:null
 endfunction
