@@ -1,0 +1,23 @@
+Before:
+  call ale#assert#SetUpLinterTest('verilog', 'verible_ls')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'verible-verilog-ls', ale#Escape('verible-verilog-ls')
+
+Execute(The project root should be detected correctly in empty directory):
+  AssertLSPProject '.'
+
+Execute(The project root should be detected correctly with verible.filelist):
+  call ale#test#SetFilename('../test-files/verilog/verible/module.sv')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/verilog/verible')
+
+Execute(The LSP values should be set correctly):
+  call ale#test#SetFilename('../test-files/verilog/verible/module.sv')
+
+  AssertLSPLanguage 'verilog'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/verilog/verible')

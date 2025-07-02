@@ -732,6 +732,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['roc'],
 \       'description': 'Annotates all top-level definitions in Roc files.',
 \   },
+\   'verible_format': {
+\       'function': 'ale#fixers#verible_format#Fix',
+\       'suggested_filetypes': ['verilog'],
+\       'description': 'Formats verilog files using verible.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
