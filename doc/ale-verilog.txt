@@ -112,6 +112,26 @@ g:ale_verilog_verible_ls_config
 
   Dictionary with configuration settings for `verible_ls`
 
+                                        *ale-config.verilog_verible_ls_options*
+                                             *g:ale_verilog_verible_ls_options*
+                                             *b:ale_verilog_verible_ls_options*
+verilog_verible_ls_options
+g:ale_verilog_verible_ls_options
+  Type: |String|
+  Default: `'--rules_config_search'`
+
+  Additional flags for `verible_ls`
+
+                                          *ale-config.verilog_verible_ls_rules*
+                                               *g:ale_verilog_verible_ls_rules*
+                                               *b:ale_verilog_verible_ls_rules*
+verilog_verible_ls_rules
+g:ale_verilog_verible_ls_rules
+  Type: |String|
+  Default: `''`
+
+  Additional rules applied by `verible_ls`
+
 ===============================================================================
 verible_format                                     *ale-verilog-verible-format*
 
@@ -129,8 +149,8 @@ g:ale_verilog_verible_format_executable
                                     *ale-config.verilog_verible_format_options*
                                          *g:ale_verilog_verible_format_options*
                                          *b:ale_verilog_verible_format_options*
-verilog_verible_format_config
-g:ale_verilog_verible_format_config
+verilog_verible_format_options
+g:ale_verilog_verible_format_options
   Type: |String|
   Default: `''`
 

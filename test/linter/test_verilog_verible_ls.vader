@@ -4,8 +4,8 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
-Execute(The default executable path should be correct):
-  AssertLinter 'verible-verilog-ls', ale#Escape('verible-verilog-ls')
+Execute(The default executable path and arguments should be correct):
+  AssertLinter 'verible-verilog-ls', ale#Escape('verible-verilog-ls') . ' --rules_config_search'
 
 Execute(The project root should be detected correctly in empty directory):
   AssertLSPProject '.'
@@ -21,3 +21,13 @@ Execute(The LSP values should be set correctly):
   AssertLSPOptions {}
   AssertLSPConfig {}
   AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/verilog/verible')
+
+
+Execute(The verible LSP callback should allow custom options):
+  let g:ale_verilog_verible_ls_options = '--foo --bar'
+  AssertLinter 'verible-verilog-ls', ale#Escape('verible-verilog-ls') . ' --foo --bar'
+
+
+Execute(The verible LSP callback should allow custom rules):
+  let g:ale_verilog_verible_ls_rules = '+foo,-bar'
+  AssertLinter 'verible-verilog-ls', ale#Escape('verible-verilog-ls') . ' --rules_config_search --rules=+foo,-bar'
