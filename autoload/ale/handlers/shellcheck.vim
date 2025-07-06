@@ -63,6 +63,12 @@ function! ale#handlers#shellcheck#GetCommand(buffer, version) abort
     \   . ' -f ' . l:format . ' -'
 endfunction
 
+function! s:ShouldIgnoreErrorCode(buffer, code) abort
+    " Skip warnings for trailing whitespace if the option is off.
+    return a:code is# 'SC1101'
+    \   && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+endfunction
+
 function! s:HandleShellcheckJSON(buffer, lines) abort
     try
         let l:errors = json_decode(a:lines[0])
@@ -87,11 +93,17 @@ function! s:HandleShellcheckJSON(buffer, lines) abort
             let l:type = 'W'
         endif
 
+        let l:code = 'SC' . l:error['code']
+
+        if s:ShouldIgnoreErrorCode(a:buffer, l:code)
+            continue
+        endif
+
         let l:item = {
         \   'lnum': l:error['line'],
         \   'type': l:type,
         \   'text': l:error['message'],
-        \   'code': 'SC' . l:error['code'],
+        \   'code': l:code,
         \   'detail': l:error['message'] . "\n\nFor more information:\n  https://www.shellcheck.net/wiki/SC" . l:error['code'],
         \}
 
@@ -106,7 +118,6 @@ function! s:HandleShellcheckJSON(buffer, lines) abort
         if has_key(l:error, 'endLine')
             let l:item.end_lnum = l:error['endLine']
         endif
-
 
         " If the filename is something like <stdin>, <nofile> or -, then
         " this is an error for the file we checked.
@@ -135,11 +146,17 @@ function! s:HandleShellcheckGCC(buffer, lines) abort
             let l:type = 'W'
         endif
 
+        let l:code = l:match[6]
+
+        if s:ShouldIgnoreErrorCode(a:buffer, l:code)
+            continue
+        endif
+
         let l:item = {
         \   'lnum': str2nr(l:match[2]),
         \   'type': l:type,
         \   'text': l:match[5],
-        \   'code': l:match[6],
+        \   'code': l:code,
         \   'detail': l:match[5] . "\n\nFor more information:\n  https://www.shellcheck.net/wiki/" . l:match[6],
         \}
 
