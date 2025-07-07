@@ -722,6 +722,8 @@ Notes:
   * `hdl-checker`
   * `iverilog`
   * slang
+  * `verible_format`
+  * `verible_ls`
   * `verilator`
   * `vlog`
   * `xvlog`
