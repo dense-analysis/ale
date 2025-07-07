@@ -447,3 +447,32 @@ function! ale#linter#GetAddress(buffer, linter) abort
 
     return type(l:Address) is v:t_func ? l:Address(a:buffer) : l:Address
 endfunction
+
+" Get the project root for a linter.
+" If |b:ale_root| or |g:ale_root| is set to either a String or a Dict mapping
+" linter names to roots or callbacks, return that value immediately.  When no
+" value is available, fall back to the linter-specific configuration.
+function! ale#linter#GetRoot(buffer, linter) abort
+    let l:buffer_ale_root = getbufvar(a:buffer, 'ale_root', {})
+
+    if type(l:buffer_ale_root) is v:t_string
+        return l:buffer_ale_root
+    endif
+
+    if has_key(l:buffer_ale_root, a:linter.name)
+        let l:Root = l:buffer_ale_root[a:linter.name]
+        return type(l:Root) is v:t_func ? l:Root(a:buffer) : l:Root
+    endif
+
+    if has_key(g:ale_root, a:linter.name)
+        let l:Root = g:ale_root[a:linter.name]
+        return type(l:Root) is v:t_func ? l:Root(a:buffer) : l:Root
+    endif
+
+    if has_key(a:linter, 'project_root')
+        let l:Root = a:linter.project_root
+        return type(l:Root) is v:t_func ? l:Root(a:buffer) : l:Root
+    endif
+
+    return ''
+endfunction
