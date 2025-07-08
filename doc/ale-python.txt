@@ -1465,7 +1465,7 @@ g:ale_python_pylsp_executable
   See |ale-integrations-local-executables|
 
   Set this to `'pipenv'` to invoke `'pipenv` `run` `pylsp'`.
-  Set this to `'poetry'` to invoke `'poetry` `run` `pyls'`.
+  Set this to `'poetry'` to invoke `'poetry` `run` `pylsp'`.
 
                                           *ale-options.python_pylsp_use_global*
                                                 *g:ale_python_pylsp_use_global*
