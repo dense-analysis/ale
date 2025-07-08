@@ -109,14 +109,23 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths, meta) abort
     " Create .class files in a temporary directory, which we will delete later.
     let l:class_file_directory = ale#command#CreateDirectory(a:buffer)
 
-    " Always run javac from the directory the file is in, so we can resolve
-    " relative paths correctly.
-    return '%e -Xlint'
-    \ . ale#Pad(l:cp_option)
-    \ . ale#Pad(l:sp_option)
-    \ . ' -d ' . ale#Escape(l:class_file_directory)
-    \ . ale#Pad(ale#Var(a:buffer, 'java_javac_options'))
-    \ . ' %t'
+	"=======================================================
+	"  Write file options to a tempfile to bypass long
+	"  command line issues
+	"=======================================================
+
+	" Switch backslashes in Windows filenames to forward slashes 
+	let l:adjusted_cp_option = substitute( l:cp_option, "\\", "/", "g")
+	let l:adjusted_sp_option = substitute( l:sp_option, "\\", "/", "g")
+	let l:adjusted_class_file_directory = substitute( l:class_file_directory, "\\", "/", "g")
+	call writefile( [
+	\					ale#Pad(l:adjusted_cp_option),
+	\					ale#Pad(l:adjusted_sp_option),
+	\					' -d ' . ale#Escape(l:adjusted_class_file_directory),
+	\					ale#Pad(ale#Var(a:buffer, 'java_javac_options')),
+	\			    ], l:class_file_directory . '/javac_options')
+
+	return '%e -Xlint' . ' @' . l:class_file_directory . '/javac_options ' . '%t'
 endfunction
 
 function! ale_linters#java#javac#Handle(buffer, lines) abort
