@@ -29,6 +29,7 @@ function! ale_linters#verilog#slang#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:item = {
+        \   'filename': l:match[1],
         \   'lnum': str2nr(l:match[2]),
         \   'type': (l:match[4] is# 'error') ? 'E' : 'W',
         \   'text': s:RemoveUnicodeQuotes(l:match[5]),
