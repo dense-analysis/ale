@@ -10,6 +10,7 @@ endif
 function! ale_linters#verilog#slang#GetCommand(buffer) abort
     return 'slang -Weverything '
     \   . '-I%s:h '
+    \   . '-y%s:h '
     \   . ale#Var(a:buffer, 'verilog_slang_options') .' '
     \   . '%t'
 endfunction
