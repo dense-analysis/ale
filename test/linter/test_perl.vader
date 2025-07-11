@@ -12,3 +12,5 @@ Execute(Overriding the executable and command should work):
   let b:ale_perl_perl_options = '-w'
 
   AssertLinter 'foobar', ale#Escape('foobar') . ' -w %t'
+  unlet b:ale_perl_perl_executable
+  unlet b:ale_perl_perl_options
