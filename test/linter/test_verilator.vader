@@ -5,10 +5,10 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default verilator command should be correct):
-  AssertLinter 'verilator', 'verilator --lint-only -Wall -Wno-DECLFILENAME -I%s:h  %t'
+  AssertLinter 'verilator', 'verilator --lint-only -Wall -Wno-DECLFILENAME -I%s:h -y %s:h  %t'
 
 Execute(verilator options should be configurable):
   " Additional args for the linter
   let g:ale_verilog_verilator_options = '-sv --default-language "1800-2012"'
 
-  AssertLinter 'verilator', 'verilator --lint-only -Wall -Wno-DECLFILENAME -I%s:h -sv --default-language "1800-2012" %t'
+  AssertLinter 'verilator', 'verilator --lint-only -Wall -Wno-DECLFILENAME -I%s:h -y %s:h -sv --default-language "1800-2012" %t'

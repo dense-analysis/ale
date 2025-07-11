@@ -10,6 +10,7 @@ function! ale_linters#verilog#verilator#GetCommand(buffer) abort
     " the path to the current file is systematically added to the search path
     return 'verilator --lint-only -Wall -Wno-DECLFILENAME '
     \   . '-I%s:h '
+    \   . '-y %s:h '
     \   . ale#Var(a:buffer, 'verilog_verilator_options') .' '
     \   . '%t'
 endfunction
