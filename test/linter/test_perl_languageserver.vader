@@ -1,0 +1,112 @@
+" Author: rymdbar
+
+Before:
+  call ale#assert#SetUpLinterTest('perl', 'languageserver')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Ensure default perl_perl_executable is coherent):
+  vimgrep /^call ale#Set('perl_perl_executable', /
+  \ ../../ale_linters/perl/perl.vim
+  \ ../../ale_linters/perl/languageserver.vim
+  let b:executables = getqflist()
+
+  AssertEqual len(b:executables), 2
+
+  AssertEqual b:executables[0].text, b:executables[1].text
+  unlet b:executables
+
+Execute(The default Perl command callback should be correct):
+  AssertLinter 'perl',
+  \ ale#Escape('perl') . ' -MPerl::LanguageServer -ePerl::LanguageServer::run'
+
+Execute(Overriding the executable should work):
+  let b:ale_perl_perl_executable = 'plls'
+
+  AssertLinter 'plls', ale#Escape('plls') .
+  \ ' -MPerl::LanguageServer -ePerl::LanguageServer::run'
+  unlet b:ale_perl_perl_executable
+
+# # Creating a directory without a .git/ folder in any ancestor is problematic
+# # in CI. Variable scoping is tricky. Maybe one could create a function to
+# # prevent tempdir here to avoid ale_linters/vim/ale_custom_linting_rules.vim
+# # interfering with its identically named variable? Lets just see if any other
+# # test case fails with this commented out.
+# Execute(The project root should be detected correctly in empty directory):
+#   if has('unix')
+#     let b:tempdir = tempname()
+#     call mkdir(b:tempdir)
+#     call ale#test#SetFilename(b:tempdir . '/unsaved-buffer.pl')
+#
+#     AssertLSPProject b:tempdir
+#   else
+#     " On non-unix tempname() is documented as broken. Keeping track of which
+#     " platforms this is knowingly being ignored on is the best we can do.
+#     " Unless someone wish to contribute an overengineered fix.
+#     AssertEqual has('win32') 1
+#   endif
+
+Execute(The project root should be detected correctly in from build files):
+  for mod in ['extutils-makemaker', 'module-build', 'dist-zilla']
+    call ale#test#SetFilename('../test-files/perl/' . mod . '/subdir/empty.pl')
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl/' . mod)
+  endfor
+
+Execute(The project root should be globally configurable):
+  for mod in ['extutils-makemaker', 'module-build', 'dist-zilla']
+    call ale#test#SetFilename('../test-files/perl/'. mod . '/subdir/empty.pl')
+    " Configuring g:ale_root using a Dictionary works.
+    let g:ale_root.languageserver =
+    \ ale#path#Simplify(g:dir . '/../test-files/perl')
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl')
+    unlet g:ale_root.languageserver
+    " As tracked by <https://github.com/dense-analysis/ale/issues/5002>, there
+    " is a bug with g:ale_root.
+    " While attempting to configure g:ale_root using a String might be a quite
+    " limiting setup, it would be handy for debugging. However the test case is
+    " missing here. It would unfortunately just fail.
+  endfor
+
+Execute(The project root should be per buffer configurable):
+  for mod in ['extutils-makemaker', 'module-build', 'dist-zilla']
+    call ale#test#SetFilename('../test-files/perl/'. mod . '/subdir/empty.pl')
+    " Configuring b:ale_root using a String works.
+    let b:ale_root = ale#path#Simplify(g:dir . '/../test-files/perl')
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl')
+    unlet b:ale_root
+
+    " Configuring b:ale_root using a Dictionary works.
+    let b:ale_root = {
+    \ 'languageserver': ale#path#Simplify(g:dir . '/../test-files/perl')
+    \ }
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl')
+    unlet b:ale_root.languageserver
+  endfor
+
+Execute(The LSP values should be set correctly):
+
+  AssertLSPLanguage 'perl'
+
+  AssertLSPOptions {}
+
+  AssertLSPConfig {}
+
+Execute(Should accept configuration settings):
+  let b:ale_perl_languageserver_config = {
+  \   'perl': {
+  \     'perlInc': ['/usr/share/perl5/', '/usr/local/share/perl5/' ],
+  \     'fileFilter': [''],
+  \   },
+  \ }
+
+  AssertLSPConfig {
+  \   'perl': {
+  \     'perlInc': ['/usr/share/perl5/', '/usr/local/share/perl5/' ],
+  \     'fileFilter': [''],
+  \   },
+  \ }
