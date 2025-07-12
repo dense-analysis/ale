@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2317
 DOCKER=${DOCKER:-docker}
 export DOCKER
 # Author: w0rp <devw0rp@gmail.com>
