@@ -8,12 +8,14 @@ Execute(The slang handler should parse lines correctly):
   AssertEqual
   \ [
   \    {
+  \      'filename' : 'foo.sv',
   \      'lnum': 11,
   \      'col': 1,
   \      'type': 'W',
   \      'text': 'extra '';'' has no effect [-Wempty-member]',
   \    },
   \    {
+  \      'filename' : 'bar.sv',
   \      'lnum': 24,
   \      'col': 12,
   \      'type': 'E',
@@ -22,5 +24,5 @@ Execute(The slang handler should parse lines correctly):
   \ ],
   \ ale_linters#verilog#slang#Handle(bufnr(''), [
   \ 'foo.sv:11:1: warning: extra '';'' has no effect [-Wempty-member]',
-  \ 'foo.sv:24:12: error: cannot mix continuous and procedural assignments to variable ''data_o''',
+  \ 'bar.sv:24:12: error: cannot mix continuous and procedural assignments to variable ''data_o''',
   \ ])
