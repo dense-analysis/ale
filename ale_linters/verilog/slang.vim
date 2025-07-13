@@ -9,6 +9,7 @@ endif
 " --lint-only
 function! ale_linters#verilog#slang#GetCommand(buffer) abort
     return 'slang -Weverything '
+    \   . '--diag-abs-paths '
     \   . '-I%s:h '
     \   . '-y%s:h '
     \   . ale#Var(a:buffer, 'verilog_slang_options') .' '
