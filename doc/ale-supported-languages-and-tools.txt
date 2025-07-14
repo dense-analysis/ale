@@ -207,6 +207,7 @@ Notes:
 * Fortran
   * `gcc`
   * `language_server`
+  * `fortitude`
 * Fountain
   * `proselint`
 * FusionScript

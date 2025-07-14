@@ -216,6 +216,7 @@ formatting.
 * Fortran
   * [gcc](https://gcc.gnu.org/)
   * [language_server](https://github.com/hansec/fortran-language-server)
+  * [fortitude](https://github.com/PlasmaFAIR/fortitude)
 * Fountain
   * [proselint](http://proselint.com/)
 * FusionScript
