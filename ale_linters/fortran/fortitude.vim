@@ -5,14 +5,14 @@ call ale#Set('fortran_fortitude_executable', 'fortitude')
 call ale#Set('fortran_fortitude_options', '')
 
 let s:severity_map = {
-    \ 'E': 'E',
-    \ 'C': 'W',
-    \ 'OB': 'I',
-    \ 'MOD': 'I',
-    \ 'S': 'I',
-    \ 'PORT': 'I',
-    \ 'FORT': 'I',
-    \}
+\   'E': 'E',
+\   'C': 'W',
+\   'OB': 'I',
+\   'MOD': 'I',
+\   'S': 'I',
+\   'PORT': 'I',
+\   'FORT': 'I',
+\}
 
 function! ale_linters#fortran#fortitude#Handle(buffer, lines) abort
     let l:json_str = join(a:lines, "\n")
@@ -20,7 +20,6 @@ function! ale_linters#fortran#fortitude#Handle(buffer, lines) abort
     try
         let l:errors = json_decode(l:json_str)
     catch
-        echom 'Error decoding JSON output from fortitude.'
         return []
     endtry
 
@@ -35,14 +34,14 @@ function! ale_linters#fortran#fortitude#Handle(buffer, lines) abort
         let l:type = get(s:severity_map, l:prefix, 'I')
 
         call add(l:output, {
-            \ 'lnum': l:error['location']['row'],
-            \ 'end_lnum': l:error['end_location']['row'],
-            \ 'col': l:error['location']['column'],
-            \ 'end_col': l:error['end_location']['column'],
-            \ 'text': l:error['message'],
-            \ 'type': l:type,
-            \ 'code': l:error['code'],
-            \})
+        \   'lnum': l:error['location']['row'],
+        \   'end_lnum': l:error['end_location']['row'],
+        \   'col': l:error['location']['column'],
+        \   'end_col': l:error['end_location']['column'],
+        \   'text': l:error['message'],
+        \   'type': l:type,
+        \   'code': l:error['code'],
+        \})
     endfor
 
     return l:output
