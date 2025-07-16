@@ -30,7 +30,7 @@ Before:
   \       'nr': -1,
   \       'type': 'E',
   \       'code': 'semi',
-  \       'text': "Missing semicolon.\r",
+  \       'text': "Missing\nsemicolon.\r",
   \       'detail': "Every statement should end with a semicolon\nsecond line",
   \     },
   \     {

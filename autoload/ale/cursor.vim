@@ -23,7 +23,7 @@ function! ale#cursor#TruncatedEcho(original_message) abort
     " Change tabs to spaces.
     let l:message = substitute(l:message, "\t", ' ', 'g')
     " Remove any newlines in the message.
-    let l:message = substitute(l:message, "\n", '', 'g')
+    let l:message = substitute(l:message, "\n", ' ', 'g')
     " Convert indentation groups into single spaces for better legibility when
     " put on a single line
     let l:message = substitute(l:message, ' \+', ' ', 'g')
@@ -93,6 +93,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
         if !empty(l:loc)
             let l:format = ale#Var(l:buffer, 'echo_msg_format')
             let l:msg = ale#GetLocItemMessage(l:loc, l:format)
+
             call ale#cursor#TruncatedEcho(l:msg)
             let l:info.echoed = 1
         elseif get(l:info, 'echoed')
