@@ -12,6 +12,8 @@ let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeL
 
 let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [
 \   'build',
+\   'build/Debug',
+\   'build/Release',
 \   'bin',
 \])
 
