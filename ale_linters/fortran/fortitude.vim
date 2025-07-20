@@ -15,21 +15,9 @@ let s:severity_map = {
 \}
 
 function! ale_linters#fortran#fortitude#Handle(buffer, lines) abort
-    let l:json_str = join(a:lines, "\n")
-
-    try
-        let l:errors = json_decode(l:json_str)
-    catch
-        return []
-    endtry
-
-    if empty(l:errors)
-        return []
-    endif
-
     let l:output = []
 
-    for l:error in l:errors
+    for l:error in ale#util#FuzzyJSONDecode(a:lines, [])
         let l:prefix = matchstr(l:error['code'], '^\a\+')
         let l:type = get(s:severity_map, l:prefix, 'I')
 
