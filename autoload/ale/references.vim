@@ -1,4 +1,5 @@
 let g:ale_default_navigation = get(g:, 'ale_default_navigation', 'buffer')
+let g:ale_references_show_contents = get(g:, 'ale_references_show_contents', 1)
 
 let s:references_map = {}
 
@@ -67,24 +68,26 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
 endfunction
 
 function! ale#references#FormatLSPResponseItem(response_item, options) abort
+    let l:line_text = ''
+
     let l:line= a:response_item.range.start.line
     let l:col = a:response_item.range.start.character
     let l:filename = ale#util#ToResource(a:response_item.uri)
 
-    try
-        let l:line_text = readfile(l:filename)[l:line]
-    catch
-        " cannot read file, this happens in tests
-    endtry
-
-
-    let l:ret = { 'filename': l:filename }
+    if get(a:options, 'show_contents') == 1
+        try
+            let l:line_text = substitute(readfile(l:filename)[l:line], '^\s*\(.\{-}\)\s*$', '\1', '')
+        catch
+            " This happens in tests
+        endtry
+    endif
 
     if get(a:options, 'open_in') is# 'quickfix'
-        let l:ret = {
+        return {
         \ 'filename': l:filename,
         \ 'lnum': a:response_item.range.start.line + 1,
         \ 'col': a:response_item.range.start.character + 1,
+        \ 'text': l:line_text,
         \}
     elseif get(a:options, 'open_in') is# 'fzf'
         " grep-style output (filename:line:col:text) so that fzf can properly
@@ -99,18 +102,13 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
         " \ 'text': l:line_text,
         " \})
     else
-        let l:ret ={
+        return {
         \ 'filename': l:filename,
         \ 'line': l:line + 1,
         \ 'column': l:col + 1,
+        \ 'match': l:line_text,
         \}
-
-        if exists('l:line_text')
-            let l:ret['match'] = l:line_text
-        endif
     endif
-
-    return l:ret
 endfunction
 
 function! ale#references#ShowInFzf(item_list) abort
@@ -247,6 +245,7 @@ function! s:OnReady(line, column, options, linter, lsp_details) abort
     let s:references_map[l:request_id] = {
     \ 'use_relative_paths': has_key(a:options, 'use_relative_paths') ? a:options.use_relative_paths : 0,
     \ 'open_in': get(a:options, 'open_in', 'current-buffer'),
+    \ 'show_contents': a:options.show_contents,
     \}
 endfunction
 
@@ -277,6 +276,10 @@ function! ale#references#Find(...) abort
         if index(['tab', 'split', 'vsplit'], l:default_navigation) >= 0
             let l:options.open_in = l:default_navigation
         endif
+    endif
+
+    if !has_key(l:options, 'show_contents')
+        let l:options.show_contents = ale#Var(bufnr(''), 'references_show_contents')
     endif
 
     let l:buffer = bufnr('')
