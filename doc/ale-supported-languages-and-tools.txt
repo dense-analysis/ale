@@ -205,9 +205,9 @@ Notes:
   * `fish` (-n flag)
   * `fish_indent`
 * Fortran
+  * `fortitude`
   * `gcc`
   * `language_server`
-  * `fortitude`
 * Fountain
   * `proselint`
 * FusionScript
