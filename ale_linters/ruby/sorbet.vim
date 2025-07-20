@@ -1,6 +1,7 @@
 call ale#Set('ruby_sorbet_executable', 'srb')
 call ale#Set('ruby_sorbet_options', '')
 call ale#Set('ruby_sorbet_enable_watchman', 0)
+call ale#Set('ruby_sorbet_initialization_options', { 'highlightUntyped': v:false })
 
 function! ale_linters#ruby#sorbet#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'ruby_sorbet_executable')
@@ -21,6 +22,6 @@ call ale#linter#Define('ruby', {
 \   'language': 'ruby',
 \   'executable': {b -> ale#Var(b, 'ruby_sorbet_executable')},
 \   'command': function('ale_linters#ruby#sorbet#GetCommand'),
-\   'project_root': function('ale#ruby#FindProjectRoot')
+\   'project_root': function('ale#ruby#FindProjectRoot'),
+\   'initialization_options': {b -> ale#Var(b, 'ruby_sorbet_initialization_options')}
 \})
-
