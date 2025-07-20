@@ -61,6 +61,12 @@ endfunction
 " through paths, including the current directory, until no __init__.py files
 " is found.
 function! ale#python#FindProjectRoot(buffer) abort
+    let l:root = ale#linter#GetRoot(a:buffer, {'name': 'python'})
+
+    if !empty(l:root)
+        return l:root
+    endif
+
     let l:ini_root = ale#python#FindProjectRootIni(a:buffer)
 
     if !empty(l:ini_root)
