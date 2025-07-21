@@ -30,7 +30,8 @@ CONTENTS                                                         *ale-contents*
     7.2 Options for cspell................|ale-cspell-options|
     7.3 Options for languagetool..........|ale-languagetool-options|
     7.4 Options for write-good............|ale-write-good-options|
-    7.5 Other Linter/Fixer Options........|ale-other-integration-options|
+    7.5 Options for redpen................|ale-redpen-options|
+    7.6 Other Linter/Fixer Options........|ale-other-integration-options|
   8. Commands/Keybinds....................|ale-commands|
   9. API..................................|ale-api|
   10. Special Thanks......................|ale-special-thanks|
@@ -3321,7 +3322,24 @@ g:ale_writegood_use_global
 
 
 -------------------------------------------------------------------------------
-7.6. Other Linter/Fixer Options                 *ale-other-integration-options*
+7.6. Options for redpen                                    *ale-redpen-options*
+
+The options for `redpen` are shared between all filetypes, so options can
+be configured once.
+
+                                                   *ale-options.redpen_options*
+                                                         *g:ale_redpen_options*
+                                                         *b:ale_redpen_options*
+redpen_options
+g:ale_redpen_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to redpen.
+
+
+-------------------------------------------------------------------------------
+7.7. Other Linter/Fixer Options                 *ale-other-integration-options*
 
 ALE supports a very wide variety of tools. Other linter or fixer options are
 documented in additional help files.
@@ -3342,6 +3360,7 @@ documented in additional help files.
     cspell................................|ale-asciidoc-cspell|
     write-good............................|ale-asciidoc-write-good|
     textlint..............................|ale-asciidoc-textlint|
+    redpen................................|ale-asciidoc-redpen|
   asm.....................................|ale-asm-options|
     gcc...................................|ale-asm-gcc|
     llvm_mc...............................|ale-asm-llvm_mc|
@@ -3665,6 +3684,7 @@ documented in additional help files.
     remark-lint...........................|ale-markdown-remark-lint|
     textlint..............................|ale-markdown-textlint|
     write-good............................|ale-markdown-write-good|
+    redpen................................|ale-markdown-redpen|
   mercury.................................|ale-mercury-options|
     mmc...................................|ale-mercury-mmc|
   nasm....................................|ale-nasm-options|
@@ -3916,6 +3936,7 @@ documented in additional help files.
     lacheck...............................|ale-tex-lacheck|
     latexindent...........................|ale-tex-latexindent|
     texlab................................|ale-tex-texlab|
+    redpen................................|ale-tex-redpen|
   texinfo.................................|ale-texinfo-options|
     cspell................................|ale-texinfo-cspell|
     write-good............................|ale-texinfo-write-good|
@@ -3923,6 +3944,7 @@ documented in additional help files.
     cspell................................|ale-text-cspell|
     textlint..............................|ale-text-textlint|
     write-good............................|ale-text-write-good|
+    redpen................................|ale-text-redpen|
   thrift..................................|ale-thrift-options|
     thrift................................|ale-thrift-thrift|
     thriftcheck...........................|ale-thrift-thriftcheck|
