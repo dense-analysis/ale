@@ -1,21 +1,7 @@
 " Author: rhysd https://rhysd.github.io
 " Description: Redpen, a proofreading tool (http://redpen.cc)
-"
-function! ale#handlers#redpen#ResetOptions() abort
-    call ale#Set('redpen_options', '')
-endfunction
 
-" Reset the options so the tests can test how they are set.
-call ale#handlers#redpen#ResetOptions()
-
-function! ale#handlers#redpen#GetCommand(buffer) abort
-    let l:options = ale#Var(a:buffer, 'redpen_options')
-    let l:filetype = getbufvar(a:buffer, '&filetype')
-
-    return 'redpen -f ' . l:filetype . ' -r json'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' %t'
-endfunction
+call ale#Set('redpen_options', '')
 
 function! ale#handlers#redpen#HandleRedpenOutput(buffer, lines) abort
     " Only one file was passed to redpen. So response array has only one
@@ -86,7 +72,7 @@ function! ale#handlers#redpen#DefineLinter(filetype) abort
     call ale#linter#Define(a:filetype, {
     \   'name': 'redpen',
     \   'executable': 'redpen',
-    \   'command': function('ale#handlers#redpen#GetCommand'),
+    \   'command': {b -> 'redpen -f ' . a:filetype . ' -r json' . ale#Pad(ale#Var(b, 'redpen_options')) . ' %t'},
     \   'callback': 'ale#handlers#redpen#HandleRedpenOutput',
     \})
 endfunction

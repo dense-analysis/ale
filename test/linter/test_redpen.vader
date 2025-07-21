@@ -2,15 +2,8 @@ Before:
   " This is just one example of a language using the linter.
   call ale#assert#SetUpLinterTest('markdown', 'redpen')
 
-  " The options are shared between many languages.
-  Save g:ale_redpen_options
-
   unlet! g:ale_redpen_options
-
-  call ale#test#SetFilename('testfile.md')
-  " Set the buffer's filetype explicitly
-  setfiletype markdown
-  call ale#handlers#redpen#ResetOptions()
+  call ale#Set('redpen_options', '')
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -29,7 +22,7 @@ Execute(The options should be used in the command):
 
 Execute(The command should work with different filetypes):
   " Test with a different filetype
-  setfiletype text
+  call ale#assert#SetUpLinterTest('text', 'redpen')
 
   AssertLinter
   \ 'redpen',
