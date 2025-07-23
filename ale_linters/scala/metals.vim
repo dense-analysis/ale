@@ -13,6 +13,7 @@ function! ale_linters#scala#metals#GetProjectRoot(buffer) abort
 
     let l:potential_roots = [
     \   'build.sc',
+    \   'build.mill',
     \   'build.sbt',
     \   '.bloop',
     \   '.metals',

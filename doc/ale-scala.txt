@@ -33,8 +33,8 @@ g:ale_scala_metals_project_root
   Default: `''`
 
   By default the project root is found by searching upwards for `build.sbt`,
-  `build.sc`, `.bloop` or `.metals`. If the project root is elsewhere, you
-  can override the project root directory.
+  `build.sc`, `build.mill`, `.bloop` or `.metals`. If the project root is elsewhere, 
+	you can override the project root directory.
 
 
 ===============================================================================
