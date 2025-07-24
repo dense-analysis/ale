@@ -2,9 +2,42 @@
 " Description: ansible-lint for ansible-yaml files
 
 call ale#Set('ansible_ansible_lint_executable', 'ansible-lint')
+call ale#Set('ansible_ansible_lint_auto_pipenv', 0)
+call ale#Set('ansible_ansible_lint_auto_poetry', 0)
+call ale#Set('ansible_ansible_lint_auto_uv', 0)
+call ale#Set('ansible_ansible_lint_change_directory', 1)
 
 function! ale_linters#ansible#ansible_lint#GetExecutable(buffer) abort
+    if (ale#Var(a:buffer, 'python_auto_pipenv')
+    \ || ale#Var(a:buffer, 'ansible_ansible_lint_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
+        return 'pipenv'
+    endif
+
+    if (ale#Var(a:buffer, 'python_auto_poetry')
+    \ || ale#Var(a:buffer, 'ansible_ansible_lint_auto_poetry'))
+    \ && ale#python#PoetryPresent(a:buffer)
+        return 'poetry'
+    endif
+
+    if (ale#Var(a:buffer, 'python_auto_uv')
+    \ || ale#Var(a:buffer, 'ansible_ansible_lint_auto_uv'))
+    \ && ale#python#UvPresent(a:buffer)
+        return 'uv'
+    endif
+
     return ale#Var(a:buffer, 'ansible_ansible_lint_executable')
+endfunction
+
+function! ale_linters#ansible#ansible_lint#GetCwd(buffer) abort
+    if ale#Var(a:buffer, 'ansible_ansible_lint_change_directory')
+        " Run from project root if found, else from buffer dir.
+        let l:project_root = ale#python#FindProjectRoot(a:buffer)
+
+        return !empty(l:project_root) ? l:project_root : '%s:h'
+    endif
+
+    return ''
 endfunction
 
 function! ale_linters#ansible#ansible_lint#Handle(buffer, version, lines) abort
@@ -103,28 +136,50 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, version, lines) abort
 endfunction
 
 function! ale_linters#ansible#ansible_lint#GetCommand(buffer, version) abort
-    let l:commands = {
-    \   '>=6.0.0': '%e --nocolor -f json -x yaml %s',
-    \   '>=5.0.0': '%e --nocolor --parseable-severity -x yaml %s',
-    \   '<5.0.0': '%e --nocolor -p %t'
+    let l:executable = ale_linters#ansible#ansible_lint#GetExecutable(a:buffer)
+
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
+    \   ? ' run ansible-lint'
+    \   : ''
+
+    let l:opts_map = {
+    \   '>=6.0.0': ' --nocolor -f json -x yaml %s',
+    \   '>=5.0.0': ' --nocolor --parseable-severity -x yaml %s',
+    \   '<5.0.0': ' --nocolor -p %t'
     \}
-    let l:command = ale#semver#GTE(a:version, [6, 0]) ? l:commands['>=6.0.0'] :
-    \               ale#semver#GTE(a:version, [5, 0]) ? l:commands['>=5.0.0'] :
-    \               l:commands['<5.0.0']
+
+    let l:cmd_opts = ale#semver#GTE(a:version, [6, 0]) ? l:opts_map['>=6.0.0'] :
+    \               ale#semver#GTE(a:version, [5, 0]) ? l:opts_map['>=5.0.0'] :
+    \               l:opts_map['<5.0.0']
+
+    let l:command = ale#Escape(l:executable) . l:exec_args . l:cmd_opts
 
     return l:command
+endfunction
+
+function! ale_linters#ansible#ansible_lint#RunWithVersionCheck(buffer) abort
+    let l:executable = ale_linters#ansible#ansible_lint#GetExecutable(a:buffer)
+
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
+    \ ? ' run ansible-lint'
+    \ : ''
+
+    let l:command = ale#Escape(l:executable) . l:exec_args . ' --version'
+
+    return ale#semver#RunWithVersionCheck(
+    \   a:buffer,
+    \   l:executable,
+    \   l:command,
+    \   function('ale_linters#ansible#ansible_lint#GetCommand'),
+    \)
 endfunction
 
 call ale#linter#Define('ansible', {
 \   'name': 'ansible_lint',
 \   'aliases': ['ansible', 'ansible-lint'],
 \   'executable': function('ale_linters#ansible#ansible_lint#GetExecutable'),
-\   'command': {buffer -> ale#semver#RunWithVersionCheck(
-\       buffer,
-\       ale_linters#ansible#ansible_lint#GetExecutable(buffer),
-\       '%e --version',
-\       function('ale_linters#ansible#ansible_lint#GetCommand'),
-\   )},
+\   'cwd': function('ale_linters#ansible#ansible_lint#GetCwd'),
+\   'command':  function('ale_linters#ansible#ansible_lint#RunWithVersionCheck'),
 \   'lint_file': 1,
 \   'callback': {buffer, lines -> ale#semver#RunWithVersionCheck(
 \       buffer,
