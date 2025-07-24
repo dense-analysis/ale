@@ -24,3 +24,28 @@ Execute(The ansible_lint executable should be configurable):
   GivenCommandOutput ['v4.1.2']
   AssertLinter '~/.local/bin/ansible-lint',
   \ ale#Escape('~/.local/bin/ansible-lint') . ' --nocolor -p %t'
+
+Execute(pipenv is detected when ansible_ansible_lint_auto_pipenv is set):
+  let g:ale_ansible_ansible_lint_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/ansible/pipenv/script.yml')
+
+  GivenCommandOutput ['v25.6.1']
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'pipenv', ale#Escape('pipenv') . ' run ansible-lint --nocolor -f json -x yaml %s'
+
+Execute(poetry is detected when ansible_ansible_lint_auto_poetry is set):
+  let g:ale_ansible_ansible_lint_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/ansible/poetry/script.yml')
+
+  GivenCommandOutput ['v25.6.1']
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'poetry', ale#Escape('poetry') . ' run ansible-lint --nocolor -f json -x yaml %s'
+
+Execute(uv is detected when ansible_ansible_lint_auto_uv is set):
+  let g:ale_ansible_ansible_lint_auto_uv = 1
+  call ale#test#SetFilename('../test-files/ansible/uv/script.yml')
+
+  GivenCommandOutput ['v25.6.1']
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'uv', ale#Escape('uv') . ' run ansible-lint --nocolor -f json -x yaml %s'
+
