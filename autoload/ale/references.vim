@@ -73,6 +73,18 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
         \ 'lnum': a:response_item.range.start.line + 1,
         \ 'col': a:response_item.range.start.character + 1,
         \}
+    elseif get(a:options, 'open_in') is# 'fzf'
+        " grep-style output (filename:line:col:text) so that fzf can properly
+        " show matches and previews.
+        " See note below in ShowInFzf about returning json encoded values here
+        " (and commented return below)
+        return l:filename . ':' .  (a:response_item.range.start.line + 1) . ":" . (a:response_item.range.start.character + 1) . ":" . l:line_text
+        " return json_encode({
+        " \ 'filename': l:filename,
+        " \ 'lnum': a:response_item.range.start.line + 1,
+        " \ 'col': a:response_item.range.start.character + 1,
+        " \ 'text': l:line_text,
+        " \})
     else
         return {
         \ 'filename': ale#util#ToResource(a:response_item.uri),
@@ -80,6 +92,59 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
         \ 'column': a:response_item.range.start.character + 1,
         \}
     endif
+endfunction
+
+function! ale#references#ShowInFzf(item_list) abort
+    let l:name = "LSP References"
+    let l:capname = "References"
+
+    " start with an empty query to let user filter
+    let l:start_query = ''
+    let l:opts = {
+    \ 'source':  a:item_list,
+    \ 'options': ['--ansi', '--prompt', l:name.'> ', '--query', l:start_query,
+    \             '--disabled',
+    \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all',
+    \             '--delimiter', ':', '--preview-window', '+{2}/2']
+    \}
+
+    function! s:action(key, file_info, ...)
+        " FIXME: temporarily only using edit, need to add more methods
+        silent keepjumps keepalt execute "edit " . fnameescape(a:file_info['filename'])
+        execute a:file_info.lnum
+        call cursor(0, a:file_info.col)
+    endfunction
+
+
+    function! s:references_to_qf(line)
+        " mimics ag_to_qf in fzf.vim
+        " NOTE: it's kinda annoying that we have to format each match as
+        " filename:linenum:column:text, but that's how we can easily display
+        " matches (and previews) in fzf, and then we have to parse it again here.
+        "
+        " TODO: figure out a way pass json to fzf and use that for matches.
+        " We could get rid of this code and just have FormatLSPResponseItem
+        " return json_encode(<match info>) and then here:
+        "   let l:dict = json_decode(a:line)
+        "
+        let parts = matchlist(a:line, '\(.\{-}\)\s*:\s*\(\d\+\)\%(\s*:\s*\(\d\+\)\)\?\%(\s*:\(.*\)\)\?')
+        let file = &acd ? fnamemodify(parts[1], ':p') : parts[1]
+
+        return {'filename': file, 'lnum': parts[2], 'col': parts[3], 'text': parts[4]}
+    endfunction
+
+    function! opts.sinklist(lines) closure
+        let l:references = map(filter(a:lines, 'len(v:val)'), 's:references_to_qf(v:val)')
+
+        for ref in l:references
+            call s:action("dummykey", l:ref)
+        endfor
+    endfunction
+
+    let l:opts_with_preview = fzf#vim#with_preview(l:opts)
+    let l:fullscreen = 1 " FIXME: decide what to do with this
+
+    call fzf#run(fzf#wrap(l:name, l:opts_with_preview, l:fullscreen))
 endfunction
 
 function! ale#references#HandleLSPResponse(conn_id, response) abort
@@ -106,6 +171,17 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
                 call setqflist([], 'r')
                 call setqflist(l:item_list, 'a')
                 call ale#util#Execute('cc 1')
+            elseif get(l:options, 'open_in') is# 'fzf'
+                close  " close the buffer that's been opened, we're not going to use it
+                       " when showing results through fzf
+                " TODO: use 'use_fzf' instead of 'open_in', then pass 'open_in' to
+                " ShowInFzf in order to use as default open method
+
+                if !exists('*fzf#run')
+                    throw "fzf#run function not found. You also need Vim plugin from the main fzf repository (i.e. junegunn/fzf *and* junegunn/fzf.vim)"
+                endif
+
+                call ale#references#ShowInFzf(l:item_list)
             else
                 call ale#preview#ShowSelection(l:item_list, l:options)
             endif
@@ -165,6 +241,8 @@ function! ale#references#Find(...) abort
                 let l:options.open_in = 'vsplit'
             elseif l:option is? '-quickfix'
                 let l:options.open_in = 'quickfix'
+            elseif l:option is? '-fzf'
+                let l:options.open_in = 'fzf'
             endif
         endfor
     endif
