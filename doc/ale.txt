@@ -2280,6 +2280,16 @@ g:ale_references_show_contents
   If set to `true` or `1`,  matches found by `:ALEFindReferences` will be
   shown with a preview of the matching line.
 
+                                               *ale-options.references_use_fzf*
+                                                     *g:ale_references_use_fzf*
+references_use_fzf
+g:ale_references_use_fzf
+  Type: |Boolean| or |Number|
+  Default: `false`
+
+  If set to `true` or `1`,  matches found by `:ALEFindReferences` will be
+  always shown using |fzf-vim| (https://github.com/junegunn/fzf.vim).
+
                                  *ale-options.rename_tsserver_find_in_comments*
                                        *g:ale_rename_tsserver_find_in_comments*
 rename_tsserver_find_in_comments
@@ -4085,12 +4095,18 @@ documented in additional help files.
   `:ALEFindReferences -vsplit`    - Open the location in a vertical split.
   `:ALEFindReferences -quickfix`  - Put the locations into quickfix list.
   `:ALEFindReferences -contents`  - Show line contents for matches.
+  `:ALEFindReferences -fzf`       - Show matches/previews using |fzf-vim|.
 
   The default method used for navigating to a new location can be changed
   by modifying |g:ale_default_navigation|.
 
   The default behaviour on whether to show line content for matches can
   be changed by modifying |g:ale_references_show_contents|.
+
+  The default behaviour on whether to use `fzf` to show matches/file previews
+  can be changed by modifying |g:ale_references_use_fzf|. `-fzf` can be combined
+  with  `-tab`, `-split`, `-vsplit`, `-quickfix` and `-relative`, while line
+  contents/file previews are always shown.
 
   You can add `-relative` to the command to view results with relatives paths,
   instead of absolute paths. This option has no effect if `-quickfix` is used.
