@@ -17,7 +17,7 @@ function! ale_linters#bitbake#oelint_adv#Command(buffer) abort
 endfunction
 
 function! ale_linters#bitbake#oelint_adv#Handle(buffer, lines) abort
-    let l:pattern = '\v^(.+):(.+):(.+):(.+):(.+)$'
+    let l:pattern = '\v^(.+):(.+):(.+):(.+):(.+)( \[branch:.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
