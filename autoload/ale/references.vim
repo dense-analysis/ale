@@ -148,43 +148,48 @@ function! ale#references#ShowInFzf(item_list) abort
 endfunction
 
 function! ale#references#HandleLSPResponse(conn_id, response) abort
-    if has_key(a:response, 'id')
-    \&& has_key(s:references_map, a:response.id)
-        let l:options = remove(s:references_map, a:response.id)
+    if ! (has_key(a:response, 'id') && has_key(s:references_map, a:response.id))
+        return
+    endif
 
-        " The result can be a Dictionary item, a List of the same, or null.
-        let l:result = get(a:response, 'result', [])
-        let l:item_list = []
+    let l:options = remove(s:references_map, a:response.id)
 
-        if type(l:result) is v:t_list
-            for l:response_item in l:result
-                call add(l:item_list,
-                \ ale#references#FormatLSPResponseItem(l:response_item, l:options)
-                \)
-            endfor
-        endif
+    " The result can be a Dictionary item, a List of the same, or null.
+    let l:result = get(a:response, 'result', [])
+    let l:item_list = []
 
-        if empty(l:item_list)
-            call ale#util#Execute('echom ''No references found.''')
-        else
-            if get(l:options, 'open_in') is# 'quickfix'
-                call setqflist([], 'r')
-                call setqflist(l:item_list, 'a')
-                call ale#util#Execute('cc 1')
-            elseif get(l:options, 'open_in') is# 'fzf'
-                close  " close the buffer that's been opened, we're not going to use it
-                       " when showing results through fzf
-                " TODO: use 'use_fzf' instead of 'open_in', then pass 'open_in' to
-                " ShowInFzf in order to use as default open method
+    if type(l:result) is v:t_list
+        for l:response_item in l:result
+            call add(l:item_list,
+            \ ale#references#FormatLSPResponseItem(l:response_item, l:options)
+            \)
+        endfor
+    endif
 
-                if !exists('*fzf#run')
-                    throw "fzf#run function not found. You also need Vim plugin from the main fzf repository (i.e. junegunn/fzf *and* junegunn/fzf.vim)"
-                endif
+    if empty(l:item_list)
+        call ale#util#Execute('echom ''No references found.''')
+    else
+        if get(l:options, 'open_in') is# 'quickfix'
+            call setqflist([], 'r')
+            call setqflist(l:item_list, 'a')
+            call ale#util#Execute('cc 1')
+        elseif get(l:options, 'open_in') is# 'fzf'
+            close  " close the buffer that's been opened, we're not going to use it
+                   " when showing results through fzf
+            " TODO: use 'use_fzf' instead of 'open_in', then pass 'open_in' to
+            " ShowInFzf in order to use as default open method
 
-                call ale#references#ShowInFzf(l:item_list)
-            else
-                call ale#preview#ShowSelection(l:item_list, l:options)
+            if !exists('*fzf#run')
+                throw "fzf#run function not found. You also need Vim plugin from the main fzf repository (i.e. junegunn/fzf *and* junegunn/fzf.vim)"
             endif
+
+            " if !exists('*fzf#vim#references')
+            "     throw "fzf#vim#references function not found. You need to upgrade to the latest fzf.vim version"
+            " endif
+
+            call ale#references#ShowInFzf(l:item_list)
+        else
+            call ale#preview#ShowSelection(l:item_list, l:options)
         endif
     endif
 endfunction
