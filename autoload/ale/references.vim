@@ -1,5 +1,6 @@
 let g:ale_default_navigation = get(g:, 'ale_default_navigation', 'buffer')
 let g:ale_references_show_contents = get(g:, 'ale_references_show_contents', 1)
+let g:ale_references_use_fzf = get(g:, 'ale_references_use_fzf', 0)
 
 let s:references_map = {}
 
@@ -82,6 +83,16 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
         endtry
     endif
 
+    if get(a:options, 'use_fzf') == 1
+        let l:filename = ale#util#ToResource(a:response_item.uri)
+        let l:nline = a:response_item.range.start.line + 1
+        let l:ncol = a:response_item.range.start.character + 1
+
+        " grep-style output (filename:line:col:text) so that fzf can properly
+        " show matches and previews using ':' as delimiter
+        return l:filename . ':' . l:nline . ":" . l:ncol . ":" . l:line_text
+    endif
+
     if get(a:options, 'open_in') is# 'quickfix'
         return {
         \ 'filename': l:filename,
@@ -89,18 +100,6 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
         \ 'col': a:response_item.range.start.character + 1,
         \ 'text': l:line_text,
         \}
-    elseif get(a:options, 'open_in') is# 'fzf'
-        " grep-style output (filename:line:col:text) so that fzf can properly
-        " show matches and previews.
-        " See note below in ShowInFzf about returning json encoded values here
-        " (and commented return below)
-        return l:filename . ':' .  (a:response_item.range.start.line + 1) . ":" . (a:response_item.range.start.character + 1) . ":" . l:line_text
-        " return json_encode({
-        " \ 'filename': l:filename,
-        " \ 'lnum': a:response_item.range.start.line + 1,
-        " \ 'col': a:response_item.range.start.character + 1,
-        " \ 'text': l:line_text,
-        " \})
     else
         return {
         \ 'filename': l:filename,
@@ -111,57 +110,83 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
     endif
 endfunction
 
-function! ale#references#ShowInFzf(item_list) abort
-    let l:name = "LSP References"
-    let l:capname = "References"
+function! ale#references#ShowInFzf(item_list, options) abort
+    let name = "LSP References"
+    let capname = "References"
+    let items = copy(a:item_list)
+    let cwd = getcwd() " no-custom-checks
+    let sep = has('win32') ? '\' : '/'
 
-    " start with an empty query to let user filter
-    let l:start_query = ''
-    let l:opts = {
-    \ 'source':  a:item_list,
-    \ 'options': ['--ansi', '--prompt', l:name.'> ', '--query', l:start_query,
-    \             '--disabled',
+    function! s:relative_paths(line) closure
+        return substitute(a:line, '^' . cwd . sep, '', '')
+    endfunction
+
+    if get(a:options, 'use_relative_paths')
+        let items = map(filter(items, 'len(v:val)'), 's:relative_paths(v:val)')
+    endif
+
+    let start_query = ''
+    let fzf_options = {
+    \ 'source':  items,
+    \ 'options': ['--prompt', name.'> ', '--query', start_query,
     \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all',
     \             '--delimiter', ':', '--preview-window', '+{2}/2']
     \}
 
-    function! s:action(key, file_info, ...)
-        " FIXME: temporarily only using edit, need to add more methods
-        silent keepjumps keepalt execute "edit " . fnameescape(a:file_info['filename'])
-        execute a:file_info.lnum
-        call cursor(0, a:file_info.col)
+    call add(fzf_options['options'], '--highlight-line') " this only works for more recent fzf versions (TODO: handle version check?)
+
+    " wrap with #with_preview and #fzfwrap before adding the sinklist,
+    " otherwise --expect options are not added
+    let opts_with_preview = fzf#vim#with_preview(fzf_options)
+    let bang = 0 " TODO: handle bang
+    let wrapped = fzf#wrap(name, opts_with_preview, bang)
+
+    call remove(wrapped, 'sink*') " remove the default sinklist to add in our custom sinklist
+
+    function! wrapped.sinklist(lines) closure
+        if len(a:lines) <2
+            return
+        endif
+        let cmd = a:lines[0]
+        function! s:references_to_qf(line) closure
+            " mimics ag_to_qf in fzf.vim
+            let parts = matchlist(a:line, '\(.\{-}\)\s*:\s*\(\d\+\)\%(\s*:\s*\(\d\+\)\)\?\%(\s*:\(.*\)\)\?')
+            let filename = &acd ? fnamemodify(parts[1], ':p') : parts[1]
+            return {'filename': filename, 'lnum': parts[2], 'col': parts[3], 'text': parts[4]}
+        endfunction
+
+        let references = map(filter(a:lines[1:], 'len(v:val)'), 's:references_to_qf(v:val)')
+
+        if empty(references)
+            return
+        endif
+
+        if get(a:options, 'open_in') is# 'quickfix'
+            call setqflist([], 'r')
+            call setqflist(references, 'a')
+            echomsg 'a:lines[1]=' . string(a:lines[1:])
+            call ale#util#Execute('cc 1')
+        endif
+
+        function! s:action(key, file)
+            " copied from fzf.vim
+            let default_action = {
+              \ 'ctrl-t': 'tab split',
+              \ 'ctrl-x': 'split',
+              \ 'ctrl-v': 'vsplit' }
+
+            let fzf_actions = get(g:, 'fzf_action', default_action)
+            let Cmd = get(fzf_actions, a:key, 'edit')
+
+            let cursor_cmd = escape("call cursor(" . a:file['lnum'] . "," . a:file['col'] . ")", ' ')
+            let fullcmd = Cmd . " +" . cursor_cmd . " " . fnameescape(a:file['filename'])
+            silent keepjumps keepalt execute fullcmd
+        endfunction
+
+        return map(references, 's:action(cmd, v:val)')
     endfunction
 
-
-    function! s:references_to_qf(line)
-        " mimics ag_to_qf in fzf.vim
-        " NOTE: it's kinda annoying that we have to format each match as
-        " filename:linenum:column:text, but that's how we can easily display
-        " matches (and previews) in fzf, and then we have to parse it again here.
-        "
-        " TODO: figure out a way pass json to fzf and use that for matches.
-        " We could get rid of this code and just have FormatLSPResponseItem
-        " return json_encode(<match info>) and then here:
-        "   let l:dict = json_decode(a:line)
-        "
-        let parts = matchlist(a:line, '\(.\{-}\)\s*:\s*\(\d\+\)\%(\s*:\s*\(\d\+\)\)\?\%(\s*:\(.*\)\)\?')
-        let file = &acd ? fnamemodify(parts[1], ':p') : parts[1]
-
-        return {'filename': file, 'lnum': parts[2], 'col': parts[3], 'text': parts[4]}
-    endfunction
-
-    function! opts.sinklist(lines) closure
-        let l:references = map(filter(a:lines, 'len(v:val)'), 's:references_to_qf(v:val)')
-
-        for ref in l:references
-            call s:action("dummykey", l:ref)
-        endfor
-    endfunction
-
-    let l:opts_with_preview = fzf#vim#with_preview(l:opts)
-    let l:fullscreen = 1 " FIXME: decide what to do with this
-
-    call fzf#run(fzf#wrap(l:name, l:opts_with_preview, l:fullscreen))
+    call fzf#run(wrapped)
 endfunction
 
 function! ale#references#HandleLSPResponse(conn_id, response) abort
@@ -186,25 +211,16 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
     if empty(l:item_list)
         call ale#util#Execute('echom ''No references found.''')
     else
-        if get(l:options, 'open_in') is# 'quickfix'
-            call setqflist([], 'r')
-            call setqflist(l:item_list, 'a')
-            call ale#util#Execute('cc 1')
-        elseif get(l:options, 'open_in') is# 'fzf'
-            close  " close the buffer that's been opened, we're not going to use it
-                   " when showing results through fzf
-            " TODO: use 'use_fzf' instead of 'open_in', then pass 'open_in' to
-            " ShowInFzf in order to use as default open method
-
+        if get(l:options, 'use_fzf') == 1
             if !exists('*fzf#run')
                 throw "fzf#run function not found. You also need Vim plugin from the main fzf repository (i.e. junegunn/fzf *and* junegunn/fzf.vim)"
             endif
 
-            " if !exists('*fzf#vim#references')
-            "     throw "fzf#vim#references function not found. You need to upgrade to the latest fzf.vim version"
-            " endif
-
-            call ale#references#ShowInFzf(l:item_list)
+            call ale#references#ShowInFzf(l:item_list, l:options)
+        elseif get(l:options, 'open_in') is# 'quickfix'
+            call setqflist([], 'r')
+            call setqflist(l:item_list, 'a')
+            call ale#util#Execute('cc 1')
         else
             call ale#preview#ShowSelection(l:item_list, l:options)
         endif
@@ -246,6 +262,7 @@ function! s:OnReady(line, column, options, linter, lsp_details) abort
     \ 'use_relative_paths': has_key(a:options, 'use_relative_paths') ? a:options.use_relative_paths : 0,
     \ 'open_in': get(a:options, 'open_in', 'current-buffer'),
     \ 'show_contents': a:options.show_contents,
+    \ 'use_fzf': get(a:options, 'use_fzf', g:ale_references_use_fzf),
     \}
 endfunction
 
@@ -265,7 +282,7 @@ function! ale#references#Find(...) abort
             elseif l:option is? '-quickfix'
                 let l:options.open_in = 'quickfix'
             elseif l:option is? '-fzf'
-                let l:options.open_in = 'fzf'
+                let l:options.use_fzf = 1
             endif
         endfor
     endif
