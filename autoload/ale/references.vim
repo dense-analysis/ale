@@ -76,7 +76,7 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
 
     if get(a:options, 'show_contents') == 1
         try
-            let l:line_text = readfile(l:filename)[l:line]
+            let l:line_text = substitute(readfile(l:filename)[l:line], '^\s*\(.\{-}\)\s*$', '\1', '')
         catch
             " This happens in tests
         endtry
