@@ -583,3 +583,17 @@ function! ale#util#ToResource(uri) abort
 
     return l:resource
 endfunction
+
+function! ale#util#SafeReadFileLine(filename, line)
+    let l:content = ''
+    if filereadable(a:filename)
+        let l:lines = readfile(a:filename, '', a:line)
+        if len(l:lines) >= a:line
+            let l:content = l:lines[-1]
+        else
+            let l:content = ''
+        endif
+    endif
+
+    return l:content
+endfunction
