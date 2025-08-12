@@ -698,6 +698,7 @@ Notes:
   * `thriftcheck`
 * TOML
   * `dprint`
+  * `tombi`
 * TypeScript
   * `biome`
   * `cspell`
