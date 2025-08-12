@@ -37,5 +37,29 @@ g:ale_toml_tombi_lsp_options
   LSP server.
 
 
+                                        *ale-options.toml_tombi_format_options*
+                                              *g:ale_toml_tombi_format_options*
+                                              *b:ale_toml_tombi_format_options*
+toml_tombi_format_options
+g:ale_toml_tombi_format_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be modified to provide options when using `tombi` as a
+  formatter.
+
+
+                                          *ale-options.toml_tombi_lint_options*
+                                                *g:ale_toml_tombi_lint_options*
+                                                *b:ale_toml_tombi_lint_options*
+toml_tombi_lint_options
+g:ale_toml_tombi_lint_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be modified to provide options when using `tombi` as a
+  linter.
+
+
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
