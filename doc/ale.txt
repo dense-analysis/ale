@@ -3760,6 +3760,7 @@ documented in additional help files.
     cspell................................|ale-php-cspell|
     langserver............................|ale-php-langserver|
     phan..................................|ale-php-phan|
+    phpactor..............................|ale-php-phpactor|
     phpcbf................................|ale-php-phpcbf|
     phpcs.................................|ale-php-phpcs|
     phpmd.................................|ale-php-phpmd|
