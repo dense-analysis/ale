@@ -1,6 +1,8 @@
 " Author: rhysd https://rhysd.github.io
 " Description: Redpen, a proofreading tool (http://redpen.cc)
 
+call ale#Set('redpen_options', '')
+
 function! ale#handlers#redpen#HandleRedpenOutput(buffer, lines) abort
     " Only one file was passed to redpen. So response array has only one
     " element.
@@ -62,4 +64,15 @@ function! ale#handlers#redpen#HandleRedpenOutput(buffer, lines) abort
     endfor
 
     return l:output
+endfunction
+
+
+" Define the redpen linter for a given filetype.
+function! ale#handlers#redpen#DefineLinter(filetype) abort
+    call ale#linter#Define(a:filetype, {
+    \   'name': 'redpen',
+    \   'executable': 'redpen',
+    \   'command': {b -> 'redpen -f ' . a:filetype . ' -r json' . ale#Pad(ale#Var(b, 'redpen_options')) . ' %t'},
+    \   'callback': 'ale#handlers#redpen#HandleRedpenOutput',
+    \})
 endfunction
