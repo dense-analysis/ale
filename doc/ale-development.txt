@@ -424,11 +424,11 @@ running tests. >
 
   Add-Type -A System.IO.Compression.FileSystem
 
-  Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip -OutFile C:\vim.zip
+  Invoke-WebRequest https://github.com/dense-analysis/ale/releases/download/v4.0.0/vim80-586w32.zip -OutFile C:\vim.zip
   [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
   rm C:\vim.zip
 
-  Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip -OutFile C:\rt.zip
+  Invoke-WebRequest https://github.com/dense-analysis/ale/releases/download/v4.0.0/vim80-586rt.zip -OutFile C:\rt.zip
   [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
   rm C:\rt.zip
 
