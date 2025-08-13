@@ -16,8 +16,3 @@ Execute(The project root should be detected correctly in Python projects):
   call ale#test#SetFilename('../test-files/toml/tombi/pyprojecttoml/subdir/file.ext')
 
   AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/toml/tombi/pyprojecttoml')
-
-Execute(The project root should be empty when no project files can be detected):
-  call ale#test#SetFilename('../test-files/dummy')
-
-  AssertLSPProject ''

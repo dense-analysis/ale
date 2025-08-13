@@ -4,13 +4,6 @@
 call ale#Set('toml_tombi_executable', 'tombi')
 call ale#Set('toml_tombi_lsp_options', '')
 
-function! ale_linters#toml#tombi#GetCommand(buffer) abort
-    let l:options = ale#Var(a:buffer, 'toml_tombi_lsp_options')
-
-    return '%e lsp'
-    \       . (empty(l:options) ? '' : ' ' . l:options)
-endfunction
-
 function! ale_linters#toml#tombi#GetProjectRoot(buffer) abort
     " Try to find nearest tombi.toml
     let l:tombiconfig_file = ale#path#FindNearestFile(a:buffer, 'tombi.toml')
@@ -40,6 +33,6 @@ call ale#linter#Define('toml', {
 \   'name': 'tombi',
 \   'lsp': 'stdio',
 \   'executable': {b -> ale#Var(b, 'toml_tombi_executable')},
-\   'command': function('ale_linters#toml#tombi#GetCommand'),
+\   'command': {b -> '%e lsp' . ale#Pad(ale#Var(b, 'toml_tombi_lsp_options'))},
 \   'project_root': function('ale_linters#toml#tombi#GetProjectRoot'),
 \})

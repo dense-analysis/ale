@@ -14,20 +14,13 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The tombi format callback should return the correct default values):
-
   AssertEqual
-  \ {
-  \   'command': ale#Escape('xxxinvalid') . ' format',
-  \ },
+  \ {'command': ale#Escape('xxxinvalid') . ' format'},
   \ ale#fixers#tombi_format#Fix(bufnr(''))
 
 Execute(The tombi format callback should include custom options):
   let g:ale_toml_tombi_format_options = "--offline"
 
   AssertEqual
-  \ {
-  \   'command': ale#Escape('xxxinvalid')
-  \     . ' format'
-  \     . ' ' . g:ale_toml_tombi_format_options
-  \ },
+  \ {'command': ale#Escape('xxxinvalid') . ' format --offline'},
   \ ale#fixers#tombi_format#Fix(bufnr(''))

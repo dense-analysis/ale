@@ -6,11 +6,10 @@ call ale#Set('toml_tombi_format_options', '')
 
 function! ale#fixers#tombi_format#Fix(buffer) abort
     let l:executable = ale#Var(a:buffer, 'toml_tombi_executable')
-    let l:options = ale#Var(a:buffer, 'toml_tombi_format_options')
 
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' format'
-    \       . (empty(l:options) ? '' : ' ' . l:options),
+    \       . ale#Pad(ale#Var(a:buffer, 'toml_tombi_format_options')),
     \}
 endfunction
