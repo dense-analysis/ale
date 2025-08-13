@@ -482,6 +482,7 @@ formatting.
 * Pawn
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Perl
+  * [languageserver](https://metacpan.org/pod/Perl::LanguageServer)
   * [perl -c](https://perl.org/) :warning:
   * [perl-critic](https://metacpan.org/pod/Perl::Critic)
   * [perltidy](https://metacpan.org/pod/distribution/Perl-Tidy/bin/perltidy)

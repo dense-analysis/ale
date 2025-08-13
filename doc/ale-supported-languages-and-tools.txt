@@ -472,6 +472,7 @@ Notes:
 * Pawn
   * `uncrustify`
 * Perl
+  * `languageserver`
   * `perl -c`
   * `perl-critic`
   * `perltidy`
