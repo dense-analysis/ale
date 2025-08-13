@@ -9,4 +9,57 @@ See |ale-dprint-options| and https://dprint.dev/plugins/toml
 
 
 ===============================================================================
+tombi                                                          *ale-toml-tombi*
+
+  `'tombi'` is a TOML formatter, linter, and language server.
+
+                                            *ale-options.toml_tombi_executable*
+                                                  *g:ale_toml_tombi_executable*
+                                                  *b:ale_toml_tombi_executable*
+toml_tombi_executable
+g:ale_toml_tombi_executable
+  Type: |String|
+  Default: `'tombi'`
+
+  This variable can be modified to change the executable path for
+  `tombi`.
+
+
+                                           *ale-options.toml_tombi_lsp_options*
+                                                 *g:ale_toml_tombi_lsp_options*
+                                                 *b:ale_toml_tombi_lsp_options*
+toml_tombi_lsp_options
+g:ale_toml_tombi_lsp_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be modified to provide options when using `tombi` as an
+  LSP server.
+
+
+                                        *ale-options.toml_tombi_format_options*
+                                              *g:ale_toml_tombi_format_options*
+                                              *b:ale_toml_tombi_format_options*
+toml_tombi_format_options
+g:ale_toml_tombi_format_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be modified to provide options when using `tombi` as a
+  formatter.
+
+
+                                          *ale-options.toml_tombi_lint_options*
+                                                *g:ale_toml_tombi_lint_options*
+                                                *b:ale_toml_tombi_lint_options*
+toml_tombi_lint_options
+g:ale_toml_tombi_lint_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be modified to provide options when using `tombi` as a
+  linter.
+
+
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

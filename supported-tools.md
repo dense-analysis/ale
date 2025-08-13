@@ -707,6 +707,7 @@ formatting.
   * [thriftcheck](https://github.com/pinterest/thriftcheck)
 * TOML
   * [dprint](https://dprint.dev)
+  * [tombi](https://tombi-toml.github.io/tombi/)
 * TypeScript
   * [biome](https://biomejs.dev/)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
