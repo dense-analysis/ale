@@ -3509,6 +3509,7 @@ documented in additional help files.
   fish....................................|ale-fish-options|
     fish_indent...........................|ale-fish-fish_indent|
   fortran.................................|ale-fortran-options|
+    fortitude.............................|ale-fortran-fortitude|
     gcc...................................|ale-fortran-gcc|
     language_server.......................|ale-fortran-language-server|
   fountain................................|ale-fountain-options|

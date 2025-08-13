@@ -215,6 +215,7 @@ formatting.
   * fish [-n flag](https://linux.die.net/man/1/fish)
   * [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html)
 * Fortran
+  * [fortitude](https://github.com/PlasmaFAIR/fortitude)
   * [gcc](https://gcc.gnu.org/)
   * [language_server](https://github.com/hansec/fortran-language-server) :speech_balloon:
 * Fountain
