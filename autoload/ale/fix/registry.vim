@@ -742,6 +742,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['toml'],
 \       'description': 'Lints TOML files',
 \   },
+\   'verible_format': {
+\       'function': 'ale#fixers#verible_format#Fix',
+\       'suggested_filetypes': ['verilog'],
+\       'description': 'Formats verilog files using verible.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
