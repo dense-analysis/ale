@@ -76,6 +76,10 @@ function! ale_linters#python#ruff#Handle(buffer, lines) abort
             continue
         endtry
 
+        if empty(l:item)
+            continue
+        endif
+
         if (l:item.code is# 'W291' || l:item.code is# 'W293')
         \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
             " Skip warnings for trailing whitespace if the option is off.
