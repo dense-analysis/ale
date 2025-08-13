@@ -1,0 +1,16 @@
+Before:
+  call ale#assert#SetUpLinterTest('fortran', 'fortitude')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default fortitude command should be correct):
+  AssertLinter 'fortitude', ale#Escape('fortitude')
+  \ . ' check --output-format json %s'
+
+Execute(fortitude should be configurable):
+  let b:ale_fortran_fortitude_executable = 'custom-exe'
+  let b:ale_fortran_fortitude_options = '--foobar'
+
+  AssertLinter 'custom-exe', ale#Escape('custom-exe')
+  \ . ' check --output-format json --foobar %s'

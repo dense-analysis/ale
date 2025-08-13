@@ -1,8 +1,8 @@
 Before:
-  runtime ale_linters/shell/shellcheck.vim
+  Save g:ale_warn_about_trailing_whitespace
 
 After:
-  call ale#linter#Reset()
+  Restore
 
 Execute(The shellcheck handler should handle basic errors or warnings <0.7.0):
   AssertEqual
@@ -149,4 +149,59 @@ Execute(The shellcheck handler should handle info and style >=0.7.0):
   \       }
   \     ]
   \   }'
+  \ ])
+
+Execute(shellcheck errors for trailing whitespace should show by default):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 8,
+  \     'col': 12,
+  \     'code': 'SC1101',
+  \     'end_lnum': 8,
+  \     'type': 'E',
+  \     'end_col': 11,
+  \     'text': 'Delete trailing spaces after \ to break line (or use quotes for literal space).',
+  \     'detail': 'Delete trailing spaces after \ to break line (or use quotes for literal space).' . "\n\nFor more information:\n  https://www.shellcheck.net/wiki/" . 'SC1101',
+  \   },
+  \ ],
+  \ ale#handlers#shellcheck#Handle(bufnr(''), [0, 7, 0], [
+  \   '{
+  \     "comments": [
+  \       {
+  \         "file": "-",
+  \         "line": 8,
+  \         "endLine": 8,
+  \         "column": 12,
+  \         "endColumn": 12,
+  \         "level": "error",
+  \         "code":1101,
+  \         "message":"Delete trailing spaces after \\ to break line (or use quotes for literal space).",
+  \         "fix":null
+  \       }
+  \     ]
+  \   }',
+  \ ])
+
+Execute(shellcheck errors for trailing whitepsace should be able to be silenced by ale_warn_about_trailing_whitespace):
+  let g:ale_warn_about_trailing_whitespace = 0
+
+  AssertEqual
+  \ [],
+  \ ale#handlers#shellcheck#Handle(bufnr(''), [0, 7, 0], [
+  \   '{
+  \     "comments": [
+  \       {
+  \         "file": "-",
+  \         "line": 8,
+  \         "endLine": 8,
+  \         "column": 12,
+  \         "endColumn": 12,
+  \         "level": "error",
+  \         "code":1101,
+  \         "message":"Delete trailing spaces after \\ to break line (or use quotes for literal space).",
+  \         "fix":null
+  \       }
+  \     ]
+  \   }',
   \ ])

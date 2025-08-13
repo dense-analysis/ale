@@ -205,6 +205,7 @@ Notes:
   * `fish` (-n flag)
   * `fish_indent`
 * Fortran
+  * `fortitude`
   * `gcc`
   * `language_server`
 * Fountain
@@ -698,6 +699,7 @@ Notes:
   * `thriftcheck`
 * TOML
   * `dprint`
+  * `tombi`
 * TypeScript
   * `biome`
   * `cspell`

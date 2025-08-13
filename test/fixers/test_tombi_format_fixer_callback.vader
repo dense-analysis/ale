@@ -1,0 +1,26 @@
+Before:
+  Save g:ale_toml_tombi_executable
+  Save g:ale_toml_tombi_format_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_toml_tombi_executable = 'xxxinvalid'
+  let g:ale_toml_tombi_format_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The tombi format callback should return the correct default values):
+  AssertEqual
+  \ {'command': ale#Escape('xxxinvalid') . ' format'},
+  \ ale#fixers#tombi_format#Fix(bufnr(''))
+
+Execute(The tombi format callback should include custom options):
+  let g:ale_toml_tombi_format_options = "--offline"
+
+  AssertEqual
+  \ {'command': ale#Escape('xxxinvalid') . ' format --offline'},
+  \ ale#fixers#tombi_format#Fix(bufnr(''))

@@ -44,5 +44,39 @@ g:ale_ansible_ansible_lint_executable
   This variable can be changed to modify the executable used for ansible-lint.
 
 
+                                 *ale-options.ansible_ansible_lint_auto_pipenv*
+                                       *g:ale_ansible_ansible_lint_auto_pipenv*
+                                       *b:ale_ansible_ansible_lint_auto_pipenv*
+ansible_ansible_lint_auto_pipenv
+g:ale_ansible_ansible_lint_auto_pipenv
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
+                                 *ale-options.ansible_ansible_lint_auto_poetry*
+                                       *g:ale_ansible_ansible_lint_auto_poetry*
+                                       *b:ale_ansible_ansible_lint_auto_poetry*
+ansible_ansible_lint_auto_poetry
+g:ale_ansible_ansible_lint_auto_poetry
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a poetry, and set the executable to `poetry`
+  if true. This is overridden by a manually-set executable.
+
+                                     *ale-options.ansible_ansible_lint_auto_uv*
+                                           *g:ale_ansible_ansible_lint_auto_uv*
+                                           *b:ale_ansible_ansible_lint_auto_uv*
+ansible_ansible_lint_auto_uv
+g:ale_ansible_ansible_lint_auto_uv
+  Type: |Number|
+  Default: `0`
+
+  Set the executable to `uv` if true. This is overridden by a manually-set
+  executable.
+
+
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

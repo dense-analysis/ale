@@ -1,0 +1,18 @@
+Before:
+  call ale#assert#SetUpLinterTest('toml', 'tombi')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'tombi', ale#Escape('tombi') . ' lsp'
+
+Execute(The project root should be detected correctly with a configuration file):
+  call ale#test#SetFilename('../test-files/toml/tombi/tombitoml/subdir/file.ext')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/toml/tombi/tombitoml')
+
+Execute(The project root should be detected correctly in Python projects):
+  call ale#test#SetFilename('../test-files/toml/tombi/pyprojecttoml/subdir/file.ext')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/toml/tombi/pyprojecttoml')

@@ -3,6 +3,7 @@ Before:
   call ale#test#SetFilename('dummy.txt')
 
   Save g:ale_default_navigation
+  Save g:ale_references_show_contents
 
   let g:old_filename = expand('%:p')
   let g:Callback = ''
@@ -15,6 +16,7 @@ Before:
   let g:conn_id = v:null
   let g:InitCallback = v:null
   let g:ale_default_navigation = 'buffer'
+  let g:ale_references_show_contents = 1
 
   runtime autoload/ale/lsp_linter.vim
   runtime autoload/ale/lsp.vim
@@ -281,7 +283,7 @@ Execute(tsserver reference requests should be sent):
   \   [0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServerResponse):
   runtime ale_linters/typescript/tsserver.vim
@@ -291,7 +293,7 @@ Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServe
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 1}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 1}}, ale#references#GetMap()
 
 Execute(`-tab` should display results in tabs):
   runtime ale_linters/typescript/tsserver.vim
@@ -301,7 +303,7 @@ Execute(`-tab` should display results in tabs):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'tab', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute(The default navigation type should be used):
   runtime ale_linters/typescript/tsserver.vim
@@ -312,7 +314,7 @@ Execute(The default navigation type should be used):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'tab', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute(`-split` should display results in splits):
   runtime ale_linters/typescript/tsserver.vim
@@ -322,7 +324,7 @@ Execute(`-split` should display results in splits):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'open_in': 'split', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'split', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute(`-vsplit` should display results in vsplits):
   runtime ale_linters/typescript/tsserver.vim
@@ -332,7 +334,7 @@ Execute(`-vsplit` should display results in vsplits):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'open_in': 'vsplit', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'vsplit', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute(`-quickfix` should display results in quickfix):
   runtime ale_linters/typescript/tsserver.vim
@@ -342,7 +344,7 @@ Execute(`-quickfix` should display results in quickfix):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'open_in': 'quickfix', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'quickfix', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Given python(Some Python file):
   foo
@@ -378,11 +380,13 @@ Execute(LSP reference responses should be handled):
   \     'filename': ale#path#Simplify(g:dir . '/completion_dummy_file'),
   \     'line': 3,
   \     'column': 8,
+  \     'match': '',
   \   },
   \   {
   \     'filename': ale#path#Simplify(g:dir . '/other_file'),
   \     'line': 8,
   \     'column': 16,
+  \     'match': '',
   \   },
   \ ],
   \ g:item_list
@@ -414,6 +418,163 @@ Execute(LSP reference responses should be put to quickfix):
   AssertEqual
   \ 2,
   \ len(getqflist())
+
+Execute(LSP reference responses should contain line contents):
+  let tempfile = tempname()
+  let contents = ['line1 sometext', 'line2 othertext', 'line3 moretext']
+  call writefile(contents, tempfile)
+
+  call ale#references#SetMap({3: { 'show_contents': 1 }})
+
+  call ale#references#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': [
+  \     {
+  \       'uri': ale#path#ToFileURI(tempfile),
+  \       'range': {
+  \         'start': {'line': 0, 'character': 6},
+  \       },
+  \     },
+  \     {
+  \       'uri': ale#path#ToFileURI(tempfile),
+  \       'range': {
+  \         'start': {'line': 2, 'character': 1},
+  \       },
+  \     },
+  \   ],
+  \ }
+  \)
+  AssertEqual
+  \ 2,
+  \ len(g:item_list)
+
+  AssertEqual contents[0], g:item_list[0]['match']
+  AssertEqual contents[2], g:item_list[1]['match']
+
+  call ale#references#SetMap({3: { 'show_contents': 1, 'open_in': 'quickfix' }})
+
+  call ale#references#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': [
+  \     {
+  \       'uri': ale#path#ToFileURI(tempfile),
+  \       'range': {
+  \         'start': {'line': 0, 'character': 6},
+  \       },
+  \     },
+  \     {
+  \       'uri': ale#path#ToFileURI(tempfile),
+  \       'range': {
+  \         'start': {'line': 2, 'character': 1},
+  \       },
+  \     },
+  \   ],
+  \ }
+  \)
+
+  AssertEqual
+  \ 2,
+  \ len(getqflist())
+
+  AssertEqual contents[0], getqflist()[0]['text']
+  AssertEqual contents[2], getqflist()[1]['text']
+
+Execute(LSP reference responses should not contain line contents when disabled):
+  call ale#references#SetMap({3: { 'show_contents': 0 }})
+
+  call ale#references#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': [
+  \     {
+  \       'uri': ale#path#ToFileURI('dummy'),
+  \       'range': {
+  \         'start': {'line': 0, 'character': 6},
+  \       },
+  \     },
+  \     {
+  \       'uri': ale#path#ToFileURI('dummy'),
+  \       'range': {
+  \         'start': {'line': 2, 'character': 1},
+  \       },
+  \     },
+  \   ],
+  \ }
+  \)
+  AssertEqual
+  \ 2,
+  \ len(g:item_list)
+
+  AssertEqual '', g:item_list[0]['match']
+  AssertEqual '', g:item_list[1]['match']
+  call ale#references#SetMap({3: { 'show_contents': 0, 'open_in': 'quickfix' }} )
+
+  call ale#references#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': [
+  \     {
+  \       'uri': ale#path#ToFileURI('dummy'),
+  \       'range': {
+  \         'start': {'line': 0, 'character': 6},
+  \       },
+  \     },
+  \     {
+  \       'uri': ale#path#ToFileURI('dummy'),
+  \       'range': {
+  \         'start': {'line': 2, 'character': 1},
+  \       },
+  \     },
+  \   ],
+  \ }
+  \)
+  AssertEqual
+  \ 2,
+  \ len(getqflist())
+
+  AssertEqual '', getqflist()[0]['text']
+  AssertEqual '', getqflist()[1]['text']
+
+Execute(LSP reference responses should respect the global configuration):
+  let g:ale_references_show_contents = 0
+  call ale#references#SetMap({3: {}})
+
+  let tempfile = tempname()
+  let contents = ['line1 sometext', 'line2 othertext', 'line3 moretext']
+  call writefile(contents, tempfile)
+
+  call ale#references#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': [
+  \     {
+  \       'uri': ale#path#ToFileURI(tempfile),
+  \       'range': {
+  \         'start': {'line': 0, 'character': 6},
+  \       },
+  \     },
+  \     {
+  \       'uri': ale#path#ToFileURI(tempfile),
+  \       'range': {
+  \         'start': {'line': 2, 'character': 1},
+  \       },
+  \     },
+  \   ],
+  \ }
+  \)
+  AssertEqual
+  \ 2,
+  \ len(g:item_list)
+
+  AssertEqual '', g:item_list[0]['match']
+  AssertEqual '', g:item_list[1]['match']
 
 Execute(Preview windows should not be opened for empty LSP reference responses):
   call ale#references#SetMap({3: {}})
@@ -466,7 +627,7 @@ Execute(LSP reference requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
   runtime ale_linters/python/pylsp.vim
@@ -477,4 +638,4 @@ Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResp
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 1}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 1}}, ale#references#GetMap()
