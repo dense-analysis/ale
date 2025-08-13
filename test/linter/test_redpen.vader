@@ -2,8 +2,9 @@ Before:
   " This is just one example of a language using the linter.
   call ale#assert#SetUpLinterTest('markdown', 'redpen')
 
-  unlet! g:ale_redpen_options
-  call ale#Set('redpen_options', '')
+  Save g:ale_redpen_options
+
+  let g:ale_redpen_options = ''
 
 After:
   call ale#assert#TearDownLinterTest()
