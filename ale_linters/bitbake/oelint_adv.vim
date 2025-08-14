@@ -5,6 +5,14 @@ call ale#Set('bitbake_oelint_adv_executable', 'oelint-adv')
 call ale#Set('bitbake_oelint_adv_options', '')
 call ale#Set('bitbake_oelint_adv_config', '.oelint.cfg')
 
+function! ale_linters#bitbake#oelint_adv#StripAnsiCodes(line) abort
+    return substitute(a:line, '\e\[[0-9;]\+[mK]', '', 'g')
+endfunction
+
+function! ale_linters#bitbake#oelint_adv#RemoveBranch(line) abort
+    return substitute(a:line, ' \[branch:.*', '', 'g')
+endfunction
+
 function! ale_linters#bitbake#oelint_adv#Command(buffer) abort
     let l:config_file = ale#path#FindNearestFile(a:buffer,
     \    ale#Var(a:buffer, 'bitbake_oelint_adv_config'))
@@ -22,23 +30,18 @@ function! ale_linters#bitbake#oelint_adv#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \    'lnum': str2nr(l:match[2]),
-        \    'type': l:match[3] is# 'error'
-        \          ? 'E' : (l:match[3] is# 'warning' ? 'W' : 'I'),
-        \    'text': RemoveBranch(StripAnsiCodes(l:match[5])),
-        \    'code': l:match[4]
-        \    })
+        \   'lnum': str2nr(l:match[2]),
+        \   'type': l:match[3] is# 'error'
+        \       ? 'E'
+        \       : (l:match[3] is# 'warning' ? 'W' : 'I'),
+        \   'text': ale_linters#bitbake#oelint_adv#RemoveBranch(
+        \       ale_linters#bitbake#oelint_adv#StripAnsiCodes(l:match[5])
+        \   ),
+        \   'code': l:match[4],
+        \})
     endfor
 
     return l:output
-endfunction
-
-function! StripAnsiCodes(line) abort
-    return substitute(a:line, '\e\[[0-9;]\+[mK]', '', 'g')
-endfunction
-
-function! RemoveBranch(line) abort
-    return substitute(a:line, ' \[branch:.*', '', 'g')
 endfunction
 
 call ale#linter#Define('bitbake', {
