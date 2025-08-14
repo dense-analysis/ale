@@ -213,6 +213,8 @@ Notes:
   * `proselint`
 * FusionScript
   * `fusion-lint`
+* Generic
+  * `ast-grep`
 * Git Commit Messages
   * `gitlint`
 * Gleam
