@@ -34,6 +34,22 @@ function! ale_linters#python#ruff#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_ruff', ['ruff'])
 endfunction
 
+function! ale_linters#python#ruff#RunWithVersionCheck(buffer) abort
+    let l:executable = ale_linters#python#ruff#GetExecutable(a:buffer)
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
+    \   ? ' run ruff'
+    \   : ''
+
+    let l:command = ale#Escape(l:executable) . l:exec_args . ' --version'
+
+    return ale#semver#RunWithVersionCheck(
+    \   a:buffer,
+    \   l:executable,
+    \   l:command,
+    \   function('ale_linters#python#ruff#GetCommand'),
+    \)
+endfunction
+
 function! ale_linters#python#ruff#GetCwd(buffer) abort
     if ale#Var(a:buffer, 'python_ruff_change_directory')
         " Run from project root if found, else from buffer dir.
@@ -110,12 +126,7 @@ call ale#linter#Define('python', {
 \   'name': 'ruff',
 \   'executable': function('ale_linters#python#ruff#GetExecutable'),
 \   'cwd': function('ale_linters#python#ruff#GetCwd'),
-\   'command': {buffer -> ale#semver#RunWithVersionCheck(
-\       buffer,
-\       ale_linters#python#ruff#GetExecutable(buffer),
-\       '%e --version',
-\       function('ale_linters#python#ruff#GetCommand'),
-\   )},
+\   'command': function('ale_linters#python#ruff#RunWithVersionCheck'),
 \   'callback': 'ale_linters#python#ruff#Handle',
 \   'output_stream': 'both',
 \   'read_buffer': 1,
