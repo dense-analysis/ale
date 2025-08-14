@@ -3419,6 +3419,7 @@ documented in additional help files.
     joker.................................|ale-clojure-joker|
   cloudformation..........................|ale-cloudformation-options|
     cfn-python-lint.......................|ale-cloudformation-cfn-python-lint|
+    checkov...............................|ale-cloudformation-checkov|
   cmake...................................|ale-cmake-options|
     cmakelint.............................|ale-cmake-cmakelint|
     cmake-lint............................|ale-cmake-cmake-lint|

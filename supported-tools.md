@@ -131,6 +131,7 @@ formatting.
   * [joker](https://github.com/candid82/joker)
 * CloudFormation
   * [cfn-python-lint](https://github.com/awslabs/cfn-python-lint)
+  * [checkov](https://github.com/bridgecrewio/checkov)
 * CMake
   * [cmake-format](https://github.com/cheshirekow/cmake_format)
   * [cmake-lint](https://github.com/cheshirekow/cmake_format)

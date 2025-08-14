@@ -41,5 +41,51 @@ Just put the following in `ftdetect/cloudformation.vim`: >
 This will get both cloudformation and yaml linters to work on any file with
 `.template.yaml` extension.
 
+
+===============================================================================
+checkov                                            *ale-cloudformation-checkov*
+
+                                *ale-options.cloudformation_checkov_executable*
+                                      *g:ale_cloudformation_checkov_executable*
+                                      *b:ale_cloudformation_checkov_executable*
+cloudformation_checkov_executable
+g:ale_cloudformation_checkov_executable
+  Type: |String|
+  Default: `'checkov'`
+
+  This variable can be changed to use a different executable for checkov.
+
+                                   *ale-options.cloudformation_checkov_options*
+                                         *g:ale_cloudformation_checkov_options*
+                                         *b:ale_cloudformation_checkov_options*
+cloudformation_checkov_options
+g:ale_cloudformation_checkov_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to set additional options for checkov.
+
+
+-------------------------------------------------------------------------------
+Configuration
+
+To get chekov to work with cloudformation files (rather than general yaml
+files) we must set the buffer |filetype| to `yaml.cloudformation`.  This
+causes ALE to lint the file with linters configured for cloudformation and
+YAML files.
+
+One option is to put the following in `ftdetect/cloudformation.vim`: >
+
+  au BufRead,BufNewFile *.template.yaml set filetype=yaml.cloudformation
+
+This will get both cloudformation and yaml linters to work on any file with
+`.template.yaml` extension.
+
+Another option is to check for the presence of 'AWSTemplateFormatVersion' in
+the yaml file: >
+
+  au BufRead,BufNewFile *.yaml,*.yml if search('AWSTemplateFormatVersion', 'nw') | set filetype=yaml.cloudformation | endif
+<
+
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

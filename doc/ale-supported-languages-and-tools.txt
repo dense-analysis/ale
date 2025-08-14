@@ -121,6 +121,7 @@ Notes:
   * `joker`
 * CloudFormation
   * `cfn-python-lint`
+  * `checkov`
 * CMake
   * `cmake-format`
   * `cmake-lint`
