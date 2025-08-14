@@ -407,7 +407,7 @@ Execute(PreProcess should allow the `project_root` to be set as a String):
   \ 'project_root': '/foo/bar',
   \})
 
-  AssertEqual '/foo/bar', ale#lsp_linter#FindProjectRoot(0, g:linter)
+  AssertEqual '/foo/bar', ale#linter#GetRoot(0, g:linter)
 
 Execute(PreProcess should `project_root` be set as a Function):
   let g:linter = ale#linter#PreProcess('testft', {
@@ -418,7 +418,7 @@ Execute(PreProcess should `project_root` be set as a Function):
   \ 'project_root': {-> '/foo/bar'},
   \})
 
-  AssertEqual '/foo/bar', ale#lsp_linter#FindProjectRoot(0, g:linter)
+  AssertEqual '/foo/bar', ale#linter#GetRoot(0, g:linter)
 
 Execute(PreProcess should complain when `project_root` is invalid):
   AssertThrows call ale#linter#PreProcess('testft', {
