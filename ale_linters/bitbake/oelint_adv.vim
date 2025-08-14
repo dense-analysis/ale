@@ -17,7 +17,7 @@ function! ale_linters#bitbake#oelint_adv#Command(buffer) abort
 endfunction
 
 function! ale_linters#bitbake#oelint_adv#Handle(buffer, lines) abort
-    let l:pattern = '\v^(.+):(.+):(.+):(.+):(.+)( \[branch:.+)$'
+    let l:pattern = '\v^(.{-}):(.{-}):(.{-}):(.{-}):(.{-})$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
@@ -25,7 +25,7 @@ function! ale_linters#bitbake#oelint_adv#Handle(buffer, lines) abort
         \    'lnum': str2nr(l:match[2]),
         \    'type': l:match[3] is# 'error'
         \          ? 'E' : (l:match[3] is# 'warning' ? 'W' : 'I'),
-        \    'text': StripAnsiCodes(l:match[5]),
+        \    'text': RemoveBranch(StripAnsiCodes(l:match[5])),
         \    'code': l:match[4]
         \    })
     endfor
@@ -35,6 +35,10 @@ endfunction
 
 function! StripAnsiCodes(line) abort
     return substitute(a:line, '\e\[[0-9;]\+[mK]', '', 'g')
+endfunction
+
+function! RemoveBranch(line) abort
+    return substitute(a:line, ' \[branch:.*', '', 'g')
 endfunction
 
 call ale#linter#Define('bitbake', {
