@@ -200,7 +200,7 @@ function! ale#python#PoetryPresent(buffer) abort
     return findfile('poetry.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
 endfunction
 
-" Detects whether a poetry environment is present.
+" Detects whether a uv environment is present.
 function! ale#python#UvPresent(buffer) abort
     return findfile('uv.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
 endfunction
