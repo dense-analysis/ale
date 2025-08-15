@@ -243,8 +243,8 @@ formatting.
   * [golangci-lint](https://github.com/golangci/golangci-lint) :warning: :floppy_disk:
   * [golangserver](https://github.com/sourcegraph/go-langserver) :warning:
   * [golines](https://github.com/segmentio/golines)
-  * [gopls](https://github.com/golang/go/wiki/gopls) :speech_balloon:
-  * [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) :warning: :floppy_disk: :speech_balloon:
+  * [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) :speech_balloon:
+  * [gosimple](https://staticcheck.io/changes/2019.2/#deprecated) :warning: :floppy_disk: :speech_balloon:
   * [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype) :warning: :floppy_disk: :speech_balloon:
   * [revive](https://github.com/mgechev/revive) :warning: :floppy_disk:
   * [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) :warning: :floppy_disk: :speech_balloon:
