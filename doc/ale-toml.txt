@@ -25,6 +25,18 @@ g:ale_toml_tombi_executable
   `tombi`.
 
 
+                                                *ale-options.toml_tombi_online*
+                                                      *g:ale_toml_tombi_online*
+                                                      *b:ale_toml_tombi_online*
+toml_tombi_online
+g:ale_toml_tombi_online
+  Type: |Boolean|
+  Default: `1`
+
+  This variable can be modified allow fetching remote schemas when using
+  `tombi`.
+
+
                                            *ale-options.toml_tombi_lsp_options*
                                                  *g:ale_toml_tombi_lsp_options*
                                                  *b:ale_toml_tombi_lsp_options*
