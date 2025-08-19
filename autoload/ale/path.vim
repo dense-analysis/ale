@@ -62,6 +62,36 @@ function! ale#path#FindNearestDirectory(buffer, directory_name) abort
     return ''
 endfunction
 
+" Given a buffer and a filename, find the nearest file or directory by
+" searching upwards through the paths relative to the given buffer.
+function! ale#path#FindNearestFileOrDirectory(buffer, filename) abort
+    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
+    let l:buffer_filename = fnameescape(l:buffer_filename)
+
+    let l:relative_path_file = findfile(a:filename, l:buffer_filename . ';')
+    let l:relative_path_dir = finddir(a:filename, l:buffer_filename . ';')
+
+    " If we find both a file and directory, choose the shorter response by
+    " making the longer one empty instead.
+    if !empty(l:relative_path_file) && !empty(l:relative_path_dir)
+        if strlen(l:relative_path_file) > strlen(l:relative_path_dir)
+            let l:relative_path_dir = ''
+        else
+            let l:relative_path_file = ''
+        endif
+    endif
+
+    if !empty(l:relative_path_file)
+        return fnamemodify(l:relative_path_file, ':p')
+    endif
+
+    if !empty(l:relative_path_dir)
+        return fnamemodify(l:relative_path_dir, ':p')
+    endif
+
+    return ''
+endfunction
+
 " Given a buffer, a string to search for, and a global fallback for when
 " the search fails, look for a file in parent paths, and if that fails,
 " use the global fallback path instead.
