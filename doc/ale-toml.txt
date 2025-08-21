@@ -25,6 +25,18 @@ g:ale_toml_tombi_executable
   `tombi`.
 
 
+                                               *ale-options.toml_tombi_offline*
+                                                     *g:ale_toml_tombi_offline*
+                                                     *b:ale_toml_tombi_offline*
+toml_tombi_offline
+g:ale_toml_tombi_offline
+  Type: |Boolean|
+  Default: `1
+
+  This variable can be modified to not fetch remote schemas when using
+  `tombi`.
+
+
                                            *ale-options.toml_tombi_lsp_options*
                                                  *g:ale_toml_tombi_lsp_options*
                                                  *b:ale_toml_tombi_lsp_options*
