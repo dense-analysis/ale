@@ -1,0 +1,22 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+
+After:
+  call ale#test#RestoreDirectory()
+
+Execute(We should find a directory when searching and it is closer):
+  call ale#test#SetFilename('test-files/top/needle_dir/target/query/buffer.txt')
+
+  AssertEqual
+  \ ale#path#Simplify(expand('%:p:h:h:h:h:h:h') . '/test-files/top/needle_dir/target/needle/'),
+  \ ale#path#FindNearestFileOrDirectory(bufnr('%'), 'needle')
+
+Execute(We should find a file when searching and it is closer):
+  call ale#test#SetFilename('test-files/top/needle_file/target/query/buffer.txt')
+
+  AssertEqual
+  \ ale#path#Simplify(expand('%:p:h:h:h:h:h:h') . '/test-files/top/needle_file/target/needle'),
+  \ ale#path#FindNearestFileOrDirectory(bufnr('%'), 'needle')
+
+Execute(We shouldn't find anything for files which don't match):
+  AssertEqual '', ale#path#FindNearestFileOrDirectory(bufnr('%'), 'cantfindthis')
