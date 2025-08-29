@@ -143,4 +143,25 @@ g:ale_elixir_lexical_release
 
 
 ===============================================================================
+expert                                                      *ale-elixir-expert*
+
+Lexical (https://github.com/elixir-lang/lsp)
+
+                                            *ale-options.elixir_expert_release*
+                                                  *g:ale_elixir_expert_release*
+                                                  *b:ale_elixir_expert_release*
+elixir_expert_release
+g:ale_elixir_expert_release
+  Type: |String|
+  Default: `expert`
+
+  Location of the expert release directory. This directory must contain
+  the language server (expert_darwin_amd64, expert_darwin_arm64,
+  export_linux_amd64, or export_windows_amd64).
+
+  For example, set release to: `/home/projects/expert/apps/expert/burrito_out`
+
+  There are currnetly no configuration options for expert
+
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
