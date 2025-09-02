@@ -139,29 +139,28 @@ g:ale_elixir_lexical_release
 
   For example, set release to: `/home/projects/lexical/_build/dev/rel/lexical`
 
-  There are currnetly no configuration options for lexical.
+  There are currently no configuration options for lexical.
 
 
 ===============================================================================
 expert                                                      *ale-elixir-expert*
 
-Lexical (https://github.com/elixir-lang/lsp)
+Expert (https://github.com/elixir-lang/expert)
 
-                                            *ale-options.elixir_expert_release*
-                                                  *g:ale_elixir_expert_release*
-                                                  *b:ale_elixir_expert_release*
-elixir_expert_release
-g:ale_elixir_expert_release
+                                         *ale-options.elixir_expert_executable*
+                                               *g:ale_elixir_expert_executable*
+                                               *b:ale_elixir_expert_executable*
+elixir_expert_executable
+g:ale_elixir_expert_executable
   Type: |String|
-  Default: `expert`
+  Default: `/usr/bin/elixir-expert`
 
-  Location of the expert release directory. This directory must contain
-  the language server (expert_darwin_amd64, expert_darwin_arm64,
-  export_linux_amd64, or export_windows_amd64).
+  Location of the expert executable.
 
-  For example, set release to: `/home/projects/expert/apps/expert/burrito_out`
+  For example, set release to:
+  `/home/projects/expert/apps/expert/burrito_out/expert_linux_amd64`
 
-  There are currnetly no configuration options for expert
+  There are currently no configuration options for expert.
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
