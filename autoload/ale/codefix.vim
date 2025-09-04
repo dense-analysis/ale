@@ -256,6 +256,7 @@ function! ale#codefix#HandleLSPResponse(conn_id, response) abort
         \   },
         \   {}
         \)
+
         return v:true
     elseif has_key(a:response, 'id')
     \&& has_key(s:codefix_map, a:response.id)
