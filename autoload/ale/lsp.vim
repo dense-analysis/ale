@@ -395,10 +395,19 @@ function! ale#lsp#HandleMessage(conn_id, message) abort
     " responses.
     if l:conn.initialized
         for l:response in l:response_list
+            let l:handled = 0
             " Call all of the registered handlers with the response.
             for l:Callback in l:conn.callback_list
-                call ale#util#GetFunction(l:Callback)(a:conn_id, l:response)
+                let l:result = ale#util#GetFunction(l:Callback)(a:conn_id, l:response)
+                if l:result is v:true
+                    let l:handled = 1
+                endif
             endfor
+            
+            " If this was a request that no handler processed, send Method Not Found error
+            if !l:handled && has_key(l:response, 'method') && has_key(l:response, 'id')
+                call s:SendMethodNotFoundResponse(a:conn_id, l:response.id, l:response.method)
+            endif
         endfor
     endif
 endfunction
@@ -674,6 +683,28 @@ function! ale#lsp#StopAll() abort
     for l:conn_id in keys(s:connections)
         call ale#lsp#Stop(l:conn_id)
     endfor
+endfunction
+
+function! s:SendMethodNotFoundResponse(conn_id, request_id, method) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+    if empty(l:conn)
+        return
+    endif
+    
+    let l:error_response = {
+    \   'jsonrpc': '2.0',
+    \   'id': a:request_id,
+    \   'error': {
+    \       'code': -32601,
+    \       'message': 'Method not found',
+    \       'data': 'Unknown method: ' . a:method
+    \   }
+    \}
+    
+    let l:body = json_encode(l:error_response)
+    let l:data = 'Content-Length: ' . strlen(l:body) . "\r\n\r\n" . l:body
+    
+    call s:SendMessageData(l:conn, l:data)
 endfunction
 
 function! s:SendMessageData(conn, data) abort

@@ -244,7 +244,7 @@ function! ale#codefix#HandleLSPResponse(conn_id, response) abort
         let l:changes_map = ale#code_action#GetChanges(l:params.edit)
 
         if empty(l:changes_map)
-            return
+            return v:true
         endif
 
         let l:changes = ale#code_action#BuildChangesList(l:changes_map)
@@ -256,6 +256,7 @@ function! ale#codefix#HandleLSPResponse(conn_id, response) abort
         \   },
         \   {}
         \)
+        return v:true
     elseif has_key(a:response, 'id')
     \&& has_key(s:codefix_map, a:response.id)
         let l:data = remove(s:codefix_map, a:response.id)

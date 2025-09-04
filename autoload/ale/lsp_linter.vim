@@ -234,6 +234,7 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
         let l:diagnostics = a:response.params.diagnostics
 
         call ale#lsp_linter#HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
+        return v:true
     elseif has_key(s:diagnostic_uri_map, get(a:response, 'id'))
         let l:uri = remove(s:diagnostic_uri_map, a:response.id)
         let l:diagnostics = a:response.result.kind is# 'unchanged'
@@ -247,16 +248,20 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
         \   g:ale_lsp_show_message_format,
         \   a:response.params
         \)
+        return v:true
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'semanticDiag'
         call s:HandleTSServerDiagnostics(a:response, 'semantic')
+        return v:true
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'syntaxDiag'
         call s:HandleTSServerDiagnostics(a:response, 'syntax')
+        return v:true
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'suggestionDiag'
     \&& get(g:, 'ale_lsp_suggestions')
         call s:HandleTSServerDiagnostics(a:response, 'suggestion')
+        return v:true
     endif
 endfunction
 
