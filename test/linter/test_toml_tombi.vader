@@ -1,10 +1,16 @@
 Before:
+  Save g:ale_toml_tombi_online
   call ale#assert#SetUpLinterTest('toml', 'tombi')
 
 After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
+  AssertLinter 'tombi', ale#Escape('tombi') . ' lsp --offline'
+
+Execute(The default executable path should obey `toml_tombi_online`):
+  let g:ale_toml_tombi_online = 1
+
   AssertLinter 'tombi', ale#Escape('tombi') . ' lsp'
 
 Execute(The project root should be detected correctly with a configuration file):

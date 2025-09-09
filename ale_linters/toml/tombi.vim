@@ -3,6 +3,19 @@
 
 call ale#Set('toml_tombi_executable', 'tombi')
 call ale#Set('toml_tombi_lsp_options', '')
+call ale#Set('toml_tombi_online', 0)
+
+function! ale_linters#toml#tombi#GetCommand(buffer) abort
+    let l:offline = ''
+
+    if !ale#Var(a:buffer, 'toml_tombi_online')
+        let l:offline = '--offline'
+    endif
+
+    return '%e lsp'
+    \       . ale#Pad(l:offline)
+    \       . ale#Pad(ale#Var(a:buffer, 'toml_tombi_lsp_options'))
+endfunction
 
 function! ale_linters#toml#tombi#GetProjectRoot(buffer) abort
     " Try to find nearest tombi.toml
@@ -33,6 +46,6 @@ call ale#linter#Define('toml', {
 \   'name': 'tombi',
 \   'lsp': 'stdio',
 \   'executable': {b -> ale#Var(b, 'toml_tombi_executable')},
-\   'command': {b -> '%e lsp' . ale#Pad(ale#Var(b, 'toml_tombi_lsp_options'))},
+\   'command': function('ale_linters#toml#tombi#GetCommand'),
 \   'project_root': function('ale_linters#toml#tombi#GetProjectRoot'),
 \})
