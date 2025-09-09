@@ -111,9 +111,11 @@ See |ale-javascript-prettier| for information about the available options.
 ===============================================================================
 pymarkdown                                            *ale-markdown-pymarkdown*
 
+pymarkdown can be used both as a linter and a fixer for Markdown files.
+
                                    *ale-options.markdown_pymarkdown_executable*
                                          *g:ale_markdown_pymarkdown_executable*
-                                          *b:ale_markdown_pymarkdown_executable*
+                                         *b:ale_markdown_pymarkdown_executable*
 markdown_pymarkdown_executable
 g:ale_markdown_pymarkdown_executable
   Type: |String|
@@ -126,7 +128,7 @@ g:ale_markdown_pymarkdown_executable
 
                                       *ale-options.markdown_pymarkdown_options*
                                             *g:ale_markdown_pymarkdown_options*
-                                             *b:ale_markdown_pymarkdown_options*
+                                            *b:ale_markdown_pymarkdown_options*
 markdown_pymarkdown_options
 g:ale_markdown_pymarkdown_options
   Type: |String|
@@ -137,7 +139,7 @@ g:ale_markdown_pymarkdown_options
 
                                    *ale-options.markdown_pymarkdown_use_global*
                                          *g:ale_markdown_pymarkdown_use_global*
-                                          *b:ale_markdown_pymarkdown_use_global*
+                                         *b:ale_markdown_pymarkdown_use_global*
 markdown_pymarkdown_use_global
 g:ale_markdown_pymarkdown_use_global
   Type: |Number|
@@ -147,7 +149,7 @@ g:ale_markdown_pymarkdown_use_global
 
                                   *ale-options.markdown_pymarkdown_auto_pipenv*
                                         *g:ale_markdown_pymarkdown_auto_pipenv*
-                                         *b:ale_markdown_pymarkdown_auto_pipenv*
+                                        *b:ale_markdown_pymarkdown_auto_pipenv*
 markdown_pymarkdown_auto_pipenv
 g:ale_markdown_pymarkdown_auto_pipenv
   Type: |Number|
@@ -158,7 +160,7 @@ g:ale_markdown_pymarkdown_auto_pipenv
 
                                   *ale-options.markdown_pymarkdown_auto_poetry*
                                         *g:ale_markdown_pymarkdown_auto_poetry*
-                                         *b:ale_markdown_pymarkdown_auto_poetry*
+                                        *b:ale_markdown_pymarkdown_auto_poetry*
 markdown_pymarkdown_auto_poetry
 g:ale_markdown_pymarkdown_auto_poetry
   Type: |Number|
@@ -169,7 +171,7 @@ g:ale_markdown_pymarkdown_auto_poetry
 
                                       *ale-options.markdown_pymarkdown_auto_uv*
                                             *g:ale_markdown_pymarkdown_auto_uv*
-                                             *b:ale_markdown_pymarkdown_auto_uv*
+                                            *b:ale_markdown_pymarkdown_auto_uv*
 markdown_pymarkdown_auto_uv
 g:ale_markdown_pymarkdown_auto_uv
   Type: |Number|
