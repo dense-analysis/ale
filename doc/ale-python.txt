@@ -1677,8 +1677,36 @@ g:ale_python_pyrefly_auto_uv
 
   Set the executable to `uv` if true. This is overridden by a manually-set
   executable.
+                                           *ale-options.python_pyrefly_config*
+                                                 *g:ale_python_pyrefly_config*
+                                                 *b:ale_python_pyrefly_config*
+python_pyrefly_config
+g:ale_python_pyrefly_config
+	Type: |Dictionary|
+  Default: `{'python': {'pyrefly': {'displayTypeErrors': 'force-on'}}}`
 
+	Settings for configuring the `pyrefly` language server.
 
+	Starting with `pyrefly` version `0.31.1` displaying type errors is
+	disabled by default. The default |g:ale_python_pyrefly_config|
+	enables `displayTypeErrors`. When explicitly configuring
+	|g:ale_python_pyrefly_config| ensure to configure `displayTypeErrors`
+	if desired. To disable `displayTypeErrors` set the value to `force-off`
+	or set to `default` to require a `pyrefly` configuration for the
+	project.
+
+  A commonly used setting for `pyrefly` is disabling language services
+  apart from type checking, you can set this setting like so, or use
+	whatever other settings you want: >
+
+  let b:ale_python_pyright_config = {
+  \   'python': {
+  \       'pyrefly': {
+  \           'disableLanguageServices': v:true,
+	\       }
+  \   },
+  \}
+<
 ===============================================================================
 pyright                                                    *ale-python-pyright*
 
