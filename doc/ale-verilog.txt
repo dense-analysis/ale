@@ -79,11 +79,11 @@ iverilog                                                 *ale-verilog-iverilog*
 ===============================================================================
 slang                                                       *ale-verilog-slang*
 
-                                             *ale-options.verilog_slang_option*
-                                                   *g:ale_verilog_slang_option*
+                                            *ale-options.verilog_slang_options*
+                                                  *g:ale_verilog_slang_options*
                                                   *b:ale_verilog_slang_options*
-verilog_slang_option
-g:ale_verilog_slang_option
+verilog_slang_options
+g:ale_verilog_slang_options
   Type: |String|
   Default: `''`
 
