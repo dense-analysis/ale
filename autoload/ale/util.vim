@@ -589,6 +589,7 @@ function! ale#util#SafeReadFileLine(filename, line) abort
 
     if filereadable(a:filename)
         let l:lines = readfile(a:filename, '', a:line)
+
         if len(l:lines) >= a:line
             let l:content = l:lines[-1]
         else
