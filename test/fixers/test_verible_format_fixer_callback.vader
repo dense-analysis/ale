@@ -1,0 +1,16 @@
+Before:
+  call ale#assert#SetUpFixerTest('verilog', 'verible_format')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The verible format callback should return the correct default values):
+  AssertFixer {'command': ale#Escape('verible-verilog-format') .' -'}
+
+Execute(The verible format callback should allow a custom executable):
+  let g:ale_verilog_verible_format_executable = 'foo/bar'
+  AssertFixer {'command': ale#Escape('foo/bar') . ' -'}
+
+Execute(The verible format callback should allow custom options):
+  let g:ale_verilog_verible_format_options = '--foo --bar'
+  AssertFixer {'command': ale#Escape('verible-verilog-format') .' --foo --bar -'}

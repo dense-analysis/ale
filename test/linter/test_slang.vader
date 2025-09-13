@@ -5,10 +5,10 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default slang command should be correct):
-  AssertLinter 'slang', 'slang -Weverything -I%s:h  %t'
+  AssertLinter 'slang', 'slang -Weverything --diag-abs-paths -I%s:h -y%s:h  %t'
 
 Execute(slang options should be configurable):
   " Additional args for the linter
   let g:ale_verilog_slang_options = '--define-macro DWIDTH=12'
 
-  AssertLinter 'slang', 'slang -Weverything -I%s:h --define-macro DWIDTH=12 %t'
+  AssertLinter 'slang', 'slang -Weverything --diag-abs-paths -I%s:h -y%s:h --define-macro DWIDTH=12 %t'

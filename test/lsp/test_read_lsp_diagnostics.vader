@@ -109,11 +109,11 @@ Execute(ale#lsp#response#ReadDiagnostics() should include sources in detail):
   \   }
   \ ])
 
-Execute(ale#lsp#response#ReadDiagnostics() should keep detail with line breaks but replace with spaces in text):
+Execute(ale#lsp#response#ReadDiagnostics() should keep line breaks in text):
   AssertEqual [
   \   {
   \     'type': 'E',
-  \     'text': 'cannot borrow `cap` as mutable more than once at a time  mutable borrow starts here in previous iteration of loop',
+  \     'text': "cannot borrow `cap` as mutable\r\nmore than once at a time\n\nmutable borrow starts here\rin previous iteration of loop",
   \     'detail': "[rustc] cannot borrow `cap` as mutable\r\nmore than once at a time\n\nmutable borrow starts here\rin previous iteration of loop",
   \     'lnum': 10,
   \     'col': 15,

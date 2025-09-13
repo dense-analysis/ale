@@ -61,6 +61,14 @@ linting and fixing of code in Vim. ALE offers the following.
 * Windows support
 * Well-integrated with other plugins
 
+## Sponsorship
+
+If you would like to donate to Dense Analysis to say thank you for ALE, please
+consider visiting our [Sponsorship page](https://denseanalysis.org/sponsors/).
+Funds will be used to pay for our hosting fees and research. Whilst visiting our
+site, please feel free to make use of our educational resources and other
+recommended tools.
+
 ## Supported Languages and Tools
 
 ALE supports a wide variety of languages and tools. See the

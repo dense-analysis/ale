@@ -30,7 +30,8 @@ CONTENTS                                                         *ale-contents*
     7.2 Options for cspell................|ale-cspell-options|
     7.3 Options for languagetool..........|ale-languagetool-options|
     7.4 Options for write-good............|ale-write-good-options|
-    7.5 Other Linter/Fixer Options........|ale-other-integration-options|
+    7.5 Options for redpen................|ale-redpen-options|
+    7.6 Other Linter/Fixer Options........|ale-other-integration-options|
   8. Commands/Keybinds....................|ale-commands|
   9. API..................................|ale-api|
   10. Special Thanks......................|ale-special-thanks|
@@ -2269,6 +2270,16 @@ g:ale_popup_menu_enabled
   This setting must be set to `true` or `1` before ALE is loaded for this
   behavior to be enabled. See |ale-lint-settings-on-startup|.
 
+                                         *ale-options.references_show_contents*
+                                               *g:ale_references_show_contents*
+references_show_contents
+g:ale_references_show_contents
+  Type: |Boolean| or |Number|
+  Default: true
+
+  If set to `true` or `1`,  matches found by `:ALEFindReferences` will be
+  shown with a preview of the matching line.
+
                                  *ale-options.rename_tsserver_find_in_comments*
                                        *g:ale_rename_tsserver_find_in_comments*
 rename_tsserver_find_in_comments
@@ -3321,7 +3332,24 @@ g:ale_writegood_use_global
 
 
 -------------------------------------------------------------------------------
-7.6. Other Linter/Fixer Options                 *ale-other-integration-options*
+7.6. Options for redpen                                    *ale-redpen-options*
+
+The options for `redpen` are shared between all filetypes, so options can
+be configured once.
+
+                                                   *ale-options.redpen_options*
+                                                         *g:ale_redpen_options*
+                                                         *b:ale_redpen_options*
+redpen_options
+g:ale_redpen_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to redpen.
+
+
+-------------------------------------------------------------------------------
+7.7. Other Linter/Fixer Options                 *ale-other-integration-options*
 
 ALE supports a very wide variety of tools. Other linter or fixer options are
 documented in additional help files.
@@ -3342,6 +3370,7 @@ documented in additional help files.
     cspell................................|ale-asciidoc-cspell|
     write-good............................|ale-asciidoc-write-good|
     textlint..............................|ale-asciidoc-textlint|
+    redpen................................|ale-asciidoc-redpen|
   asm.....................................|ale-asm-options|
     gcc...................................|ale-asm-gcc|
     llvm_mc...............................|ale-asm-llvm_mc|
@@ -3390,6 +3419,7 @@ documented in additional help files.
     joker.................................|ale-clojure-joker|
   cloudformation..........................|ale-cloudformation-options|
     cfn-python-lint.......................|ale-cloudformation-cfn-python-lint|
+    checkov...............................|ale-cloudformation-checkov|
   cmake...................................|ale-cmake-options|
     cmakelint.............................|ale-cmake-cmakelint|
     cmake-lint............................|ale-cmake-cmake-lint|
@@ -3480,6 +3510,7 @@ documented in additional help files.
   fish....................................|ale-fish-options|
     fish_indent...........................|ale-fish-fish_indent|
   fortran.................................|ale-fortran-options|
+    fortitude.............................|ale-fortran-fortitude|
     gcc...................................|ale-fortran-gcc|
     language_server.......................|ale-fortran-language-server|
   fountain................................|ale-fountain-options|
@@ -3665,6 +3696,7 @@ documented in additional help files.
     remark-lint...........................|ale-markdown-remark-lint|
     textlint..............................|ale-markdown-textlint|
     write-good............................|ale-markdown-write-good|
+    redpen................................|ale-markdown-redpen|
   mercury.................................|ale-mercury-options|
     mmc...................................|ale-mercury-mmc|
   nasm....................................|ale-nasm-options|
@@ -3719,6 +3751,7 @@ documented in additional help files.
     uncrustify............................|ale-pawn-uncrustify|
   perl....................................|ale-perl-options|
     perl..................................|ale-perl-perl|
+    perl language server..................|ale-perl-languageserver|
     perlcritic............................|ale-perl-perlcritic|
     perltidy..............................|ale-perl-perltidy|
   perl6...................................|ale-perl6-options|
@@ -3727,6 +3760,7 @@ documented in additional help files.
     cspell................................|ale-php-cspell|
     langserver............................|ale-php-langserver|
     phan..................................|ale-php-phan|
+    phpactor..............................|ale-php-phpactor|
     phpcbf................................|ale-php-phpcbf|
     phpcs.................................|ale-php-phpcs|
     phpmd.................................|ale-php-phpmd|
@@ -3916,6 +3950,7 @@ documented in additional help files.
     lacheck...............................|ale-tex-lacheck|
     latexindent...........................|ale-tex-latexindent|
     texlab................................|ale-tex-texlab|
+    redpen................................|ale-tex-redpen|
   texinfo.................................|ale-texinfo-options|
     cspell................................|ale-texinfo-cspell|
     write-good............................|ale-texinfo-write-good|
@@ -3923,11 +3958,13 @@ documented in additional help files.
     cspell................................|ale-text-cspell|
     textlint..............................|ale-text-textlint|
     write-good............................|ale-text-write-good|
+    redpen................................|ale-text-redpen|
   thrift..................................|ale-thrift-options|
     thrift................................|ale-thrift-thrift|
     thriftcheck...........................|ale-thrift-thriftcheck|
   toml....................................|ale-toml-options|
     dprint................................|ale-toml-dprint|
+    tombi.................................|ale-toml-tombi|
   typescript..............................|ale-typescript-options|
     biome.................................|ale-typescript-biome|
     cspell................................|ale-typescript-cspell|
@@ -3950,6 +3987,8 @@ documented in additional help files.
     hdl-checker...........................|ale-verilog-hdl-checker|
     iverilog..............................|ale-verilog-iverilog|
     slang.................................|ale-verilog-slang|
+    verible_ls............................|ale-verilog-verible-ls|
+    verible_format........................|ale-verilog-verible-format|
     verilator.............................|ale-verilog-verilator|
     vlog..................................|ale-verilog-vlog|
     xvlog.................................|ale-verilog-xvlog|
@@ -4042,9 +4081,13 @@ documented in additional help files.
   `:ALEFindReferences -split`     - Open the location in a horizontal split.
   `:ALEFindReferences -vsplit`    - Open the location in a vertical split.
   `:ALEFindReferences -quickfix`  - Put the locations into quickfix list.
+  `:ALEFindReferences -contents`  - Show line contents for matches.
 
   The default method used for navigating to a new location can be changed
   by modifying |g:ale_default_navigation|.
+
+  The default behaviour on whether to show line content for matches can
+  be changed by modifying |g:ale_references_show_contents|.
 
   You can add `-relative` to the command to view results with relatives paths,
   instead of absolute paths. This option has no effect if `-quickfix` is used.

@@ -107,7 +107,7 @@ Execute(The mypy handler should handle Windows names with spaces):
   \   {
   \     'lnum': 4,
   \     'col': 0,
-  \     'filename': ale#path#Simplify('C:\something\with spaces.py'),
+  \     'filename': ale#path#GetAbsPath(getcwd(), 'C:\something\with spaces.py'),
   \     'type': 'E',
   \     'text': 'No library stub file for module ''django.db''',
   \   },

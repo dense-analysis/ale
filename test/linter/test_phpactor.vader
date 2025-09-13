@@ -8,6 +8,12 @@ Execute(The default executable path should be correct):
   AssertLinter 'phpactor',
   \ ale#Escape('phpactor') . ' language-server'
 
+Execute(Overriding the executable should work):
+  let b:ale_php_phpactor_executable = 'my_phpactor'
+
+  AssertLinter 'my_phpactor', ale#Escape('my_phpactor') . ' language-server'
+  unlet b:ale_php_phpactor_executable
+
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('../test-files/php/with-git/test.php')
   silent! call mkdir('../test-files/php/with-git/.git')
@@ -18,3 +24,20 @@ Execute(The project path should be correct for composer.json file):
   call ale#test#SetFilename('../test-files/php/with-composer/test.php')
 
   AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/php/with-composer')
+
+Execute(The LSP values should be set correctly):
+
+  AssertLSPLanguage 'php'
+
+  AssertLSPOptions {}
+
+  AssertLSPConfig {}
+
+Execute(Should accept initialization options):
+  let b:ale_php_phpactor_init_options = {
+  \   'language_server_phpstan.enabled': v:false,
+  \ }
+
+  AssertLSPOptions {
+  \   'language_server_phpstan.enabled': v:false,
+  \ }

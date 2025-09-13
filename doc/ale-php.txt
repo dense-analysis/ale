@@ -79,6 +79,36 @@ g:ale_php_phan_use_client
 
 
 ===============================================================================
+phpactor                                                     *ale-php-phpactor*
+
+                                          *ale-options.php_phpactor_executable*
+                                                *g:ale_php_phpactor_executable*
+                                                *b:ale_php_phpactor_executable*
+php_phpactor_executable
+g:ale_php_phpactor_executable
+  Type: |String|
+  Default: `'phpactor'`
+
+  This variable sets executable used for phpactor.
+
+php_phpactor_init_options
+g:ale_php_phpactor_init_options
+  Type: |Dictionary|
+  Default: `'{}'`
+
+  This variable can be changed to customize the LSP initialization_options.
+  For example: >
+
+  let g:ale_php_phpactor_init_options = {
+  \   'language_server_phpstan.enabled': v:false,
+  \   'language_server_psalm.enabled': v:false,
+  \   'worse_reflection.stub_dir': '%application_root%/.php-stubs'
+  \}
+<
+For all available options and explanations, visit
+https://phpactor.readthedocs.io/en/master/reference/configuration.html
+
+===============================================================================
 phpcbf                                                         *ale-php-phpcbf*
 
                                             *ale-options.php_phpcbf_executable*

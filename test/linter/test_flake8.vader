@@ -125,35 +125,35 @@ Execute(The flake8 callbacks should detect virtualenv directories):
   \   . ' --stdin-display-name %s -',
   \]
 
-Execute(The FindProjectRoot should detect the project root directory for namespace package via Manifest.in):
+Execute(FindProjectRoot should detect the project root directory for namespace package via Manifest.in):
   call ale#test#SetFilename('../test-files/python/namespace_package_manifest/namespace/foo/bar.py')
 
   AssertEqual
   \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_manifest'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
-Execute(The FindProjectRoot should detect the project root directory for namespace package via setup.cf):
+Execute(FindProjectRoot should detect the project root directory for namespace package via setup.cf):
   call ale#test#SetFilename('../test-files/python/namespace_package_setup/namespace/foo/bar.py')
 
   AssertEqual
   \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_setup'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
-Execute(The FindProjectRoot should detect the project root directory for namespace package via pytest.ini):
+Execute(FindProjectRoot should ignore the location of pytest.ini):
   call ale#test#SetFilename('../test-files/python/namespace_package_pytest/namespace/foo/bar.py')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_pytest'),
+  \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_pytest/namespace'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
-Execute(The FindProjectRoot should detect the project root directory for namespace package via tox.ini):
+Execute(FindProjectRoot should detect the project root directory for namespace package via tox.ini):
   call ale#test#SetFilename('../test-files/python/namespace_package_tox/namespace/foo/bar.py')
 
   AssertEqual
   \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_tox'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
-Execute(The FindProjectRoot should detect the project root directory for non-namespace package):
+Execute(FindProjectRoot should detect the project root directory for non-namespace package):
   call ale#test#SetFilename('../test-files/python/no_virtualenv/subdir/foo/bar.py')
 
   AssertEqual

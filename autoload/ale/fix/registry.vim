@@ -732,6 +732,21 @@ let s:default_registry = {
 \       'suggested_filetypes': ['roc'],
 \       'description': 'Annotates all top-level definitions in Roc files.',
 \   },
+\   'tombi_format': {
+\       'function': 'ale#fixers#tombi_format#Fix',
+\       'suggested_filetypes': ['toml'],
+\       'description': 'Formats TOML files',
+\   },
+\   'tombi_lint': {
+\       'function': 'ale#fixers#tombi_lint#Fix',
+\       'suggested_filetypes': ['toml'],
+\       'description': 'Lints TOML files',
+\   },
+\   'verible_format': {
+\       'function': 'ale#fixers#verible_format#Fix',
+\       'suggested_filetypes': ['verilog'],
+\       'description': 'Formats verilog files using verible.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

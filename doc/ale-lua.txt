@@ -49,16 +49,21 @@ g:ale_lua_language_server_executable
   If you have compiled the language server yourself in `/some/path`, the path
   will be `'/some/path/bin/lua-language-server'`.
 
-                                   *ale-options.lua_lua_language_server_config*
-                                         *g:ale_lua_lua_language_server_config*
-                                         *b:ale_lua_lua_language_server_config*
-lua_lua_language_server_config
-g:ale_lua_lua_language_server_config
+                                       *ale-options.lua_language_server_config*
+                                             *g:ale_lua_language_server_config*
+                                             *b:ale_lua_language_server_config*
+lua_language_server_config
+g:ale_lua_language_server_config
+
   Type: |Dictionary|
   Default: `{}`
 
   Dictionary containing configuration settings that will be passed to the
   language server.
+
+  For available configuration parameters, see `Settings` on the luals wiki:
+
+  https://luals.github.io/wiki/settings/
 
 
 ===============================================================================

@@ -3,7 +3,7 @@ ALE Verilog/SystemVerilog Integration                     *ale-verilog-options*
 
 
 ===============================================================================
-ALE can use seven different linters for Verilog HDL:
+ALE can use eight different linters for Verilog HDL:
 
   HDL Checker
     Using `hdl_checker --lsp`
@@ -13,6 +13,9 @@ ALE can use seven different linters for Verilog HDL:
 
   slang:
     Using `slang -Weverything`
+
+  verible_ls
+    Using `verible-verilog-ls`
 
   verilator
     Using `verilator --lint-only -Wall`
@@ -35,6 +38,12 @@ defining 'g:ale_linters' variable: >
     \ let g:ale_linters = {'systemverilog' : ['verilator'],}
 <
 
+===============================================================================
+ALE can use one fixer for Verilog HDL:
+
+
+  verible_fomat
+    Using `verible-verilog-format`
 ===============================================================================
 General notes
 
@@ -80,8 +89,74 @@ g:ale_verilog_slang_option
 
   This variable can be changed to modify 'slang' command arguments.
 
+===============================================================================
+verible_ls                                             *ale-verilog-verible-ls*
+
+                                     *ale-config.verilog_verible_ls_executable*
+                                          *g:ale_verilog_verible_ls_executable*
+                                          *b:ale_verilog_verible_ls_executable*
+verilog_verible_ls_executable
+g:ale_verilog_verible_ls_executable
+  Type: |String|
+  Default: `'verible-verilog-ls'`
+
+  This variable can be modifies to change the executable path for `verible_ls`
+
+                                         *ale-config.verilog_verible_ls_config*
+                                              *g:ale_verilog_verible_ls_config*
+                                              *b:ale_verilog_verible_ls_config*
+verilog_verible_ls_config
+g:ale_verilog_verible_ls_config
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary with configuration settings for `verible_ls`
+
+                                        *ale-config.verilog_verible_ls_options*
+                                             *g:ale_verilog_verible_ls_options*
+                                             *b:ale_verilog_verible_ls_options*
+verilog_verible_ls_options
+g:ale_verilog_verible_ls_options
+  Type: |String|
+  Default: `'--rules_config_search'`
+
+  Additional flags for `verible_ls`
+
+                                          *ale-config.verilog_verible_ls_rules*
+                                               *g:ale_verilog_verible_ls_rules*
+                                               *b:ale_verilog_verible_ls_rules*
+verilog_verible_ls_rules
+g:ale_verilog_verible_ls_rules
+  Type: |String|
+  Default: `''`
+
+  Additional rules applied by `verible_ls`
 
 ===============================================================================
+verible_format                                     *ale-verilog-verible-format*
+
+                                 *ale-config.verilog_verible_format_executable*
+                                      *g:ale_verilog_verible_format_executable*
+                                      *b:ale_verilog_verible_format_executable*
+verilog_verible_format_executable
+g:ale_verilog_verible_format_executable
+  Type: |String|
+  Default: `'verible-verilog-format'`
+
+  This variable can be modifies to change the executable path for
+  `verible_format`
+
+                                    *ale-config.verilog_verible_format_options*
+                                         *g:ale_verilog_verible_format_options*
+                                         *b:ale_verilog_verible_format_options*
+verilog_verible_format_options
+g:ale_verilog_verible_format_options
+  Type: |String|
+  Default: `''`
+
+  Additional flags for `verible_format`
+===============================================================================
+
 verilator                                               *ale-verilog-verilator*
 
                                         *ale-options.verilog_verilator_options*
