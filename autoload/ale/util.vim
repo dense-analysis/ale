@@ -584,8 +584,9 @@ function! ale#util#ToResource(uri) abort
     return l:resource
 endfunction
 
-function! ale#util#SafeReadFileLine(filename, line)
+function! ale#util#SafeReadFileLine(filename, line) abort
     let l:content = ''
+
     if filereadable(a:filename)
         let l:content = readfile(a:filename, '', a:line)[-1]
     endif
