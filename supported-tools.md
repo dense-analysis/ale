@@ -346,6 +346,7 @@ formatting.
   * [xo](https://github.com/sindresorhus/xo)
 * Jinja
   * [djlint](https://djlint.com/)
+  * [j2lint](https://github.com/aristanetworks/j2lint/)
 * JSON
   * [VSCode JSON language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [biome](https://biomejs.dev/)

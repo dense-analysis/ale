@@ -3634,6 +3634,7 @@ documented in additional help files.
     xo....................................|ale-javascript-xo|
   jinja...................................|ale-jinja-options|
     djlint................................|ale-jinja-djlint|
+    j2lint................................|ale-jinja-j2lint|
   json....................................|ale-json-options|
     biome.................................|ale-json-biome|
     clang-format..........................|ale-json-clangformat|
