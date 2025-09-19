@@ -1,6 +1,7 @@
 call ale#Set('ruby_rubocop_options', '')
 call ale#Set('ruby_rubocop_auto_correct_all', 0)
 call ale#Set('ruby_rubocop_executable', 'rubocop')
+call ale#Set('ruby_rubocop_editor_mode', '1')
 
 " Rubocop fixer outputs diagnostics first and then the fixed
 " output. These are delimited by a "=======" string that we
@@ -23,10 +24,12 @@ function! ale#fixers#rubocop#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'ruby_rubocop_executable')
     let l:options = ale#Var(a:buffer, 'ruby_rubocop_options')
     let l:auto_correct_all = ale#Var(a:buffer, 'ruby_rubocop_auto_correct_all')
+    let l:editor_mode= ale#Var(a:buffer, 'ruby_rubocop_editor_mode')
 
     return ale#ruby#EscapeExecutable(l:executable, 'rubocop')
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . (l:auto_correct_all ? ' --auto-correct-all' : ' --auto-correct')
+    \   . (l:editor_mode ? ' --editor-mode' : '')
     \   . ' --force-exclusion --stdin %s'
 endfunction
 

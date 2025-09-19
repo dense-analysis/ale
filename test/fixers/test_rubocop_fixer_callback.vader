@@ -20,7 +20,7 @@ Execute(The rubocop callback should return the correct default values):
   \ {
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
-  \     . ' --auto-correct --force-exclusion --stdin %s',
+  \     . ' --auto-correct --editor-mode --force-exclusion --stdin %s',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -33,7 +33,7 @@ Execute(The rubocop callback should include custom rubocop options):
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --except Lint/Debugger'
-  \     . ' --auto-correct --force-exclusion --stdin %s',
+  \     . ' --auto-correct --editor-mode --force-exclusion --stdin %s',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -45,7 +45,7 @@ Execute(The rubocop callback should use auto-correct-all option when set):
   \ {
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
-  \     . ' --auto-correct-all --force-exclusion --stdin %s'
+  \     . ' --auto-correct-all --editor-mode --force-exclusion --stdin %s'
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -87,3 +87,15 @@ Execute(The rubocop post-processor should remove diagnostics content):
   \   '         ''forrest'',',
   \   '         ''run'']',
   \ ])
+
+Execute(The rubocop callback should not use editor-mode option when configured not to):
+  let g:ale_ruby_rubocop_editor_mode = 0
+  call ale#test#SetFilename('../test-files/ruby/with_config/dummy.rb')
+
+  AssertEqual
+  \ {
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
+  \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
+  \     . ' --auto-correct-all --force-exclusion --stdin %s'
+  \ },
+  \ ale#fixers#rubocop#Fix(bufnr(''))
