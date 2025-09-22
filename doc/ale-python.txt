@@ -1688,7 +1688,8 @@ g:ale_python_pyrefly_config
 	Settings for configuring the `pyrefly` language server.
 
 	Starting with `pyrefly` version `0.31.1` displaying type errors is
-	disabled by default. The default |g:ale_python_pyrefly_config|
+	disabled by default if no `pyrefly.toml` or `pyproject.toml` with a
+	`[tool.pyrefly]` section exists. The default |g:ale_python_pyrefly_config|
 	enables `displayTypeErrors`. When explicitly configuring
 	|g:ale_python_pyrefly_config| ensure to configure `displayTypeErrors`
 	if desired. To disable `displayTypeErrors` set the value to `force-off`
