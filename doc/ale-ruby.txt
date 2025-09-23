@@ -187,18 +187,6 @@ g:ale_ruby_rubocop_auto_correct_all
   This variable can be changed to make rubocop to correct all offenses (unsafe).
 
 
-                                         *ale-options.ruby_rubocop_editor_mode*
-                                               *g:ale_ruby_rubocop_editor_mode*
-                                               *b:ale_ruby_rubocop_editor_mode*
-ruby_rubocop_editor_mode
-g:ale_ruby_rubocop_editor_mode
-  Type: |Number|
-  Default: `1`
-
-  This variable can be changed to 0 to run rubocop without the `--editor-mode`
-  flag (if using RuboCop < v1.61.0).
-
-
 ===============================================================================
 ruby                                                            *ale-ruby-ruby*
 

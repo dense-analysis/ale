@@ -1,53 +1,47 @@
 Before:
-  Save g:ale_ruby_rubocop_executable
-  Save g:ale_ruby_rubocop_options
-
-  " Use an invalid global executable, so we don't match it.
-  let g:ale_ruby_rubocop_executable = 'xxxinvalid'
-  let g:ale_ruby_rubocop_options = ''
-
-  call ale#test#SetDirectory('/testplugin/test/fixers')
+  call ale#assert#SetUpFixerTest('ruby', 'rubocop')
 
 After:
-  Restore
-
-  call ale#test#RestoreDirectory()
+  call ale#assert#TearDownFixerTest()
 
 Execute(The rubocop callback should return the correct default values):
   call ale#test#SetFilename('../test-files/ruby/dummy.rb')
 
-  AssertEqual
+  GivenCommandOutput ['1.61.0']
+
+  AssertFixer
   \ {
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --auto-correct --editor-mode --force-exclusion --stdin %s',
-  \ },
-  \ ale#fixers#rubocop#Fix(bufnr(''))
+  \ }
 
 Execute(The rubocop callback should include custom rubocop options):
   let g:ale_ruby_rubocop_options = '--except Lint/Debugger'
   call ale#test#SetFilename('../test-files/ruby/with_config/dummy.rb')
 
-  AssertEqual
+  GivenCommandOutput ['1.61.0']
+
+  AssertFixer
   \ {
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --except Lint/Debugger'
   \     . ' --auto-correct --editor-mode --force-exclusion --stdin %s',
-  \ },
-  \ ale#fixers#rubocop#Fix(bufnr(''))
+  \ }
 
 Execute(The rubocop callback should use auto-correct-all option when set):
   let g:ale_ruby_rubocop_auto_correct_all = 1
   call ale#test#SetFilename('../test-files/ruby/with_config/dummy.rb')
 
-  AssertEqual
+  GivenCommandOutput ['1.61.0']
+
+  AssertFixer
   \ {
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --auto-correct-all --editor-mode --force-exclusion --stdin %s'
-  \ },
-  \ ale#fixers#rubocop#Fix(bufnr(''))
+  \ }
 
 Execute(The rubocop post-processor should remove diagnostics content):
   AssertEqual
@@ -88,14 +82,15 @@ Execute(The rubocop post-processor should remove diagnostics content):
   \   '         ''run'']',
   \ ])
 
-Execute(The rubocop callback should not use editor-mode option when configured not to):
-  let g:ale_ruby_rubocop_editor_mode = 0
+Execute(The rubocop callback should not use editor-mode option with older versions):
   call ale#test#SetFilename('../test-files/ruby/with_config/dummy.rb')
 
-  AssertEqual
+  GivenCommandOutput ['1.59.0']
+
+  AssertFixer
   \ {
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
-  \     . ' --auto-correct-all --force-exclusion --stdin %s'
-  \ },
-  \ ale#fixers#rubocop#Fix(bufnr(''))
+  \     . ' --auto-correct --force-exclusion --stdin %s'
+  \ }
+
