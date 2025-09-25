@@ -17,7 +17,7 @@ Execute(The stylelint callback should return the correct default values):
   \   'cwd': '%s:h',
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/stylelint/bin/stylelint.js'))
-  \     . ' --fix --stdin --stdin-filename %s',
+  \     . ' --fix --stdin --no-color --stdin-filename %s',
   \ }
 
 Execute(The stylelint callback should include custom stylelint options):
@@ -30,5 +30,5 @@ Execute(The stylelint callback should include custom stylelint options):
   \   'cwd': '%s:h',
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/stylelint/bin/stylelint.js'))
-  \     . ' --cache --fix --stdin --stdin-filename %s',
+  \     . ' --cache --fix --stdin --no-color --stdin-filename %s',
   \ }

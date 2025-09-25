@@ -14,7 +14,7 @@ Execute(node_modules directories should be discovered):
   \   . '/../test-files/stylelint/node_modules/.bin/stylelint'
   \)
 
-  AssertLinter b:executable, ale#Escape(b:executable) . '  --stdin-filename %s'
+  AssertLinter b:executable, ale#Escape(b:executable) . '  --no-color --stdin-filename %s'
 
 Execute(The global override should work):
   let b:ale_scss_stylelint_executable = 'foobar'
@@ -22,7 +22,7 @@ Execute(The global override should work):
 
   call ale#test#SetFilename('../test-files/stylelint/nested/testfile.scss')
 
-  AssertLinter 'foobar', ale#Escape('foobar') . '  --stdin-filename %s'
+  AssertLinter 'foobar', ale#Escape('foobar') . '  --no-color --stdin-filename %s'
 
 Execute(Extra options should be configurable):
   call ale#test#SetFilename('../test-files/dummy')
@@ -30,4 +30,4 @@ Execute(Extra options should be configurable):
   let b:ale_scss_stylelint_options = '--configFile ''/absolute/path/to/file'''
 
   AssertLinter 'stylelint',
-  \ ale#Escape('stylelint') . '  --configFile ''/absolute/path/to/file'' --stdin-filename %s'
+  \ ale#Escape('stylelint') . '  --configFile ''/absolute/path/to/file'' --no-color --stdin-filename %s'
