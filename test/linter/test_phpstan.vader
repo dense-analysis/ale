@@ -59,6 +59,13 @@ Execute(project with level set to 3):
   AssertLinter 'phpstan',
   \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('3') . ' %s'
 
+Execute(project with level set to 0):
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+  let g:ale_php_phpstan_level = 0
+
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('0') . ' %s'
+
 Execute(Custom phpstan configuration file):
   let g:ale_php_phpstan_configuration = 'phpstan_config'
 
