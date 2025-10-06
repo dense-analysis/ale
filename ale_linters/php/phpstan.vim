@@ -83,6 +83,10 @@ function! ale_linters#php#phpstan#FindConfigFile(buffer) abort
         let l:result = ale#path#FindNearestFile(a:buffer, 'phpstan.neon.dist')
     endif
 
+    if empty(l:result)
+        let l:result = ale#path#FindNearestFile(a:buffer, 'phpstan.dist.neon')
+    endif
+
     return l:result
 endfunction
 
