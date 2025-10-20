@@ -3586,6 +3586,7 @@ documented in additional help files.
     prettier..............................|ale-html-prettier|
     rustywind.............................|ale-html-rustywind|
     stylelint.............................|ale-html-stylelint|
+    superhtml...........................|ale-html-superhtml|
     tidy..................................|ale-html-tidy|
     vscodehtml............................|ale-html-vscode|
     write-good............................|ale-html-write-good|
