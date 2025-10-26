@@ -336,6 +336,7 @@ Notes:
   * `xo`
 * Jinja
   * djlint
+  * j2lint
 * JSON
   * `VSCode JSON language server`
   * `biome`
