@@ -19,20 +19,34 @@ function! ale#fixers#rubocop#PostProcess(buffer, output) abort
     return a:output[l:line :]
 endfunction
 
-function! ale#fixers#rubocop#GetCommand(buffer) abort
+function! ale#fixers#rubocop#GetCommand(buffer, version) abort
     let l:executable = ale#Var(a:buffer, 'ruby_rubocop_executable')
     let l:options = ale#Var(a:buffer, 'ruby_rubocop_options')
     let l:auto_correct_all = ale#Var(a:buffer, 'ruby_rubocop_auto_correct_all')
+    let l:editor_mode = ale#semver#GTE(a:version, [1, 61, 0])
 
     return ale#ruby#EscapeExecutable(l:executable, 'rubocop')
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . (l:auto_correct_all ? ' --auto-correct-all' : ' --auto-correct')
+    \   . (l:editor_mode ? ' --editor-mode' : '')
     \   . ' --force-exclusion --stdin %s'
 endfunction
 
-function! ale#fixers#rubocop#Fix(buffer) abort
+function! ale#fixers#rubocop#GetCommandForVersion(buffer, version) abort
     return {
-    \   'command': ale#fixers#rubocop#GetCommand(a:buffer),
-    \   'process_with': 'ale#fixers#rubocop#PostProcess'
+    \ 'command': ale#fixers#rubocop#GetCommand(a:buffer, a:version),
+    \ 'process_with': 'ale#fixers#rubocop#PostProcess'
     \}
+endfunction
+
+function! ale#fixers#rubocop#Fix(buffer) abort
+    let l:executable = ale#Var(a:buffer, 'ruby_rubocop_executable')
+    let l:command = l:executable . ale#Pad('--version')
+
+    return ale#semver#RunWithVersionCheck(
+    \   a:buffer,
+    \   l:executable,
+    \   l:command,
+    \   function('ale#fixers#rubocop#GetCommandForVersion'),
+    \)
 endfunction
