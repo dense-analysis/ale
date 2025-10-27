@@ -85,9 +85,11 @@ The following general coding standards should be adhered to for Vim code.
 * Try to keep lines no longer than 80 characters, but this isn't an absolute
   requirement.
 * Use 4 spaces for every level of indentation in Vim code.
-* Add a blank line before every `function`, `if`, `for`, `while`, or `return`,
-  which doesn't start a new level of indentation. This makes the logic in
-  your code easier to follow.
+* Add a blank line before every `function`, `if`, `for`, `while`, `try`, or `return`,
+  which doesn't start a new level of indentation. When adding more code on the
+  same indentation level, also add blank lines after every corresponding end
+  for those mentioned keywords. This makes the logic in your code easier to
+  follow.
 * End every file with a trailing newline character, but not with extra blank
   lines. Remove trailing whitespace from the ends of lines.
 * Write the full names of commands instead of abbreviations. For example, write
