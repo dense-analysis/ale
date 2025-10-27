@@ -32,7 +32,8 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
     " optional in the researched pattern
     if has('win32')
         " windows path  has 'D:/subpath'(one more ':') which is different with unix 
-        let l:pattern = '^%\(Warning\|Error\)[^:]*:\s*\([a-zA-Z]:[^:]\+\):\(\d\+\):\(\d\+\)\?:\? \(.\+\)$'
+        " match filename until last colon before line number
+        let l:pattern = '^%\(Warning\|Error\)[^:]*:\s*\(.\{-}\):\(\d\+\):\(\d\+\)\?:\? \(.\+\)$'
     else
         let l:pattern = '^%\(Warning\|Error\)[^:]*:\s*\([^:]\+\):\(\d\+\):\(\d\+\)\?:\? \(.\+\)$'
     endif
