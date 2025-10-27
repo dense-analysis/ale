@@ -6,6 +6,7 @@ call ale#Set('python_pyrefly_use_global', get(g:, 'ale_use_global_executables', 
 call ale#Set('python_pyrefly_auto_pipenv', 0)
 call ale#Set('python_pyrefly_auto_poetry', 0)
 call ale#Set('python_pyrefly_auto_uv', 0)
+call ale#Set('python_pyrefly_config', {'python': {'pyrefly': {'displayTypeErrors': 'force-on'}}})
 
 function! ale_linters#python#pyrefly#GetExecutable(buffer) abort
     if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_pyrefly_auto_pipenv'))
@@ -54,4 +55,5 @@ call ale#linter#Define('python', {
 \   'project_root': function('ale#python#FindProjectRoot'),
 \   'completion_filter': 'ale#completion#python#CompletionItemFilter',
 \   'cwd': function('ale_linters#python#pyrefly#GetCwd'),
+\   'lsp_config': {b -> ale#Var(b, 'python_pyrefly_config')},
 \})
