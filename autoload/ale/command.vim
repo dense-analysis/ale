@@ -138,9 +138,20 @@ function! s:TemporaryFilename(buffer) abort
         let l:filename = 'file' . ale#filetypes#GuessExtension(l:ft)
     endif
 
-    " Create a temporary filename, <temp_dir>/<original_basename>
-    " The file itself will not be created by this function.
-    return ale#util#Tempname() . (has('win32') ? '\' : '/') . l:filename
+    " Get temp name first
+    let l:tmpname = ale#util#Tempname()
+
+    " Detect separator:
+    " If running on Windows and ale#util#Tempname() contains a backslash,
+    " continue to use '\' for consistency.
+    " Otherwise, always use '/' (recommended cross-platform).
+    if has('win32') && l:tmpname =~ '\\'
+        let l:sep = '\'
+    else
+        let l:sep = '/'
+    endif
+
+    return l:tmpname . l:sep . l:filename
 endfunction
 
 " Given part of a command, replace any % with %%, so that no characters in
