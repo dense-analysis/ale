@@ -64,7 +64,7 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths, meta) abort
 
         " Automatically include the jaxb directory too, if it's there.
         let l:jaxb_dir = fnamemodify(l:src_dir, ':h:h')
-        \   . (has('win32') ? '\jaxb\' : '/jaxb/')
+        \   . (ale#util#PathSeparator(l:src_dir) == '\' ? '\jaxb\' : '/jaxb/') 
 
         if isdirectory(l:jaxb_dir)
             call add(l:sp_dirs, l:jaxb_dir)

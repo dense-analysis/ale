@@ -6,7 +6,8 @@ call ale#Set('nasm_nasm_options', '')
 
 function! ale_linters#nasm#nasm#GetCommand(buffer) abort
     " Note that NASM requires a trailing slash for the -I option.
-    let l:separator = has('win32') ? '\' : '/'
+    let l:dir  = fnamemodify(bufname(a:buffer), ':p:h')
+    let l:separator = ale#util#PathSeparator(l:dir) 
     let l:output_null = has('win32') ? 'NUL' : '/dev/null'
 
     return '%e -X gnu -I %s:h' . l:separator

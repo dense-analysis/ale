@@ -45,7 +45,7 @@ let s:executables = [
 \   'node_modules/solhint/solhint.js',
 \   'solhint',
 \]
-let s:sep = has('win32') ? '\' : '/'
+let s:sep = ale#util#PathSeparator() 
 
 " Given a buffer, return an appropriate working directory for solhint.
 function! ale_linters#solidity#solhint#GetCwd(buffer) abort

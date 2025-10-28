@@ -30,7 +30,13 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
     "
     " to stay compatible with old versions of the tool, the column number is
     " optional in the researched pattern
-    let l:pattern = '^%\(Warning\|Error\)[^:]*:\s*\([^:]\+\):\(\d\+\):\(\d\+\)\?:\? \(.\+\)$'
+    if has('win32')
+        " windows path  has 'D:/subpath'(one more ':') which is different with unix 
+        " match filename until last colon before line number
+        let l:pattern = '^%\(Warning\|Error\)[^:]*:\s*\(.\{-}\):\(\d\+\):\(\d\+\)\?:\? \(.\+\)$'
+    else
+        let l:pattern = '^%\(Warning\|Error\)[^:]*:\s*\([^:]\+\):\(\d\+\):\(\d\+\)\?:\? \(.\+\)$'
+    endif
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
