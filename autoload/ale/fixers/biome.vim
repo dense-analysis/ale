@@ -1,12 +1,11 @@
 function! ale#fixers#biome#Fix(buffer) abort
     let l:executable = ale#handlers#biome#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'biome_options')
-    let l:apply = ale#Var(a:buffer, 'biome_fixer_apply_unsafe') ? '--write --unsafe' : '--write'
+    let l:unsafe = ale#Var(a:buffer, 'biome_fixer_apply_unsafe') ? ' --unsafe' : ''
 
     return {
-    \   'read_temporary_file': 1,
-    \   'command': ale#Escape(l:executable) . ' check ' . l:apply
+    \   'command': ale#Escape(l:executable) . ' check '
+    \       . '--write --stdin-file-path %s' . l:unsafe
     \       . (!empty(l:options) ? ' ' . l:options : '')
-    \       . ' %t'
     \}
 endfunction

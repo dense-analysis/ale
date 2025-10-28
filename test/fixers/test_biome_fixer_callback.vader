@@ -15,9 +15,8 @@ Execute(The default biome command should be correct):
 
   AssertFixer
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape('biome')
-  \     . ' check --write %t'
+  \     . ' check --write --stdin-file-path %s'
   \ }
 
 Execute(Unsafe fixes can be applied via an option):
@@ -26,9 +25,8 @@ Execute(Unsafe fixes can be applied via an option):
 
   AssertFixer
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape('biome')
-  \     . ' check --write --unsafe %t'
+  \     . ' check --write --stdin-file-path %s --unsafe'
   \ }
 
 Execute(The fixer should accept options):
@@ -37,7 +35,6 @@ Execute(The fixer should accept options):
 
   AssertFixer
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape('biome')
-  \     . ' check --write --foobar %t',
+  \     . ' check --write --stdin-file-path %s --foobar',
   \ }
