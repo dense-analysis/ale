@@ -299,6 +299,7 @@ formatting.
   * [prettier](https://github.com/prettier/prettier)
   * [proselint](http://proselint.com/)
   * [rustywind](https://github.com/avencera/rustywind)
+  * [superhtml](https://github.com/kristoff-it/superhtml)
   * [tidy](http://www.html-tidy.org/)
   * [write-good](https://github.com/btford/write-good)
 * HTML Angular

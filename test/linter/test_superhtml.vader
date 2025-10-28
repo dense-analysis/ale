@@ -1,0 +1,29 @@
+Before:
+  call ale#assert#SetUpLinterTest('html', 'superhtml')
+  call ale#test#SetFilename('test.html')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'superhtml',
+  \ ale#Escape('superhtml') . ' check --stdin'
+
+Execute(The executable should be configurable):
+  let g:ale_html_superhtml_executable = '/usr/local/bin/superhtml'
+
+  AssertLinter '/usr/local/bin/superhtml',
+  \ ale#Escape('/usr/local/bin/superhtml') . ' check --stdin'
+
+Execute(The options should be configurable):
+  let g:ale_html_superhtml_options = '--some-option'
+
+  AssertLinter 'superhtml',
+  \ ale#Escape('superhtml') . ' check --stdin'
+
+Execute(The use_global option should be respected):
+  let g:ale_html_superhtml_executable = 'custom_superhtml'
+  let g:ale_html_superhtml_use_global = 1
+
+  AssertLinter 'custom_superhtml',
+  \ ale#Escape('custom_superhtml') . ' check --stdin'
