@@ -8,7 +8,8 @@ call ale#Set('ruby_brakeman_options', '')
 function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
     let l:output = []
     let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
-    let l:sep = has('win32') ? '\' : '/'
+    let l:dir  = fnamemodify(bufname(a:buffer), ':p:h')
+    let l:sep = ale#util#PathSeparator(l:dir) 
     " Brakeman always outputs paths relative to the Rails app root
     let l:rails_root = ale#ruby#FindRailsRoot(a:buffer)
 

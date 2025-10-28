@@ -63,7 +63,7 @@ endfunction
 " Each item should have 'filename', 'line', and 'column' keys.
 function! ale#preview#ShowSelection(item_list, ...) abort
     let l:options = get(a:000, 0, {})
-    let l:sep = has('win32') ? '\' : '/'
+    let l:sep = ale#util#PathSeparator()
     let l:lines = []
 
     " Create lines to display to users.

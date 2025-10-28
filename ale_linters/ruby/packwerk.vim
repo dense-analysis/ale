@@ -35,7 +35,7 @@ function! ale_linters#ruby#packwerk#GetCommand(buffer) abort
     endif
 
     let l:executable = ale#Var(a:buffer, 'ruby_packwerk_executable')
-    let l:sep = has('win32') ? '\' : '/'
+    let l:sep = ale#util#PathSeparator(l:rails_root) 
     let l:abs_path = expand('#' . a:buffer . ':p')
     let l:rel_path = substitute(l:abs_path, escape(l:rails_root . l:sep, '\'), '', '')
 

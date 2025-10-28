@@ -317,6 +317,25 @@ function! ale#util#Tempname() abort
     return l:name
 endfunction
 
+" Detect the best path separator for the current environment.
+function! ale#util#PathSeparator(...) abort
+    " 1. Get base dir from args OR  a temporary file name (reflects the real system path style)
+    let l:tmpname = a:0 ? a:1 : ale#util#Tempname()
+    " 2. On Windows, if the path contains '\', use it.
+    if has('win32')
+        if l:tmpname =~# '\\'
+            return '\\'
+        endif
+        " Otherwise, fallback to '/' (e.g., WSL, Git Bash, MSYS2)
+        return '/'
+    endif
+    " 3. On Unix-like systems, always use '/'
+    return '/'
+endfunction
+
+
+
+
 " Given a single line, or a List of lines, and a single pattern, or a List
 " of patterns, return all of the matches for the lines(s) from the given
 " patterns, using matchlist().

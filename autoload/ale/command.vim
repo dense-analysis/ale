@@ -140,16 +140,8 @@ function! s:TemporaryFilename(buffer) abort
 
     " Get temp name first
     let l:tmpname = ale#util#Tempname()
-
-    " Detect separator:
-    " If running on Windows and ale#util#Tempname() contains a backslash,
-    " continue to use '\' for consistency.
-    " Otherwise, always use '/' (recommended cross-platform).
-    if has('win32') && l:tmpname =~ '\\'
-        let l:sep = '\'
-    else
-        let l:sep = '/'
-    endif
+    " Gen Sep 
+    let l:sep = ale#util#PathSeparator(l:tmpname)
 
     return l:tmpname . l:sep . l:filename
 endfunction
