@@ -131,10 +131,10 @@ g:ale_perl_perlcritic_showrules
 perlnavigator                                          *ale-perl-perlnavigator*
 
                                     *ale-options.perl_perlnavigator_executable*
-                                              *g:perl_perlnavigator_executable*
-                                              *b:perl_perlnavigator_executable*
+                                          *g:ale_perl_perlnavigator_executable*
+                                          *b:ale_perl_perlnavigator_executable*
 perl_perlnavigator_executable
-g:perl_perlnavigator_executable
+g:ale_perl_perlnavigator_executable
   Type: |String|
   Default: `'perlnavigator'`
 
@@ -142,10 +142,10 @@ g:perl_perlnavigator_executable
   linting perl.
 
                                         *ale-options.perl_perlnavigator_config*
-                                                  *g:perl_perlnavigator_config*
-                                                  *b:perl_perlnavigator_config*
+                                              *g:ale_perl_perlnavigator_config*
+                                              *b:ale_perl_perlnavigator_config*
 perl_perlnavigator_config
-g:perl_perlnavigator_config
+g:ale_perl_perlnavigator_config
   Type: |Dictionary|
   Default: `'{}'`
 
