@@ -70,54 +70,6 @@ g:ale_perl_languageserver_config
   For all available options and explanations, visit
   https://metacpan.org/pod/Perl::LanguageServer#Extension-Settings
 
-
-===============================================================================
-perlnavigator                                          *ale-perl-perlnavigator*
-
-                                    *ale-options.perl_perlnavigator_executable*
-                                              *g:perl_perlnavigator_executable*
-                                              *b:perl_perlnavigator_executable*
-perl_perlnavigator_executable
-g:perl_perlnavigator_executable
-  Type: |String|
-  Default: `'perlnavigator'`
-
-  This variable can be changed to modify the perlnavigator executable used for
-  linting perl.
-
-                                        *ale-options.perl_perlnavigator_config*
-                                                  *g:perl_perlnavigator_config*
-                                                  *b:perl_perlnavigator_config*
-perl_perlnavigator_config
-g:perl_perlnavigator_config
-  Type: |Dictionary|
-  Default: `'{}'`
-
-  This variable can be changed to customize the lsp_config (sent as a
-  workspace/didChangeConfiguration command) for perlnavigator.
-  For example: >
-
-  let g:ale_perl_perlnavigator_config = {
-  \   'perlnavigator': {
-  \       'enableWarnings': 1,
-  \       'includePaths': [ $HOME . '/MyPerlStuff/lib', '/tmp/tmp.7qSgUo34e' ],
-  \       'perlEnvAdd': 1,
-  \       'perlEnv': {
-  \           'PERL_DL_NONLAZY': 1,
-  \       },
-  \       'perlPath': substitute(g:ale_perl_perl_executable, '/perl$', '', ''),
-  \       'perlcriticEnabled': 1,
-  \       'perlcriticProfile': '$workspaceFolder/.perlcriticrc',
-  \       'perltidyProfile': '$workspaceFolder/.perltidyrc',
-  \       'perlcriticSeverity': 2,
-  \   },
-  \ }
-  \}
-
-<
-  For all available options and explanations, visit
-  https://github.com/bscan/PerlNavigator?tab=readme-ov-file
-
 ===============================================================================
 perlcritic                                                *ale-perl-perlcritic*
 
@@ -173,6 +125,54 @@ g:ale_perl_perlcritic_showrules
   Controls whether perlcritic rule names are shown after the error message.
   Defaults to off to reduce length of message.
 
+
+
+===============================================================================
+perlnavigator                                          *ale-perl-perlnavigator*
+
+                                    *ale-options.perl_perlnavigator_executable*
+                                              *g:perl_perlnavigator_executable*
+                                              *b:perl_perlnavigator_executable*
+perl_perlnavigator_executable
+g:perl_perlnavigator_executable
+  Type: |String|
+  Default: `'perlnavigator'`
+
+  This variable can be changed to modify the perlnavigator executable used for
+  linting perl.
+
+                                        *ale-options.perl_perlnavigator_config*
+                                                  *g:perl_perlnavigator_config*
+                                                  *b:perl_perlnavigator_config*
+perl_perlnavigator_config
+g:perl_perlnavigator_config
+  Type: |Dictionary|
+  Default: `'{}'`
+
+  This variable can be changed to customize the lsp_config (sent as a
+  workspace/didChangeConfiguration command) for perlnavigator.
+  For example: >
+
+  let g:ale_perl_perlnavigator_config = {
+  \   'perlnavigator': {
+  \       'enableWarnings': 1,
+  \       'includePaths': [ $HOME . '/MyPerlStuff/lib', '/tmp/tmp.7qSgUo34e' ],
+  \       'perlEnvAdd': 1,
+  \       'perlEnv': {
+  \           'PERL_DL_NONLAZY': 1,
+  \       },
+  \       'perlPath': substitute(g:ale_perl_perl_executable, '/perl$', '', ''),
+  \       'perlcriticEnabled': 1,
+  \       'perlcriticProfile': '$workspaceFolder/.perlcriticrc',
+  \       'perltidyProfile': '$workspaceFolder/.perltidyrc',
+  \       'perlcriticSeverity': 2,
+  \   },
+  \ }
+  \}
+
+<
+  For all available options and explanations, visit
+  https://github.com/bscan/PerlNavigator?tab=readme-ov-file
 
 ===============================================================================
 perltidy                                                    *ale-perl-perltidy*
