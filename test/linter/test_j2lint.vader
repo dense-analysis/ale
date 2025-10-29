@@ -1,0 +1,44 @@
+Before:
+  call ale#assert#SetUpLinterTest('jinja', 'j2lint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The j2lint executable should be configurable):
+  let g:ale_jinja_j2lint_executable = '~/.local/bin/j2lint'
+
+  AssertLinter '~/.local/bin/j2lint',
+  \ ale#Escape('~/.local/bin/j2lint'). ' %t'
+
+Execute(Setting executable to 'pipenv' appends 'run j2lint'):
+  let g:ale_jinja_j2lint_executable = 'path/to/pipenv'
+
+  AssertLinter 'path/to/pipenv',
+  \ ale#Escape('path/to/pipenv') . ' run j2lint %t'
+
+Execute(Pipenv is detected when jinja_j2lint_auto_pipenv is set):
+  let g:ale_jinja_j2lint_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run j2lint %t'
+
+Execute(Setting executable to 'poetry' appends 'run j2lint'):
+  let g:ale_jinja_j2lint_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run j2lint %t'
+
+Execute(Poetry is detected when jinja_j2lint_auto_poetry is set):
+  let g:ale_jinja_j2lint_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run j2lint %t'
+
+Execute(uv is detected when jinja_j2lint_auto_uv is set):
+  let g:ale_jinja_j2lint_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run j2lint %t'

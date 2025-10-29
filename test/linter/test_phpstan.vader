@@ -59,6 +59,13 @@ Execute(project with level set to 3):
   AssertLinter 'phpstan',
   \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('3') . ' %s'
 
+Execute(project with level set to 0):
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+  let g:ale_php_phpstan_level = 0
+
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('0') . ' %s'
+
 Execute(Custom phpstan configuration file):
   let g:ale_php_phpstan_configuration = 'phpstan_config'
 
@@ -86,6 +93,17 @@ Execute(Configuration file exists in current directory):
 
 Execute(Configuration dist file exists in current directory):
   call writefile(['parameters:', '  level: 7'], './phpstan.neon.dist')
+  let g:ale_php_phpstan_level = ''
+  let g:ale_php_phpstan_configuration = ''
+
+  AssertLinter 'phpstan', [
+  \ ale#Escape('phpstan') . ' --version',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json %s'
+  \ ]
+  AssertLinterCwd g:dir
+
+Execute(Configuration alternative dist file exists in current directory):
+  call writefile(['parameters:', '  level: 7'], './phpstan.dist.neon')
   let g:ale_php_phpstan_level = ''
   let g:ale_php_phpstan_configuration = ''
 
