@@ -16,7 +16,7 @@ function! ale_linters#html#stylelint#GetCommand(buffer) abort
 
     return ale#Escape(l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' --stdin-filename %s'
+    \   . ' --no-color --stdin-filename %s'
 endfunction
 
 call ale#linter#Define('html', {

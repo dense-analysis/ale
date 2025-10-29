@@ -37,7 +37,7 @@ Execute(node_modules directories should be discovered):
 
   AssertEqual b:executable, ale_linters#html#stylelint#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape(b:executable) . ' --stdin-filename %s',
+  \ ale#Escape(b:executable) . ' --no-color --stdin-filename %s',
   \ ale_linters#html#stylelint#GetCommand(bufnr(''))
 
 Execute(The global override should work):
@@ -48,7 +48,7 @@ Execute(The global override should work):
 
   AssertEqual 'foobar', ale_linters#html#stylelint#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('foobar') . ' --stdin-filename %s',
+  \ ale#Escape('foobar') . ' --no-color --stdin-filename %s',
   \ ale_linters#html#stylelint#GetCommand(bufnr(''))
 
 Execute(Extra options should be configurable):
@@ -56,5 +56,5 @@ Execute(Extra options should be configurable):
 
   AssertEqual 'stylelint', ale_linters#html#stylelint#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('stylelint') . ' --whatever --stdin-filename %s',
+  \ ale#Escape('stylelint') . ' --whatever --no-color --stdin-filename %s',
   \ ale_linters#html#stylelint#GetCommand(bufnr(''))

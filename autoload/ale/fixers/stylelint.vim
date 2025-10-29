@@ -20,7 +20,7 @@ function! ale#fixers#stylelint#Fix(buffer) abort
     \   'cwd': '%s:h',
     \   'command': ale#node#Executable(a:buffer, l:executable)
     \       . ale#Pad(l:options)
-    \       . ' --fix --stdin --stdin-filename %s',
+    \       . ' --fix --stdin --no-color --stdin-filename %s',
     \   'read_temporary_file': 0,
     \}
 endfunction

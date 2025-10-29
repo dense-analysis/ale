@@ -7,7 +7,7 @@ call ale#Set('stylus_stylelint_use_global', get(g:, 'ale_use_global_executables'
 function! ale_linters#stylus#stylelint#GetCommand(buffer) abort
     return '%e'
     \   . ale#Pad(ale#Var(a:buffer, 'stylus_stylelint_options'))
-    \   . ' --stdin-filename %s'
+    \   . ' --no-color --stdin-filename %s'
 endfunction
 
 call ale#linter#Define('stylus', {

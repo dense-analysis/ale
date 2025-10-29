@@ -6,7 +6,7 @@ call ale#Set('css_stylelint_use_global', get(g:, 'ale_use_global_executables', 0
 
 function! ale_linters#css#stylelint#GetCommand(buffer) abort
     return '%e ' . ale#Pad(ale#Var(a:buffer, 'css_stylelint_options'))
-    \   . ' --stdin-filename %s'
+    \   . ' --no-color --stdin-filename %s'
 endfunction
 
 call ale#linter#Define('css', {

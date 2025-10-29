@@ -6,7 +6,7 @@ call ale#Set('scss_stylelint_use_global', get(g:, 'ale_use_global_executables', 
 
 function! ale_linters#scss#stylelint#GetCommand(buffer) abort
     return '%e ' . ale#Pad(ale#Var(a:buffer, 'scss_stylelint_options'))
-    \   . ' --stdin-filename %s'
+    \   . ' --no-color --stdin-filename %s'
 endfunction
 
 call ale#linter#Define('scss', {

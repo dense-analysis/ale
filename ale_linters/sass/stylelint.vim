@@ -9,6 +9,6 @@ call ale#linter#Define('sass', {
 \   'executable': {b -> ale#path#FindExecutable(b, 'sass_stylelint', [
 \       'node_modules/.bin/stylelint',
 \   ])},
-\   'command': '%e --stdin-filename %s',
+\   'command': '%e --no-color --stdin-filename %s',
 \   'callback': 'ale#handlers#css#HandleStyleLintFormat',
 \})

@@ -14,7 +14,7 @@ Execute(node_modules directories should be discovered):
   \   . '/../test-files/stylelint/node_modules/.bin/stylelint'
   \)
 
-  AssertLinter b:executable, ale#Escape(b:executable) . '  --syntax=sugarss --stdin-filename %s'
+  AssertLinter b:executable, ale#Escape(b:executable) . '  --syntax=sugarss --no-color --stdin-filename %s'
 
 Execute(The global override should work):
   let b:ale_sugarss_stylelint_executable = 'foobar'
@@ -22,7 +22,7 @@ Execute(The global override should work):
 
   call ale#test#SetFilename('../test-files/stylelint/nested/testfile.sss')
 
-  AssertLinter 'foobar', ale#Escape('foobar') . '  --syntax=sugarss --stdin-filename %s'
+  AssertLinter 'foobar', ale#Escape('foobar') . '  --syntax=sugarss --no-color --stdin-filename %s'
 
 Execute(Extra options should be configurable):
   call ale#test#SetFilename('../test-files/dummy')
@@ -30,4 +30,4 @@ Execute(Extra options should be configurable):
   let b:ale_sugarss_stylelint_options = '--configFile ''/absolute/path/to/file'''
 
   AssertLinter 'stylelint',
-  \ ale#Escape('stylelint') . '  --configFile ''/absolute/path/to/file'' --syntax=sugarss --stdin-filename %s'
+  \ ale#Escape('stylelint') . '  --configFile ''/absolute/path/to/file'' --syntax=sugarss --no-color --stdin-filename %s'

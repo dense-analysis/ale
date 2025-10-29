@@ -7,7 +7,7 @@ call ale#Set('less_stylelint_use_global', get(g:, 'ale_use_global_executables', 
 function! ale_linters#less#stylelint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'less_stylelint_options')
 
-    return '%e' . ale#Pad(l:options) . ' --stdin-filename %s'
+    return '%e' . ale#Pad(l:options) . ' --no-color --stdin-filename %s'
 endfunction
 
 call ale#linter#Define('less', {
