@@ -216,7 +216,7 @@ endfunction
 function! ale#assert#LSPProject(expected_root) abort
     let l:buffer = bufnr('')
     let l:linter = s:GetLinter()
-    let l:root = ale#lsp_linter#FindProjectRoot(l:buffer, l:linter)
+    let l:root = ale#linter#GetRoot(l:buffer, l:linter)
 
     AssertEqual a:expected_root, l:root
 endfunction
