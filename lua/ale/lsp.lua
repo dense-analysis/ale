@@ -8,6 +8,14 @@ module.start = function(config)
         config.init_options[true] = nil
     end
 
+    -- ensure init_options uses empty_dict if empty
+    if type(config.init_options) == "table"
+    and next(config.init_options) == nil
+    and getmetatable(config.init_options) == nil
+    then
+        config.init_options = vim.empty_dict()
+    end
+
     -- If configuring LSP via a socket connection, then generate the cmd
     -- using vim.lsp.rpc.connect(), as defined in Neovim documentation.
     if config.host then
