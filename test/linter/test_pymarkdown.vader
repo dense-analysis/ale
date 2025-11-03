@@ -8,7 +8,10 @@ Execute(The pymarkdown command callback should return default string):
   AssertLinter 'pymarkdown', ale#Escape('pymarkdown') . ' scan-stdin'
 
 Execute(The pycodestyle command callback should allow options):
-  let g:markdown_pymarkdown_options = '--exclude=test*.py'
+  let g:ale_markdown_pymarkdown_options = '--exclude=test*.py'
+
+  AssertLinter 'pymarkdown',
+  \ ale#Escape('pymarkdown') . ' --exclude=test*.py scan-stdin'
 
 Execute(The pymarkdown executable should be configurable):
   let g:ale_markdown_pymarkdown_executable = '~/.local/bin/pymarkdown'
@@ -41,6 +44,12 @@ Execute(Poetry is detected when markdown_pymarkdown_auto_poetry is set):
 
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run pymarkdown scan-stdin'
+
+Execute(Setting executable to 'uv' appends 'run pymarkdown'):
+  let g:ale_markdown_pymarkdown_executable = 'path/to/uv'
+
+  AssertLinter 'path/to/uv',
+  \ ale#Escape('path/to/uv') . ' run pymarkdown scan-stdin' 
 
 Execute(uv is detected when markdown_pymarkdown_auto_uv is set):
   let g:ale_markdown_pymarkdown_auto_uv = 1
