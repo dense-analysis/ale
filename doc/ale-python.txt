@@ -1677,6 +1677,7 @@ g:ale_python_pyrefly_auto_uv
 
   Set the executable to `uv` if true. This is overridden by a manually-set
   executable.
+
                                            *ale-options.python_pyrefly_config*
                                                  *g:ale_python_pyrefly_config*
                                                  *b:ale_python_pyrefly_config*
