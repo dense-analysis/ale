@@ -747,6 +747,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['verilog'],
 \       'description': 'Formats verilog files using verible.',
 \   },
+\   'markdownlint': {
+\       'function': 'ale#fixers#markdownlint#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix markdown files with markdownlint.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
