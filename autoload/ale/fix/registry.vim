@@ -192,6 +192,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Tidy Python imports with pyflyby.',
 \   },
+\   'unimport': {
+\       'function': 'ale#fixers#unimport#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'unimport fixer',
+\   },
 \   'importjs': {
 \       'function': 'ale#fixers#importjs#Fix',
 \       'suggested_filetypes': ['javascript'],
