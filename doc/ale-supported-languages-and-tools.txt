@@ -289,6 +289,7 @@ Notes:
   * `prettier`
   * `proselint`
   * `rustywind`
+  * `superhtml`
   * `tidy`
   * `write-good`
 * HTML Angular
