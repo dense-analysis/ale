@@ -190,6 +190,7 @@ formatting.
   * [dialyxir](https://github.com/jeremyjh/dialyxir)
   * [dogma](https://github.com/lpil/dogma) :floppy_disk:
   * [elixir-ls](https://github.com/elixir-lsp/elixir-ls) :warning: :speech_balloon:
+  * [expert](https://github.com/elixir-lang/expert) :warning: :speech_balloon:
   * [lexical](https://github.com/lexical-lsp/lexical) :warning: :speech_balloon:
   * [mix](https://hexdocs.pm/mix/Mix.html) :warning: :floppy_disk:
 * Elm

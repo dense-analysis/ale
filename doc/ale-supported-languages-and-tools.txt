@@ -180,6 +180,7 @@ Notes:
   * `dialyxir`
   * `dogma`!!
   * `elixir-ls`
+  * `expert`
   * `lexical`
   * `mix`!!
 * Elm
