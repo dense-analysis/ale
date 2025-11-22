@@ -36,7 +36,7 @@ function! ale#handlers#css#HandleCSSLintFormat(buffer, lines) abort
 endfunction
 
 function! ale#handlers#css#HandleStyleLintFormat(buffer, lines) abort
-    let l:exception_pattern = '\v^Error:'
+    let l:exception_pattern = '\v^(Syntax)?Error:'
 
     for l:line in a:lines[:10]
         if len(matchlist(l:line, l:exception_pattern)) > 0
