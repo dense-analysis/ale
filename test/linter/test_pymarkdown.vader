@@ -45,6 +45,12 @@ Execute(Poetry is detected when markdown_pymarkdown_auto_poetry is set):
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run pymarkdown scan-stdin'
 
+Execute(Setting executable to 'uv' appends 'run pymarkdown'):
+  let g:ale_markdown_pymarkdown_executable = 'path/to/uv'
+
+  AssertLinter 'path/to/uv',
+  \ ale#Escape('path/to/uv') . ' run pymarkdown scan-stdin' 
+
 Execute(uv is detected when markdown_pymarkdown_auto_uv is set):
   let g:ale_markdown_pymarkdown_auto_uv = 1
   call ale#test#SetFilename('../test-files/python/uv/whatever.py')
