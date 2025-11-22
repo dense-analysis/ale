@@ -1,6 +1,7 @@
 Before:
   Save g:ale_toml_tombi_executable
   Save g:ale_toml_tombi_format_options
+  Save g:ale_toml_tombi_online
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_toml_tombi_executable = 'xxxinvalid'
@@ -15,12 +16,19 @@ After:
 
 Execute(The tombi format callback should return the correct default values):
   AssertEqual
-  \ {'command': ale#Escape('xxxinvalid') . ' format'},
+  \ {'command': ale#Escape('xxxinvalid') . ' format --offline'},
   \ ale#fixers#tombi_format#Fix(bufnr(''))
 
-Execute(The tombi format callback should include custom options):
-  let g:ale_toml_tombi_format_options = "--offline"
+Execute(The tombi format callback should obey `toml_tombi_online`):
+  let g:ale_toml_tombi_online = 1
 
   AssertEqual
-  \ {'command': ale#Escape('xxxinvalid') . ' format --offline'},
+  \ {'command': ale#Escape('xxxinvalid') . ' lint'},
+  \ ale#fixers#tombi_lint#Fix(bufnr(''))
+
+Execute(The tombi format callback should include custom options):
+  let g:ale_toml_tombi_format_options = "--no-cache"
+
+  AssertEqual
+  \ {'command': ale#Escape('xxxinvalid') . ' format --offline --no-cache'},
   \ ale#fixers#tombi_format#Fix(bufnr(''))
