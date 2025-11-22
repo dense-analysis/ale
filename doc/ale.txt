@@ -1620,7 +1620,9 @@ g:ale_lint_delay
   A buffer-local option, `b:ale_lint_delay`, can be set to change the delay
   for different buffers, such as in |ftplugin| files.
 
-g:ale_lint_diff                                               *g:ale_lint_diff*
+                                                    *ale-options.ale_lint_diff*
+                                                              *g:ale_lint_diff*
+g:ale_lint_diff
 
   Type: |Number|
   Default: `0`
@@ -1628,7 +1630,6 @@ g:ale_lint_diff                                               *g:ale_lint_diff*
   When this option is set to `1`, ALE will lint buffers where `&diff` is set.
 
 
-g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
                                                     *ale-options.lint_on_enter*
                                                           *g:ale_lint_on_enter*
 lint_on_enter
