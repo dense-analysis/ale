@@ -33,9 +33,8 @@ function! ale_linters#markdown#pymarkdown#GetCommand(buffer) abort
     \   : ''
 
     return ale#Escape(l:executable) . l:exec_args
-    \   . ' '
-    \   . ale#Var(a:buffer, 'markdown_pymarkdown_options')
-    \   . 'scan-stdin'
+    \   . ale#Pad(ale#Var(a:buffer, 'markdown_pymarkdown_options'))
+    \   . ' scan-stdin'
 endfunction
 
 function! ale_linters#markdown#pymarkdown#Handle(buffer, lines) abort

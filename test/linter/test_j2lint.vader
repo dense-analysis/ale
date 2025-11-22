@@ -4,6 +4,12 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
+Execute(The pycodestyle command callback should allow options):
+  let g:ale_jinja_j2lint_options = '--exclude=test*.j2'
+
+  AssertLinter 'j2lint',
+  \ ale#Escape('j2lint') . ' --exclude=test*.j2 %t'
+
 Execute(The j2lint executable should be configurable):
   let g:ale_jinja_j2lint_executable = '~/.local/bin/j2lint'
 
@@ -35,6 +41,12 @@ Execute(Poetry is detected when jinja_j2lint_auto_poetry is set):
 
   AssertLinter 'poetry',
   \ ale#Escape('poetry') . ' run j2lint %t'
+
+Execute(Setting executable to 'uv' appends 'run j2lint'):
+  let g:ale_jinja_j2lint_executable = 'path/to/uv'
+
+  AssertLinter 'path/to/uv',
+  \ ale#Escape('path/to/uv') . ' run j2lint %t'
 
 Execute(uv is detected when jinja_j2lint_auto_uv is set):
   let g:ale_jinja_j2lint_auto_uv = 1
