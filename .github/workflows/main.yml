@@ -1,0 +1,38 @@
+---
+name: CI
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches: [ master ]  # yamllint disable-line rule:brackets
+    tags:
+      - v[0-9]+.[0-9]+.x
+      - v[0-9]+.[0-9]+.[0-9]+
+  pull_request:
+    branches: [ master ]  # yamllint disable-line rule:brackets
+
+jobs:
+  build_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build docker run image
+        shell: bash
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+          DOCKER_HUB_PASS: ${{ secrets.DOCKER_HUB_PASS }}
+        run: ./run-tests --build-image
+  test_ale:
+    needs: build_image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        vim-version:
+          - '--vim-80-only'
+          - '--vim-90-only'
+          - '--neovim-07-only'
+          - '--neovim-08-only'
+          - '--lua-only'
+          - '--linters-only'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: ./run-tests -v ${{ matrix.vim-version }}

@@ -5,20 +5,49 @@ ALE ASM Integration                                           *ale-asm-options*
 ===============================================================================
 gcc                                                               *ale-asm-gcc*
 
-g:ale_asm_gcc_executable                             *g:ale_asm_gcc_executable*
+                                               *ale-options.asm_gcc_executable*
+                                                     *g:ale_asm_gcc_executable*
                                                      *b:ale_asm_gcc_executable*
+asm_gcc_executable
+g:ale_asm_gcc_executable
   Type: |String|
   Default: `'gcc'`
 
-This variable can be changed to use a different executable for gcc.
+  This variable can be changed to use a different executable for gcc.
 
-
-g:ale_asm_gcc_options                                   *g:ale_asm_gcc_options*
+                                                  *ale-options.asm_gcc_options*
+                                                        *g:ale_asm_gcc_options*
                                                         *b:ale_asm_gcc_options*
+asm_gcc_options
+g:ale_asm_gcc_options
   Type: |String|
   Default: `'-Wall'`
 
   This variable can be set to pass additional options to gcc.
+
+
+===============================================================================
+llvm_mc                                                       *ale-asm-llvm_mc*
+
+                                           *ale-options.asm_llvm_mc_executable*
+                                                 *g:ale_asm_llvm_mc_executable*
+                                                 *b:ale_asm_llvm_mc_executable*
+asm_llvm_mc_executable
+g:ale_asm_llvm_mc_executable
+  Type: |String|
+  Default: `'llvm-mc'`
+
+This variable can be changed to use a different executable for llvm-mc.
+
+                                              *ale-options.asm_llvm_mc_options*
+                                                    *g:ale_asm_llvm_mc_options*
+                                                    *b:ale_asm_llvm_mc_options*
+asm_llvm_mc_options
+g:ale_asm_llvm_mc_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to llvm-mc.
 
 
 ===============================================================================

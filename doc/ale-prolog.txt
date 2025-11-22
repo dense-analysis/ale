@@ -5,15 +5,21 @@ ALE Prolog Integration                                     *ale-prolog-options*
 ===============================================================================
 swipl                                                        *ale-prolog-swipl*
 
-g:ale_prolog_swipl_executable                   *g:ale_prolog_swipl_executable*
+                                          *ale-options.prolog_swipl_executable*
+                                                *g:ale_prolog_swipl_executable*
                                                 *b:ale_prolog_swipl_executable*
+prolog_swipl_executable
+g:ale_prolog_swipl_executable
   Type: |String|
   Default: `'swipl'`
 
   The executable that will be run for the `swipl` linter.
 
-g:ale_prolog_swipl_load                               *g:ale_prolog_swipl_load*
+                                                *ale-options.prolog_swipl_load*
+                                                      *g:ale_prolog_swipl_load*
                                                       *b:ale_prolog_swipl_load*
+prolog_swipl_load
+g:ale_prolog_swipl_load
   Type: |String|
   Default: `'current_prolog_flag(argv, [File]), load_files(File, [sandboxed(true)]), halt.'`
 
@@ -25,8 +31,11 @@ g:ale_prolog_swipl_load                               *g:ale_prolog_swipl_load*
 
   NOTE: `sandboxed(true)` prohibits executing some directives such as 'initialization main'.
 
-g:ale_prolog_swipl_timeout                         *g:ale_prolog_swipl_timeout*
+                                             *ale-options.prolog_swipl_timeout*
+                                                   *g:ale_prolog_swipl_timeout*
                                                    *b:ale_prolog_swipl_timeout*
+prolog_swipl_timeout
+g:ale_prolog_swipl_timeout
   Type: |Number|
   Default: `3`
 
@@ -34,8 +43,11 @@ g:ale_prolog_swipl_timeout                         *g:ale_prolog_swipl_timeout*
   It is done by setting SIGALRM.
   See |g:ale_prolog_swipl_alarm| and |g:ale_prolog_swipl_alarm_handler|.
 
-g:ale_prolog_swipl_alarm                             *g:ale_prolog_swipl_alarm*
+                                               *ale-options.prolog_swipl_alarm*
+                                                     *g:ale_prolog_swipl_alarm*
                                                      *b:ale_prolog_swipl_alarm*
+prolog_swipl_alarm
+g:ale_prolog_swipl_alarm
   Type: |String|
   Default: `'alarm(%t, (%h), _, [])'`
 
@@ -43,8 +55,11 @@ g:ale_prolog_swipl_alarm                             *g:ale_prolog_swipl_alarm*
   `%t` is replaced by |g:ale_prolog_swipl_timeout|.
   `%h` is replaced by |g:ale_prolog_swipl_alarm_handler|.
 
-g:ale_prolog_swipl_alarm_handler             *g:ale_prolog_swipl_alarm_handler*
+                                       *ale-options.prolog_swipl_alarm_handler*
+                                             *g:ale_prolog_swipl_alarm_handler*
                                              *b:ale_prolog_swipl_alarm_handler*
+prolog_swipl_alarm_handler
+g:ale_prolog_swipl_alarm_handler
   Type: |String|
   Default: `'writeln(user_error, "ERROR: Exceeded %t seconds, Please change g:prolog_swipl_timeout to modify the limit."), halt(1)'`
 

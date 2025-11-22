@@ -20,7 +20,7 @@ Before:
   runtime autoload/ale/code_action.vim
 
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
-    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', '', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
     if a:linter.lsp is# 'tsserver'
@@ -57,9 +57,9 @@ Before:
     call add(g:expr_list, a:expr)
   endfunction
 
-  function! ale#code_action#HandleCodeAction(code_action, should_save) abort
+  function! ale#code_action#HandleCodeAction(code_action, options) abort
     let g:handle_code_action_called = 1
-    AssertEqual v:true, a:should_save
+    AssertEqual g:ale_save_hidden || !&hidden, get(a:options, 'should_save', 0)
     call add(g:code_actions, a:code_action)
   endfunction
 
@@ -201,16 +201,6 @@ Execute(Code actions from tsserver should be handled):
   \ ],
   \ g:code_actions
 
-Execute(HandleTSServerResponse does nothing when no data in rename_map):
-  call ale#rename#HandleTSServerResponse(1, {
-  \ 'command': 'rename',
-  \ 'request_seq': -9,
-  \ 'success': v:true,
-  \ 'body': {}
-  \})
-
-  AssertEqual g:handle_code_action_called, 0
-
 Execute(Prints a tsserver error message when unsuccessful):
   call ale#rename#HandleTSServerResponse(1, {
   \ 'command': 'rename',
@@ -223,7 +213,7 @@ Execute(Prints a tsserver error message when unsuccessful):
   AssertEqual ['echom ''Error renaming "oldName" to: "aNewName". ' .
   \ 'Reason: This symbol cannot be renamed'''], g:expr_list
 
-Execute(Does nothing when no changes):
+Execute(HandleTSServerResponse does nothing when no changes):
   call ale#rename#HandleTSServerResponse(1, {
   \ 'command': 'rename',
   \ 'request_seq': 3,
@@ -327,6 +317,115 @@ Execute(Code actions from LSP should be handled):
   \ ],
   \ g:code_actions
 
+Execute(DocumentChanges from LSP should be handled):
+  call ale#rename#HandleLSPResponse(1, {
+  \ 'id': 3,
+  \ 'result': {
+  \   'documentChanges': [
+  \     {
+  \       'textDocument': {
+  \         'version': 1.0,
+  \         'uri': 'file:///foo/bar/file1.ts',
+  \       },
+  \       'edits': [
+  \         {
+  \           'range': {
+  \             'start': {
+  \               'line': 1,
+  \               'character': 2,
+  \             },
+  \             'end': {
+  \               'line': 3,
+  \               'character': 4,
+  \             },
+  \           },
+  \           'newText': 'bla123',
+  \         },
+  \       ],
+  \     },
+  \   ],
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'description': 'rename',
+  \     'changes': [
+  \       {
+  \         'fileName': '/foo/bar/file1.ts',
+  \         'textChanges': [
+  \            {
+  \              'start': {
+  \                'line': 2,
+  \                'offset': 3,
+  \              },
+  \              'end': {
+  \                'line': 4,
+  \                'offset': 5,
+  \              },
+  \              'newText': 'bla123',
+  \            },
+  \         ],
+  \       },
+  \     ],
+  \   }
+  \ ],
+  \ g:code_actions
+
+Execute(Single DocumentChange from LSP should be handled):
+  call ale#rename#HandleLSPResponse(1, {
+  \ 'id': 3,
+  \ 'result': {
+  \   'documentChanges': {
+  \     'textDocument': {
+  \       'version': 1.0,
+  \       'uri': 'file:///foo/bar/file1.ts',
+  \     },
+  \     'edits': [
+  \       {
+  \         'range': {
+  \           'start': {
+  \             'line': 1,
+  \             'character': 2,
+  \           },
+  \           'end': {
+  \             'line': 3,
+  \             'character': 4,
+  \           },
+  \         },
+  \         'newText': 'bla123',
+  \       },
+  \     ],
+  \   },
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'description': 'rename',
+  \     'changes': [
+  \       {
+  \         'fileName': '/foo/bar/file1.ts',
+  \         'textChanges': [
+  \            {
+  \              'start': {
+  \                'line': 2,
+  \                'offset': 3,
+  \              },
+  \              'end': {
+  \                'line': 4,
+  \                'offset': 5,
+  \              },
+  \              'newText': 'bla123',
+  \            },
+  \         ],
+  \       },
+  \     ],
+  \   }
+  \ ],
+  \ g:code_actions
 Execute(LSP should perform no action when no result):
   call ale#rename#HandleLSPResponse(1, {
   \ 'id': 3,
@@ -357,8 +456,8 @@ Execute(LSP should perform no action when changes is empty):
 
 Execute(LSP rename requests should be sent):
   call ale#rename#SetMap({})
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALERename
@@ -378,13 +477,13 @@ Execute(LSP rename requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/rename', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   'newName': 'a-new-name',
   \   }],

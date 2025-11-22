@@ -17,8 +17,8 @@ function! ale#rename#ClearLSPData() abort
     let s:rename_map = {}
 endfunction
 
-let g:ale_rename_tsserver_find_in_comments = get(g:, 'ale_rename_tsserver_find_in_comments')
-let g:ale_rename_tsserver_find_in_strings = get(g:, 'ale_rename_tsserver_find_in_strings')
+let g:ale_rename_tsserver_find_in_comments = get(g:, 'ale_rename_tsserver_find_in_comments', v:false)
+let g:ale_rename_tsserver_find_in_strings = get(g:, 'ale_rename_tsserver_find_in_strings', v:false)
 
 function! s:message(message) abort
     call ale#util#Execute('echom ' . string(a:message))
@@ -33,9 +33,10 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
         return
     endif
 
-    let l:old_name = s:rename_map[a:response.request_seq].old_name
-    let l:new_name = s:rename_map[a:response.request_seq].new_name
-    call remove(s:rename_map, a:response.request_seq)
+    let l:options = remove(s:rename_map, a:response.request_seq)
+
+    let l:old_name = l:options.old_name
+    let l:new_name = l:options.new_name
 
     if get(a:response, 'success', v:false) is v:false
         let l:message = get(a:response, 'message', 'unknown')
@@ -77,16 +78,22 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
         return
     endif
 
-    call ale#code_action#HandleCodeAction({
-    \ 'description': 'rename',
-    \ 'changes': l:changes,
-    \}, v:true)
+    call ale#code_action#HandleCodeAction(
+    \   {
+    \       'description': 'rename',
+    \       'changes': l:changes,
+    \   },
+    \   {
+    \       'conn_id': a:conn_id,
+    \       'should_save': g:ale_save_hidden || !&hidden,
+    \   },
+    \)
 endfunction
 
 function! ale#rename#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:rename_map, a:response.id)
-        call remove(s:rename_map, a:response.id)
+        let l:options = remove(s:rename_map, a:response.id)
 
         if !has_key(a:response, 'result')
             call s:message('No rename result received from server')
@@ -94,51 +101,30 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
             return
         endif
 
-        let l:workspace_edit = a:response.result
+        let l:changes_map = ale#code_action#GetChanges(a:response.result)
 
-        if !has_key(l:workspace_edit, 'changes') || empty(l:workspace_edit.changes)
+        if empty(l:changes_map)
             call s:message('No changes received from server')
 
             return
         endif
 
-        let l:changes = []
+        let l:changes = ale#code_action#BuildChangesList(l:changes_map)
 
-        for l:file_name in keys(l:workspace_edit.changes)
-            let l:text_edits = l:workspace_edit.changes[l:file_name]
-            let l:text_changes = []
-
-            for l:edit in l:text_edits
-                let l:range = l:edit.range
-                let l:new_text = l:edit.newText
-
-                call add(l:text_changes, {
-                \ 'start': {
-                \   'line': l:range.start.line + 1,
-                \   'offset': l:range.start.character + 1,
-                \ },
-                \ 'end': {
-                \   'line': l:range.end.line + 1,
-                \   'offset': l:range.end.character + 1,
-                \ },
-                \ 'newText': l:new_text,
-                \})
-            endfor
-
-            call add(l:changes, {
-            \   'fileName': ale#path#FromURI(l:file_name),
-            \   'textChanges': l:text_changes,
-            \})
-        endfor
-
-        call ale#code_action#HandleCodeAction({
-        \   'description': 'rename',
-        \   'changes': l:changes,
-        \}, v:true)
+        call ale#code_action#HandleCodeAction(
+        \   {
+        \       'description': 'rename',
+        \       'changes': l:changes,
+        \   },
+        \   {
+        \       'conn_id': a:conn_id,
+        \       'should_save': g:ale_save_hidden || !&hidden,
+        \   },
+        \)
     endif
 endfunction
 
-function! s:OnReady(line, column, old_name, new_name, linter, lsp_details) abort
+function! s:OnReady(line, column, options, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
 
     if !ale#lsp#HasCapability(l:id, 'rename')
@@ -170,19 +156,16 @@ function! s:OnReady(line, column, old_name, new_name, linter, lsp_details) abort
         \   l:buffer,
         \   a:line,
         \   a:column,
-        \   a:new_name
+        \   a:options.new_name
         \)
     endif
 
     let l:request_id = ale#lsp#Send(l:id, l:message)
 
-    let s:rename_map[l:request_id] = {
-    \   'new_name': a:new_name,
-    \   'old_name': a:old_name,
-    \}
+    let s:rename_map[l:request_id] = a:options
 endfunction
 
-function! s:ExecuteRename(linter, old_name, new_name) abort
+function! s:ExecuteRename(linter, options) abort
     let l:buffer = bufnr('')
     let [l:line, l:column] = getpos('.')[1:2]
 
@@ -190,21 +173,14 @@ function! s:ExecuteRename(linter, old_name, new_name) abort
         let l:column = min([l:column, len(getline(l:line))])
     endif
 
-    let l:Callback = function(
-    \ 's:OnReady', [l:line, l:column, a:old_name, a:new_name])
+    let l:Callback = function('s:OnReady', [l:line, l:column, a:options])
     call ale#lsp_linter#StartLSP(l:buffer, a:linter, l:Callback)
 endfunction
 
 function! ale#rename#Execute() abort
-    let l:lsp_linters = []
+    let l:linters = ale#lsp_linter#GetEnabled(bufnr(''))
 
-    for l:linter in ale#linter#Get(&filetype)
-        if !empty(l:linter.lsp)
-            call add(l:lsp_linters, l:linter)
-        endif
-    endfor
-
-    if empty(l:lsp_linters)
+    if empty(l:linters)
         call s:message('No active LSPs')
 
         return
@@ -219,7 +195,10 @@ function! ale#rename#Execute() abort
         return
     endif
 
-    for l:lsp_linter in l:lsp_linters
-        call s:ExecuteRename(l:lsp_linter, l:old_name, l:new_name)
+    for l:linter in l:linters
+        call s:ExecuteRename(l:linter, {
+        \   'old_name': l:old_name,
+        \   'new_name': l:new_name,
+        \})
     endfor
 endfunction

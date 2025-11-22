@@ -15,7 +15,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The gomod callback should return the correct default values):
-  call ale#test#SetFilename('../go_files/go.mod')
+  call ale#test#SetFilename('../test-files/go/go.mod')
   setl filetype=gomod
 
   AssertEqual
@@ -28,7 +28,7 @@ Execute(The gomod callback should return the correct default values):
   \ ale#fixers#gomod#Fix(bufnr(''))
 
 Execute(The gomod callback should support Go environment variables):
-  call ale#test#SetFilename('../go_files/go.mod')
+  call ale#test#SetFilename('../test-files/go/go.mod')
   setl filetype=gomod
   let g:ale_go_go111module = 'on'
 

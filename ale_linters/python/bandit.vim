@@ -6,6 +6,8 @@ call ale#Set('python_bandit_options', '')
 call ale#Set('python_bandit_use_config', 1)
 call ale#Set('python_bandit_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_bandit_auto_pipenv', 0)
+call ale#Set('python_bandit_auto_poetry', 0)
+call ale#Set('python_bandit_auto_uv', 0)
 
 function! ale_linters#python#bandit#GetExecutable(buffer) abort
     if (
@@ -13,6 +15,18 @@ function! ale_linters#python#bandit#GetExecutable(buffer) abort
     \   || ale#Var(a:buffer, 'python_bandit_auto_pipenv')
     \) && ale#python#PipenvPresent(a:buffer)
         return 'pipenv'
+    endif
+
+    if (
+    \   ale#Var(a:buffer, 'python_auto_poetry')
+    \   || ale#Var(a:buffer, 'python_bandit_auto_poetry')
+    \) && ale#python#PoetryPresent(a:buffer)
+        return 'poetry'
+    endif
+
+    if (ale#Var(a:buffer, 'python_auto_uv') || ale#Var(a:buffer, 'python_bandit_auto_uv'))
+    \ && ale#python#UvPresent(a:buffer)
+        return 'uv'
     endif
 
     return ale#python#FindExecutable(a:buffer, 'python_bandit', ['bandit'])
@@ -31,7 +45,7 @@ function! ale_linters#python#bandit#GetCommand(buffer) abort
         endif
     endif
 
-    let l:exec_args = l:executable =~? 'pipenv$'
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run bandit'
     \   : ''
 

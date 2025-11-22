@@ -1,0 +1,43 @@
+Before:
+  runtime ale_linters/yaml/actionlint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(Problems should be parsed correctly for actionlint):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': '"jobs" section is missing in workflow',
+  \     'code': 'syntax-check',
+  \   },
+  \   {
+  \     'lnum': 56,
+  \     'col': 23,
+  \     'type': 'E',
+  \     'text': 'property "unknown_input" is not defined in object type {input7: bool; input0: any; input1: any; input2: string; input3: any; input4: any; input5: number; input6: number}',
+  \     'code': 'expression',
+  \   },
+  \ ],
+  \ ale_linters#yaml#actionlint#Handle(bufnr(''), [
+  \   '.codecov.yaml:2:1: "jobs" section is missing in workflow [syntax-check]',
+  \   'workflow_call_event.yaml:56:23: property "unknown_input" is not defined in object type {input7: bool; input0: any; input1: any; input2: string; input3: any; input4: any; input5: number; input6: number} [expression]',
+  \ ])
+
+Execute(Shellcheck issues should be reported at the line they appear):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 19,
+  \     'col': 9,
+  \     'type': 'E',
+  \     'text': 'Double quote to prevent globbing and word splitting',
+  \     'code': 'shellcheck SC2086',
+  \   },
+  \ ],
+  \ ale_linters#yaml#actionlint#Handle(bufnr(''), [
+  \   'validate.yml:19:9: shellcheck reported issue in this script: SC2086:info:1:15: Double quote to prevent globbing and word splitting [shellcheck]'
+  \ ])

@@ -1,0 +1,44 @@
+Before:
+  runtime ale_linters/zig/zlint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The zlint handler should parse GitHub Actions format correctly):
+  " Create a temporary buffer
+  let buffer = bufnr('')
+
+  " Define input lines
+  let input_lines = [
+  \   '::warning file=test.zig,line=61,col=47,title=unsafe-undefined::`undefined` is missing a safety comment',
+  \   '',
+  \   '::error file=test2.zig,line=4,col=33,title=no-unresolved::Unresolved import to ''test3.zig''',
+  \   '',
+  \ ]
+
+  " Define expected output
+  let expected_output = [
+  \   {
+  \     'filename': 'test.zig',
+  \     'lnum': 61,
+  \     'col': 47,
+  \     'text': '`undefined` is missing a safety comment',
+  \     'type': 'W',
+  \     'code': 'unsafe-undefined'
+  \   },
+  \   {
+  \     'filename': 'test2.zig',
+  \     'lnum': 4,
+  \     'col': 33,
+  \     'text': 'Unresolved import to ''test3.zig''',
+  \     'type': 'E',
+  \     'code': 'no-unresolved'
+  \   },
+  \ ]
+
+  " Get actual output
+  let actual_output = ale_linters#zig#zlint#Handle(buffer, input_lines)
+
+  " Assert equality
+  AssertEqual expected_output, actual_output
+

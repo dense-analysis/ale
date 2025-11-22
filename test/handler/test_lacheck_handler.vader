@@ -1,14 +1,13 @@
 Before:
   runtime ale_linters/tex/lacheck.vim
-  call ale#test#SetDirectory('/testplugin/test')
+  call ale#test#SetDirectory('/testplugin/test/handler')
 
 After:
   call ale#linter#Reset()
   call ale#test#RestoreDirectory()
 
 Execute(The lacheck handler should parse lines correctly):
-
-  call ale#test#SetFilename('command_callback/tex_paths/sample1.tex')
+  call ale#test#SetFilename('../test-files/tex/sample1.tex')
 
   AssertEqual
   \ [
@@ -24,7 +23,6 @@ Execute(The lacheck handler should parse lines correctly):
   \ ])
 
 Execute(The lacheck handler should ignore errors from input files):
-
   call ale#test#SetFilename('ale_test.tex')
 
   AssertEqual

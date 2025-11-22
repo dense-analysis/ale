@@ -1,0 +1,20 @@
+Before:
+    augroup TestFiletypeGroup
+        autocmd!
+        autocmd BufEnter,BufRead *.x setf xfiletype
+        autocmd BufEnter,BufRead *.y set filetype=yfiletype
+        autocmd BufEnter,BufRead *.z setlocal filetype=zfiletype
+        autocmd BufEnter,BufRead *.jsx set filetype=javascript.jsx
+    augroup END
+
+After:
+  augroup TestFiletypeGroup
+      autocmd!
+  augroup END
+  augroup! TestFiletypeGroup
+
+Execute(ALE should guess file extensions appropriately):
+  " The whole string should be used, if there's a match.
+  AssertEqual '.jsx', ale#filetypes#GuessExtension('javascript.jsx')
+  " The first part should be used.
+  AssertEqual '.x', ale#filetypes#GuessExtension('xfiletype.yfiletype')

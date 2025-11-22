@@ -1,0 +1,76 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test/handler')
+
+  " Load sca2d
+  runtime ale_linters/openscad/sca2d.vim
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The openscad handler should handle sca2d output):
+  AssertEqual
+  \ [
+  \   {
+  \     'filename': ale#path#Simplify(g:dir . '/awesome_project.scad'),
+  \     'lnum': 7,
+  \     'type': 'E',
+  \     'col': 42,
+  \     'text': 'Module `corcle` used but never defined.',
+  \     'detail': 'E2002: Module `corcle` used but never defined.',
+  \   },
+  \ ],
+  \ ale#handlers#openscad#SCA2D_callback(bufnr(''), [
+  \  'awesome_project.scad:7:42: E2002: Module `corcle` used but never defined.',
+  \   '',
+  \   'SCA2D message summary',
+  \   '=====================',
+  \   'Fatal errors: 0',
+  \   'Errors:       1',
+  \   'Warnings:     0',
+  \   'Info:         0',
+  \   'Depreciated   0',
+  \ ])
+
+  AssertEqual
+  \ [
+  \   {
+  \     'filename': ale#path#Simplify(g:dir . '/awesome_project.scad'),
+  \     'lnum': 1,
+  \     'type': 'E',
+  \     'col': 37,
+  \     'text': 'Cannot read file due to syntax error:   - No terminal matches ''}'' in the current parser context',
+  \     'detail': 'F0001: Cannot read file due to syntax error:   - No terminal matches ''}'' in the current parser context',
+  \   },
+  \ ],
+  \ ale#handlers#openscad#SCA2D_callback(bufnr(''), [
+  \ 'awesome_project.scad:1:1: F0001: Cannot read file due to syntax error:',
+  \ '   - No terminal matches ''}'' in the current parser context, at line 1 col 37',
+  \ '   - ',
+  \ '   - translate([ 0, 0, 0 ]) { circle(10) }',
+  \ '   -                                     ^',
+  \ '   - Expected one of: ',
+  \ '   - 	* IF',
+  \ '   - 	* LET',
+  \ '   - 	* FOR',
+  \ '   - 	* FUNC_CALL_NAME',
+  \ '   - 	* TERMINATION',
+  \ '   - 	* STAR',
+  \ '   - 	* LBRACE',
+  \ '   - 	* BANG',
+  \ '   - 	* ASSIGN',
+  \ '   - 	* PERCENT',
+  \ '   - 	* HASH',
+  \ '   - 	* INTERSECTION_FOR',
+  \ '   - ',
+  \ 'If you believe this is a bug in SCA2D please report it to us.',
+  \ '',
+  \ '',
+  \ 'SCA2D message summary',
+  \ '=====================',
+  \ 'Fatal errors: 1',
+  \ 'Errors:       0',
+  \ 'Warnings:     0',
+  \ 'Info:         0',
+  \ 'Depreciated   0',
+  \ ])

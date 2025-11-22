@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpFixerTest('roc', 'roc_annotate')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The roc annotate callback should return the correct default values):
+  AssertFixer {
+  \    'command': 'roc format annotate %t',
+  \    'read_temporary_file': 1,
+  \}
+
+Execute(The roc annotate callback should allow a custom executable):
+  let g:ale_roc_roc_annotate_executable = 'foo/bar'
+
+  AssertFixer {
+  \    'command': 'foo/bar format annotate %t',
+  \    'read_temporary_file': 1,
+  \}
+

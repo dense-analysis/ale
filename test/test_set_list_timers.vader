@@ -26,4 +26,4 @@ Execute(The SetLists function should work when run in a timer):
   \ 'nr': 0,
   \ 'type': 'E',
   \ 'pattern': '',
-  \}], ale#test#GetLoclistWithoutModule()
+  \}], ale#test#GetLoclistWithoutNewerKeys()

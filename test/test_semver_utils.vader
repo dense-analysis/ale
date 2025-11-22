@@ -8,7 +8,7 @@ Execute(ParseVersion should return the version from the lines of output):
   \ '1.2.3',
   \])
 
-Execute(ParseVersion should return an empty list when no vesrion can be found):
+Execute(ParseVersion should return an empty list when no version can be found):
   AssertEqual [], ale#semver#ParseVersion(['x'])
   AssertEqual [], ale#semver#ParseVersion([])
 
@@ -17,8 +17,6 @@ Execute(ParseVersion should tolerate missing patch numbers):
   AssertEqual [3, 4, 0], ale#semver#ParseVersion(['Version 3.4'])
 
 Execute(GTE should compare triples correctly):
-  Assert ale#semver#GTE([3, 0, 4], [3, 0, 0])
-  Assert ale#semver#GTE([3, 0, 0], [3, 0, 0])
   Assert ale#semver#GTE([3, 0, 0], [2, 0, 0])
   Assert ale#semver#GTE([3, 1, 0], [3, 1, 0])
   Assert ale#semver#GTE([3, 2, 0], [3, 1, 0])

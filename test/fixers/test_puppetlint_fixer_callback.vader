@@ -7,9 +7,6 @@ Before:
   let g:ale_puppet_puppetlint_options = '--invalid'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -17,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The puppetlint callback should return the correct default values):
-  silent execute 'file ' . fnameescape(g:dir . '/puppet_paths/dummy.pp')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/puppet/dummy.pp')
 
   AssertEqual
   \ {'read_temporary_file': 1,

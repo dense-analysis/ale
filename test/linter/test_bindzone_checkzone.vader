@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpLinterTest('bindzone', 'checkzone')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'named-checkzone',
+  \ ale#Escape('named-checkzone') . ' -c IN example.com %t'
+
+Execute(The default command should be overridden):
+  let b:ale_bindzone_checkzone_executable = '/bin/bind9-checkzone'
+  AssertLinter '/bin/bind9-checkzone',
+  \ ale#Escape('/bin/bind9-checkzone') . ' -c IN example.com %t'
+
+Execute(The default options should be overridden):
+  let b:ale_bindzone_checkzone_options = '-c IN -d'
+  AssertLinter 'named-checkzone',
+  \ ale#Escape('named-checkzone') . ' -c IN -d example.com %t'

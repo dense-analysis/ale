@@ -1,0 +1,59 @@
+Before:
+  runtime ale_linters/fortran/fortitude.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(Simple fortitude handler run):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'end_lnum': 3,
+  \     'col': 5,
+  \     'end_col': 18,
+  \     'text': '''implicit none'' missing ''external''',
+  \     'type': 'W',
+  \     'code': 'C003',
+  \   },
+  \   {
+  \     'col': 13,
+  \     'end_col': 14,
+  \     'end_lnum': 7,
+  \     'lnum': 7,
+  \     'text': 'Syntax error',
+  \     'type': 'E',
+  \     'code': 'E001',
+  \   },
+  \ ],
+  \ ale_linters#fortran#fortitude#Handle(bufnr(''), [
+  \   '[',
+  \   json_encode({
+  \     'code': 'C003',
+  \     'end_location': {'column': 18, 'row': 3},
+  \     'filename': '/home/user/documents/somefortranfile.f90',
+  \     'fix': {
+  \       'applicability': 'unsafe',
+  \       'edits': [
+  \         {
+  \           'content': ' (type, external)',
+  \           'end_location': {'column': 18, 'row': 3},
+  \           'location': {'column': 18, 'row': 3},
+  \         },
+  \       ],
+  \       'message': 'Add `(external)` to ''implicit none''',
+  \     },
+  \     'location': {'column': 5, 'row': 3},
+  \     'message': '''implicit none'' missing ''external'''
+  \   }),
+  \   ',',
+  \   json_encode({
+  \     'code': 'E001',
+  \     'end_location': {'column': 14, 'row': 7},
+  \     'filename': '/home/user/documents/somefortranfile.f90',
+  \     'fix': v:null,
+  \     'location': {'column': 13, 'row': 7},
+  \     'message': 'Syntax error',
+  \   }),
+  \   ']',
+  \ ])

@@ -1,10 +1,5 @@
 " Author: w0rp <devw0rp@gmail.com>
-" Description: Lints sh files using bash -n
-
-" Backwards compatibility
-if exists('g:ale_linters_sh_shell_default_shell')
-    let g:ale_sh_shell_default_shell = g:ale_linters_sh_shell_default_shell
-endif
+" Description: Lints shell files by invoking the shell with -n
 
 " This option can be changed to change the default shell when the shell
 " cannot be taken from the hashbang line.

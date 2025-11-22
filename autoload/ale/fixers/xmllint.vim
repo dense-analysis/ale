@@ -1,4 +1,4 @@
-" Author: Cyril Roelandt <tipecaml@gmail.com>
+" Author: Cyril Roelandt <tipecaml@gmail.com>, jiz4oh <me@jiz4oh.com>
 " Description: Integration of xmllint with ALE.
 
 call ale#Set('xml_xmllint_executable', 'xmllint')
@@ -7,8 +7,8 @@ call ale#Set('xml_xmllint_indentsize', 2)
 
 function! ale#fixers#xmllint#Fix(buffer) abort
     let l:executable = ale#Escape(ale#Var(a:buffer, 'xml_xmllint_executable'))
-    let l:filename = ale#Escape(bufname(a:buffer))
-    let l:command = l:executable . ' --format ' . l:filename
+
+    let l:command = l:executable . ' --format'
 
     let l:indent = ale#Var(a:buffer, 'xml_xmllint_indentsize')
 
@@ -24,6 +24,6 @@ function! ale#fixers#xmllint#Fix(buffer) abort
     endif
 
     return {
-    \   'command': l:command
+    \   'command': l:command . ' -'
     \}
 endfunction

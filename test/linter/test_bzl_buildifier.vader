@@ -1,0 +1,29 @@
+Before:
+  call ale#assert#SetUpLinterTest('bzl', 'buildifier')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Should use default command when bazel_buildifier_options are not set):
+  call ale#test#SetDirectory('/testplugin/test/test-files/bzl/bazel-package')
+  call ale#test#SetFilename('BUILD.bazel')
+
+  let g:ale_bazel_buildifier_executable = 'buildifier'
+  let g:ale_bazel_buildifier_options = ''
+
+  AssertLinter 'buildifier',
+  \ ale#Escape('buildifier') . ' -mode check -lint warn -path %s'
+
+  call ale#test#RestoreDirectory()
+
+Execute(Should use custom buildifier options when bazel_buildifier_options are set):
+  call ale#test#SetDirectory('/testplugin/test/test-files/bzl/bazel-package')
+  call ale#test#SetFilename('BUILD.bazel')
+
+  let g:ale_bazel_buildifier_executable = 'buildifier'
+  let g:ale_bazel_buildifier_options = '-v'
+
+  AssertLinter 'buildifier',
+  \ ale#Escape('buildifier') . ' -mode check -lint warn -path %s -v'
+
+  call ale#test#RestoreDirectory()

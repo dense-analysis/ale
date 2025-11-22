@@ -1,0 +1,92 @@
+Before:
+  Save g:ale_python_auto_pipenv
+  Save g:ale_python_auto_poetry
+
+  let g:ale_python_auto_pipenv = 0
+  let g:ale_python_auto_poetry = 0
+
+  call ale#assert#SetUpLinterTest('python', 'refurb')
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  unlet! b:bin_dir
+  unlet! b:executable
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The refurb callbacks should return the correct default values):
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'refurb', ale#Escape('refurb') . ' %s'
+
+Execute(The option for disabling changing directories should work):
+  let g:ale_python_refurb_change_directory = 0
+
+  AssertLinterCwd ''
+  AssertLinter 'refurb', ale#Escape('refurb') . ' %s'
+
+Execute(The refurb executable should be configurable, and escaped properly):
+  let g:ale_python_refurb_executable = 'executable with spaces'
+
+  AssertLinter 'executable with spaces', ale#Escape('executable with spaces') . ' %s'
+
+Execute(The refurb command callback should let you set options):
+  let g:ale_python_refurb_options = '--some-flag'
+  AssertLinter 'refurb', ale#Escape('refurb') . ' --some-flag %s'
+
+  let g:ale_python_refurb_options = '--some-option value'
+  AssertLinter 'refurb', ale#Escape('refurb') . ' --some-option value %s'
+
+Execute(The refurb callbacks shouldn't detect virtualenv directories where they don't exist):
+  call ale#test#SetFilename('../test-files/python/no_virtualenv/subdir/foo/bar.py')
+
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/no_virtualenv/subdir')
+  AssertLinter 'refurb', ale#Escape('refurb') . ' %s'
+
+Execute(The refurb callbacks should detect virtualenv directories):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+  let b:executable = ale#path#Simplify(
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/refurb'
+  \)
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir')
+  AssertLinter b:executable, ale#Escape(b:executable) . ' %s'
+
+Execute(You should able able to use the global refurb instead):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+  let g:ale_python_refurb_use_global = 1
+
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir')
+  AssertLinter 'refurb', ale#Escape('refurb') . ' %s'
+
+Execute(Setting executable to 'pipenv' appends 'run refurb'):
+  let g:ale_python_refurb_executable = 'path/to/pipenv'
+  let g:ale_python_refurb_use_global = 1
+
+  AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run refurb %s'
+
+Execute(Pipenv is detected when python_refurb_auto_pipenv is set):
+  let g:ale_python_refurb_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'pipenv', ale#Escape('pipenv') . ' run refurb %s'
+
+Execute(Setting executable to 'poetry' appends 'run refurb'):
+  let g:ale_python_refurb_executable = 'path/to/poetry'
+  let g:ale_python_refurb_use_global = 1
+
+  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run refurb %s'
+
+Execute(poetry is detected when python_refurb_auto_poetry is set):
+  let g:ale_python_refurb_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'poetry', ale#Escape('poetry') . ' run refurb %s'
+
+Execute(uv is detected when python_refurb_auto_uv is set):
+  let g:ale_python_refurb_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'uv', ale#Escape('uv') . ' run refurb %s'

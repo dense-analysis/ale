@@ -1,0 +1,221 @@
+Before:
+  Save g:ale_buffer_info
+  Save g:ale_virtualtext_cursor
+  Save g:ale_virtualtext_delay
+  Save g:ale_virtualtext_single
+  Save g:ale_virtualtext_prefix
+  Save b:ale_virtualtext_prefix
+  Save g:ale_use_neovim_diagnostics_api
+
+  call ale#virtualtext#ResetDataForTests()
+
+  let g:setting = ''
+  let g:ale_virtualtext_prefix = '%comment% %type%: '
+  let g:ale_virtualtext_delay = 0
+  let g:ale_virtualtext_single = 0
+  let g:ale_buffer_info = {
+  \ bufnr(''): {
+  \   'loclist': [
+  \     {
+  \       'bufnr': bufnr(''),
+  \       'type': 'E',
+  \       'lnum': 1,
+  \       'col': 5,
+  \       'text': 'Line 1 error',
+  \     },
+  \     {
+  \       'bufnr': bufnr(''),
+  \       'type': 'W',
+  \       'lnum': 2,
+  \       'col': 1,
+  \       'text': 'Line 2 warning 1',
+  \     },
+  \     {
+  \       'bufnr': bufnr(''),
+  \       'type': 'W',
+  \       'lnum': 2,
+  \       'col': 5,
+  \       'text': 'Line 2 warning 2',
+  \     },
+  \     {
+  \       'bufnr': bufnr(''),
+  \       'type': 'W',
+  \       'lnum': 3,
+  \       'col': 3,
+  \       'text': 'Line 3 warning 1',
+  \     },
+  \     {
+  \       'bufnr': bufnr(''),
+  \       'type': 'E',
+  \       'lnum': 3,
+  \       'col': 5,
+  \       'text': 'Line 3 error 1',
+  \     },
+  \     {
+  \       'bufnr': bufnr(''),
+  \       'type': 'E',
+  \       'lnum': 3,
+  \       'col': 6,
+  \       'text': 'Line 3 error 2',
+  \     },
+  \   ],
+  \ },
+  \}
+  let g:ale_use_neovim_diagnostics_api = 0
+
+After:
+  Restore
+
+  unlet! g:setting
+  unlet! g:ns_id
+
+Execute(The correct highlight groups should be loaded for virtual-text):
+  AssertEqual 'ALEVirtualTextError', ale#virtualtext#GetGroup({})
+  AssertEqual 'ALEVirtualTextError', ale#virtualtext#GetGroup({'type': 'E'})
+  AssertEqual 'ALEVirtualTextStyleError',
+  \ ale#virtualtext#GetGroup({'type': 'E', 'sub_type': 'style'})
+  AssertEqual 'ALEVirtualTextWarning', ale#virtualtext#GetGroup({'type': 'W'})
+  AssertEqual 'ALEVirtualTextStyleWarning',
+  \ ale#virtualtext#GetGroup({'type': 'W', 'sub_type': 'style'})
+  AssertEqual 'ALEVirtualTextInfo', ale#virtualtext#GetGroup({'type': 'I'})
+
+Given python (An empty Python file):
+Execute(Comment text should be detected correctly for Python files):
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    AssertEqual '#', ale#virtualtext#GetComment(bufnr(''))
+  endif
+
+Given java (An empty Java file):
+Execute(Comment text should be detected correctly for Java files):
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    AssertEqual '//', ale#virtualtext#GetComment(bufnr(''))
+  endif
+
+Given html (An empty HTML file):
+Execute(Comment text should be detected correctly for HTML files):
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    AssertEqual "\<!--", ale#virtualtext#GetComment(bufnr(''))
+  endif
+
+Given python(An example Python file):
+  # line 1
+  # line 2
+  # line 3
+
+Execute(We should not show virtualtext when disabled):
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    for g:setting in ['disabled', '0', 0]
+      call ale#virtualtext#ResetDataForTests()
+
+      let g:ale_virtualtext_cursor = g:setting
+      call cursor(1, 1)
+      call ale#virtualtext#ShowCursorWarningWithDelay()
+      " Tick the timer.
+      sleep 1ms
+
+      AssertEqual '', ale#virtualtext#GetLastMessageForTests()
+    endfor
+  endif
+
+Execute(We should find a virtualtext error on line 1):
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    for g:setting in ['current', '1', 1]
+      call ale#virtualtext#ResetDataForTests()
+
+      let g:ale_virtualtext_cursor = 'current'
+      call cursor(1, 1)
+      call ale#virtualtext#ShowCursorWarningWithDelay()
+      " Tick the timer.
+      sleep 1ms
+
+      AssertEqual '# E: Line 1 error', ale#virtualtext#GetLastMessageForTests()
+
+      if has('patch-9.0.0297')
+        AssertEqual ['ALEVirtualTextError'], map(prop_list(1), {_, v -> v.type})
+        AssertEqual [], prop_list(2)
+      endif
+    endfor
+  endif
+
+Execute(We should find a virtualtext error on line 2):
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    let g:ale_virtualtext_cursor = 'current'
+    call cursor(2, 5)
+    call ale#virtualtext#ShowCursorWarningWithDelay()
+    " Tick the timer.
+    sleep 1ms
+
+    AssertEqual '# W: Line 2 warning 2', ale#virtualtext#GetLastMessageForTests()
+
+    if has('patch-9.0.0297')
+      AssertEqual [], prop_list(1)
+      AssertEqual ['ALEVirtualTextWarning'], map(prop_list(2), {_, v -> v.type})
+    endif
+  endif
+
+Execute(We should be able to change the virtualtext prefix globally):
+  let g:ale_virtualtext_prefix = '%severity%: '
+
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    let g:ale_virtualtext_cursor = 'current'
+    call cursor(1, 1)
+    call ale#virtualtext#ShowCursorWarningWithDelay()
+    " Tick the timer.
+    sleep 1ms
+
+    AssertEqual 'Error: Line 1 error', ale#virtualtext#GetLastMessageForTests()
+  endif
+
+Execute(We should be able to change the virtualtext prefix per-buffer):
+  let b:ale_virtualtext_prefix = 'B> '
+
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    let g:ale_virtualtext_cursor = 'current'
+    call cursor(1, 1)
+    call ale#virtualtext#ShowCursorWarningWithDelay()
+    " Tick the timer.
+    sleep 1ms
+
+    AssertEqual 'B> Line 1 error', ale#virtualtext#GetLastMessageForTests()
+  endif
+
+Execute(We should be able to set messages across all lines):
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    call ale#virtualtext#SetTexts(bufnr(''), g:ale_buffer_info[bufnr('')].loclist)
+
+    AssertEqual '# E: Line 3 error 2', ale#virtualtext#GetLastMessageForTests()
+
+    if has('patch-9.0.0297')
+      AssertEqual ['ALEVirtualTextError'], map(prop_list(1), {_, v -> v.type})
+      AssertEqual ['ALEVirtualTextWarning', 'ALEVirtualTextWarning'],
+      \ map(prop_list(2), {_, v -> v.type})
+    endif
+  endif
+
+Execute(We should be able to limit virtual messages to the first one only):
+  let g:ale_virtualtext_single = 1
+
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    call ale#virtualtext#SetTexts(bufnr(''), g:ale_buffer_info[bufnr('')].loclist)
+
+    AssertEqual '# E: Line 3 error 1', ale#virtualtext#GetLastMessageForTests()
+
+    if has('patch-9.0.0297')
+      AssertEqual ['ALEVirtualTextError'], map(prop_list(1), {_, v -> v.type})
+      AssertEqual ['ALEVirtualTextWarning'], map(prop_list(2), {_, v -> v.type})
+      AssertEqual ['ALEVirtualTextError'], map(prop_list(3), {_, v -> v.type})
+    endif
+  endif
+
+Execute(We should not set cursor messages when Neovim diagnostics are enabled):
+  let g:ale_use_neovim_diagnostics_api = 1
+
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    let g:ale_virtualtext_cursor = 'current'
+    call cursor(1, 1)
+    call ale#virtualtext#ShowCursorWarningWithDelay()
+    " Tick the timer.
+    sleep 1ms
+
+    AssertEqual '', ale#virtualtext#GetLastMessageForTests()
+  endif

@@ -1,5 +1,4 @@
 Before:
-  Save g:ale_statusline_format
   Save g:ale_buffer_info
 
   let g:ale_buffer_info = {}
@@ -82,8 +81,8 @@ Execute (Count should read data from the cache):
   AssertEqual Counts({'error': 1, 'warning': 2}), ale#statusline#Count(44)
 
 Execute (FirstProblem should read data from the cache):
-  let g:ale_buffer_info = 
-    \{"44": 
+  let g:ale_buffer_info =
+    \{"44":
         \{'count': 0,
          \'first_problems':
               \{'error': {'lnum': 3},
@@ -91,7 +90,7 @@ Execute (FirstProblem should read data from the cache):
               \'style_error': {'lnum': 22},
               \'style_warning': {'lnum': 223},
               \'info': {'lnum': 2}
-           \} 
+           \}
         \}
     \}
   AssertEqual {'lnum': 3}, ale#statusline#FirstProblem(44, 'error')
@@ -143,15 +142,3 @@ Execute (Output should be empty for non-existent buffer):
   AssertEqual {}, ale#statusline#FirstProblem(9001, 'style_error')
   AssertEqual {}, ale#statusline#FirstProblem(9001, 'style_warning')
   AssertEqual {}, ale#statusline#FirstProblem(9001, 'info')
-
-Execute(ale#statusline#Update shouldn't blow up when globals are undefined):
-  unlet! g:ale_statusline_format
-  call ale#statusline#Update(1, [])
-
-Execute(ale#statusline#Count should return 0 counts when globals are undefined):
-  unlet! g:ale_statusline_format
-  AssertEqual Counts({}), ale#statusline#Count(1)
-
-Execute(FirstProblem should return an empty dict when globals are undefined):
-  unlet! g:ale_statusline_format
-  AssertEqual {}, ale#statusline#FirstProblem(bufnr(''), 'info')

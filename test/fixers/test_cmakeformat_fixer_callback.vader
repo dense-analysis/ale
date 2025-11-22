@@ -18,10 +18,8 @@ Execute(The cmakeformat callback should return the correct default values):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' -i '
-  \     . ' %t',
+  \     . ' -'
   \ },
   \ ale#fixers#cmakeformat#Fix(bufnr(''))
 
@@ -31,10 +29,8 @@ Execute(The cmakeformat callback should include custom cmakeformat options):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' -i '
   \     . ' ' . g:ale_cmake_cmakeformat_options
-  \     . ' %t',
+  \     . ' -',
   \ },
   \ ale#fixers#cmakeformat#Fix(bufnr(''))

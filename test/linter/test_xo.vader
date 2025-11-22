@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('javascript', 'xo')
+  call ale#test#SetFilename('testfile.jsx')
+  unlet! b:executable
+
+  set filetype=javascriptreact
+  runtime autoload/ale/handlers/xo.vim
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default xo command should be correct):
+  AssertLinter 'xo', ale#Escape('xo') . ' --reporter json --stdin --stdin-filename %s'
+
+Execute(The xo executable and command should be configurable):
+  let b:ale_javascript_xo_executable = 'foobar'
+  let b:ale_javascript_xo_options = '--wat'
+
+  AssertLinter 'foobar', ale#Escape('foobar')
+  \ . ' --wat --reporter json --stdin --stdin-filename %s'

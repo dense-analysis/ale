@@ -5,7 +5,6 @@ After:
   call ale#linter#Reset()
 
 Execute(cpplint warnings from included files should be parsed correctly):
-
   AssertEqual
   \ [
   \   {

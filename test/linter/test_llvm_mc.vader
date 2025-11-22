@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('asm', 'llvm_mc')
+  call ale#test#SetFilename('test.cpp')
+  let b:command_tail = ' --assemble'
+  \   . ' --filetype=asm'
+  \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' '
+
+After:
+  unlet! b:command_tail
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default llvm-mc command should be correct):
+  AssertLinter 'llvm-mc', ale#Escape('llvm-mc') . b:command_tail
+
+Execute(The llvm-mc executable should be configurable):
+  let b:ale_asm_llvm_mc_executable = 'foobar'
+
+  AssertLinter 'foobar', ale#Escape('foobar') . b:command_tail

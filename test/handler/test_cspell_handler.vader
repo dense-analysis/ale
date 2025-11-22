@@ -1,0 +1,14 @@
+Execute(The cspell handler should handle cspell output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'col': 128,
+  \     'end_col': 133,
+  \     'type': 'W',
+  \     'text': 'Unknown word (Neovim)',
+  \   },
+  \ ],
+  \ ale#handlers#cspell#Handle(bufnr(''),
+  \   '/:3:128 - Unknown word (Neovim)'
+  \)

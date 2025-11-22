@@ -1,13 +1,22 @@
 Before:
+  Save g:ale_c_build_dir
   Save g:ale_c_clangtidy_executable
+  Save g:ale_c_clangtidy_checks
+  Save g:ale_c_clangtidy_extra_options
+  Save g:ale_cpp_clangtidy_executable
+  Save g:ale_cpp_clangtidy_checks
+  Save g:ale_cpp_clangtidy_extra_options
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_c_clangtidy_executable = 'xxxinvalid'
+  let g:ale_c_clangtidy_checks = []
+  let g:ale_c_clangtidy_extra_options = ''
+  let g:ale_cpp_clangtidy_executable = 'xxxinvalidpp'
+  let g:ale_cpp_clangtidy_checks = []
+  let g:ale_cpp_clangtidy_extra_options = ''
   let g:ale_c_build_dir = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ../command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -15,7 +24,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The clangtidy callback should return the correct default values):
-  call ale#test#SetFilename('c_paths/dummy.c')
+  call ale#test#SetFilename('../test-files/c/dummy.c')
 
   AssertEqual
   \ {
@@ -26,7 +35,7 @@ Execute(The clangtidy callback should return the correct default values):
   \ ale#fixers#clangtidy#Fix(bufnr(''))
 
 Execute(The clangtidy callback should include any additional options):
-  call ale#test#SetFilename('c_paths/dummy.c')
+  call ale#test#SetFilename('../test-files/c/dummy.c')
   let g:ale_c_clangtidy_extra_options = '--some-option'
 
   AssertEqual
@@ -34,18 +43,5 @@ Execute(The clangtidy callback should include any additional options):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_c_clangtidy_executable)
   \     . ' -fix -fix-errors --some-option %t',
-  \ },
-  \ ale#fixers#clangtidy#Fix(bufnr(''))
-
-Execute(The clangtidy callback should support cpp files):
-  call ale#test#SetFilename('c_paths/dummy.cpp')
-  let g:ale_cpp_clangtidy_executable = 'invalidpp'
-  set filetype=cpp " The test fails without this
-
-  AssertEqual
-  \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_cpp_clangtidy_executable)
-  \     . ' -fix -fix-errors %t',
   \ },
   \ ale#fixers#clangtidy#Fix(bufnr(''))

@@ -14,27 +14,23 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The latexindent callback should return the correct default values):
-  call ale#test#SetFilename('../tex_files/testfile.tex')
+  call ale#test#SetFilename('../test-files/tex/testfile.tex')
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' -l -w'
-  \     . ' %t',
+  \     . ' -l'
   \ },
   \ ale#fixers#latexindent#Fix(bufnr(''))
 
 Execute(The latexindent callback should include custom gofmt options):
   let g:ale_tex_latexindent_options = "-l '~/.indentconfig.yaml'"
-  call ale#test#SetFilename('../tex_files/testfile.tex')
+  call ale#test#SetFilename('../test-files/tex/testfile.tex')
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' -l -w'
+  \     . ' -l'
   \     . ' ' . g:ale_tex_latexindent_options
-  \     . ' %t',
   \ },
   \ ale#fixers#latexindent#Fix(bufnr(''))

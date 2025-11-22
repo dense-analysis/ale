@@ -5,6 +5,7 @@ call ale#Set('verilog_iverilog_options', '')
 
 function! ale_linters#verilog#iverilog#GetCommand(buffer) abort
     return 'iverilog -t null -Wall '
+    \   . '-y%s:h '
     \   . ale#Var(a:buffer, 'verilog_iverilog_options')
     \   . ' %t'
 endfunction

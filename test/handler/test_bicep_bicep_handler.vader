@@ -1,0 +1,30 @@
+Before:
+  runtime ale_linters/bicep/bicep.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The bicep handler should handle basic warnings):
+  AssertEqual
+  \ [
+  \   {
+  \     'filename': '/tmp/nvimhxqs5D/1/dns.bicep',
+  \     'lnum': 7,
+  \     'col': 10,
+  \     'type': 'W',
+  \     'code': 'no-unused-existing-resources',
+  \     'text': 'Existing resource "asdasd" is declared but never used. [https://aka.ms/bicep/linter/no-unused-existing-resources]',
+  \   },
+  \   {
+  \     'filename': '/tmp/nvimhxqs5D/1/dns.bicep',
+  \     'lnum': 106,
+  \     'col': 6,
+  \     'type': 'E',
+  \     'code': 'BCP019',
+  \     'text': 'Expected a new line character at this location.',
+  \   },
+  \ ],
+  \ ale_linters#bicep#bicep#Handle(1, [
+  \   '/tmp/nvimhxqs5D/1/dns.bicep(7,10) : Warning no-unused-existing-resources: Existing resource "asdasd" is declared but never used. [https://aka.ms/bicep/linter/no-unused-existing-resources]',
+  \   '/tmp/nvimhxqs5D/1/dns.bicep(106,6) : Error BCP019: Expected a new line character at this location.',
+  \ ])

@@ -6,12 +6,13 @@ call ale#Set('scss_stylelint_use_global', get(g:, 'ale_use_global_executables', 
 
 function! ale_linters#scss#stylelint#GetCommand(buffer) abort
     return '%e ' . ale#Pad(ale#Var(a:buffer, 'scss_stylelint_options'))
-    \   . ' --stdin-filename %s'
+    \   . ' --no-color --stdin-filename %s'
 endfunction
 
 call ale#linter#Define('scss', {
 \   'name': 'stylelint',
-\   'executable': {b -> ale#node#FindExecutable(b, 'scss_stylelint', [
+\   'output_stream': 'both',
+\   'executable': {b -> ale#path#FindExecutable(b, 'scss_stylelint', [
 \       'node_modules/.bin/stylelint',
 \   ])},
 \   'command': function('ale_linters#scss#stylelint#GetCommand'),

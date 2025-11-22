@@ -1,0 +1,17 @@
+Before:
+  call ale#assert#SetUpLinterTest('handlebars', 'embertemplatelint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Runs the right command for ember-template-lint >= 4.x):
+  GivenCommandOutput ['4.0.0']
+
+  AssertLinter 'ember-template-lint',
+  \ ale#Escape('ember-template-lint') . ' --format=json --filename %s'
+
+Execute(Runs the right command for ember-template-lint < 4.x):
+  GivenCommandOutput ['3.14.0']
+
+  AssertLinter 'ember-template-lint',
+  \ ale#Escape('ember-template-lint') . ' --json --filename %s'

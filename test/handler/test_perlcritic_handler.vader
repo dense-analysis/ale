@@ -17,4 +17,3 @@ Execute(The Perl::Critic handler should create all issues as warnings):
   \  ale_linters#perl#perlcritic#Handle(99, [
   \      '21:17 Regular expression without "/m" flag'
   \  ])
-

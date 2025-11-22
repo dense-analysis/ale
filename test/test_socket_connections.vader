@@ -28,10 +28,16 @@ Before:
     endfunction
 
     let g:port = 10347
-    let g:pid = str2nr(system(
+    let g:pid_tcp = str2nr(system(
     \ 'python'
-    \ . ' ' . ale#Escape(g:dir . '/dumb_tcp_server.py')
+    \ . ' ' . ale#Escape(g:dir . '/script/dumb_tcp_server.py')
     \ . ' ' . g:port
+    \))
+    let g:pipe_path = tempname()
+    let g:pid_pipe = str2nr(system(
+    \ 'python'
+    \ . ' ' . ale#Escape(g:dir . '/script/dumb_named_pipe_server.py')
+    \ . ' ' . g:pipe_path
     \))
   endif
 
@@ -46,17 +52,23 @@ After:
     delfunction WaitForData
     delfunction TestCallback
 
-    if has_key(g:, 'pid')
-      call system('kill ' . g:pid)
+    if has_key(g:, 'pid_tcp')
+      call system('kill ' . g:pid_tcp)
     endif
 
-    unlet! g:pid
+    if has_key(g:, 'pid_pipe')
+      call system('kill ' . g:pid_pipe)
+    endif
+
+    unlet! g:pid_tcp
     unlet! g:port
+    unlet! g:pid_pipe
+    unlet! g:pipe_path
   endif
 
   unlet! g:can_run_socket_tests
 
-Execute(Sending and receiving connections to sockets should work):
+Execute(Sending and receiving connections to tcp sockets should work):
   if g:can_run_socket_tests
     let g:channel_id = ale#socket#Open(
     \ '127.0.0.1:' . g:port,
@@ -87,6 +99,41 @@ Execute(Sending and receiving connections to sockets should work):
   if has('nvim') && !exists('*chanclose')
     AssertEqual -1, ale#socket#Open(
     \ '127.0.0.1:1111',
+    \ {'callback': function('function')}
+    \)
+  endif
+
+Execute(Sending and receiving connections to named pipe sockets should work):
+  if g:can_run_socket_tests && has('nvim-0.4')
+    let g:channel_id = ale#socket#Open(
+    \ g:pipe_path,
+    \ {'callback': function('TestCallback')}
+    \)
+
+    Assert g:channel_id >= 0, 'The socket was not opened!'
+
+    call ale#socket#Send(g:channel_id, 'hello')
+    call ale#socket#Send(g:channel_id, ' world')
+
+    AssertEqual 1, ale#socket#IsOpen(g:channel_id)
+
+    " Wait up to 1 second for the expected data to arrive.
+    call WaitForData('hello world', 1000)
+
+    AssertEqual g:channel_id, g:channel_id_received
+    AssertEqual 'hello world', g:data_received
+    AssertEqual g:pipe_path, ale#socket#GetAddress(g:channel_id)
+
+    call ale#socket#Close(g:channel_id)
+
+    AssertEqual 0, ale#socket#IsOpen(g:channel_id)
+    AssertEqual '', ale#socket#GetAddress(g:channel_id)
+  endif
+
+  " NeoVim versions which can't connect to sockets should just fail.
+  if has('nvim-0.4') && !exists('*chanclose')
+    AssertEqual -1, ale#socket#Open(
+    \ g:pipe_path,
     \ {'callback': function('function')}
     \)
   endif

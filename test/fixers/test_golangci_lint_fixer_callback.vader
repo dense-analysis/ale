@@ -1,0 +1,80 @@
+Before:
+  call ale#assert#SetUpFixerTest('go', 'golangci_lint')
+  Save g:ale_go_go111module
+  Save g:ale_go_golangci_formatter_executable
+  Save g:ale_go_golangci_formatter_options
+
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  call ale#test#SetFilename('../test-files/go/testfile.go')
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#assert#TearDownFixerTest()
+
+  unlet! b:ale_go_go111module
+
+Execute(The golangci-lint callback should return the correct default values with v1):
+
+  GivenCommandOutput ['golangci-lint has version 1.64.8 built with go1.23.0']
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('golangci-lint') . ' run --fix  ' . ale#Escape('testfile.go'),
+  \ }
+
+Execute(The golangci-lint callback should include custom golangci-lint options with v1):
+  let g:ale_go_golangci_formatter_options = "--new --config /dev/null"
+
+  GivenCommandOutput ['golangci-lint has version 1.64.8 built with go1.23.0']
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('golangci-lint')
+  \     . ' run --fix ' . g:ale_go_golangci_formatter_options . ' ' . ale#Escape('testfile.go'),
+  \ },
+
+Execute(The golangci-lint callback should override executable with v1):
+  let g:ale_go_golangci_formatter_executable = 'xxxinvalid'
+
+  GivenCommandOutput ['golangci-lint has version 1.64.8 built with go1.23.0']
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' run --fix '
+  \     . g:ale_go_golangci_formatter_options
+  \     . ' ' . ale#Escape('testfile.go'),
+  \ },
+
+Execute(The golangci-lint callback should return the correct default values with v2):
+
+  GivenCommandOutput ['golangci-lint has version 2.1.5 built with go1.23.0']
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('golangci-lint') . ' fmt --stdin ',
+  \ }
+
+Execute(The golangci-lint callback should include custom golangci-lint options with v2):
+  let g:ale_go_golangci_formatter_options = "--new --config /dev/null"
+
+  GivenCommandOutput ['golangci-lint has version 2.1.5 built with go1.23.0']
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('golangci-lint')
+  \     . ' fmt --stdin ' . g:ale_go_golangci_formatter_options,
+  \ },
+
+Execute(The golangci-lint callback should override executable with v2):
+  let g:ale_go_golangci_formatter_executable = 'xxxinvalid'
+
+  GivenCommandOutput ['golangci-lint has version 2.1.5 built with go1.23.0']
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' fmt --stdin '
+  \     . g:ale_go_golangci_formatter_options
+  \ },

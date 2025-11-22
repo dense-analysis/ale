@@ -1,12 +1,19 @@
 Before:
+  Save g:ale_ruby_reek_show_context
+  Save g:ale_ruby_reek_show_wiki_link
+
+  let g:ale_ruby_reek_show_context = 0
+  let g:ale_ruby_reek_show_wiki_link = 0
+
   runtime ale_linters/ruby/reek.vim
 
 After:
+  Restore
+
   call ale#linter#Reset()
 
 Execute(The reek handler should parse JSON correctly, with only context enabled):
   let g:ale_ruby_reek_show_context = 1
-  let g:ale_ruby_reek_show_wiki_link = 0
 
   AssertEqual
   \ [
@@ -34,9 +41,6 @@ Execute(The reek handler should parse JSON correctly, with only context enabled)
   \ ])
 
 Execute(The reek handler should parse JSON correctly, with no context or wiki links):
-  let g:ale_ruby_reek_show_context = 0
-  let g:ale_ruby_reek_show_wiki_link = 0
-
   AssertEqual
   \ [
   \     {

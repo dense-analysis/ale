@@ -19,7 +19,7 @@ Execute(ale#util#Tempname shouldn't set $TMPDIR to an empty string if it isn't s
     Assert !exists('$TMPDIR'), '$TMPDIR exists where it shouldn''t'
   endif
 
-Execute(ale#util#Tempname shouldn't replace $TMPDIR and reset them to an empty string.):
+Execute(ale#util#Tempname shouldn't replace $TMPDIR and reset them to an empty string):
   if has('unix')
     let $TMPDIR = ''
     Assert ale#util#Tempname() =~# '^/tmp'

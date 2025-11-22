@@ -1,0 +1,74 @@
+Before:
+  Save g:ale_go_go111module
+
+  call ale#assert#SetUpLinterTest('go', 'golangci_lint')
+  call ale#test#SetFilename('test.go')
+
+  " Test with version 1.64.8 by default
+  GivenCommandOutput ['golangci-lint has version 1.64.8 built with go1.23.0']
+
+After:
+  Restore
+
+  unlet! b:ale_go_go111module
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The golangci-lint defaults should be correct):
+  AssertLinterCwd '%s:h',
+  AssertLinter 'golangci-lint',
+  \ ale#Escape('golangci-lint') . ' run  --out-format=json --show-stats=0'
+
+Execute(The golangci-lint defaults should be correct with no version info):
+  GivenCommandOutput []
+  AssertLinterCwd '%s:h',
+  AssertLinter 'golangci-lint',
+  \ ale#Escape('golangci-lint') . ' run  --out-format=json --show-stats=0'
+
+Execute(The golangci-lint defaults should be correct with version 2):
+  GivenCommandOutput ['golangci-lint has version 2.0.2 built with go1.24.0']
+  AssertLinterCwd '%s:h',
+  AssertLinter 'golangci-lint',
+  \ ale#Escape('golangci-lint') . ' run  --output.json.path stdout --output.text.path stderr --show-stats=0'
+
+Execute(The golangci-lint callback should use a configured executable):
+  let b:ale_go_golangci_lint_executable = 'something else'
+
+  AssertLinter 'something else',
+  \ ale#Escape('something else')
+  \   . ' run  --out-format=json --show-stats=0'
+
+Execute(The golangci-lint callback should use a configured version 2 executable):
+  GivenCommandOutput ['golangci-lint has version 2.0.0 built with go1.22.0']
+  let b:ale_go_golangci_lint_executable = 'something else'
+
+  AssertLinter 'something else',
+  \ ale#Escape('something else')
+  \   . ' run  --output.json.path stdout --output.text.path stderr --show-stats=0'
+
+Execute(The golangci-lint callback should use configured options):
+  let b:ale_go_golangci_lint_options = '--foobar'
+
+  AssertLinter 'golangci-lint',
+  \ ale#Escape('golangci-lint')
+  \   . ' run '
+  \   . '--foobar '
+  \   . '--out-format=json '
+  \   . '--show-stats=0'
+
+Execute(The golangci-lint callback should support environment variables):
+  let b:ale_go_go111module = 'on'
+
+  AssertLinter 'golangci-lint',
+  \ ale#Env('GO111MODULE', 'on')
+  \   . ale#Escape('golangci-lint')
+  \   . ' run  '
+  \   . '--out-format=json '
+  \   . '--show-stats=0'
+
+Execute(The golangci-lint `lint_package` option should use the correct command):
+  let b:ale_go_golangci_lint_package = 0
+  AssertLinter 'golangci-lint',
+  \ ale#Escape('golangci-lint')
+  \   . ' run ' . ale#Escape(expand('%' . ':t'))
+  \   . '  --out-format=json --show-stats=0'

@@ -1,0 +1,21 @@
+Before:
+  call ale#assert#SetUpLinterTest('bicep', 'az_bicep')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  if has('win32')
+      AssertLinter 'az', ale#Escape('az') . ' bicep build --outfile NUL --file %s '
+  else
+      AssertLinter 'az', ale#Escape('az') . ' bicep build --outfile /dev/null --file %s '
+  endif
+
+Execute(The executable should be configurable):
+  let g:ale_bicep_az_bicep_executable = 'foobar'
+
+  if has('win32')
+      AssertLinter 'foobar', ale#Escape('foobar') . ' bicep build --outfile NUL --file %s '
+  else
+      AssertLinter 'foobar', ale#Escape('foobar') . ' bicep build --outfile /dev/null --file %s '
+  endif

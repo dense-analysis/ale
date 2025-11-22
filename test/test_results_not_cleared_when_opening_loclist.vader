@@ -27,4 +27,4 @@ Execute(The loclist shouldn't be cleared when opening the loclist):
   :lopen
   :q
 
-  AssertEqual 1, len(ale#test#GetLoclistWithoutModule()), 'The loclist was cleared'
+  AssertEqual 1, len(ale#test#GetLoclistWithoutNewerKeys()), 'The loclist was cleared'

@@ -1,0 +1,39 @@
+Before:
+  runtime ale_linters/bicep/az_bicep.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The az_bicep handler should handle basic warnings):
+  AssertEqual
+  \ [
+  \   {
+  \     'filename': '/tmp/nvimhxqs5D/1/dns.bicep',
+  \     'lnum': 7,
+  \     'col': 10,
+  \     'type': 'W',
+  \     'code': 'no-unused-existing-resources',
+  \     'text': 'Existing resource "asdasd" is declared but never used. [https://aka.ms/bicep/linter/no-unused-existing-resources]',
+  \   },
+  \   {
+  \     'filename': '/tmp/nvimhxqs5D/1/dns.bicep',
+  \     'lnum': 106,
+  \     'col': 6,
+  \     'type': 'E',
+  \     'code': 'BCP019',
+  \     'text': 'Expected a new line character at this location.',
+  \   },
+  \   {
+  \     'filename': '/tmp/cluster.bicep',
+  \     'lnum': 25,
+  \     'col': 30,
+  \     'type': 'E',
+  \     'code': 'BCP334',
+  \     'text': 'The provided value has no configured minimum length and may be too short to assign to a target with a configured minimum length of 1.',
+  \   },
+  \ ],
+  \ ale_linters#bicep#az_bicep#Handle(1, [
+  \   '/tmp/nvimhxqs5D/1/dns.bicep(7,10) : Warning no-unused-existing-resources: Existing resource "asdasd" is declared but never used. [https://aka.ms/bicep/linter/no-unused-existing-resources]',
+  \   '/tmp/nvimhxqs5D/1/dns.bicep(106,6) : Error BCP019: Expected a new line character at this location.',
+  \   'ERROR: /tmp/cluster.bicep(25,30) : Warning BCP334: The provided value has no configured minimum length and may be too short to assign to a target with a configured minimum length of 1.',
+  \ ])

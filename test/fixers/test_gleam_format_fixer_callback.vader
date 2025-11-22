@@ -1,0 +1,28 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The gleam_format command should have default values):
+  call ale#test#SetFilename('../test-files/elixir/testfile.gleam')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('gleam') . ' format %t',
+  \ },
+  \ ale#fixers#gleam_format#Fix(bufnr(''))
+
+Execute(The gleam_format executable should be configurable):
+  let g:ale_gleam_format_executable = 'xxxinvalid'
+  call ale#test#SetFilename('../test-files/elixir/testfile.gleam')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid') . ' format %t',
+  \ },
+  \ ale#fixers#gleam_format#Fix(bufnr(''))

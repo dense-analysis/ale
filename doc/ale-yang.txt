@@ -5,8 +5,11 @@ ALE YANG Integration                                         *ale-yang-options*
 ===============================================================================
 yang-lsp                                                         *ale-yang-lsp*
 
-g:ale_yang_lsp_executable                           *g:ale_yang_lsp_executable*
+                                              *ale-options.yang_lsp_executable*
+                                                    *g:ale_yang_lsp_executable*
                                                     *b:ale_yang_lsp_executable*
+yang_lsp_executable
+g:ale_yang_lsp_executable
   Type: |String|
   Default: `'yang-language-server'`
 

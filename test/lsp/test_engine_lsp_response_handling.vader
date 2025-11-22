@@ -44,8 +44,20 @@ After:
 Given foobar(An empty file):
 Execute(tsserver syntax error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
-  call ale#test#SetFilename('filename.ts')
+
+  if has('win32')
+    call ale#test#SetFilename('filename,[]^$.ts')
+  else
+    call ale#test#SetFilename('filename*?,{}[]^$.ts')
+  endif
+
   call ale#engine#InitBufferInfo(bufnr(''))
+
+  if has('win32')
+    AssertEqual 'filename,[]^$.ts', expand('%:p:t')
+  else
+    AssertEqual 'filename*?,{}[]^$.ts', expand('%:p:t')
+  endif
 
   " When we get syntax errors and no semantic errors, we should keep the
   " syntax errors.
@@ -54,7 +66,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
   \ 'body': {
-  \   'file': g:dir . '/filename.ts',
+  \   'file': expand('%:p'),
   \   'diagnostics':[
   \     {
   \       'start': {
@@ -76,7 +88,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
   \ 'body': {
-  \   'file': g:dir . '/filename.ts',
+  \   'file': expand('%:p'),
   \   'diagnostics':[
   \   ],
   \ },
@@ -96,7 +108,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \     'pattern': '',
   \   },
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
   " After we get empty syntax errors, we should clear them.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -104,7 +116,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
   \ 'body': {
-  \   'file': g:dir . '/filename.ts',
+  \   'file': expand('%:p'),
   \   'diagnostics':[
   \   ],
   \ },
@@ -113,7 +125,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
   " Syntax errors on the project root should not populate the LocList.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -142,12 +154,24 @@ Execute(tsserver syntax error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(tsserver semantic error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
-  call ale#test#SetFilename('filename.ts')
+
+  if has('win32')
+    call ale#test#SetFilename('filename,[]^$.ts')
+  else
+    call ale#test#SetFilename('filename*?,{}[]^$.ts')
+  endif
+
   call ale#engine#InitBufferInfo(bufnr(''))
+
+  if has('win32')
+    AssertEqual 'filename,[]^$.ts', expand('%:p:t')
+  else
+    AssertEqual 'filename*?,{}[]^$.ts', expand('%:p:t')
+  endif
 
   " When we get syntax errors and no semantic errors, we should keep the
   " syntax errors.
@@ -156,7 +180,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
   \ 'body': {
-  \   'file': g:dir . '/filename.ts',
+  \   'file': expand('%:p'),
   \   'diagnostics':[
   \   ],
   \ },
@@ -166,7 +190,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
   \ 'body': {
-  \   'file': g:dir . '/filename.ts',
+  \   'file': expand('%:p'),
   \   'diagnostics':[
   \     {
   \       'start': {
@@ -198,7 +222,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \     'pattern': '',
   \   },
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
   " After we get empty syntax errors, we should clear them.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -206,7 +230,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
   \ 'body': {
-  \   'file': g:dir . '/filename.ts',
+  \   'file': expand('%:p'),
   \   'diagnostics':[
   \   ],
   \ },
@@ -215,7 +239,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
   " Semantic errors on the project root should not populate the LocList.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -244,7 +268,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(tsserver errors should mark tsserver no longer active):
   let b:ale_linters = ['tsserver']
@@ -270,15 +294,27 @@ Execute(tsserver errors should mark tsserver no longer active):
 Execute(LSP diagnostics responses should be handled correctly):
   let b:ale_linters = ['eclipselsp']
   runtime ale_linters/java/eclipselsp.vim
-  call ale#test#SetFilename('filename.java')
+
+  if has('win32')
+    call ale#test#SetFilename('filename,[]^$.ts')
+  else
+    call ale#test#SetFilename('filename*?,{}[]^$.java')
+  endif
+
   call ale#engine#InitBufferInfo(bufnr(''))
-  call ale#lsp_linter#SetLSPLinterMap({'1': 'eclipselsp'})
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'eclipselsp', 'aliases': [], 'lsp': 'stdio'}})
+
+  if has('win32')
+    AssertEqual 'filename,[]^$.ts', expand('%:p:t')
+  else
+    AssertEqual 'filename*?,{}[]^$.java', expand('%:p:t')
+  endif
 
   call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'jsonrpc':'2.0',
   \ 'method':'textDocument/publishDiagnostics',
   \ 'params': {
-  \     'uri':'file://' . g:dir . '/filename.java',
+  \     'uri': ale#path#ToFileURI(expand('%:p')),
   \     'diagnostics': [
   \        {
   \          'range': {
@@ -314,14 +350,14 @@ Execute(LSP diagnostics responses should be handled correctly):
   \     'text': 'Missing JRE 1-8'
   \    }
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(LSP diagnostics responses on project root should not populate loclist):
   let b:ale_linters = ['eclipselsp']
   runtime ale_linters/java/eclipselsp.vim
   call ale#test#SetFilename('filename.java')
   call ale#engine#InitBufferInfo(bufnr(''))
-  call ale#lsp_linter#SetLSPLinterMap({'1': 'eclipselsp'})
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'eclipselsp', 'aliases': [], 'lsp': 'stdio'}})
 
   call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'jsonrpc':'2.0',
@@ -352,14 +388,14 @@ Execute(LSP diagnostics responses on project root should not populate loclist):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(LSP errors should mark linters no longer active):
-  let b:ale_linters = ['pyls']
-  runtime ale_linters/python/pyls.vim
+  let b:ale_linters = ['pylsp']
+  runtime ale_linters/python/pylsp.vim
   call ale#test#SetFilename('filename.py')
   call ale#engine#InitBufferInfo(bufnr(''))
-  call ale#lsp_linter#SetLSPLinterMap({1: 'pyls'})
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'pylsp', 'aliases': [], 'lsp': 'stdio'}})
 
   let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('python')
   Assert !empty(g:ale_buffer_info[bufnr('')].active_linter_list)
@@ -367,15 +403,139 @@ Execute(LSP errors should mark linters no longer active):
   call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'method': 'textDocument/publishDiagnostics',
   \ 'params': {
-  \   'uri': ale#path#ToURI(g:dir . '/filename.py'),
+  \   'uri': ale#path#ToFileURI(g:dir . '/filename.py'),
   \   'diagnostics': [],
   \ },
   \})
 
   AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
 
+Execute(LSP pull model diagnostic responses should be handled):
+  let b:ale_linters = ['eclipselsp']
+  runtime ale_linters/java/eclipselsp.vim
+
+  if has('win32')
+    call ale#test#SetFilename('filename,[]^$.ts')
+  else
+    call ale#test#SetFilename('filename*?,{}[]^$.java')
+  endif
+
+  call ale#engine#InitBufferInfo(bufnr(''))
+  let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('eclipselsp')
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'eclipselsp', 'aliases': [], 'lsp': 'stdio'}})
+  call ale#lsp_linter#SetDiagnosticURIMap({'347': ale#util#ToURI(expand('%:p'))})
+
+  if has('win32')
+    AssertEqual 'filename,[]^$.ts', expand('%:p:t')
+  else
+    AssertEqual 'filename*?,{}[]^$.java', expand('%:p:t')
+  endif
+
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'jsonrpc':'2.0',
+  \ 'id': 347,
+  \ 'result': {
+  \   'kind': 'full',
+  \   'items': [
+  \     {
+  \       'range': {
+  \         'start': {
+  \           'line': 0,
+  \           'character':0
+  \         },
+  \         'end': {
+  \           'line': 0,
+  \           'character':0
+  \         }
+  \       },
+  \       'severity': 2,
+  \       'code': "",
+  \       'source': 'Java',
+  \       'message': 'Missing JRE 1-8'
+  \     }
+  \   ]
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr(''),
+  \     'col': 1,
+  \     'pattern': '',
+  \     'valid': 1,
+  \     'vcol': 0,
+  \     'nr': -1,
+  \     'type': 'W',
+  \     'text': 'Missing JRE 1-8'
+  \    }
+  \ ],
+  \ ale#test#GetLoclistWithoutNewerKeys()
+  AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
+
+Execute(LSP pull model diagnostic responses that are 'unchanged' should be handled):
+  let b:ale_linters = ['eclipselsp']
+  runtime ale_linters/java/eclipselsp.vim
+
+  if has('win32')
+    call ale#test#SetFilename('filename,[]^$.ts')
+  else
+    call ale#test#SetFilename('filename*?,{}[]^$.java')
+  endif
+
+  call ale#engine#InitBufferInfo(bufnr(''))
+  let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('eclipselsp')
+  let g:ale_buffer_info[bufnr('')].loclist = [
+  \ {
+  \   'lnum': 1,
+  \   'bufnr': bufnr(''),
+  \   'col': 1,
+  \   'pattern': '',
+  \   'valid': 1,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'type': 'W',
+  \   'text': 'Missing JRE 1-8'
+  \ },
+  \]
+
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'eclipselsp', 'aliases': [], 'lsp': 'stdio'}})
+  call ale#lsp_linter#SetDiagnosticURIMap({'347': ale#util#ToURI(expand('%:p'))})
+
+  if has('win32')
+    AssertEqual 'filename,[]^$.ts', expand('%:p:t')
+  else
+    AssertEqual 'filename*?,{}[]^$.java', expand('%:p:t')
+  endif
+
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'jsonrpc':'2.0',
+  \ 'id': 347,
+  \ 'result': {
+  \     'kind': 'unchanged',
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr(''),
+  \     'col': 1,
+  \     'pattern': '',
+  \     'valid': 1,
+  \     'vcol': 0,
+  \     'nr': -1,
+  \     'type': 'W',
+  \     'text': 'Missing JRE 1-8'
+  \    }
+  \ ],
+  \ g:ale_buffer_info[bufnr('')].loclist
+  AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
+
 Execute(LSP errors should be logged in the history):
-  call ale#lsp_linter#SetLSPLinterMap({'347': 'foobar'})
+  call ale#lsp_linter#SetLSPLinterMap({'347': {'name': 'foobar', 'aliases': [], 'lsp': 'stdio'}})
   call ale#lsp_linter#HandleLSPResponse(347, {
   \ 'jsonrpc': '2.0',
   \ 'error': {

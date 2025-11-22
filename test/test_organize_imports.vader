@@ -20,7 +20,7 @@ Before:
   runtime autoload/ale/code_action.vim
 
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
-    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', '', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
     if a:linter.lsp is# 'tsserver'
@@ -57,9 +57,9 @@ Before:
     call add(g:expr_list, a:expr)
   endfunction
 
-  function! ale#code_action#HandleCodeAction(code_action, should_save) abort
+  function! ale#code_action#HandleCodeAction(code_action, options) abort
     let g:handle_code_action_called = 1
-    AssertEqual v:false, a:should_save
+    AssertEqual g:ale_save_hidden || !&hidden, get(a:options, 'should_save')
     call add(g:code_actions, a:code_action)
   endfunction
 
@@ -154,10 +154,10 @@ Given python(Some Python file):
   somelongerline
   bazxyzxyzxyz
 
-Execute(Should result in error message):
+Execute(Should result in error message for LSP):
   call ale#linter#Reset()
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
 
   ALEOrganizeImports
 

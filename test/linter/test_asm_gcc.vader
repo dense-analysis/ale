@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('asm', 'gcc')
+  call ale#test#SetFilename('test.cpp')
+  let b:command_tail = ' -x assembler'
+  \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . '-iquote %s:h'
+  \   . ' -Wall -'
+
+After:
+  unlet! b:command_tail
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail
+
+Execute(The executable should be configurable):
+  let b:ale_asm_gcc_executable = 'foobar'
+
+  AssertLinter 'foobar', ale#Escape('foobar') . b:command_tail

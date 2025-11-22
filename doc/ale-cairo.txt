@@ -1,0 +1,38 @@
+===============================================================================
+ALE Cairo Integration                                       *ale-cairo-options*
+
+
+===============================================================================
+scarb                                                         *ale-cairo-scarb*
+
+                                           *ale-options.cairo_scarb_executable*
+                                                 *g:ale_cairo_scarb_executable*
+                                                 *b:ale_cairo_scarb_executable*
+cairo_scarb_executable
+g:ale_cairo_scarb_executable
+  Type: |String|
+  Default: `'scarb build'`
+
+  For Cairo1 projects using Scarb
+
+  For more information read 'https://docs.swmansion.com/scarb/'
+
+
+===============================================================================
+starknet                                                   *ale-cairo-starknet*
+
+                                        *ale-options.cairo_starknet_executable*
+                                              *g:ale_cairo_starknet_executable*
+                                              *b:ale_cairo_starknet_executable*
+cairo_starknet_executable
+g:ale_cairo_starknet_executable
+  Type: |String|
+  Default: `'starknet-compile'`
+
+  Overrides the starknet-compile binary after installing the cairo-language.
+
+  For more information read 'https://starknet.io/docs/quickstart.html'
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

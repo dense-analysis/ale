@@ -1,0 +1,17 @@
+Before:
+  call ale#assert#SetUpFixerTest('markdown', 'markdownlint')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute:
+  AssertFixer {
+  \ 'command': ale#Escape('markdownlint') . ' --fix',
+  \}
+
+Execute:
+  let g:ale_markdownlint_executable = 'custom_markdownlint'
+  
+  AssertFixer {
+  \ 'command': ale#Escape('custom_markdownlint') . ' --fix',
+  \}

@@ -1,0 +1,19 @@
+Before:
+  runtime ale_linters/yaml/yq.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute (Should parse error correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'text': "did not find expected ',' or ']'",
+  \   }
+  \ ],
+  \ ale_linters#yaml#yq#Handle(bufnr(''), [
+  \ "Error: bad file '-': yaml: line 2: did not find expected ',' or ']'"
+  \ ])
+
+

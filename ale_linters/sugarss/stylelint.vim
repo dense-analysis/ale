@@ -8,12 +8,13 @@ call ale#Set('sugarss_stylelint_use_global', get(g:, 'ale_use_global_executables
 function! ale_linters#sugarss#stylelint#GetCommand(buffer) abort
     return '%e ' . ale#Pad(ale#Var(a:buffer, 'sugarss_stylelint_options'))
     \   . ' --syntax=sugarss'
-    \   . ' --stdin-filename %s'
+    \   . ' --no-color --stdin-filename %s'
 endfunction
 
 call ale#linter#Define('sugarss', {
 \   'name': 'stylelint',
-\   'executable': {b -> ale#node#FindExecutable(b, 'sugarss_stylelint', [
+\   'output_stream': 'both',
+\   'executable': {b -> ale#path#FindExecutable(b, 'sugarss_stylelint', [
 \       'node_modules/.bin/stylelint',
 \   ])},
 \   'command': function('ale_linters#sugarss#stylelint#GetCommand'),

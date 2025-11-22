@@ -1,0 +1,27 @@
+Before:
+  runtime ale_linters/asm/llvm_mc.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The asm llvm-mc handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \    {
+  \      'lnum': 10,
+  \      'col' : 15,
+  \      'text': "invalid operand for instruction",
+  \      'type': 'E',
+  \    },
+  \    {
+  \      'lnum': 11,
+  \      'col' : 2,
+  \      'text': "invalid instruction mnemonic 'lpaq'",
+  \      'type': 'E',
+  \    },
+  \ ],
+  \ ale_linters#asm#llvm_mc#Handle(357, [
+  \   "xorq %rbp, %rbp",
+  \   "{standard_input}:10:15: error: invalid operand for instruction",
+  \   "{standard input}:11:2: error: invalid instruction mnemonic 'lpaq'",
+  \ ])

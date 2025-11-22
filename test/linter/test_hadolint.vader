@@ -1,0 +1,25 @@
+Before:
+  call ale#assert#SetUpLinterTest('dockerfile', 'hadolint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(We should not use Docker by default):
+  AssertLinter 'hadolint', 'hadolint  --no-color -'
+
+Execute(Options should be passed correctly when docker is disabled):
+  let b:ale_dockerfile_hadolint_options = '--ignore DL3006'
+
+  AssertLinter 'hadolint', 'hadolint --ignore DL3006 --no-color -'
+
+Execute(The command should be correct when using Docker):
+  let b:ale_dockerfile_hadolint_use_docker = 'always'
+
+  AssertLinter 'docker', 'docker run --rm -i hadolint/hadolint hadolint  --no-color -'
+
+Execute(The command should be correct when using docker and supplying options):
+  let b:ale_dockerfile_hadolint_use_docker = 'always'
+  let b:ale_dockerfile_hadolint_options = '--ignore DL3006'
+
+  AssertLinter 'docker',
+  \ 'docker run --rm -i hadolint/hadolint hadolint --ignore DL3006 --no-color -'

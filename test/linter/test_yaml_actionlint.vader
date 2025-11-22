@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('yaml', 'actionlint')
+  call ale#test#SetFilename('/.github/file.yml')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Command should always have -no-color, -oneline and - options):
+  let g:ale_yaml_actionlint_options = ''
+
+  AssertLinter 'actionlint', ale#Escape('actionlint') . '  -no-color -oneline - '
+
+Execute(Options should be added to command):
+  let g:ale_yaml_actionlint_options = '-shellcheck= -pyflakes='
+
+  AssertLinter 'actionlint',
+  \ ale#Escape('actionlint') .  ' -shellcheck= -pyflakes= -no-color -oneline - '
+
+Execute(actionlint not run on files outside of /.github/ paths):
+  call ale#test#SetFilename('/something-else/file.yml')

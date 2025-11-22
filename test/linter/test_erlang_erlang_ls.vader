@@ -1,0 +1,70 @@
+Before:
+  call ale#assert#SetUpLinterTest('erlang', 'erlang_ls')
+
+After:
+  unlet! b:root
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'erlang_ls',
+  \ ale#Escape('erlang_ls') . ' --log-level=' . ale#Escape('info')
+
+Execute(Executable should be configurable):
+  let b:ale_erlang_erlang_ls_executable = '/path/to/erlang_ls'
+
+  AssertLinter '/path/to/erlang_ls',
+  \ ale#Escape('/path/to/erlang_ls') . ' --log-level=' . ale#Escape('info')
+
+Execute(Log level should be configurable):
+  let b:ale_erlang_erlang_ls_log_level = 'debug'
+
+  AssertLinter 'erlang_ls',
+  \ ale#Escape('erlang_ls') . ' --log-level=' . ale#Escape('debug')
+
+Execute(Log directory should be configurable):
+  let b:ale_erlang_erlang_ls_log_dir = '/path/to/logs'
+
+  AssertLinter 'erlang_ls',
+  \ ale#Escape('erlang_ls')
+  \ . ' --log-dir=' . ale#Escape('/path/to/logs')
+  \ . ' --log-level=' . ale#Escape('info')
+
+Execute(Project root should be detected using erlang_ls.config):
+  let b:root = '../test-files/erlang/app_with_erlang_ls_config'
+
+  call ale#test#SetFilename(b:root . '/src/app.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
+  call ale#test#SetFilename(b:root . '/_build/default/lib/dep/src/dep.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
+  call ale#test#SetFilename(b:root . '/deps/dep/src/dep.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
+Execute(Root of Rebar3 project should be detected):
+  let b:root = '../test-files/erlang/rebar3_app'
+
+  call ale#test#SetFilename(b:root . '/src/app.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
+  call ale#test#SetFilename(b:root . '/_build/default/lib/dep/src/dep.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
+  call ale#test#SetFilename(b:root . '/_checkouts/dep/src/dep.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
+Execute(Root of Erlang.mk project should be detected):
+  let b:root = '../test-files/erlang/erlang_mk_app'
+
+  call ale#test#SetFilename(b:root . '/src/app.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
+  call ale#test#SetFilename(b:root . '/deps/dep/src/dep.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
+Execute(Root of kerl managed Erlang/OTP installation should be detected):
+  let b:root = '../test-files/erlang/kerl_otp_root'
+
+  call ale#test#SetFilename(b:root . '/lib/stdlib-4.1.1/array.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)

@@ -53,6 +53,7 @@ class DeopleteSourceTest(unittest.TestCase):
                 'rust': r'(\.|::)\w*$',
                 'typescript': r'(\.|\'|")\w*$',
                 'cpp': r'(\.|::|->)\w*$',
+                'c': r'(\.|->)\w*$',
             },
             'is_bytepos': True,
             'is_volatile': True,

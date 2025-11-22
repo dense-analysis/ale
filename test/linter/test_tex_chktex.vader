@@ -1,0 +1,50 @@
+Before:
+  call ale#assert#SetUpLinterTest('tex', 'chktex')
+
+  GivenCommandOutput ['ChkTeX v1.7.6 - Copyright 1995-96 Jens T. Berger Thielemann']
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'chktex', [
+  \ ale#Escape('chktex') . ' --version',
+  \ ale#Escape('chktex')
+  \   . ' -v0 -p stdin -q'
+  \   . ' -I',
+  \]
+
+  " The version check should be cached.
+  GivenCommandOutput []
+  AssertLinter 'chktex', [
+  \ ale#Escape('chktex')
+  \   . ' -v0 -p stdin -q'
+  \   . ' -I',
+  \]
+
+  " Try newer version
+  call ale#semver#ResetVersionCache()
+  GivenCommandOutput ['ChkTeX v1.7.8 - Copyright 1995-96 Jens T. Berger Thielemann']
+  AssertLinter 'chktex', [
+  \ ale#Escape('chktex') . ' --version',
+  \ ale#Escape('chktex')
+  \   . ' -v0 -p stdin -q'
+  \   . ' -S TabSize=1'
+  \   . ' -I',
+  \]
+
+Execute(The executable should be configurable):
+  let g:ale_tex_chktex_executable = 'bin/foo'
+
+  AssertLinter 'bin/foo',
+  \ ale#Escape('bin/foo')
+  \   . ' -v0 -p stdin -q'
+  \   . ' -I'
+
+Execute(The options should be configurable):
+  let b:ale_tex_chktex_options = '--something'
+
+  AssertLinter 'chktex',
+  \ ale#Escape('chktex')
+  \   . ' -v0 -p stdin -q'
+  \   . ' --something'

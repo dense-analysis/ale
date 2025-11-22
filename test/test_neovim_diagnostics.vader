@@ -1,0 +1,71 @@
+Before:
+  Save g:ale_use_neovim_diagnostics_api
+
+  function! CollectMessages(buffer)
+    let l:messages = []
+    for l:diag in v:lua.vim.diagnostic.get(a:buffer)
+        call add(l:messages, l:diag.message)
+    endfor
+
+    return l:messages
+  endfunction
+
+
+After:
+  unlet! b:other_bufnr
+  delfunction CollectMessages
+  Restore
+
+Execute(Should only set diagnostics belonging to the given buffer):
+  if has('nvim-0.6')
+    let b:other_bufnr = bufnr('/foo/bar/baz', 1)
+    " Make sure we actually get another buffer number, or the test is invalid.
+    AssertNotEqual -1, b:other_bufnr
+
+    let g:ale_use_neovim_diagnostics_api = 1
+
+    call ale#engine#SetResults(bufnr('%'), [
+    \  {
+    \    'lnum': 1,
+    \    'col': 10,
+    \    'bufnr': bufnr('%'),
+    \    'vcol': 0,
+    \    'linter_name': 'bettercode',
+    \    'nr': -1,
+    \    'type': 'W',
+    \    'text': 'A',
+    \  },
+    \  {
+    \    'lnum': 2,
+    \    'col': 10,
+    \    'bufnr': b:other_bufnr,
+    \    'vcol': 0,
+    \    'linter_name': 'bettercode',
+    \    'nr': -1,
+    \    'type': 'W',
+    \    'text': 'B',
+    \  },
+    \  {
+    \    'lnum': 3,
+    \    'col': 1,
+    \    'bufnr': bufnr('%'),
+    \    'vcol': 0,
+    \    'linter_name': 'bettercode',
+    \    'nr': -1,
+    \    'type': 'E',
+    \    'text': 'C',
+    \  },
+    \  {
+    \    'lnum': 4,
+    \    'col': 1,
+    \    'bufnr': b:other_bufnr,
+    \    'vcol': 0,
+    \    'linter_name': 'bettercode',
+    \    'nr': -1,
+    \    'type': 'E',
+    \    'text': 'D',
+    \  },
+    \])
+
+    AssertEqual ["A", "C"], CollectMessages(bufnr('%'))
+  endif

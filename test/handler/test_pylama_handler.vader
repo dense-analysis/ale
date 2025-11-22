@@ -12,10 +12,13 @@ After:
 
   silent file something_else.py
 
-Execute(The pylama handler should handle no messages):
-  AssertEqual [], ale_linters#python#pylama#Handle(bufnr(''), [])
+Execute(The pylama handler should handle no messages with version older than 8.1.4):
+  AssertEqual [], ale_linters#python#pylama#Handle(bufnr(''), [8, 0, 5], [])
 
-Execute(The pylama handler should handle basic warnings and syntax errors):
+Execute(The pylama handler should handle no messages with version newer or equal than 8.1.4):
+  AssertEqual [], ale_linters#python#pylama#Handle(bufnr(''), [8, 2, 0], [])
+
+Execute(The pylama handler should handle basic warnings and syntax errors with version older than 8.1.4):
   AssertEqual
   \ [
   \   {
@@ -83,7 +86,7 @@ Execute(The pylama handler should handle basic warnings and syntax errors):
   \     'text': 'Invalid string quote ", should be '' [pylint]',
   \   },
   \ ],
-  \ ale_linters#python#pylama#Handle(bufnr(''), [
+  \ ale_linters#python#pylama#Handle(bufnr(''), [8, 0, 5], [
   \   'No config file found, using default configuration',
   \   'index.py:8:1: W0611 ''foo'' imported but unused [pyflakes]',
   \   'index.py:8:0: E0401 Unable to import ''foo'' [pylint]',
@@ -95,7 +98,79 @@ Execute(The pylama handler should handle basic warnings and syntax errors):
   \   'index.py:20:0: C4001 Invalid string quote ", should be '' [pylint]',
   \ ])
 
-Execute(The pylama handler should handle tracebacks with parsable messages):
+Execute(The pylama handler should handle basic warnings and syntax errors with version newer than 8.1.4):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 8,
+  \     'col': 1,
+  \     'code': 'W0611',
+  \     'type': 'W',
+  \     'sub_type': '',
+  \     'text': '''foo'' imported but unused [pyflakes]',
+  \   },
+  \   {
+  \     'lnum': 8,
+  \     'col': 0,
+  \     'code': 'E0401',
+  \     'type': 'E',
+  \     'sub_type': '',
+  \     'text': 'Unable to import ''foo'' [pylint]',
+  \   },
+  \   {
+  \     'lnum': 10,
+  \     'col': 1,
+  \     'code': 'E302',
+  \     'type': 'E',
+  \     'sub_type': '',
+  \     'text': 'expected 2 blank lines, found 1 [pycodestyle]',
+  \   },
+  \   {
+  \     'lnum': 11,
+  \     'col': 1,
+  \     'code': 'D401',
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': 'First line should be in imperative mood (''Get'', not ''Gets'') [pydocstyle]',
+  \   },
+  \   {
+  \     'lnum': 15,
+  \     'col': 81,
+  \     'code': 'E501',
+  \     'type': 'E',
+  \     'sub_type': '',
+  \     'text': 'line too long (96 > 80 characters) [pycodestyle]',
+  \   },
+  \   {
+  \     'lnum': 16,
+  \     'col': 1,
+  \     'code': 'D203',
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': '1 blank line required before class docstring (found 0) [pydocstyle]',
+  \   },
+  \   {
+  \     'lnum': 18,
+  \     'col': 1,
+  \     'code': 'D107',
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': 'Missing docstring in __init__ [pydocstyle]',
+  \   },
+  \   {
+  \     'lnum': 20,
+  \     'col': 0,
+  \     'code': 'C4001',
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': 'Invalid string quote ", should be '' [pylint]',
+  \   },
+  \ ],
+  \ ale_linters#python#pylama#Handle(bufnr(''), [8, 2, 0], [
+  \ '[{"source":"pyflakes","col":1,"lnum":8,"etype":"W","message":"''foo'' imported but unused","filename":"index.py","number":"W0611"},{"source":"pylint","col":0,"lnum":8,"etype":"E","message":"Unable to import ''foo''","filename":"index.py","number":"E0401"},{"source":"pycodestyle","col":1,"lnum":10,"etype":"E","message":"expected 2 blank lines, found 1","filename":"index.py","number":"E302"},{"source":"pydocstyle","col":1,"lnum":11,"etype":"D","message":"First line should be in imperative mood (''Get'', not ''Gets'')","filename":"index.py","number":"D401"},{"source":"pycodestyle","col":81,"lnum":15,"etype":"E","message":"line too long (96 > 80 characters)","filename":"index.py","number":"E501"},{"source":"pydocstyle","col":1,"lnum":16,"etype":"D","message":"1 blank line required before class docstring (found 0)","filename":"index.py","number":"D203"},{"source":"pydocstyle","col":1,"lnum":18,"etype":"D","message":"Missing docstring in __init__","filename":"index.py","number":"D107"},{"source":"pylint","col":0,"lnum":20,"etype":"C","message":"Invalid string quote \", should be ''","filename":"index.py","number":"C4001"}]',
+  \ ])
+
+Execute(The pylama handler should handle tracebacks with parsable messages with version older than 8.1.4):
   AssertEqual
   \ [
   \   {
@@ -135,7 +210,7 @@ Execute(The pylama handler should handle tracebacks with parsable messages):
   \     'text': 'line too long (96 > 80 characters) [pycodestyle]',
   \   },
   \ ],
-  \ ale_linters#python#pylama#Handle(bufnr(''), [
+  \ ale_linters#python#pylama#Handle(bufnr(''), [8, 0, 5], [
   \   'Traceback (most recent call last):',
   \   '  File "/usr/local/lib/python2.7/site-packages/pylama/core.py", line 66, in run',
   \   '    path, code=code, ignore=ignore, select=select, params=lparams)',
@@ -158,7 +233,7 @@ Execute(The pylama handler should handle tracebacks with parsable messages):
 " Note: This is probably a bug, since all pylama plugins produce codes, but
 " should be handled for compatibility.
 " Note: The pylama isort plugin is distributed in the isort package.
-Execute(The pylama handler should handle messages without codes):
+Execute(The pylama handler should handle messages without codes with version older than 8.1.4):
   AssertEqual
   \ [
   \   {
@@ -170,13 +245,13 @@ Execute(The pylama handler should handle messages without codes):
   \     'text': 'Incorrectly sorted imports. [isort]'
   \   },
   \ ],
-  \ ale_linters#python#pylama#Handle(bufnr(''), [
+  \ ale_linters#python#pylama#Handle(bufnr(''), [8, 0, 5], [
   \   'index.py:0:0: Incorrectly sorted imports. [isort]',
   \ ])
 
 " Note: This is a pylama bug, but should be handled for compatibility.
 " See https://github.com/klen/pylama/pull/146
-Execute(The pylama handler should handle message codes followed by a colon):
+Execute(The pylama handler should handle message codes followed by a colon with version older than 8.1.4):
   AssertEqual
   \ [
   \   {
@@ -188,6 +263,6 @@ Execute(The pylama handler should handle message codes followed by a colon):
   \     'text': 'Found commented out code: # needs_sphinx = ''1.0'' [eradicate]',
   \   },
   \ ],
-  \ ale_linters#python#pylama#Handle(bufnr(''), [
+  \ ale_linters#python#pylama#Handle(bufnr(''), [8, 0, 5], [
   \   'index.py:31:1: E800: Found commented out code: # needs_sphinx = ''1.0'' [eradicate]',
   \ ])

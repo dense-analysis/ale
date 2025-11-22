@@ -20,7 +20,7 @@ After:
 "        This is a multi-line description that should produce multiple errors to be
 "        tested by the handler
 "        """
-"        return Fales
+"        return False
 "
 "
 "    if __name__ == '__main__':

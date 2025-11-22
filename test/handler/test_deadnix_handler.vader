@@ -1,0 +1,25 @@
+Execute(The deadnix handler should handle deadnix output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 23,
+  \     'col': 5,
+  \     'end_col': 9,
+  \     'text': 'Unused lambda pattern: self',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'col': 2,
+  \     'end_col': 6,
+  \     'text': 'Unused lambda pattern: pkgs',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale#handlers#deadnix#Handle(bufnr(''), [
+  \   '{"file":"./flake.nix","results":[{"column":5,"endColumn":9,"line":23,"message":"Unused lambda pattern: self"},{"column":2,"endColumn":6,"line":1,"message":"Unused lambda pattern: pkgs"}]}'
+  \ ])
+
+  AssertEqual [], ale#handlers#deadnix#Handle(bufnr(''), [''])
+  AssertEqual [], ale#handlers#deadnix#Handle(bufnr(''), ['not json'])
+  AssertEqual [], ale#handlers#deadnix#Handle(bufnr(''), ['{"results":[{}]}'])

@@ -1,0 +1,35 @@
+Before:
+  runtime ale_linters/dart/dart_analyze.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(Basic problems should be parsed correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'type': 'E',
+  \     'text': 'expected_token: Expected to find ''}''',
+  \     'lnum': 5,
+  \     'col': 1,
+  \   },
+  \   {
+  \     'type': 'W',
+  \     'text': 'invalid_assignment: A value of type ''String'' can''t be assigned to a variable of type ''int''',
+  \     'lnum': 2,
+  \     'col': 16,
+  \   },
+  \   {
+  \     'type': 'I',
+  \     'text': 'dead_code: Dead code. Try removing the code, or fixing the code before it so that it can be reached.',
+  \     'lnum': 8,
+  \     'col': 3,
+  \   },
+  \ ],
+  \ ale_linters#dart#dart_analyze#Handle(bufnr(''), [
+  \ 'Analyzing main.dart...',
+  \ '  error - main.dart:5:1 - Expected to find ''}'' - expected_token',
+  \ 'warning - main.dart:2:16 - A value of type ''String'' can''t be assigned to a variable of type ''int'' - invalid_assignment',
+  \ '   info - main.dart:8:3 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code',
+  \ '3 issues found.',
+  \ ])

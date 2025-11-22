@@ -1,23 +1,10 @@
 Before:
-  Save g:ale_c_flawfinder_error_severity
-
-  unlet! g:ale_c_flawfinder_error_severity
-  unlet! b:ale_c_flawfinder_error_severity
-
+  Save b:ale_c_flawfinder_error_severity
   runtime ale_linters/c/flawfinder.vim
 
 After:
-  unlet! g:ale_c_flawfinder_error_severity
   Restore
-
-Execute(The Flawfinder handler should ignore other lines of output):
-  AssertEqual
-  \ [],
-  \ ale#handlers#flawfinder#HandleFlawfinderFormat(347, [
-  \   'foo',
-  \   'bar',
-  \   'baz',
-  \ ])
+  call ale#linter#Reset()
 
 Execute(The Flawfinder handler should work):
   AssertEqual
@@ -30,7 +17,10 @@ Execute(The Flawfinder handler should work):
   \   },
   \ ],
   \ ale#handlers#flawfinder#HandleFlawfinderFormat(347, [
-  \ "<stdin>:31:4:  [1] (buffer) strncpy:Easily used incorrectly",
+  \   '<stdin>:31:4:  [1] (buffer) strncpy:Easily used incorrectly',
+  \   'foo',
+  \   'bar',
+  \   'baz',
   \ ])
 
 Execute(The Flawfinder error severity level should be configurable):
@@ -52,6 +42,6 @@ Execute(The Flawfinder error severity level should be configurable):
   \   },
   \ ],
   \ ale#handlers#flawfinder#HandleFlawfinderFormat(bufnr(''), [
-  \ "<stdin>:12:4:  [2] (buffer) char:Statically-sized arrays can be bad",
-  \ "<stdin>:31:4:  [1] (buffer) strncpy:Easily used incorrectly",
+  \   '<stdin>:12:4:  [2] (buffer) char:Statically-sized arrays can be bad',
+  \   '<stdin>:31:4:  [1] (buffer) strncpy:Easily used incorrectly',
   \ ])

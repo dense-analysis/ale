@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpLinterTest('nasm', 'nasm')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default nasm command should be correct):
+  AssertLinter 'nasm', ale#Escape('nasm')
+  \ . ' -X gnu -I %s:h' . (has('win32') ? '\' : '/')
+  \ . ' %s -o ' . (has('win32') ? 'NUL' : '/dev/null')
+
+Execute(The nasm executable and options should be configurable):
+  let b:ale_nasm_nasm_executable = '~/nasm'
+  let b:ale_nasm_nasm_options = '-w-macro-params'
+
+  AssertLinter '~/nasm', ale#Escape('~/nasm')
+  \ . ' -X gnu -I %s:h' . (has('win32') ? '\' : '/')
+  \ . ' -w-macro-params'
+  \ . ' %s -o ' . (has('win32') ? 'NUL' : '/dev/null')

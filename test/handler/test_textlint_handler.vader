@@ -37,5 +37,4 @@ Execute(textlint handler should handle errors output):
 Execute(textlint handler should no error output):
   AssertEqual
   \ [],
-  \ ale#handlers#textlint#HandleTextlintOutput(bufnr(''), [
-  \ ])
+  \ ale#handlers#textlint#HandleTextlintOutput(bufnr(''), [])

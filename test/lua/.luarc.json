@@ -1,0 +1,40 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "diagnostics.globals": [
+    "vim",
+    "describe",
+    "it",
+    "before_each",
+    "after_each",
+    "setup",
+    "teardown",
+    "pending",
+    "assert"
+  ],
+  "workspace.checkThirdParty": false,
+  "workspace.library": [
+    "${3rd}/busted/library",
+    "${env:HOME}/.luarocks/share/lua/5.4",
+    "${env:HOME}/.luarocks/share/lua/5.3",
+    "${env:HOME}/.luarocks/share/lua/5.2",
+    "${env:HOME}/.luarocks/share/lua/5.1",
+    "../../lua"
+  ],
+  "runtime.pathStrict": true,
+  "runtime.path": [
+    "?.lua",
+    "?/init.lua",
+    "../../lua/?.lua",
+    "../../lua/?/init.lua",
+    "${env:HOME}/.luarocks/share/lua/5.4/?.lua",
+    "${env:HOME}/.luarocks/share/lua/5.4/?/init.lua",
+    "${env:HOME}/.luarocks/share/lua/5.3/?.lua",
+    "${env:HOME}/.luarocks/share/lua/5.3/?/init.lua",
+    "${env:HOME}/.luarocks/share/lua/5.2/?.lua",
+    "${env:HOME}/.luarocks/share/lua/5.2/?/init.lua",
+    "${env:HOME}/.luarocks/share/lua/5.1/?.lua",
+    "${env:HOME}/.luarocks/share/lua/5.1/?/init.lua"
+  ],
+  "runtime.version": "LuaJIT",
+  "hint.enable": false
+}

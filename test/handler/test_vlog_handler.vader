@@ -10,12 +10,14 @@ Execute(The vlog handler should parse old-style lines correctly):
   \   {
   \     'lnum': 7,
   \     'type': 'W',
-  \     'text': '(vlog-2623) Undefined variable: C.'
+  \     'text': '(vlog-2623) Undefined variable: C.',
+  \     'filename': 'add.v'
   \   },
   \   {
   \     'lnum': 1,
   \     'type': 'E',
-  \     'text': '(vlog-13294) Identifier must be declared with a port mode: C.'
+  \     'text': '(vlog-13294) Identifier must be declared with a port mode: C.',
+  \     'filename': 'file.v'
   \   },
   \ ],
   \ ale_linters#verilog#vlog#Handle(bufnr(''), [
@@ -29,12 +31,14 @@ Execute(The vlog handler should parse new-style lines correctly):
   \   {
   \     'lnum': 7,
   \     'type': 'W',
-  \     'text': '(vlog-2623) Undefined variable: C.'
+  \     'text': '(vlog-2623) Undefined variable: C.',
+  \     'filename': 'add.v'
   \   },
   \   {
   \     'lnum': 1,
   \     'type': 'E',
-  \     'text': '(vlog-13294) Identifier must be declared with a port mode: C.'
+  \     'text': '(vlog-13294) Identifier must be declared with a port mode: C.',
+  \     'filename': 'file.v'
   \   },
   \ ],
   \ ale_linters#verilog#vlog#Handle(bufnr(''), [

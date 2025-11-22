@@ -1,0 +1,14 @@
+Before:
+  call ale#assert#SetUpLinterTest('ispc', 'ispc')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default ispc command should be configurable):
+  AssertLinter 'ispc', ale#Escape('ispc') . ' --nowrap %s'
+
+Execute(The ispc executable nad options should be configurable):
+  let b:ale_ispc_ispc_executable = 'foo'
+  let g:ale_ispc_ispc_options = '--foo'
+
+  AssertLinter 'foo', ale#Escape('foo') . ' --nowrap --foo' . ' %s'

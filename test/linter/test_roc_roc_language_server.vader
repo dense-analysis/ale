@@ -1,0 +1,23 @@
+Before:
+  call ale#assert#SetUpLinterTest('roc', 'roc_language_server')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'roc_language_server', ale#Escape('roc_language_server')
+
+Execute(The project root should be detected correctly in empty directory):
+  AssertLSPProject '.'
+
+Execute(The project root should be detected correctly with main.roc):
+  call ale#test#SetFilename('../test-files/roc/main.roc')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/roc')
+
+Execute(The LSP values should be set correctly):
+  call ale#test#SetFilename('../test-files/roc/main.roc')
+
+  AssertLSPLanguage 'roc'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/roc')

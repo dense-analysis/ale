@@ -23,12 +23,7 @@ Execute(The command wrapper should work with a nice command):
 
   call TestCommand('nice -n 5 foo bar', 'foo bar')
 
-Execute(The command wrapper should work with a nice command with an explicit marker):
-  let b:ale_command_wrapper = 'nice -n 5 %*'
-
-  call TestCommand('nice -n 5 foo bar', 'foo bar')
-
-Execute(Wrappers with spread arguments in the middle should be suppported):
+Execute(The command wrapper should spread arguments correctly):
   let b:ale_command_wrapper = 'wrap %* --'
 
   call TestCommand('wrap foo bar --', 'foo bar')

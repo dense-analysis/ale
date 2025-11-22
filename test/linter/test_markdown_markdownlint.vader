@@ -1,0 +1,14 @@
+Before:
+  call ale#assert#SetUpLinterTest('markdown', 'markdownlint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default markdownlint command should be correct):
+  AssertLinter 'markdownlint', ale#Escape('markdownlint') . ' %s'
+
+Execute(The executable should be configurable):
+  let g:ale_markdown_markdownlint_executable = 'foo bar'
+  let g:ale_markdown_markdownlint_options = '--option'
+
+  AssertLinter 'foo bar', ale#Escape('foo bar') . ' --option %s'

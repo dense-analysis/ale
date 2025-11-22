@@ -1,0 +1,77 @@
+Before:
+  runtime ale_linters/dockerfile/dockerlinter.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The dockerlinter handler should handle broken JSON):
+  AssertEqual
+  \ [],
+  \ ale_linters#dockerfile#dockerlinter#Handle(bufnr(''), ["{asdf"])
+
+Execute(The dockerlinter handler should handle an empty string response):
+  AssertEqual
+  \ [],
+  \ ale_linters#dockerfile#dockerlinter#Handle(bufnr(''), [])
+
+Execute(The dockerlinter handler should handle an empty result, even if it shouldn't happen):
+  AssertEqual
+  \ [],
+  \ ale_linters#dockerfile#dockerlinter#Handle(bufnr(''), ["{}"])
+
+Execute(The dockerlinter handler should handle a normal example):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 11,
+  \     'type': 'I',
+  \     'code': 'ER0002',
+  \     'text': "Delete the apt-get lists after installing something",
+  \     'detail': "Delete the apt-get lists after installing something\n\nhttps://github.com/buddy-works/dockerfile-linter/blob/master/Rules.md#ER0002",
+  \   },
+  \   {
+  \     'lnum': 11,
+  \     'type': 'I',
+  \     'code': 'ER0010',
+  \     'text': "Avoid additional packages by specifying --no-install-recommends",
+  \     'detail': "Avoid additional packages by specifying --no-install-recommends\n\nhttps://github.com/buddy-works/dockerfile-linter/blob/master/Rules.md#ER0010",
+  \   },
+  \   {
+  \     'lnum': 11,
+  \     'type': 'I',
+  \     'code': 'ER0012',
+  \     'text': "Pin versions in apt get install",
+  \     'detail': "Pin versions in apt get install\n\nhttps://github.com/buddy-works/dockerfile-linter/blob/master/Rules.md#ER0012",
+  \   },
+  \   {
+  \     'lnum': 30,
+  \     'type': 'W',
+  \     'code': 'SC2155',
+  \     'text': "Declare and assign separately to avoid masking return values.",
+  \     'detail': "Declare and assign separately to avoid masking return values.\n\nhttps://www.shellcheck.net/wiki/SC2155",
+  \   },
+  \   {
+  \     'lnum': 30,
+  \     'type': 'W',
+  \     'code': 'SC2046',
+  \     'text': "Quote this to prevent word splitting.",
+  \     'detail': "Quote this to prevent word splitting.\n\nhttps://www.shellcheck.net/wiki/SC2046",
+  \   },
+  \   {
+  \     'lnum': 30,
+  \     'type': 'I',
+  \     'code': 'SC2086',
+  \     'text': "Double quote to prevent globbing and word splitting.",
+  \     'detail': "Double quote to prevent globbing and word splitting.\n\nhttps://www.shellcheck.net/wiki/SC2086",
+  \   },
+  \   {
+  \     'lnum': 31,
+  \     'type': 'W',
+  \     'code': 'SC2046',
+  \     'text': "Quote this to prevent word splitting.",
+  \     'detail': "Quote this to prevent word splitting.\n\nhttps://www.shellcheck.net/wiki/SC2046",
+  \   },
+  \ ],
+  \ ale_linters#dockerfile#dockerlinter#Handle(bufnr(''), [
+  \  '[{"lineNumber":11,"message":"Delete the apt-get lists after installing something","level":"info","code":"ER0002"},{"lineNumber":11,"message":"Avoid additional packages by specifying --no-install-recommends","level":"info","code":"ER0010"},{"lineNumber":11,"message":"Pin versions in apt get install","level":"info","code":"ER0012"},{"lineNumber":30,"message":"Declare and assign separately to avoid masking return values.","level":"warning","code":"SC2155"},{"lineNumber":30,"message":"Quote this to prevent word splitting.","level":"warning","code":"SC2046"},{"lineNumber":30,"message":"Double quote to prevent globbing and word splitting.","level":"info","code":"SC2086"},{"lineNumber":31,"message":"Quote this to prevent word splitting.","level":"warning","code":"SC2046"}]',
+  \ ])

@@ -5,18 +5,22 @@ Before:
   Save g:ale_fix_on_save
   Save g:ale_lint_on_save
   Save g:ale_echo_cursor
+  Save g:ale_command_wrapper
+  Save g:ale_filename_mappings
 
   silent! cd /testplugin/test/fix
 
   unlet! b:ale_lint_on_save
   let g:ale_enabled = 0
   let g:ale_echo_cursor = 0
+  let g:ale_command_wrapper = ''
   let g:ale_run_synchronously = 1
   let g:ale_set_lists_synchronously = 1
   let g:ale_fix_buffer_data = {}
   let g:ale_fixers = {
   \ 'testft': [],
   \}
+  let g:ale_filename_mappings = {}
 
   let g:pre_success = 0
   let g:post_success = 0
@@ -70,6 +74,10 @@ Before:
     return {'command': 'cat %t <(echo d)'}
   endfunction
 
+  function EchoFilename(buffer, lines) abort
+    return {'command': 'echo %s'}
+  endfunction
+
   function RemoveLastLine(buffer, lines) abort
     return ['a', 'b']
   endfunction
@@ -82,57 +90,7 @@ Before:
     return [{'lnum': 1, 'col': 1, 'text': 'xxx'}]
   endfunction
 
-  function! FirstChainCallback(buffer)
-    return {'command': 'echo echoline', 'chain_with': 'SecondChainCallback'}
-  endfunction
-
-  function! FirstChainCallbackSkipped(buffer)
-    let l:ChainWith = 'SecondChainCallback'
-
-    " Test with lambdas where support is available.
-    if has('lambda')
-      let l:ChainWith = {buffer, output -> SecondChainCallback(buffer, output)}
-    endif
-
-    return {'command': '', 'chain_with': l:ChainWith}
-  endfunction
-
-  function! FirstChainCallbackSecondSkipped(buffer)
-    return {'command': 'echo skipit', 'chain_with': 'SecondChainCallback'}
-  endfunction
-
-  function! SecondChainCallback(buffer, output)
-    let l:previous_line = empty(a:output)
-    \ ? 'emptydefault'
-    \ : join(split(a:output[0]))
-
-    if l:previous_line is# 'skipit'
-      return {'command': '', 'chain_with': 'ThirdChainCallback'}
-    endif
-
-    return {
-    \ 'command': 'echo ' . l:previous_line,
-    \ 'chain_with': 'ThirdChainCallback',
-    \}
-  endfunction
-
-  function! ThirdChainCallback(buffer, output, input)
-    let l:previous_line = empty(a:output)
-    \ ? 'thirddefault'
-    \ : join(split(a:output[0]))
-
-    return a:input + [l:previous_line]
-  endfunction
-
-  function! ChainWhereLastIsSkipped(buffer)
-    return {'command': 'echo echoline', 'chain_with': 'ChainEndSkipped'}
-  endfunction
-
-  function! ChainEndSkipped(buffer, output)
-    return {'command': ''}
-  endfunction
-
-  " echo will output a single blank line, and we should ingore it.
+  " echo will output a single blank line, and we should ignore it.
   function! IgnoredEmptyOutput(buffer, output)
     return {'command': has('win32') ? 'echo(' : 'echo'}
   endfunction
@@ -203,16 +161,10 @@ After:
   delfunction CatLineDeferred
   delfunction ReplaceWithTempFile
   delfunction CatWithTempFile
+  delfunction EchoFilename
   delfunction RemoveLastLine
   delfunction RemoveLastLineOneArg
   delfunction TestCallback
-  delfunction FirstChainCallback
-  delfunction FirstChainCallbackSkipped
-  delfunction FirstChainCallbackSecondSkipped
-  delfunction SecondChainCallback
-  delfunction ThirdChainCallback
-  delfunction ChainWhereLastIsSkipped
-  delfunction ChainEndSkipped
   delfunction SetUpLinters
   delfunction GetLastMessage
   delfunction IgnoredEmptyOutput
@@ -244,6 +196,10 @@ After:
   " Clear the messages between tests.
   echomsg ''
 
+  if !exists('g:ale_command_wrapper')
+    let g:ale_command_wrapper = ''
+  endif
+
 Given testft (A file with three lines):
   a
   b
@@ -254,6 +210,13 @@ Execute(ALEFix should complain when there are no functions to call):
   call ale#test#FlushJobs()
   AssertEqual 'No fixers have been defined. Try :ALEFixSuggest', GetLastMessage()
 
+Execute(ALEFix should not complain when the command is run with a bang):
+  echom 'none'
+
+  ALEFix!
+  call ale#test#FlushJobs()
+  AssertEqual 'none', GetLastMessage()
+
 Execute(ALEFix should apply simple functions):
   let g:ale_fixers.testft = ['AddCarets']
   ALEFix
@@ -263,6 +226,25 @@ Expect(The first function should be used):
   ^a
   ^b
   ^c
+
+Execute(Should apply filename mpapings):
+  " The command echos %s, and we'll map the current path so we can check
+  " that ALEFix applies filename mappings, end-to-end.
+  let g:ale_filename_mappings = {
+  \ 'echo_filename': [
+  \   [expand('%:p:h') . '/', '/some/fake/path/'],
+  \ ],
+  \}
+
+  call ale#fix#registry#Add('echo_filename', 'EchoFilename', [], 'echo filename')
+  let g:ale_fixers.testft = ['echo_filename']
+  ALEFix
+  call ale#test#FlushJobs()
+  " Remote trailing whitespace from the line.
+  call setline(1, substitute(getline(1), '[ \r]\+$', '', ''))
+
+Expect(The mapped filename should be printed):
+  /some/fake/path/test.txt
 
 Execute(ALEFix should apply simple functions in a chain):
   let g:ale_fixers.testft = ['AddCarets', 'Capitalize']
@@ -517,7 +499,7 @@ Execute(ALEFix should fix files on the save event):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], ale#test#GetLoclistWithoutModule()
+    \}], ale#test#GetLoclistWithoutNewerKeys()
   endif
 
 Expect(The buffer should be modified):
@@ -565,7 +547,7 @@ Execute(ALEFix should run the linters with b:ale_lint_on_save = 1):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], ale#test#GetLoclistWithoutModule()
+    \}], ale#test#GetLoclistWithoutNewerKeys()
   endif
 
 Expect(The buffer should be modified):
@@ -597,7 +579,7 @@ Execute(ALEFix should not fix files on :wq):
   Assert &modified, 'The was not marked as ''modified'''
 
   " We should not run the linter.
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Expect(The buffer should not be modified):
   a
@@ -637,7 +619,7 @@ Execute(ALEFix should still lint with no linters to be applied):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], ale#test#GetLoclistWithoutModule()
+    \}], ale#test#GetLoclistWithoutNewerKeys()
   endif
 
 Expect(The buffer should be the same):
@@ -673,7 +655,7 @@ Execute(ALEFix should still lint when nothing was fixed on save):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], ale#test#GetLoclistWithoutModule()
+    \}], ale#test#GetLoclistWithoutNewerKeys()
   endif
 
 Expect(The buffer should be the same):
@@ -697,7 +679,7 @@ Execute(ALEFix should not lint the buffer on save if linting on save is disabled
 
   Assert !filereadable(g:test_filename), 'The file should not have been saved'
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Expect(The buffer should be the same):
   a
@@ -720,7 +702,7 @@ Execute(ALEFix should not lint the buffer on save if linting on save is disabled
 
   Assert !filereadable(g:test_filename), 'The file should not have been saved'
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Expect(The buffer should be the same):
   a
@@ -744,6 +726,19 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
   \   'done': 0,
   \   'lines_before': ['a', 'b', 'c'],
   \   'should_save': 1,
+  \   'ignore_file_changed_errors': 0,
+  \ },
+  \}, g:ale_fix_buffer_data
+
+  call ale#fix#InitBufferData(bufnr(''), '!')
+
+  AssertEqual {
+  \ bufnr(''): {
+  \   'temporary_directory_list': [],
+  \   'done': 0,
+  \   'lines_before': ['a', 'b', 'c'],
+  \   'should_save': 0,
+  \   'ignore_file_changed_errors': 1,
   \ },
   \}, g:ale_fix_buffer_data
 
@@ -751,6 +746,19 @@ Execute(ALEFix simple functions should be able to accept one argument, the buffe
   let g:ale_fixers.testft = ['RemoveLastLineOneArg']
   ALEFix
   call ale#test#FlushJobs()
+
+Expect(There should be only two lines):
+  a
+  b
+
+Execute(ALEFix should modify a buffer that is not modifiable, if it becomes modifiable later):
+  let g:ale_fixers.testft = ['RemoveLastLineOneArg']
+
+  set nomodifiable
+  ALEFix
+  call ale#test#FlushJobs()
+  set modifiable
+  call ale#fix#ApplyQueuedFixes(bufnr(''))
 
 Expect(There should be only two lines):
   a
@@ -813,57 +821,6 @@ Execute(ALE should tolerate valid fixers with minuses in the name):
   let g:ale_fixers.testft = ['prettier-standard']
   ALEFix
   call ale#test#FlushJobs()
-
-Execute(Test fixing with chained callbacks):
-  let g:ale_fixers.testft = ['FirstChainCallback']
-  ALEFix
-  call ale#test#FlushJobs()
-
-  " The buffer shouldn't be piped in for earlier commands in the chain.
-  AssertEqual
-  \ [
-  \   string(ale#job#PrepareCommand(bufnr(''), 'echo echoline')),
-  \   string(ale#job#PrepareCommand(bufnr(''), 'echo echoline')),
-  \ ],
-  \ map(ale#history#Get(bufnr(''))[-2:-1], 'string(v:val.command)')
-
-Expect(The echoed line should be added):
-  a
-  b
-  c
-  echoline
-
-Execute(Test fixing with chained callback where the first command is skipped):
-  let g:ale_fixers.testft = ['FirstChainCallbackSkipped']
-  ALEFix
-  call ale#test#FlushJobs()
-
-Expect(The default line should be added):
-  a
-  b
-  c
-  emptydefault
-
-Execute(Test fixing with chained callback where the second command is skipped):
-  let g:ale_fixers.testft = ['FirstChainCallbackSecondSkipped']
-  ALEFix
-  call ale#test#FlushJobs()
-
-Expect(The default line should be added):
-  a
-  b
-  c
-  thirddefault
-
-Execute(Test fixing with chained callback where the final callback is skipped):
-  let g:ale_fixers.testft = ['ChainWhereLastIsSkipped']
-  ALEFix
-  call ale#test#FlushJobs()
-
-Expect(The lines should be the same):
-  a
-  b
-  c
 
 Execute(Empty output should be ignored):
   let g:ale_fixers.testft = ['IgnoredEmptyOutput']

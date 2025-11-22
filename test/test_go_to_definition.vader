@@ -19,7 +19,7 @@ Before:
   runtime autoload/ale/util.vim
 
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
-    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', '', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
     if a:linter.lsp is# 'tsserver'
@@ -242,6 +242,54 @@ Execute(tsserver definition requests should be sent):
   \ g:message_list
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
+Execute(tsserver type definition requests should be sent):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEGoToTypeDefinition
+
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
+
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
+
+  AssertEqual 'typeDefinition', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#definition#HandleTSServerResponse'')',
+  \ string(g:Callback)
+  AssertEqual
+  \ [
+  \   ale#lsp#tsserver_message#Change(bufnr('')),
+  \   [0, 'ts@typeDefinition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
+  \ ],
+  \ g:message_list
+  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+
+Execute(tsserver implementation requests should be sent):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEGoToImplementation
+
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
+
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
+
+  AssertEqual 'implementation', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#definition#HandleTSServerResponse'')',
+  \ string(g:Callback)
+  AssertEqual
+  \ [
+  \   ale#lsp#tsserver_message#Change(bufnr('')),
+  \   [0, 'ts@implementation', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
+  \ ],
+  \ g:message_list
+  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+
 Execute(tsserver tab definition requests should be sent):
   runtime ale_linters/typescript/tsserver.vim
   call setpos('.', [bufnr(''), 2, 5, 0])
@@ -303,8 +351,31 @@ Execute(Other files should be jumped to for LSP definition responses):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \     'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \     'range': {
+  \       'start': {'line': 2, 'character': 7},
+  \     },
+  \   },
+  \ }
+  \)
+
+  AssertEqual
+  \ [
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \ ],
+  \ g:expr_list
+  AssertEqual [3, 8], getpos('.')[1:2]
+  AssertEqual {}, ale#definition#GetMap()
+
+Execute(Newer LocationLink items should be supported):
+  call ale#definition#SetMap({3: {'open_in': 'current-buffer'}})
+  call ale#definition#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': {
+  \     'targetUri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \     'targetRange': {
   \       'start': {'line': 2, 'character': 7},
   \     },
   \   },
@@ -326,7 +397,7 @@ Execute(Locations inside the same file should be jumped to without using :edit):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'uri': ale#path#ToURI(ale#path#Simplify(expand('%:p'))),
+  \     'uri': ale#path#ToFileURI(ale#path#Simplify(expand('%:p'))),
   \     'range': {
   \       'start': {'line': 2, 'character': 7},
   \     },
@@ -348,7 +419,7 @@ Execute(Other files should be jumped to in tabs for LSP definition responses):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \     'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \     'range': {
   \       'start': {'line': 2, 'character': 7},
   \     },
@@ -372,13 +443,13 @@ Execute(Definition responses with lists should be handled):
   \   'id': 3,
   \   'result': [
   \     {
-  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \       'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \       'range': {
   \         'start': {'line': 2, 'character': 7},
   \       },
   \     },
   \     {
-  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/other_file')),
+  \       'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/other_file')),
   \       'range': {
   \         'start': {'line': 20, 'character': 3},
   \       },
@@ -387,23 +458,19 @@ Execute(Definition responses with lists should be handled):
   \ }
   \)
 
-  AssertEqual
-  \ [
-  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
-  \ ],
-  \ g:expr_list
-  AssertEqual [3, 8], getpos('.')[1:2]
+  " Multiple results should either open the ALEPreview or go to quickfix
+  AssertEqual [1, 1], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Definition responses with null response should be handled):
   call ale#definition#SetMap({3: {'open_in': 'current-buffer'}})
   call ale#definition#HandleLSPResponse(1, {'id': 3, 'result': v:null})
 
-  AssertEqual [], g:expr_list
+  AssertEqual ['echom ''No definitions found'''], g:expr_list
 
 Execute(LSP definition requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEGoToDefinition
@@ -423,13 +490,13 @@ Execute(LSP definition requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/definition', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
@@ -438,8 +505,8 @@ Execute(LSP definition requests should be sent):
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
 Execute(LSP type definition requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEGoToTypeDefinition
@@ -459,13 +526,49 @@ Execute(LSP type definition requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/typeDefinition', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
+  \   'position': {'line': 0, 'character': 2},
+  \   }],
+  \ ],
+  \ g:message_list
+
+  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+
+Execute(LSP implementation requests should be sent):
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
+  call setpos('.', [bufnr(''), 1, 5, 0])
+
+  ALEGoToImplementation
+
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
+
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
+
+  AssertEqual 'implementation', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#definition#HandleLSPResponse'')',
+  \ string(g:Callback)
+
+  AssertEqual
+  \ [
+  \   [1, 'textDocument/didChange', {
+  \     'textDocument': {
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
+  \         'version': g:ale_lsp_next_version_id - 1,
+  \     },
+  \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
+  \   }],
+  \   [0, 'textDocument/implementation', {
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
@@ -474,8 +577,8 @@ Execute(LSP type definition requests should be sent):
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
 Execute(LSP tab definition requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEGoToDefinition -tab
@@ -495,13 +598,13 @@ Execute(LSP tab definition requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/definition', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
@@ -510,11 +613,11 @@ Execute(LSP tab definition requests should be sent):
   AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
 
 Execute(LSP tab type definition requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
-  ALEGoToTypeDefinitionInTab
+  ALEGoToTypeDefinition -tab
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
@@ -531,13 +634,49 @@ Execute(LSP tab type definition requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/typeDefinition', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
+  \   'position': {'line': 0, 'character': 2},
+  \   }],
+  \ ],
+  \ g:message_list
+
+  AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
+
+Execute(LSP tab implementation requests should be sent):
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
+  call setpos('.', [bufnr(''), 1, 5, 0])
+
+  ALEGoToImplementation -tab
+
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
+
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
+
+  AssertEqual 'implementation', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#definition#HandleLSPResponse'')',
+  \ string(g:Callback)
+
+  AssertEqual
+  \ [
+  \   [1, 'textDocument/didChange', {
+  \     'textDocument': {
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
+  \         'version': g:ale_lsp_next_version_id - 1,
+  \     },
+  \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
+  \   }],
+  \   [0, 'textDocument/implementation', {
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],

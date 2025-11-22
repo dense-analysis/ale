@@ -1,0 +1,30 @@
+Before:
+  " This is just one example of a language using the linter.
+  call ale#assert#SetUpLinterTest('markdown', 'redpen')
+
+  Save g:ale_redpen_options
+
+  let g:ale_redpen_options = ''
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The options should be omitted by default):
+  AssertLinter
+  \ 'redpen',
+  \ 'redpen -f markdown -r json %t'
+
+Execute(The options should be used in the command):
+  let g:ale_redpen_options = '--foo --bar'
+
+  AssertLinter
+  \ 'redpen',
+  \ 'redpen -f markdown -r json --foo --bar %t'
+
+Execute(The command should work with different filetypes):
+  " Test with a different filetype
+  call ale#assert#SetUpLinterTest('text', 'redpen')
+
+  AssertLinter
+  \ 'redpen',
+  \ 'redpen -f text -r json %t'

@@ -26,21 +26,25 @@ Execute(The dockerfile_lint handler should handle a normal example):
   \     'lnum': -1,
   \     'type': 'E',
   \     'text': "Required LABEL name/key 'Name' is not defined",
+  \     'detail': "Required LABEL name/key 'Name' is not defined\n\nhttp://docs.projectatomic.io/container-best-practices/#_recommended_labels_for_your_project",
   \   },
   \   {
   \     'lnum': -1,
   \     'type': 'E',
   \     'text': "Required LABEL name/key 'Version' is not defined",
+  \     'detail': "Required LABEL name/key 'Version' is not defined\n\nhttp://docs.projectatomic.io/container-best-practices/#_recommended_labels_for_your_project",
   \   },
   \   {
   \     'lnum': 3,
   \     'type': 'I',
-  \     'text': "the MAINTAINER command is deprecated. MAINTAINER is deprecated in favor of using LABEL since Docker v1.13.0",
+  \     'text': "the MAINTAINER command is deprecated",
+  \     'detail': "the MAINTAINER command is deprecated\n\nMAINTAINER is deprecated in favor of using LABEL since Docker v1.13.0\n\nhttps://github.com/docker/cli/blob/master/docs/deprecated.md#maintainer-in-dockerfile",
   \   },
   \   {
   \     'lnum': -1,
   \     'type': 'I',
   \     'text': "There is no 'CMD' instruction",
+  \     'detail': "There is no 'CMD' instruction\n\nhttps://docs.docker.com/engine/reference/builder/#cmd",
   \   },
   \ ],
   \ ale_linters#dockerfile#dockerfile_lint#Handle(bufnr(''), [

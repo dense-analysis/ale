@@ -1,29 +1,36 @@
 #!/usr/bin/env bash
-
-set -e
-set -u
-
+# shellcheck disable=SC2317
+DOCKER=${DOCKER:-docker}
+export DOCKER
 # Author: w0rp <devw0rp@gmail.com>
 #
 # This script runs tests for the ALE project. Run `./run-tests --help` for
 # options, or read the output below.
 #
 
-image=w0rp/ale
-current_image_id=f58c7bf8900f
+image=docker.io/denseanalysis/ale
+
+# Create docker image tag based on Dockerfile contents
+if [ -n "$(command -v md5)" ]; then
+    image_tag=$(md5 -q Dockerfile)
+else
+    image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
+fi
+git_version=$(git describe --always --tags)
 
 # Used in all test scripts for running the selected Docker image.
-DOCKER_RUN_IMAGE="$image"
+DOCKER_RUN_IMAGE="$image:$image_tag"
 export DOCKER_RUN_IMAGE
 
-tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
+tests='test/*.vader test/*/*.vader test/*/*/*.vader'
 # These flags are forwarded to the script for running Vader tests.
 verbose_flag=''
 quiet_flag=''
-run_neovim_02_tests=1
-run_neovim_03_tests=1
+run_neovim_07_tests=1
+run_neovim_08_tests=1
 run_vim_80_tests=1
-run_vim_81_tests=1
+run_vim_90_tests=1
+run_lua_tests=1
 run_linters=1
 
 while [ $# -ne 0 ]; do
@@ -36,51 +43,82 @@ while [ $# -ne 0 ]; do
         quiet_flag='-q'
         shift
     ;;
+    --build-image)
+        run_vim_80_tests=0
+        run_vim_90_tests=0
+        run_neovim_07_tests=0
+        run_neovim_08_tests=0
+        run_lua_tests=0
+        run_linters=0
+        shift
+    ;;
     --neovim-only)
         run_vim_80_tests=0
-        run_vim_81_tests=0
+        run_vim_90_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
-    --neovim-02-only)
-        run_neovim_03_tests=0
+    --neovim-07-only)
+        run_neovim_08_tests=0
         run_vim_80_tests=0
-        run_vim_81_tests=0
+        run_vim_90_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
-    --neovim-03-only)
-        run_neovim_02_tests=0
+    --neovim-08-only)
+        run_neovim_07_tests=0
         run_vim_80_tests=0
-        run_vim_81_tests=0
+        run_vim_90_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
     --vim-only)
-        run_neovim_02_tests=0
-        run_neovim_03_tests=0
+        run_neovim_07_tests=0
+        run_neovim_08_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
     --vim-80-only)
-        run_neovim_02_tests=0
-        run_neovim_03_tests=0
-        run_vim_81_tests=0
+        run_neovim_07_tests=0
+        run_neovim_08_tests=0
+        run_vim_90_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
-    --vim-81-only)
-        run_neovim_02_tests=0
-        run_neovim_03_tests=0
+    --vim-90-only)
+        run_neovim_07_tests=0
+        run_neovim_08_tests=0
         run_vim_80_tests=0
+        run_lua_tests=0
         run_linters=0
         shift
     ;;
     --linters-only)
         run_vim_80_tests=0
-        run_vim_81_tests=0
-        run_neovim_02_tests=0
-        run_neovim_03_tests=0
+        run_vim_90_tests=0
+        run_neovim_07_tests=0
+        run_neovim_08_tests=0
+        run_lua_tests=0
+        shift
+    ;;
+    --lua-only)
+        run_vim_80_tests=0
+        run_vim_90_tests=0
+        run_neovim_07_tests=0
+        run_neovim_08_tests=0
+        run_linters=0
+        shift
+    ;;
+    --fast)
+        run_vim_80_tests=0
+        run_vim_90_tests=0
+        run_neovim_07_tests=0
+        run_neovim_08_tests=1
         shift
     ;;
     --help)
@@ -92,13 +130,16 @@ while [ $# -ne 0 ]; do
         echo 'Options:'
         echo '  -v                Enable verbose output'
         echo '  -q                Hide output for successful tests'
-        echo '  --neovim-only     Run tests only for NeoVim 0.2 and 0.3'
-        echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
-        echo '  --neovim-03-only  Run tests only for NeoVim 0.3'
-        echo '  --vim-only        Run tests only for Vim 8.0 and 8.1'
-        echo '  --vim-80-only     Run tests only for Vim 8.0'
-        echo '  --vim-81-only     Run tests only for Vim 8.1'
+        echo '  --build-image     Run docker image build only.'
+        echo '  --neovim-only     Run tests only for Neovim'
+        echo '  --neovim-07-only  Run tests only for Neovim 0.7'
+        echo '  --neovim-08-only  Run tests only for Neovim 0.8'
+        echo '  --vim-only        Run tests only for Vim'
+        echo '  --vim-80-only     Run tests only for Vim 8.2'
+        echo '  --vim-90-only     Run tests only for Vim 9.0'
+        echo '  --lua-only        Run only Lua tests'
         echo '  --linters-only    Run only Vint and custom checks'
+        echo '  --fast            Run only the fastest Vim and custom checks'
         echo '  --help            Show this help text'
         echo '  --                Stop parsing options after this'
         exit 0
@@ -125,13 +166,65 @@ if [ $# -ne 0 ]; then
 
     # Don't run other tools when targeting tests.
     run_linters=0
+    run_lua_tests=0
 fi
 
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
 find test -name '*.swp' -delete
 
-docker images -q w0rp/ale | grep "^$current_image_id" > /dev/null \
-    || docker pull "$image"
+set -eu
+
+# Check if docker un image is available locally
+has_image=$(docker images --quiet "${image}:${image_tag}" | wc -l)
+
+if [[ "$DOCKER" == docker ]]; then
+  arch=$(docker info -f '{{ .Architecture }}')
+elif [[ "$DOCKER" == podman ]]; then
+  arch=$(podman info -f '{{ .Host.Arch }}')
+  if [[ "$arch" == "amd64" ]]; then
+    arch="x86_64"
+  fi
+else
+  echo "The DOCKER environment variable must be docker or podman, not ${DOCKER}"
+  exit 1
+fi
+
+download_image() {
+  if [[ $arch != x86_64 ]]; then
+    echo "Pre-built docker image is not available for architecture ${arch}"
+    return 1
+  fi
+  echo "Downloading run image ${image}:${image_tag}"
+  docker pull "${image}:${image_tag}" &> /dev/null
+}
+
+if [ "$has_image" -eq 0 ] && ! download_image; then
+  echo "Building run image ${image}:${image_tag}"
+
+  build_args=( --build-arg GIT_VERSION="$git_version" )
+
+  if [[ $arch != x86_64 ]]; then
+    echo "Building testbed/vim:24 for $arch"
+    testbed_vim_ref=902917c4caa50db2f2e80009b839605602f9f014
+    "$DOCKER" build -t "testbed/vim:$testbed_vim_ref" "https://github.com/Vimjas/vim-testbed.git#$testbed_vim_ref"
+    build_args+=( --build-arg TESTBED_VIM_VERSION="$testbed_vim_ref" )
+  fi
+
+  "$DOCKER" build "${build_args[@]}" -t "${image}:${image_tag}" .
+  "$DOCKER" tag "${image}:${image_tag}" "${image}:latest"
+
+  if [[ -z "${DOCKER_HUB_USER:-}" || -z "${DOCKER_HUB_PASS:-}" ]]; then
+    echo "Docker Hub credentials not set, skip push"
+  else
+    echo "Push ${image}:${image_tag} to Docker Hub"
+    echo "$DOCKER_HUB_PASS" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    docker push "${image}:${image_tag}"
+  fi
+else
+  echo "Docker run image ${image}:${image_tag} ready"
+fi
+
+"$DOCKER" tag "${image}:${image_tag}" "${image}:latest"
 
 output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 
@@ -164,11 +257,11 @@ cancel_tests() {
 
 trap cancel_tests INT TERM
 
-for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
+for vim in $("$DOCKER" run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
-    || ( [[ $vim =~ ^vim-v8.1 ]] && ((run_vim_81_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.3 ]] && ((run_neovim_03_tests)) ); then
+    || ( [[ $vim =~ ^vim-v9.0 ]] && ((run_vim_90_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.7 ]] && ((run_neovim_07_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.8 ]] && ((run_neovim_08_tests)) ); then
         echo "Starting Vim: $vim..."
         file_number=$((file_number+1))
         test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" \
@@ -176,6 +269,13 @@ for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neov
         pid_list="$pid_list $!"
     fi
 done
+
+if ((run_lua_tests)); then
+    echo "Starting Lua tests..."
+    file_number=$((file_number+1))
+    test/script/run-lua-tests $quiet_flag > "$output_dir/$file_number" 2>&1 &
+    pid_list="$pid_list $!"
+fi
 
 if ((run_linters)); then
     echo "Starting Vint..."

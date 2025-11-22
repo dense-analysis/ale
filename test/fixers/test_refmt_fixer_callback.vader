@@ -14,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The refmt callback should return the correct default values):
-  call ale#test#SetFilename('../reasonml_files/testfile.re')
+  call ale#test#SetFilename('../test-files/reasonml/testfile.re')
 
   AssertEqual
   \ {
@@ -27,7 +27,7 @@ Execute(The refmt callback should return the correct default values):
 
 Execute(The refmt callback should include custom refmt options):
   let g:ale_reasonml_refmt_options = "-w 80"
-  call ale#test#SetFilename('../reasonml_files/testfile.re')
+  call ale#test#SetFilename('../test-files/reasonml/testfile.re')
 
   AssertEqual
   \ {

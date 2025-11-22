@@ -1,0 +1,12 @@
+Before:
+  call ale#assert#SetUpLinterTest('openscad', 'sca2d')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The options should be used in the command):
+  AssertLinter 'sca2d', ale#Escape('sca2d') . ' %s'
+
+  let b:ale_openscad_sca2d_options = '--foobar'
+
+  AssertLinter 'sca2d', ale#Escape('sca2d') . ' --foobar %s'

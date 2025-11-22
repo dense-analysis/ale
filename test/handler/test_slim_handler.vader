@@ -6,7 +6,6 @@ After:
   call ale#linter#Reset()
 
 Execute(The slim handler should parse lines correctly):
-
   AssertEqual
   \ [
   \   {

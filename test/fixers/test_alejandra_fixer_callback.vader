@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_nix_alejandra_executable
+  Save g:ale_nix_alejandra_options
+
+After:
+  Restore
+
+Execute(The alejandra callback should return the correct default values):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('alejandra') . ' -- -'
+  \ },
+  \ ale#fixers#alejandra#Fix(bufnr(''))
+
+Execute(The alejandra executable and options should be configurable):
+  let g:ale_nix_alejandra_executable = '/path/to/alejandra'
+  let g:ale_nix_alejandra_options = '-q'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/alejandra')
+  \     . ' -q -- -',
+  \ },
+  \ ale#fixers#alejandra#Fix(bufnr(''))

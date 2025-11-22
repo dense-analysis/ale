@@ -1,0 +1,14 @@
+Before:
+  call ale#assert#SetUpLinterTest('vhdl', 'xvhdl')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default xvhdl command should be correct):
+  AssertLinter 'xvhdl', ale#Escape('xvhdl') . '  --2008 %t'
+
+Execute(The xvhdl executable and options should be configurable):
+  let b:ale_vhdl_xvhdl_executable = 'foobar'
+  let b:ale_vhdl_xvhdl_options = '--something'
+
+  AssertLinter 'foobar', ale#Escape('foobar') . '  --something %t'

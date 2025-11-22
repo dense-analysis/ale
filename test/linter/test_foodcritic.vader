@@ -1,0 +1,15 @@
+Before:
+  call ale#assert#SetUpLinterTest('chef', 'foodcritic')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default foodcritic command should be correct):
+  AssertLinter 'foodcritic', ale#Escape('foodcritic') . ' %s'
+
+Execute(The foodcritic executable and options should be configurable):
+  let b:ale_chef_foodcritic_executable = 'foobar'
+  " Tides should be escaped
+  let b:ale_chef_foodcritic_options = '-t ~F011'
+
+  AssertLinter 'foobar', ale#Escape('foobar') . ' -t \~F011 %s'

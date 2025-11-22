@@ -7,9 +7,6 @@ Before:
   let g:ale_scala_scalafmt_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -17,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The scalafmt callback should return the correct default values):
-  call ale#test#SetFilename('scala_paths/dummy.scala')
+  call ale#test#SetFilename('../test-files/scala/dummy.scala')
 
   AssertEqual
   \ {
@@ -29,7 +26,7 @@ Execute(The scalafmt callback should return the correct default values):
 
 Execute(The scalafmt callback should use ng with scalafmt automatically):
   let g:ale_scala_scalafmt_executable = 'ng'
-  call ale#test#SetFilename('scala_paths/dummy.scala')
+  call ale#test#SetFilename('../test-files/scala/dummy.scala')
 
   AssertEqual
   \ {
@@ -42,7 +39,7 @@ Execute(The scalafmt callback should use ng with scalafmt automatically):
 
 Execute(The scalafmt callback should include custom scalafmt options):
   let g:ale_scala_scalafmt_options = '--diff'
-  call ale#test#SetFilename('scala_paths/dummy.scala')
+  call ale#test#SetFilename('../test-files/scala/dummy.scala')
 
   AssertEqual
   \ {
@@ -56,7 +53,7 @@ Execute(The scalafmt callback should include custom scalafmt options):
 Execute(The scalafmt callback should include custom scalafmt options and use ng with scalafmt):
   let g:ale_scala_scalafmt_options = '--diff'
   let g:ale_scala_scalafmt_executable = 'ng'
-  call ale#test#SetFilename('scala_paths/dummy.scala')
+  call ale#test#SetFilename('../test-files/scala/dummy.scala')
 
   AssertEqual
   \ {

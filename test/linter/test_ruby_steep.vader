@@ -1,0 +1,69 @@
+" Author: Loic Nageleisen <https://github.com/lloeki>
+" Description: Tests for steep linter.
+Before:
+  call ale#assert#SetUpLinterTest('ruby', 'steep')
+
+  let g:ale_ruby_steep_executable = 'steep'
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Executable should default to steep):
+  call ale#test#SetFilename('../test-files/ruby/nested/foo/dummy.rb')
+  AssertLinter 'steep', ale#Escape('steep')
+  \   . ' check '
+  \   . ' dummy.rb'
+
+Execute(Should be able to set a custom executable):
+  let g:ale_ruby_steep_executable = 'bin/steep'
+
+  call ale#test#SetFilename('../test-files/ruby/nested/foo/dummy.rb')
+  AssertLinter 'bin/steep' , ale#Escape('bin/steep')
+  \   . ' check '
+  \   . ' dummy.rb'
+
+Execute(Setting bundle appends 'exec steep'):
+  let g:ale_ruby_steep_executable = 'path to/bundle'
+
+  call ale#test#SetFilename('../test-files/ruby/nested/foo/dummy.rb')
+  AssertLinter 'path to/bundle', ale#Escape('path to/bundle')
+  \   . ' exec steep'
+  \   . ' check '
+  \   . ' dummy.rb'
+
+Execute(should accept options):
+  let g:ale_ruby_steep_options = '--severity-level=hint'
+
+  call ale#test#SetFilename('../test-files/ruby/nested/foo/dummy.rb')
+  AssertLinter 'steep', ale#Escape('steep')
+  \   . ' check'
+  \   . ' --severity-level=hint'
+  \   . ' dummy.rb'
+
+Execute(Should not lint files out of steep root):
+  call ale#test#SetFilename('../test-files/ruby/nested/dummy.rb')
+  AssertLinter 'steep', ''
+
+Execute(Should lint files at top steep root):
+  call ale#test#SetFilename('../test-files/ruby/nested/foo/dummy.rb')
+  AssertLinter 'steep', ale#Escape('steep')
+  \   . ' check '
+  \   . ' dummy.rb'
+
+Execute(Should lint files below top steep root):
+  call ale#test#SetFilename('../test-files/ruby/nested/foo/one/dummy.rb')
+  AssertLinter 'steep', ale#Escape('steep')
+  \   . ' check '
+  \   . ' one' . (has('win32') ? '\' : '/') . 'dummy.rb'
+
+Execute(Should lint files at nested steep root):
+  call ale#test#SetFilename('../test-files/ruby/nested/foo/two/dummy.rb')
+  AssertLinter 'steep', ale#Escape('steep')
+  \   . ' check '
+  \   . ' dummy.rb'
+
+Execute(Should lint files below nested steep root):
+  call ale#test#SetFilename('../test-files/ruby/nested/foo/two/three/dummy.rb')
+  AssertLinter 'steep', ale#Escape('steep')
+  \   . ' check '
+  \   . ' three' . (has('win32') ? '\' : '/') . 'dummy.rb'

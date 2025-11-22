@@ -1,0 +1,98 @@
+Before:
+  call ale#assert#SetUpLinterTest('python', 'pylsp')
+  Save b:ale_python_auto_virtualenv
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  unlet! b:bin_dir
+  unlet! b:venv_bin
+  unlet! b:sep
+  unlet! b:executable
+
+  call ale#test#SetFilename('..')
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default pylsp command should be correct):
+  call ale#test#SetFilename('./foo.py')
+
+  AssertLinter 'pylsp', ale#Escape('pylsp')
+
+Execute(The pylsp command and executable should be configurable):
+  let g:ale_python_pylsp_executable = '~/.local/bin/pylsp'
+  let g:ale_python_pylsp_options = '--some-option'
+
+  AssertLinter '~/.local/bin/pylsp' , ale#Escape('~/.local/bin/pylsp')
+  \ . ' --some-option'
+
+Execute(The cwd and project root should be detected correctly):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  AssertLinterCwd ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
+  AssertLSPProject ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
+
+Execute(The pylsp executable should be run from the virtualenv path):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let b:executable = ale#path#Simplify(
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/pylsp'
+  \)
+
+  AssertEqual ale#Escape(b:executable),
+  \ ale_linters#python#pylsp#GetCommand(bufnr(''))
+
+Execute(virtualenv vars should be used when ale_python_auto_virtualenv = 1):
+  let b:ale_python_auto_virtualenv = 1
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let b:venv_bin = ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir)
+  let b:sep = has('win32') ? ';' : ':'
+  let b:executable = ale#path#Simplify(b:venv_bin . '/pylsp')
+
+  AssertLinter b:executable, ale#python#AutoVirtualenvEnvString(bufnr(''))
+  \   . ale#Escape(b:executable)
+  Assert !empty(ale#python#AutoVirtualenvEnvString(bufnr('')))
+
+Execute(You should be able to override the pylsp virtualenv lookup):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let g:ale_python_pylsp_use_global = 1
+
+  AssertLinter 'pylsp', ale#Escape('pylsp')
+
+Execute(Setting executable to 'pipenv' appends 'run pylsp'):
+  let g:ale_python_pylsp_executable = 'path/to/pipenv'
+  call ale#test#SetFilename('../test-files/dummy')
+
+  AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run pylsp'
+
+Execute(Pipenv is detected when python_pylsp_auto_pipenv is set):
+  let g:ale_python_pylsp_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run pylsp'
+
+Execute(Setting executable to 'poetry' appends 'run pylsp'):
+  let g:ale_python_pylsp_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run pylsp'
+
+Execute(poetry is detected when python_pylsp_auto_poetry is set):
+  let g:ale_python_pylsp_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pylsp'
+
+Execute(uv is detected when python_pylsp_auto_uv is set):
+  let g:ale_python_pylsp_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run pylsp'
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_python_pylsp_config = {'pylsp': {'plugins': {'preload': {'enabled': v:false}}}}
+  AssertLSPConfig {'pylsp': {'plugins': {'preload': {'enabled': v:false}}}}

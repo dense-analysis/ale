@@ -1,6 +1,6 @@
 " Author: Jerko Steiner <jerko.steiner@gmail.com>
 " Description: Organize imports support for tsserver
-"
+
 function! ale#organize_imports#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') isnot# 'organizeImports'
         return
@@ -12,10 +12,16 @@ function! ale#organize_imports#HandleTSServerResponse(conn_id, response) abort
 
     let l:file_code_edits =  a:response.body
 
-    call ale#code_action#HandleCodeAction({
-    \   'description': 'Organize Imports',
-    \   'changes': l:file_code_edits,
-    \}, v:false)
+    call ale#code_action#HandleCodeAction(
+    \   {
+    \       'description': 'Organize Imports',
+    \       'changes': l:file_code_edits,
+    \   },
+    \   {
+    \       'conn_id': a:conn_id,
+    \       'should_save': g:ale_save_hidden || !&hidden,
+    \   },
+    \)
 endfunction
 
 function! s:OnReady(linter, lsp_details) abort
@@ -51,9 +57,7 @@ function! s:OrganizeImports(linter) abort
 endfunction
 
 function! ale#organize_imports#Execute() abort
-    for l:linter in ale#linter#Get(&filetype)
-        if !empty(l:linter.lsp)
-            call s:OrganizeImports(l:linter)
-        endif
+    for l:linter in ale#lsp_linter#GetEnabled(bufnr(''))
+        call s:OrganizeImports(l:linter)
     endfor
 endfunction

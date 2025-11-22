@@ -12,7 +12,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The bibclean callback should return the correct default values):
-  call ale#test#SetFilename('../command_callback/bib_paths/dummy.bib')
+  call ale#test#SetFilename('../test-files/bib/dummy.bib')
 
   AssertEqual
   \ {'command': ale#Escape(g:ale_bib_bibclean_executable) . ' -align-equals'},
@@ -20,7 +20,7 @@ Execute(The bibclean callback should return the correct default values):
 
 Execute(The bibclean callback should include custom bibclean options):
   let g:ale_bib_bibclean_options = '-author -check-values'
-  call ale#test#SetFilename('../command_callback/bib_paths/dummy.bib')
+  call ale#test#SetFilename('../test-files/bib/dummy.bib')
 
   AssertEqual
   \ {

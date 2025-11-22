@@ -22,49 +22,77 @@ Integration Information
   3. rls -- If you have `rls` installed, you might prefer using this linter
      over cargo. rls implements the Language Server Protocol for incremental
      compilation of Rust code, and can check Rust files while you type. `rls`
-     requires Rust files to contained in Cargo projects.
+     requires Rust files to be contained in Cargo projects.
   4. analyzer -- If you have rust-analyzer installed, you might prefer using
      this linter over cargo and rls. rust-analyzer also implements the
      Language Server Protocol for incremental compilation of Rust code, and is
-     the next iteration of rls. rust-analyzer, like rls, requires Rust files
-     to contained in Cargo projects.
+     the next iteration of rls. rust-analyzer either requires Rust files to be
+     contained in Cargo projects or requires the project to be described in
+     the rust-project.json format:
+     https://rust-analyzer.github.io/manual.html#non-cargo-based-projects
   5. rustfmt -- If you have `rustfmt` installed, you can use it as a fixer to
      consistently reformat your Rust code.
 
-  Only cargo is enabled by default. To switch to using rustc instead of cargo,
-  configure |g:ale_linters| appropriately: >
+  Only cargo and rust-analyzer are enabled by default. To switch to using
+  rustc instead of cargo, configure |b:ale_linters| in your ftplugin file
+  appropriately: >
 
   " See the help text for the option for more information.
-  let g:ale_linters = {'rust': ['rustc']}
+  let b:ale_linters = ['analyzer', 'rustc']
 <
+  Or in Lua: >
 
-  Also note that rustc 1.12. or later is needed.
+  require("ale").setup.buffer({linters = {"analyzer", "rustc"}})
+<
+  Also note that rustc 1.18. or later is needed.
 
 
 ===============================================================================
 analyzer                                                    *ale-rust-analyzer*
 
-g:ale_rust_analyzer_executable                 *g:ale_rust_analyzer_executable*
+                                         *ale-options.rust_analyzer_executable*
+                                               *g:ale_rust_analyzer_executable*
                                                *b:ale_rust_analyzer_executable*
+rust_analyzer_executable
+g:ale_rust_analyzer_executable
   Type: |String|
   Default: `'rust-analyzer'`
 
   This variable can be modified to change the executable path for
   `rust-analyzer`.
 
-
-g:ale_rust_analyzer_config                         *g:ale_rust_analyzer_config*
+                                             *ale-options.rust_analyzer_config*
+                                                   *g:ale_rust_analyzer_config*
                                                    *b:ale_rust_analyzer_config*
+rust_analyzer_config
+g:ale_rust_analyzer_config
   Type: |Dictionary|
   Default: `{}`
 
-  Dictionary with configuration settings for rust-analyzer.
+  Dictionary with configuration settings for rust-analyzer. Keys of the
+  dictionary are components of configuration keys. For example: >
+
+  let g:ale_rust_analyzer_config = {
+  \  'server': {
+  \    'extraEnv': { 'RUSTUP_TOOLCHAIN': 'stable' },
+  \  }
+  \}
+<
+  corresponds to `rust-analyzer.server.extraEnv = { 'RUSTUP_TOOLCHAIN': 'stable' }`
+
+  For available configuration parameters, see the `rust-analyzer` manual:
+
+  https://rust-analyzer.github.io/manual.html#configuration
+
 
 ===============================================================================
 cargo                                                          *ale-rust-cargo*
 
-g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
+                                             *ale-options.rust_cargo_use_check*
+                                                   *g:ale_rust_cargo_use_check*
                                                    *b:ale_rust_cargo_use_check*
+rust_cargo_use_check
+g:ale_rust_cargo_use_check
   Type: |Number|
   Default: `1`
 
@@ -74,18 +102,22 @@ g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
   ALE will never use `cargo check` when the version of `cargo` is less than
   0.17.0.
 
-
-g:ale_rust_cargo_check_all_targets         *g:ale_rust_cargo_check_all_targets*
+                                     *ale-options.rust_cargo_check_all_targets*
+                                           *g:ale_rust_cargo_check_all_targets*
                                            *b:ale_rust_cargo_check_all_targets*
+rust_cargo_check_all_targets
+g:ale_rust_cargo_check_all_targets
   Type: |Number|
   Default: `0`
 
   When set to `1`, ALE will set the `--all-targets` option when `cargo check`
   is used. See |g:ale_rust_cargo_use_check|,
 
-
-g:ale_rust_cargo_check_tests                     *g:ale_rust_cargo_check_tests*
+                                           *ale-options.rust_cargo_check_tests*
+                                                 *g:ale_rust_cargo_check_tests*
                                                  *b:ale_rust_cargo_check_tests*
+rust_cargo_check_tests
+g:ale_rust_cargo_check_tests
   Type: |Number|
   Default: `0`
 
@@ -93,9 +125,11 @@ g:ale_rust_cargo_check_tests                     *g:ale_rust_cargo_check_tests*
   is used. This allows for linting of tests which are normally excluded.
   See |g:ale_rust_cargo_use_check|,
 
-
-g:ale_rust_cargo_check_examples               *g:ale_rust_cargo_check_examples*
+                                        *ale-options.rust_cargo_check_examples*
+                                              *g:ale_rust_cargo_check_examples*
                                               *b:ale_rust_cargo_check_examples*
+rust_cargo_check_examples
+g:ale_rust_cargo_check_examples
   Type: |Number|
   Default: `0`
 
@@ -103,10 +137,11 @@ g:ale_rust_cargo_check_examples               *g:ale_rust_cargo_check_examples*
   is used. This allows for linting of examples which are normally excluded.
   See |g:ale_rust_cargo_use_check|,
 
-
-g:ale_rust_cargo_default_feature_behavior
+                              *ale-options.rust_cargo_default_feature_behavior*
                                     *g:ale_rust_cargo_default_feature_behavior*
                                     *b:ale_rust_cargo_default_feature_behavior*
+rust_cargo_default_feature_behavior
+g:ale_rust_cargo_default_feature_behavior
   Type: |String|
   Default: `default`
 
@@ -124,18 +159,22 @@ g:ale_rust_cargo_default_feature_behavior
   invoking `cargo`, which will include all features defined in the project's
   `Cargo.toml` file when performing the lint check.
 
-
-g:ale_rust_cargo_include_features           *g:ale_rust_cargo_include_features*
+                                      *ale-options.rust_cargo_include_features*
+                                            *g:ale_rust_cargo_include_features*
                                             *b:ale_rust_cargo_include_features*
+rust_cargo_include_features
+g:ale_rust_cargo_include_features
   Type: |String|
   Default: `''`
 
   When defined, ALE will set the `--features` option when invoking `cargo` to
   perform the lint check. See |g:ale_rust_cargo_default_feature_behavior|.
 
-
-g:ale_rust_cargo_avoid_whole_workspace *g:ale_rust_cargo_avoid_whole_workspace*
+                                 *ale-options.rust_cargo_avoid_whole_workspace*
+                                       *g:ale_rust_cargo_avoid_whole_workspace*
                                        *b:ale_rust_cargo_avoid_whole_workspace*
+rust_cargo_avoid_whole_workspace
+g:ale_rust_cargo_avoid_whole_workspace
   Type: |Number|
   Default: `1`
 
@@ -143,10 +182,11 @@ g:ale_rust_cargo_avoid_whole_workspace *g:ale_rust_cargo_avoid_whole_workspace*
   workspace, avoid building the entire workspace by invoking `cargo` directly
   in the crate's directory. Otherwise, behave as usual.
 
-
-g:ale_rust_cargo_use_clippy
+                                            *ale-options.rust_cargo_use_clippy*
                                                   *g:ale_rust_cargo_use_clippy*
                                                   *b:ale_rust_cargo_use_clippy*
+rust_cargo_use_clippy
+g:ale_rust_cargo_use_clippy
   Type: |Number|
   Default: `0`
 
@@ -161,11 +201,11 @@ g:ale_rust_cargo_use_clippy
 >
     let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
 <
-
-g:ale_rust_cargo_clippy_options
+                                        *ale-options.rust_cargo_clippy_options*
                                               *g:ale_rust_cargo_clippy_options*
                                               *b:ale_rust_cargo_clippy_options*
-
+rust_cargo_clippy_options
+g:ale_rust_cargo_clippy_options
   Type: |String|
   Default: `''`
 
@@ -173,20 +213,43 @@ g:ale_rust_cargo_clippy_options
   it. This variable is useful when you want to add some extra options which
   only `cargo clippy` supports (e.g. `--deny`).
 
+                                            *ale-options.rust_cargo_target_dir*
+                                                  *g:ale_rust_cargo_target_dir*
+                                                  *b:ale_rust_cargo_target_dir*
+rust_cargo_target_dir
+g:ale_rust_cargo_target_dir
+  Type: |String|
+  Default: `''`
+
+  Use a custom target directory when running the commands for ALE. This can
+  help to avoid "waiting for file lock on build directory" messages when
+  running `cargo` commands manually while ALE is performing its checks.
+
+
+===============================================================================
+cspell                                                        *ale-rust-cspell*
+
+See |ale-cspell-options|
+
 
 ===============================================================================
 rls                                                              *ale-rust-rls*
 
-g:ale_rust_rls_executable                           *g:ale_rust_rls_executable*
+                                              *ale-options.rust_rls_executable*
+                                                    *g:ale_rust_rls_executable*
                                                     *b:ale_rust_rls_executable*
+rust_rls_executable
+g:ale_rust_rls_executable
   Type: |String|
   Default: `'rls'`
 
   This variable can be modified to change the executable path for `rls`.
 
-
-g:ale_rust_rls_toolchain                             *g:ale_rust_rls_toolchain*
+                                               *ale-options.rust_rls_toolchain*
+                                                     *g:ale_rust_rls_toolchain*
                                                      *b:ale_rust_rls_toolchain*
+rust_rls_toolchain
+g:ale_rust_rls_toolchain
   Type: |String|
   Default: `''`
 
@@ -199,73 +262,107 @@ g:ale_rust_rls_toolchain                             *g:ale_rust_rls_toolchain*
 
   The `rls` server will only be started once per executable.
 
-
-g:ale_rust_rls_config                                   *g:ale_rust_rls_config*
+                                                  *ale-options.rust_rls_config*
+                                                        *g:ale_rust_rls_config*
                                                         *b:ale_rust_rls_config*
+rust_rls_config
+g:ale_rust_rls_config
   Type: |Dictionary|
   Default: `{}`
 
   Dictionary with configuration settings for rls. For example, to force
-  using clippy as linter: >
-        {
-      \   'rust': {
-      \     'clippy_preference': 'on'
-      \   }
-      \ }
+  using clippy as linter in your ftplugin file: >
 
+  let b:ale_rust_rls_config = {
+  \   'rust': {
+  \       'clippy_preference': 'on'
+  \   },
+  \}
+<
+  Or in Lua: >
+
+  require("ale").setup.buffer({
+      rust_rls_config = {
+          rust = {
+              clippy_preference = "on",
+          },
+      },
+  })
+<
 
 ===============================================================================
 rustc                                                          *ale-rust-rustc*
 
-
-g:ale_rust_rustc_options                             *g:ale_rust_rustc_options*
+                                               *ale-options.rust_rustc_options*
+                                                     *g:ale_rust_rustc_options*
                                                      *b:ale_rust_rustc_options*
+rust_rustc_options
+g:ale_rust_rustc_options
   Type: |String|
-  Default: `'-Z no-codegen'`
+  Default: `'--emit=mir -o /dev/null'`
 
   The variable can be used to change the options passed to `rustc`.
 
-  `-Z no-codegen` should only work with nightly builds of Rust. Be careful when
-  setting the options, as running `rustc` could execute code or generate
-  binary files.
+  Users of nightly builds of Rust might want to use `-Z no-codegen` instead.
+  Be careful when setting the options, as running `rustc` could execute code
+  or generate binary files.
 
-
-g:ale_rust_ignore_error_codes                   *g:ale_rust_ignore_error_codes*
+                                          *ale-options.rust_ignore_error_codes*
+                                                *g:ale_rust_ignore_error_codes*
                                                 *b:ale_rust_ignore_error_codes*
+rust_ignore_error_codes
+g:ale_rust_ignore_error_codes
   Type: |List| of |String|s
   Default: `[]`
 
   This variable can contain error codes which will be ignored. For example, to
-  ignore most errors regarding failed imports, put this in your .vimrc
-  >
+  ignore most errors regarding failed imports, put this in your .vimrc >
+
   let g:ale_rust_ignore_error_codes = ['E0432', 'E0433']
-
-g:ale_rust_ignore_secondary_spans           *g:ale_rust_ignore_secondary_spans*
+<
+                                      *ale-options.rust_ignore_secondary_spans*
+                                            *g:ale_rust_ignore_secondary_spans*
                                             *b:ale_rust_ignore_secondary_spans*
-  Type: Number
-  Default: 0
+rust_ignore_secondary_spans
+g:ale_rust_ignore_secondary_spans
+  Type: |Number|
+  Default: `0`
 
-	When set to 1, instructs the Rust error repporting to ignore secondary
-	spans. The problem with secondary spans is that they sometimes appear in
-	error messages before the main cause of the error, for example: >
+  When set to 1, instructs the Rust error reporting to ignore secondary spans.
+  The problem with secondary spans is that they sometimes appear in error
+  messages before the main cause of the error, for example: >
 
   1 src/main.rs|98 col 5 error| this function takes 4 parameters but 5
-	parameters were supplied: defined here
+    parameters were supplied: defined here
   2 src/main.rs|430 col 32 error| this function takes 4 parameters but 5
-	parameters were supplied: expected 4 parameters
+    parameters were supplied: expected 4 parameters
 <
   This is due to the sorting by line numbers. With this option set to 1,
   the 'defined here' span will not be presented.
 
+
 ===============================================================================
 rustfmt                                                      *ale-rust-rustfmt*
 
-g:ale_rust_rustfmt_options                         *g:ale_rust_rustfmt_options*
+                                             *ale-options.rust_rustfmt_options*
+                                                   *g:ale_rust_rustfmt_options*
                                                    *b:ale_rust_rustfmt_options*
+rust_rustfmt_options
+g:ale_rust_rustfmt_options
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to the rustfmt fixer.
+
+                                          *ale-options.rust_rustfmt_executable*
+                                                *g:ale_rust_rustfmt_executable*
+                                                *b:ale_rust_rustfmt_executable*
+rust_rustfmt_executable
+g:ale_rust_rustfmt_executable
+  Type: |String|
+  Default: `'rustfmt'`
+
+  This variable can be modified to change the executable path for `rustfmt`.
 
 
 ===============================================================================

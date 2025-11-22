@@ -32,6 +32,7 @@ class Source(Base):
             'rust': r'(\.|::)\w*$',
             'typescript': r'(\.|\'|")\w*$',
             'cpp': r'(\.|::|->)\w*$',
+            'c': r'(\.|->)\w*$',
         }
 
     # Returns an integer for the start position, as with omnifunc.
@@ -49,12 +50,13 @@ class Source(Base):
 
         if event == 'Async':
             result = self.vim.call('ale#completion#GetCompletionResult')
+
             return result or []
 
         if context.get('is_refresh'):
             self.vim.command(
-                "call ale#completion#GetCompletions('ale-callback', " + \
-                "{'callback': {completions -> deoplete#auto_complete() }})"
+                "call ale#completion#GetCompletions('ale-callback', "
+                + "{'callback': {completions -> deoplete#auto_complete() }})"
             )
 
         return []

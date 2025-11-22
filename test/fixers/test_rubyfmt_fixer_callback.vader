@@ -1,0 +1,26 @@
+Before:
+  Save g:ale_ruby_rubyfmt_executable
+  Save g:ale_ruby_rubyfmt_options
+  Save &l:expandtab
+  Save &l:shiftwidth
+  Save &l:tabstop
+
+After:
+  Restore
+
+Execute(The rubyfmt callback should return 'rubyfmt' as default command):
+  setlocal noexpandtab
+  Assert
+  \ ale#fixers#rubyfmt#Fix(bufnr('')).command =~# '^' . ale#Escape('rubyfmt'),
+  \ "Default command name is expected to be 'rubyfmt'"
+
+Execute(The ruby executable and options should be configurable):
+  let g:ale_ruby_rubyfmt_executable = 'foobar'
+  let g:ale_ruby_rubyfmt_options = '--some-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('foobar')
+  \     . ' --some-option',
+  \ },
+  \ ale#fixers#rubyfmt#Fix(bufnr(''))

@@ -1,0 +1,17 @@
+Before:
+  call ale#assert#SetUpLinterTest('css', 'csslint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(--config should be set when the .csslintrc file is found):
+  call ale#test#SetFilename('../test-files/csslint/some-app/subdir/testfile.js')
+
+  AssertLinter 'csslint', 'csslint --format=compact '
+  \ . '--config=' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/csslint/some-app/.csslintrc'))
+  \ . ' %t'
+
+Execute(--config should not be used when no .csslintrc file exists):
+  call ale#test#SetFilename('../test-files/csslint/other-app/testfile.css')
+
+  AssertLinter 'csslint', 'csslint --format=compact  %t'

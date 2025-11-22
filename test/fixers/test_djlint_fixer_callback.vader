@@ -1,0 +1,98 @@
+Before:
+  call ale#assert#SetUpFixerTest('html', 'djlint', 'djlint')
+
+After:
+  Restore
+
+  call ale#assert#TearDownFixerTest()
+
+Execute(The djlint callback should return the correct default command):
+  AssertEqual
+  \ {'command': ale#Escape('djlint') . ' --reformat  -'},
+  \ ale#fixers#djlint#Fix(bufnr(''))
+
+Execute(The --profile option should not be overridden):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=htmldjango
+  let g:ale_html_djlint_options = '--profile jinja'
+
+  AssertFixer
+  \ { 'command': ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --reformat'
+  \     . ' --profile jinja'
+  \     . ' -',
+  \ }
+
+
+Execute(Should set --profile for experimental language, Handlebars):
+  call ale#test#SetFilename('../test-files/djlint/testfile.hbs')
+
+  set filetype=handlebars
+
+  AssertFixer
+  \ { 'command': ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --reformat'
+  \     . ' --profile handlebars'
+  \     . ' -',
+  \ }
+
+Execute(Should set --profile for htmldjango, Django templates):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=htmldjango
+
+  AssertFixer
+  \ { 'command': ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --reformat'
+  \     . ' --profile django'
+  \     . ' -',
+  \ }
+
+Execute(Should set --profile for htmlangular):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=htmlangular
+
+  AssertFixer
+  \ { 'command': ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --reformat'
+  \     . ' --profile angular'
+  \     . ' -',
+  \ }
+
+Execute(Should set --profile for jinja):
+  call ale#test#SetFilename('../test-files/djlint/testfile.jinja2')
+
+  set filetype=jinja
+
+  AssertFixer
+  \ { 'command': ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --reformat'
+  \     . ' --profile jinja'
+  \     . ' -',
+  \ }
+
+Execute(Should set --profile for nunjucks):
+  call ale#test#SetFilename('../test-files/djlint/testfile.njk')
+
+  set filetype=nunjucks
+
+  AssertFixer
+  \ { 'command': ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --reformat'
+  \     . ' --profile nunjucks'
+  \     . ' -',
+  \ }
+
+Execute(Should set --profile for Go HTML templates):
+  call ale#test#SetFilename('../test-files/djlint/testfile.html')
+
+  set filetype=gohtmltmpl
+
+  AssertFixer
+  \ { 'command': ale#Escape(g:ale_html_djlint_executable)
+  \     . ' --reformat'
+  \     . ' --profile golang'
+  \     . ' -',
+  \ }

@@ -1,11 +1,14 @@
 Before:
   Save g:ale_completion_delay
+  Save g:ale_completion_enabled
   Save g:ale_completion_max_suggestions
   Save g:ale_completion_info
+  Save g:ale_completion_autoimport
   Save &l:omnifunc
   Save &l:completeopt
 
-  let g:ale_completion_enabled = 1
+  let g:ale_completion_enabled = v:true
+  let g:ale_completion_autoimport = v:true
 
   call ale#test#SetDirectory('/testplugin/test/completion')
   call ale#test#SetFilename('dummy.txt')
@@ -19,7 +22,7 @@ Before:
   let g:init_callback_list = []
 
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
-    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', '', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
     let l:details = {
@@ -121,7 +124,7 @@ Execute(The right message should be sent for the initial tsserver request):
   \  'line': 1,
   \  'offset': 3,
   \  'prefix': 'fo',
-  \  'includeExternalModuleExports': g:ale_completion_tsserver_autoimport,
+  \  'includeExternalModuleExports': g:ale_completion_autoimport,
   \ }]],
   \ g:message_list
   " We should set up the completion info correctly.
@@ -205,8 +208,8 @@ Given python(Some Python file):
   bazxyzxyzxyz
 
 Execute(The right message should be sent for the initial LSP request):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   " The cursor position needs to match what was saved before.
   call setpos('.', [bufnr(''), 1, 5, 0])
 
@@ -226,20 +229,20 @@ Execute(The right message should be sent for the initial LSP request):
   \ string(g:Callback)
   " We should send the right message.
   " The character index needs to be at most the index of the last character on
-  " the line, or integration with pyls will be broken.
+  " the line, or integration with pylsp will be broken.
   "
   " We need to send the message for changing the document first.
   AssertEqual
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/completion', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
@@ -294,13 +297,13 @@ Execute(Two completion requests shouldn't be sent in a row):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/completion', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],

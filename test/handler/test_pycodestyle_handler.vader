@@ -14,7 +14,6 @@ After:
   unlet! b:ale_warn_about_trailing_whitespace
 
   call ale#linter#Reset()
-  silent file something_else.py
 
 Execute(The pycodestyle handler should parse output):
   AssertEqual

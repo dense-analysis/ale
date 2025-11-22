@@ -1,19 +1,24 @@
-" Author: w0rp <devw0rp@gmail.com>
+" Author: w0rp <dev@w0rp.com>
 " Description: Functions for integrating with Python linters.
 
 call ale#Set('python_auto_pipenv', '0')
+call ale#Set('python_auto_poetry', '0')
+call ale#Set('python_auto_uv', '0')
 
 let s:sep = has('win32') ? '\' : '/'
 " bin is used for Unix virtualenv directories, and Scripts is for Windows.
 let s:bin_dir = has('unix') ? 'bin' : 'Scripts'
+" The default virtualenv directory names are ordered from the likely most
+" common names down to the least common. `.env` might be more common, but it's
+" also likely to conflict with a `.env` file for environment variables, so we
+" search for it last. (People really shouldn't use that name.)
 let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
-\   '.env',
 \   '.venv',
 \   'env',
-\   've-py3',
 \   've',
-\   'virtualenv',
 \   'venv',
+\   'virtualenv',
+\   '.env',
 \])
 
 function! ale#python#FindProjectRootIni(buffer) abort
@@ -21,17 +26,24 @@ function! ale#python#FindProjectRootIni(buffer) abort
         " If you change this, update ale-python-root documentation.
         if filereadable(l:path . '/MANIFEST.in')
         \|| filereadable(l:path . '/setup.cfg')
-        \|| filereadable(l:path . '/pytest.ini')
         \|| filereadable(l:path . '/tox.ini')
+        \|| filereadable(l:path . '/.pyre_configuration.local')
         \|| filereadable(l:path . '/mypy.ini')
+        \|| filereadable(l:path . '/.mypy.ini')
         \|| filereadable(l:path . '/pycodestyle.cfg')
         \|| filereadable(l:path . '/.flake8')
         \|| filereadable(l:path . '/.flake8rc')
         \|| filereadable(l:path . '/pylama.ini')
         \|| filereadable(l:path . '/pylintrc')
         \|| filereadable(l:path . '/.pylintrc')
+        \|| filereadable(l:path . '/pyrightconfig.json')
+        \|| filereadable(l:path . '/pyrightconfig.toml')
         \|| filereadable(l:path . '/Pipfile')
         \|| filereadable(l:path . '/Pipfile.lock')
+        \|| filereadable(l:path . '/poetry.lock')
+        \|| filereadable(l:path . '/pyproject.toml')
+        \|| filereadable(l:path . '/.tool-versions')
+        \|| filereadable(l:path . '/uv.lock')
             return l:path
         endif
     endfor
@@ -42,11 +54,12 @@ endfunction
 " Given a buffer number, find the project root directory for Python.
 " The root directory is defined as the first directory found while searching
 " upwards through paths, including the current directory, until a path
-" containing an init file (one from MANIFEST.in, setup.cfg, pytest.ini,
-" tox.ini) is found. If it is not possible to find the project root directory
-" via init file, then it will be defined as the first directory found
-" searching upwards through paths, including the current directory, until no
-" __init__.py files is found.
+" containing an configuration file is found. (See list above)
+"
+" If it is not possible to find the project root directory via configuration
+" file, then it will be defined as the first directory found searching upwards
+" through paths, including the current directory, until no __init__.py files
+" is found.
 function! ale#python#FindProjectRoot(buffer) abort
     let l:ini_root = ale#python#FindProjectRootIni(a:buffer)
 
@@ -86,6 +99,32 @@ function! ale#python#FindVirtualenv(buffer) abort
     endfor
 
     return $VIRTUAL_ENV
+endfunction
+
+" Automatically determine virtualenv environment variables and build
+" a string of them to prefix linter commands with.
+function! ale#python#AutoVirtualenvEnvString(buffer) abort
+    let l:venv_dir = ale#python#FindVirtualenv(a:buffer)
+
+    if !empty(l:venv_dir)
+        let l:strs = [ ]
+        " venv/bin directory
+        let l:pathdir = join([l:venv_dir, s:bin_dir], s:sep)
+
+        " expand PATH correctly inside of the appropriate shell.
+        " set VIRTUAL_ENV to point to venv
+        if has('win32')
+            call add(l:strs, 'set PATH=' . ale#Escape(l:pathdir) . ';%PATH% && ')
+            call add(l:strs, 'set VIRTUAL_ENV=' . ale#Escape(l:venv_dir) . ' && ')
+        else
+            call add(l:strs, 'PATH=' . ale#Escape(l:pathdir) . '":$PATH" ')
+            call add(l:strs, 'VIRTUAL_ENV=' . ale#Escape(l:venv_dir) . ' ')
+        endif
+
+        return join(l:strs, '')
+    endif
+
+    return ''
 endfunction
 
 " Given a buffer number and a command name, find the path to the executable.
@@ -154,4 +193,14 @@ endfunction
 " Detects whether a pipenv environment is present.
 function! ale#python#PipenvPresent(buffer) abort
     return findfile('Pipfile.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
+endfunction
+
+" Detects whether a poetry environment is present.
+function! ale#python#PoetryPresent(buffer) abort
+    return findfile('poetry.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
+endfunction
+
+" Detects whether a uv environment is present.
+function! ale#python#UvPresent(buffer) abort
+    return findfile('uv.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
 endfunction

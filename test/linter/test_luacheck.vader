@@ -1,0 +1,39 @@
+Before:
+  call ale#assert#SetUpLinterTest('lua', 'luacheck')
+  " Default to testing linting Lua not in Vim directories.
+  call ale#test#SetFilename('/test.lua')
+
+After:
+  " Clear the variable for saving the result of the runtime check.
+  " We don't want to cache the result between tests.
+  unlet! b:ale_in_runtimepath
+  call ale#assert#TearDownLinterTest()
+
+Execute(The luacheck default command should be correct):
+  AssertLinter 'luacheck',
+  \ ale#Escape('luacheck') . ' --formatter plain --codes --filename %s -'
+
+Execute(You should be able to set luacheck options):
+  let g:ale_lua_luacheck_options = '--config filename'
+
+  AssertLinter 'luacheck',
+  \ ale#Escape('luacheck')
+  \   . ' --config filename'
+  \   . ' --formatter plain --codes --filename %s -'
+
+Execute(The luacheck executable should be configurable):
+  let g:ale_lua_luacheck_executable = 'luacheck.sh'
+
+  AssertLinter 'luacheck.sh',
+  \ ale#Escape('luacheck.sh') . ' --formatter plain --codes --filename %s -'
+
+Execute(The luacheck command should include vim as a global if in runtimepath):
+  call ale#test#SetFilename('test.lua')
+  AssertLinter 'luacheck',
+  \ ale#Escape('luacheck') . ' --globals vim --formatter plain --codes --filename %s -'
+
+Execute(The default Vim globals should not be set if globals are already set):
+  call ale#test#SetFilename('test.lua')
+  let g:ale_lua_luacheck_options = '--globals foo'
+  AssertLinter 'luacheck',
+  \ ale#Escape('luacheck') . ' --globals foo --formatter plain --codes --filename %s -'

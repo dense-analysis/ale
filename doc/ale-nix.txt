@@ -3,21 +3,148 @@ ALE Nix Integration                                           *ale-nix-options*
 
 
 ===============================================================================
-nixpkgs-fmt                                                 *ale-nix-nixpkgs-fmt*
+alejandra                                                   *ale-nix-alejandra*
 
-g:ale_nix_nixpkgsfmt_executable                *g:ale_nix_nixpkgsfmt_executable*
-                                               *b:ale_nix_nixpkgsfmt_executable*
+                                         *ale-options.nix_alejandra_executable*
+                                               *g:ale_nix_alejandra_executable*
+                                               *b:ale_nix_alejandra_executable*
+nix_alejandra_executable
+g:ale_nix_alejandra_executable
+  Type: |String|
+  Default: `'alejandra'`
+
+  This variable sets the executable used for alejandra.
+
+                                            *ale-options.nix_alejandra_options*
+                                                  *g:ale_nix_alejandra_options*
+                                                  *b:ale_nix_alejandra_options*
+nix_alejandra_options
+g:ale_nix_alejandra_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the alejandra fixer.
+
+
+===============================================================================
+nixfmt                                                         *ale-nix-nixfmt*
+
+                                            *ale-options.nix_nixfmt_executable*
+                                                  *g:ale_nix_nixfmt_executable*
+                                                  *b:ale_nix_nixfmt_executable*
+nix_nixfmt_executable
+g:ale_nix_nixfmt_executable
+  Type: |String|
+  Default: `'nixfmt'`
+
+  This variable sets the executable used for nixfmt.
+
+                                               *ale-options.nix_nixfmt_options*
+                                                     *g:ale_nix_nixfmt_options*
+                                                     *b:ale_nix_nixfmt_options*
+nix_nixfmt_options
+g:ale_nix_nixfmt_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the nixfmt fixer.
+
+
+===============================================================================
+nixpkgs-fmt                                               *ale-nix-nixpkgs-fmt*
+
+                                        *ale-options.nix_nixpkgsfmt_executable*
+                                              *g:ale_nix_nixpkgsfmt_executable*
+                                              *b:ale_nix_nixpkgsfmt_executable*
+nix_nixpkgsfmt_executable
+g:ale_nix_nixpkgsfmt_executable
   Type: |String|
   Default: `'nixpkgs-fmt'`
 
   This variable sets executable used for nixpkgs-fmt.
 
-g:ale_nix_nixpkgsfmt_options                     *g:ale_nix_nixpkgsfmt_options*
+                                           *ale-options.nix_nixpkgsfmt_options*
+                                                 *g:ale_nix_nixpkgsfmt_options*
                                                  *b:ale_nix_nixpkgsfmt_options*
+nix_nixpkgsfmt_options
+g:ale_nix_nixpkgsfmt_options
   Type: |String|
   Default: `''`
 
-  This variable can be set to pass additional options to the nixpkgs-fmt fixer.
+  This variable can be set to pass additional options to the nixpkgs-fmt
+  fixer.
+
+
+===============================================================================
+statix                                                         *ale-nix-statix*
+
+                                      *ale-options.nix_statix_check_executable*
+                                            *g:ale_nix_statix_check_executable*
+                                            *b:ale_nix_statix_check_executable*
+nix_statix_check_executable
+g:ale_nix_statix_check_executable
+  Type: |String|
+  Default: `'statix'`
+
+  This variable sets the executable used for statix when running it as a
+  linter.
+
+                                         *ale-options.nix_statix_check_options*
+                                               *g:ale_nix_statix_check_options*
+                                               *b:ale_nix_statix_check_options*
+nix_statix_check_options
+g:ale_nix_statix_check_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be used to pass additional options to statix when running
+  it as a linter.
+
+                                        *ale-options.nix_statix_fix_executable*
+                                              *g:ale_nix_statix_fix_executable*
+                                               *b:ale_nix_fix_check_executable*
+nix_statix_fix_executable
+g:ale_nix_statix_fix_executable
+  Type: |String|
+  Default: `'statix'`
+
+  This variable sets the executable used for statix when running it as a
+  fixer.
+
+                                           *ale-options.nix_statix_fix_options*
+                                                 *g:ale_nix_statix_fix_options*
+                                                 *b:ale_nix_statix_fix_options*
+nix_statix_fix_options
+g:ale_nix_statix_fix_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be used to pass additional options to statix when running
+  it as a fixer.
+
+
+===============================================================================
+deadnix                                                       *ale-nix-deadnix*
+
+                                           *ale-options.nix_deadnix_executable*
+                                                 *g:ale_nix_deadnix_executable*
+                                                 *b:ale_nix_deadnix_executable*
+nix_deadnix_executable
+g:ale_nix_deadnix_executable
+  Type: |String|
+  Default: `'deadnix'`
+
+  This variable sets the executable used for deadnix.
+
+                                              *ale-options.nix_deadnix_options*
+                                                    *g:ale_nix_deadnix_options*
+                                                    *b:ale_nix_deadnix_options*
+nix_deadnix_options
+g:ale_nix_deadnix_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be used to pass additional options to deadnix.
 
 
 ===============================================================================

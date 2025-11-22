@@ -1,0 +1,14 @@
+Before:
+  call ale#assert#SetUpLinterTest('nix', 'statix')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default statix command should be correct):
+  AssertLinter 'statix', ale#Escape('statix') . ' check -o errfmt --stdin'
+
+Execute(The statix executable and options should be configurable):
+  let g:ale_nix_statix_check_executable = 'foo'
+  let g:ale_nix_statix_check_options = '--foobar'
+
+  AssertLinter 'foo', ale#Escape('foo') . ' check -o errfmt --stdin --foobar'

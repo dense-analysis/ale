@@ -19,16 +19,23 @@ instructions:
 https://github.com/freebroccolo/ocaml-language-server#installation
 
 
-g:ale_reason_ols_executable                       *g:ale_reason_ols_executable*
+-------------------------------------------------------------------------------
+Options
+                                            *ale-options.reason_ols_executable*
+                                                  *g:ale_reason_ols_executable*
                                                   *b:ale_reason_ols_executable*
+reason_ols_executable
+g:ale_reason_ols_executable
   Type: |String|
   Default: `'ocaml-language-server'`
 
   This variable can be set to change the executable path for `ols`.
 
-
-g:ale_reason_ols_use_global                       *g:ale_reason_ols_use_global*
+                                            *ale-options.reason_ols_use_global*
+                                                  *g:ale_reason_ols_use_global*
                                                   *b:ale_reason_ols_use_global*
+reason_ols_use_global
+g:ale_reason_ols_use_global
   Type: |String|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -44,9 +51,11 @@ Go to https://github.com/jaredly/reason-language-server and download the
 latest release. You can place it anywhere, but ensure you set the executable
 path.
 
-
-g:ale_reason_ls_executable                         *g:ale_reason_ls_executable*
+                                             *ale-options.reason_ls_executable*
+                                                   *g:ale_reason_ls_executable*
                                                    *b:ale_reason_ls_executable*
+reason_ls_executable
+g:ale_reason_ls_executable
   Type: |String|
 
   This variable defines the standard location of the language server
@@ -56,16 +65,21 @@ g:ale_reason_ls_executable                         *g:ale_reason_ls_executable*
 ===============================================================================
 refmt                                                      *ale-reasonml-refmt*
 
-g:ale_reasonml_refmt_executable               *g:ale_reasonml_refmt_executable*
+                                        *ale-options.reasonml_refmt_executable*
+                                              *g:ale_reasonml_refmt_executable*
                                               *b:ale_reasonml_refmt_executable*
+reasonml_refmt_executable
+g:ale_reasonml_refmt_executable
   Type: |String|
   Default: `'refmt'`
 
   This variable can be set to pass the path of the refmt fixer.
 
-
-g:ale_reasonml_refmt_options                     *g:ale_reasonml_refmt_options*
+                                           *ale-options.reasonml_refmt_options*
+                                                 *g:ale_reasonml_refmt_options*
                                                  *b:ale_reasonml_refmt_options*
+reasonml_refmt_options
+g:ale_reasonml_refmt_options
   Type: |String|
   Default: `''`
 

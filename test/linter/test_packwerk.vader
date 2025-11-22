@@ -1,0 +1,38 @@
+Before:
+  call ale#assert#SetUpLinterTest('ruby', 'packwerk')
+  call ale#test#SetFilename('../test-files/ruby/valid_rails_app/db/test.rb')
+
+  let g:ale_ruby_packwerk_executable = 'packwerk'
+  let g:ale_ruby_packwerk_options = ''
+
+  let b:sep = has('win32') ? '\' : '/'
+
+After:
+  unlet! b:sep
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(Executable should default to packwerk):
+  AssertLinter 'packwerk', ale#Escape('packwerk')
+  \   . ' check '
+  \   . ale#Escape('db' . b:sep . 'test.rb')
+
+Execute(Should be able to set a custom executable):
+  let g:ale_ruby_packwerk_executable = 'bin/packwerk'
+
+  AssertLinter 'bin/packwerk', ale#Escape('bin/packwerk')
+  \   . ' check '
+  \   . ale#Escape('db' . b:sep . 'test.rb')
+
+Execute(Setting bundle appends 'exec packwerk'):
+  let g:ale_ruby_packwerk_executable = 'path to/bundle'
+
+  AssertLinter 'path to/bundle', ale#Escape('path to/bundle')
+  \   . ' exec packwerk'
+  \   . ' check '
+  \   . ale#Escape('db' . b:sep . 'test.rb')
+
+Execute(Command callback should be empty when not in a valid Rails app):
+  call ale#test#SetFilename('../test-files/ruby/not_a_rails_app/test.rb')
+
+  AssertLinter 'packwerk', ''

@@ -1,0 +1,8 @@
+Before:
+  call ale#assert#SetUpLinterTest('yara', 'yls')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'yls', ale#Escape('yls') . ' -v'

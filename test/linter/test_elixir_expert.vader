@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('elixir', 'expert')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(should set correct defaults):
+  AssertLinter 'expert', ale#Escape('expert')
+
+Execute(The executable should be configurable):
+  let b:ale_elixir_expert_executable = 'foobar'
+
+  AssertLinter 'foobar', ale#Escape('foobar')
+
+Execute(should set correct LSP values):
+  call ale#test#SetFilename('../test-files/elixir/umbrella_project/apps/app1/lib/app.ex')
+
+  AssertLSPLanguage 'elixir'
+  AssertLSPOptions {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/elixir/umbrella_project')

@@ -6,7 +6,7 @@ call ale#Set('sh_language_server_executable', 'bash-language-server')
 call ale#Set('sh_language_server_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#sh#language_server#GetExecutable(buffer) abort
-    return ale#node#FindExecutable(a:buffer, 'sh_language_server', [
+    return ale#path#FindExecutable(a:buffer, 'sh_language_server', [
     \   'node_modules/.bin/bash-language-server',
     \])
 endfunction
@@ -25,6 +25,7 @@ endfunction
 
 call ale#linter#Define('sh', {
 \   'name': 'language_server',
+\   'aliases': ['bash-language-server'],
 \   'lsp': 'stdio',
 \   'executable': function('ale_linters#sh#language_server#GetExecutable'),
 \   'command': function('ale_linters#sh#language_server#GetCommand'),

@@ -1,0 +1,63 @@
+Before:
+  call ale#assert#SetUpLinterTest('python', 'jedils')
+  Save b:ale_python_auto_virtualenv
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  unlet! b:bin_dir
+  unlet! b:venv_bin
+  unlet! b:sep
+  unlet! b:executable
+
+  call ale#test#SetFilename('..')
+  call ale#assert#TearDownLinterTest()
+
+Execute(The jedi-language-server command callback should return default string):
+  call ale#test#SetFilename('./foo.py')
+
+  AssertLinter 'jedi-language-server', ale#Escape('jedi-language-server')
+
+Execute(The jedi-language-server executable should be configurable):
+  let g:ale_python_jedils_executable = '~/.local/bin/jedi-language-server'
+
+  AssertLinter '~/.local/bin/jedi-language-server' , ale#Escape('~/.local/bin/jedi-language-server')
+
+Execute(virtualenv vars should be used when ale_python_auto_virtualenv = 1):
+  let b:ale_python_auto_virtualenv = 1
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let b:venv_bin = ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir)
+  let b:sep = has('win32') ? ';' : ':'
+  let b:executable = ale#path#Simplify(b:venv_bin . '/jedi-language-server')
+
+  AssertLinter b:executable, ale#python#AutoVirtualenvEnvString(bufnr(''))
+  \   . ale#Escape(b:executable)
+  Assert !empty(ale#python#AutoVirtualenvEnvString(bufnr('')))
+
+Execute(You should be able to override the jedi-language-server virtualenv lookup):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let g:ale_python_jedils_use_global = 1
+
+  AssertLinter 'jedi-language-server', ale#Escape('jedi-language-server')
+
+Execute(Setting executable to 'pipenv' appends 'run jedi-language-server'):
+  let g:ale_python_jedils_executable = 'path/to/pipenv'
+  call ale#test#SetFilename('../test-files/dummy')
+
+  AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run jedi-language-server'
+
+Execute(poetry is detected when python_jedils_auto_poetry is set):
+  let g:ale_python_jedils_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run jedi-language-server'
+
+Execute(uv is detected when python_jedils_auto_uv is set):
+  let g:ale_python_jedils_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run jedi-language-server'

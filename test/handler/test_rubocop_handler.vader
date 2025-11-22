@@ -2,7 +2,6 @@ Before:
   runtime ale_linters/ruby/rubocop.vim
 
 After:
-  unlet! g:lines
   call ale#linter#Reset()
 
 Execute(The rubocop handler should parse lines correctly):
@@ -59,18 +58,6 @@ Execute(The rubocop handler should handle when no files are checked):
   \     '{"metadata":{"rubocop_version":"0.47.1","ruby_engine":"ruby","ruby_version":"2.1.5","ruby_patchlevel":"273","ruby_platform":"x86_64-linux-gnu"},"files":[],"summary":{"offense_count":0,"target_file_count":0,"inspected_file_count":0}}'
   \ ])
 
-Execute(The rubocop handler should handle output without any errors):
-  let g:lines = [
-  \ '{"metadata":{"rubocop_version":"0.48.1","ruby_engine":"ruby","ruby_version":"2.4.1","ruby_patchlevel":"111","ruby_platform":"x86_64-darwin16"},"files":[]}',
-  \]
-
-  AssertEqual
-  \ [],
-  \ ale#ruby#HandleRubocopOutput(347, g:lines)
-  \
-  AssertEqual
-  \ [],
-  \ ale#ruby#HandleRubocopOutput(347, ['{}'])
-  AssertEqual
-  \ [],
-  \ ale#ruby#HandleRubocopOutput(347, [])
+Execute(The rubocop handler should handle empty output):
+  AssertEqual [], ale#ruby#HandleRubocopOutput(347, ['{}'])
+  AssertEqual [], ale#ruby#HandleRubocopOutput(347, [])

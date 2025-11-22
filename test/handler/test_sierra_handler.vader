@@ -1,0 +1,20 @@
+Before:
+  runtime ale_linters/cairo/sierra.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The starknet handler should handle error messages correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 16,
+  \     'col': 25,
+  \     'text': 'Plugin diagnostic: Type not found',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#cairo#sierra#Handle(bufnr(''), [
+  \   'error: Plugin diagnostic: Type not found',
+  \   '  --> lib.cairo:16:25',
+  \ ])

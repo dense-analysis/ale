@@ -16,19 +16,25 @@ endfunction
 " Vim 8 does not support echoing long messages from asynchronous callbacks,
 " but NeoVim does. Small messages can be echoed in Vim 8, and larger messages
 " have to be shown in preview windows.
-function! ale#util#ShowMessage(string) abort
+function! ale#util#ShowMessage(string, ...) abort
+    let l:options = get(a:000, 0, {})
+
     if !has('nvim')
         call ale#preview#CloseIfTypeMatches('ale-preview.message')
     endif
 
     " We have to assume the user is using a monospace font.
     if has('nvim') || (a:string !~? "\n" && len(a:string) < &columns)
-        execute 'echo a:string'
+        " no-custom-checks
+        echo a:string
     else
-        call ale#preview#Show(split(a:string, "\n"), {
-        \   'filetype': 'ale-preview.message',
-        \   'stay_here': 1,
-        \})
+        call ale#preview#Show(split(a:string, "\n"), extend(
+        \   {
+        \       'filetype': 'ale-preview.message',
+        \       'stay_here': 1,
+        \   },
+        \   l:options,
+        \))
     endif
 endfunction
 
@@ -335,6 +341,16 @@ function! ale#util#GetMatches(lines, patterns) abort
     return l:matches
 endfunction
 
+" Given a single line, or a List of lines, and a single pattern, or a List of
+" patterns, and a callback function for mapping the items matches, return the
+" result of mapping all of the matches for the lines from the given patterns,
+" using matchlist()
+"
+" Only the first pattern which matches a line will be returned.
+function! ale#util#MapMatches(lines, patterns, Callback) abort
+    return map(ale#util#GetMatches(a:lines, a:patterns), 'a:Callback(v:val)')
+endfunction
+
 function! s:LoadArgCount(function) abort
     try
         let l:output = execute('function a:function')
@@ -404,7 +420,7 @@ function! ale#util#FuzzyJSONDecode(data, default) abort
         endif
 
         return l:result
-    catch /E474/
+    catch /E474\|E491/
         return a:default
     endtry
 endfunction
@@ -418,7 +434,10 @@ function! ale#util#Writefile(buffer, lines, filename) abort
     \   ? map(copy(a:lines), 'substitute(v:val, ''\r*$'', ''\r'', '''')')
     \   : a:lines
 
-    call writefile(l:corrected_lines, a:filename, 'S') " no-custom-checks
+    " Set binary flag if buffer doesn't have eol and nofixeol to avoid appending newline
+    let l:flags = !getbufvar(a:buffer, '&eol') && exists('+fixeol') && !&fixeol ? 'bS' : 'S'
+
+    call writefile(l:corrected_lines, a:filename, l:flags) " no-custom-checks
 endfunction
 
 if !exists('s:patial_timers')
@@ -473,8 +492,12 @@ function! ale#util#FindItemAtCursor(buffer) abort
     return [l:info, l:loc]
 endfunction
 
-function! ale#util#Input(message, value) abort
-    return input(a:message, a:value)
+function! ale#util#Input(message, value, ...) abort
+    if a:0 > 0
+        return input(a:message, a:value, a:1)
+    else
+        return input(a:message, a:value)
+    endif
 endfunction
 
 function! ale#util#HasBuflineApi() abort
@@ -499,7 +522,18 @@ function! ale#util#SetBufferContents(buffer, lines) abort
 
     " Use a Vim API for setting lines in other buffers, if available.
     if l:has_bufline_api
-        call setbufline(a:buffer, 1, l:new_lines)
+        if has('nvim')
+            " save and restore signs to avoid flickering
+            let signs = sign_getplaced(a:buffer, {'group': 'ale'})[0].signs
+
+            call nvim_buf_set_lines(a:buffer, 0, l:first_line_to_remove, 0, l:new_lines)
+
+            " restore signs (invalid line numbers will be skipped)
+            call sign_placelist(map(signs, {_, v -> extend(v, {'buffer': a:buffer})}))
+        else
+            call setbufline(a:buffer, 1, l:new_lines)
+        endif
+
         call deletebufline(a:buffer, l:first_line_to_remove, '$')
     " Fall back on setting lines the old way, for the current buffer.
     else
@@ -516,4 +550,36 @@ function! ale#util#SetBufferContents(buffer, lines) abort
     endif
 
     return l:new_lines
+endfunction
+
+function! ale#util#GetBufferContents(buffer) abort
+    return join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
+endfunction
+
+function! ale#util#ToURI(resource) abort
+    let l:uri_handler = ale#uri#GetURIHandler(a:resource)
+
+    if l:uri_handler is# v:null
+        " resource is a filesystem path
+        let l:uri = ale#path#ToFileURI(a:resource)
+    else
+        " resource is a URI
+        let l:uri = a:resource
+    endif
+
+    return l:uri
+endfunction
+
+function! ale#util#ToResource(uri) abort
+    let l:uri_handler = ale#uri#GetURIHandler(a:uri)
+
+    if l:uri_handler is# v:null
+        " resource is a filesystem path
+        let l:resource = ale#path#FromFileURI(a:uri)
+    else
+        " resource is a URI
+        let l:resource = a:uri
+    endif
+
+    return l:resource
 endfunction

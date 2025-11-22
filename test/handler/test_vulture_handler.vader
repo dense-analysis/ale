@@ -9,8 +9,6 @@ After:
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
-  silent file something_else.py
-
 Execute(Basic vulture check with relative path in result should be handled):
   call ale#test#SetFilename('something_else.py')
   AssertEqual

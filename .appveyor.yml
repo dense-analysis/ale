@@ -10,6 +10,20 @@ branches:
     - master
     - /v\d+\.\d+\.(x|\d+)/
 
+# Skip running Windows tests if we only change files that can't impact
+# Windows tests.
+skip_commits:
+  files:
+    - '.github/**/*'
+    - .gitattributes
+    - Dockerfile
+    - README.md
+    - doc/*
+    - lua/*
+    - run-tests
+    - supported-tools.md
+    - syntax/*
+
 # Cache the vim and vader directories between builds.
 cache:
   - C:\vim -> .appveyor.yml
@@ -19,15 +33,18 @@ init:
   # Stop git from changing newlines
   - git config --global core.autocrlf input
 
+# NOTE: If you change the Vim or Vader versions here, please also update the
+# instructions for running tests on Windows in ale-development.txt
+
 install:
   # Download and unpack Vim
   - ps: >-
       if (!(Test-Path -Path C:\vim)){
         Add-Type -A System.IO.Compression.FileSystem
-        Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
+        Invoke-WebRequest https://github.com/dense-analysis/ale/releases/download/v4.0.0/vim80-586w32.zip `
           -OutFile C:\vim.zip
         [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
-        Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
+        Invoke-WebRequest https://github.com/dense-analysis/ale/releases/download/v4.0.0/vim80-586rt.zip `
           -OutFile C:\rt.zip
         [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
       }

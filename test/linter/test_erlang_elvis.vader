@@ -1,0 +1,52 @@
+Before:
+  call ale#assert#SetUpLinterTest('erlang', 'elvis')
+
+After:
+  unlet! b:root
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(Default command should be correct):
+  AssertLinter 'elvis',
+  \ ale#Escape('elvis') . ' rock --output-format=parsable '
+  \ . ale#Escape(expand('%:.'))
+
+Execute(Executable should be configurable):
+  let b:ale_erlang_elvis_executable = '/path/to/elvis'
+
+  AssertLinter '/path/to/elvis',
+  \ ale#Escape('/path/to/elvis') . ' rock --output-format=parsable '
+  \ . ale#Escape(expand('%:.'))
+
+Execute(Project root should be detected using elvis.config):
+  let b:root = '../test-files/erlang/app_with_elvis_config'
+
+  call ale#test#SetFilename(b:root . '/src/app.erl')
+  AssertLinter 'elvis',
+  \ ale#Escape('elvis') . ' rock --output-format=parsable '
+  \ . ale#Escape(ale#path#Simplify('src/app.erl'))
+  AssertLinterCwd ale#test#GetFilename(b:root)
+
+Execute(Root of Rebar3 project should be detected):
+  let b:root = '../test-files/erlang/rebar3_app'
+
+  call ale#test#SetFilename(b:root . '/src/app.erl')
+  AssertLinter 'elvis',
+  \ ale#Escape('elvis') . ' rock --output-format=parsable '
+  \ . ale#Escape(ale#path#Simplify('src/app.erl'))
+  AssertLinterCwd ale#test#GetFilename(b:root)
+
+  call ale#test#SetFilename(b:root . '/_checkouts/dep/src/dep.erl')
+  AssertLinter 'elvis',
+  \ ale#Escape('elvis') . ' rock --output-format=parsable '
+  \ . ale#Escape(ale#path#Simplify('src/dep.erl'))
+  AssertLinterCwd ale#test#GetFilename(b:root . '/_checkouts/dep')
+
+Execute(Root of Erlang.mk project should be detected):
+  let b:root = '../test-files/erlang/erlang_mk_app'
+
+  call ale#test#SetFilename(b:root . '/src/app.erl')
+  AssertLinter 'elvis',
+  \ ale#Escape('elvis') . ' rock --output-format=parsable '
+  \ . ale#Escape(ale#path#Simplify('src/app.erl'))
+  AssertLinterCwd ale#test#GetFilename(b:root)

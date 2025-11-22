@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpFixerTest('eruby', 'htmlbeautifier')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The htmlbeautifier callback should return the correct default values):
+  AssertFixer {
+  \    'command': ale#Escape('htmlbeautifier') . ' %t',
+  \    'read_temporary_file': 1,
+  \}
+
+Execute(The htmlbeautifier callback should allow custom htmlbeautifier executables):
+  let g:ale_eruby_htmlbeautifier_executable = 'foo/bar'
+
+  AssertFixer {
+  \    'command': ale#Escape('foo/bar') . ' %t',
+  \    'read_temporary_file': 1,
+  \}

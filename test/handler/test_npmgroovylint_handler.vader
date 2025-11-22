@@ -1,0 +1,63 @@
+Before:
+  runtime ale_linters/groovy/npmgroovylint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The npm-groovy-lint handler should parse JSON):
+  AssertEqual
+  \ [
+  \   {
+  \     'col': 0,
+  \     'end_col': 1,
+  \     'end_lnum': 2,
+  \     'filename': 'test2.groovy',
+  \     'lnum': 2,
+  \     'text': 'Some error message',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'filename': 'test.groovy',
+  \     'lnum': 1,
+  \     'text': 'Some warning message',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#groovy#npmgroovylint#Handle(bufnr(''), [
+  \   '{',
+  \   '  "files" : {',
+  \   '    "test.groovy" : {',
+  \   '      "errors" : [',
+  \   '        {',
+  \   '          "id" : 0,',
+  \   '          "line" : 1,',
+  \   '          "msg" : "Some warning message",',
+  \   '          "rule" : "SomeRule",',
+  \   '          "severity" : "warning"',
+  \   '        }',
+  \   '      ]',
+  \   '    },',
+  \   '    "test2.groovy": {',
+  \   '      "errors": [',
+  \   '        {',
+  \   '          "id" : 1,',
+  \   '          "line" : 2,',
+  \   '          "msg" : "Some error message",',
+  \   '          "range" : {',
+  \   '            "end" : {',
+  \   '              "character" : 1,',
+  \   '              "line" : 2',
+  \   '            },',
+  \   '            "start" : {',
+  \   '              "character" : 0,',
+  \   '              "line" : 2',
+  \   '            }',
+  \   '          },',
+  \   '          "rule" : "SomeOtherRule",',
+  \   '          "severity" : "error"',
+  \   '        }',
+  \   '      ]',
+  \   '    }',
+  \   '  }',
+  \   '}',
+  \ ])

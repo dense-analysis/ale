@@ -1,0 +1,86 @@
+Before:
+  runtime ale_linters/cloudformation/checkov.vim
+  call ale#test#SetFilename('sample.template.yaml')
+
+After:
+  call ale#linter#Reset()
+
+Execute(Handle output for no findings correctly):
+  AssertEqual
+  \ [],
+  \ ale_linters#cloudformation#checkov#Handle(bufnr(''), [
+  \'{',
+  \'    "passed": 0,',
+  \'    "failed": 0,',
+  \'    "skipped": 0,',
+  \'    "parsing_errors": 0,',
+  \'    "resource_count": 0,',
+  \'    "checkov_version": "3.2.415"',
+  \'}'
+  \])
+
+Execute(Handle output for all tests passed):
+  AssertEqual
+  \ [],
+  \ ale_linters#cloudformation#checkov#Handle(bufnr(''), [
+  \'{',
+  \'    "check_type": "cloudformation",',
+  \'    "results": {',
+  \'        "failed_checks": []',
+  \'    },',
+  \'    "summary": {',
+  \'        "passed": 18,',
+  \'        "failed": 0,',
+  \'        "skipped": 0,',
+  \'        "parsing_errors": 0,',
+  \'        "resource_count": 3,',
+  \'        "checkov_version": "3.2.415"',
+  \'    }',
+  \'}'
+  \])
+
+Execute(The JSON output of checkov should be handled correctly):
+  AssertEqual
+  \ [
+  \   {
+  \         'filename': '/sample.template.yaml',
+  \         'lnum': 57,
+  \         'end_lnum': 79,
+  \         'text': 'Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ) [CKV_AWS_116]',
+  \         'detail': "CKV_AWS_116: Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)\n" .
+  \                   'For more information, see: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq',
+  \         'type': 'W',
+  \   }
+  \ ],
+  \ ale_linters#cloudformation#checkov#Handle(bufnr(''), [
+  \'{',
+  \'    "check_type": "cloudformation",',
+  \'    "results": {',
+  \'        "failed_checks": [',
+  \'            {',
+  \'                "check_id": "CKV_AWS_116",',
+  \'                "bc_check_id": "BC_AWS_GENERAL_64",',
+  \'                "check_name": "Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)",',
+  \'                "check_result": {',
+  \'                    "result": "FAILED",',
+  \'                    "evaluated_keys": [',
+  \'                        "Properties/DeadLetterQueue/TargetArn"',
+  \'                    ]',
+  \'                },',
+  \'                "file_path": "/sample.template.yaml",',
+  \'                "repo_file_path": "/sample.template.yaml",',
+  \'                "file_line_range": [',
+  \'                    57,',
+  \'                    79',
+  \'                ],',
+  \'                "resource": "AWS::Serverless::Function.FunctionName",',
+  \'                "evaluations": {},',
+  \'                "check_class": "checkov.cloudformation.checks.resource.aws.LambdaDLQConfigured",',
+  \'                "entity_tags": null,',
+  \'                "resource_address": null,',
+  \'                "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq"',
+  \'            }',
+  \'        ]',
+  \'    }',
+  \'}'
+  \ ])
