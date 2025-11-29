@@ -672,6 +672,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['racket'],
 \       'description': 'Fix Racket files with raco fmt.',
 \   },
+\   'rescript_format': {
+\       'function': 'ale#fixers#rescript_format#Fix',
+\       'suggested_filetypes': ['rescript'],
+\       'description': 'Official formatter for ReScript.',
+\   },
 \   'ruff': {
 \       'function': 'ale#fixers#ruff#Fix',
 \       'suggested_filetypes': ['python'],

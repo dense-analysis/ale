@@ -1,0 +1,46 @@
+Before:
+  call ale#assert#SetUpFixerTest('rescript', 'rescript_format')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The rescript callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/rescript/testfile-noextension')
+
+  set filetype=rescript
+  GivenCommandOutput ['12.0.0']
+  AssertFixer
+  \ {
+  \   'command':
+  \     ale#Escape(g:ale_rescript_format_executable) . ' format --stdin .res'
+  \ }
+
+Execute(The rescript callback should correctly detect res files):
+  call ale#test#SetFilename('../test-files/rescript/testfile.res')
+
+  GivenCommandOutput ['12.0.0']
+  AssertFixer
+  \ {
+  \   'command':
+  \     ale#Escape(g:ale_rescript_format_executable) . ' format --stdin .res'
+  \ }
+
+Execute(The rescript callback should correctly detect resi files):
+  call ale#test#SetFilename('../test-files/rescript/testfile.resi')
+
+  GivenCommandOutput ['12.0.0']
+  AssertFixer
+  \ {
+  \   'command':
+  \     ale#Escape(g:ale_rescript_format_executable) . ' format --stdin .resi'
+  \ }
+
+Execute(The version check should be correct):
+  call ale#test#SetFilename('../test-files/rescript/testfile.res')
+
+  GivenCommandOutput ['11.0.0']
+  AssertFixer
+  \ {
+  \   'command':
+  \     ale#Escape(g:ale_rescript_format_executable) . ' format -stdin .res'
+  \ }

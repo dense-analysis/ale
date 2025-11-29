@@ -582,6 +582,9 @@ Notes:
   * `cspell`
   * `opacheck`
   * `opafmt`
+* ReScript
+  * `rescript-language-server`
+  * `rescript_format`
 * REST
   * kulala_fmt
 * reStructuredText

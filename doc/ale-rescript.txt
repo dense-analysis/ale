@@ -1,0 +1,54 @@
+===============================================================================
+ALE ReScript Integration                                 *ale-rescript-options*
+
+
+===============================================================================
+rescript-language-server                         *ale-rescript-language-server*
+
+                              *ale-options.rescript_language_server_executable*
+                                    *g:ale_rescript_language_server_executable*
+                                    *b:ale_rescript_language_server_executable*
+ale_rescript_language_server_executable
+g:ale_rescript_language_server_executable
+  Type: |String|
+  Default: `'rescript-language-server'`
+
+  See |ale-integrations-local-executables|
+
+                              *ale-options.rescript_language_server_use_global*
+                                    *g:ale_rescript_language_server_use_global*
+                                    *b:ale_rescript_language_server_use_global*
+rescript_language_server_use_global
+g:ale_rescript_language_server_use_global
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', v:true)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
+rescript_format                                           *ale-rescript-format*
+
+                                       *ale-options.rescript_format_executable*
+                                             *g:ale_rescript_format_executable*
+                                             *b:ale_rescript_format_executable*
+rescript_format_executable
+g:ale_rescript_format_executable
+  Type: |String|
+  Default: `'rescript'`
+
+  See |ale-integrations-local-executables|
+
+                                       *ale-options.rescript_format_use_global*
+                                             *g:ale_rescript_format_use_global*
+                                             *b:ale_rescript_format_use_global*
+rescript_format_use_global
+g:ale_rescript_format_use_global
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', v:false)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
