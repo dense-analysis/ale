@@ -1,0 +1,28 @@
+Before:
+  runtime autoload/ale/proselint.vim
+
+  let b:ale_proselint_executable = 'proselint'
+
+After:
+  unlet! b:ale_proselint_executable
+
+Execute(Command for proselint >= 0.16.0 should use 'check'):
+  AssertEqual
+  \ ale#Escape('proselint') . ' check %t',
+  \ ale#proselint#GetCommand(bufnr(''), [0, 16, 0])
+
+  AssertEqual
+  \ ale#Escape('proselint') . ' check %t',
+  \ ale#proselint#GetCommand(bufnr(''), [0, 17, 0])
+
+Execute(Command for proselint < 0.16.0 should use standard arguments):
+  AssertEqual
+  \ ale#Escape('proselint') . ' %t',
+  \ ale#proselint#GetCommand(bufnr(''), [0, 15, 0])
+
+Execute(Command should respect custom executable path):
+  let b:ale_proselint_executable = '/custom/path/to/proselint'
+
+  AssertEqual
+  \ ale#Escape('/custom/path/to/proselint') . ' check %t',
+  \ ale#proselint#GetCommand(bufnr(''), [0, 16, 0])
