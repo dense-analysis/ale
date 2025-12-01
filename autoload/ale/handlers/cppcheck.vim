@@ -69,11 +69,12 @@ function! ale#handlers#cppcheck#HandleCppCheckFormat(buffer, lines) abort
     "test.c:1:16: style: misra violation (use --rule-texts=<file> to get proper output) [misra-c2012-2.7]\'
     "void test( int parm ) {}
     "               ^
-    let l:pattern = '\v(\f+):(\d+):(\d+|\{column\}): (\w+):(\{inconclusive:inconclusive\})? ?(.*) \[(%(\w[-.]?)+)\]\'
+    let l:pattern = '\v(\f+):(\d+):(\d+|\{column\}): (\w+):(\{inconclusive:inconclusive\})? ?(.*) \[(%(\w[-.]?)+)\]\\?'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         if ale#path#IsBufferPath(a:buffer, l:match[1])
+            let l:text = substitute(l:match[6], '\\$', '', '')
             call add(l:output, {
             \   'lnum':     str2nr(l:match[2]),
             \   'col':      match(l:match[3],'{column}') >= 0 ? 1 : str2nr(l:match[3]),
