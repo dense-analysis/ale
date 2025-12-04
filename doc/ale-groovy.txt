@@ -28,9 +28,16 @@ g:ale_groovy_npmgroovylint_executable
 groovy_npmgroovylint_options
 g:ale_groovy_npmgroovylint_options
   Type: |String|
-  Default: `'--loglevel warning'`
+  Default: `'--noserver'`
 
   Additional npm-groovy-lint linter options.
+
+  To re-enable the server mode and make it close when Vim exits,
+  you can use the following in your vimrc: >
+
+    let g:ale_groovy_npmgroovylint_options = ''
+    autocmd VimLeavePre * silent! !npm-groovy-lint --killserver &
+<
 
                                  *ale-options.groovy_npmgroovylint_fix_options*
                                        *g:ale_groovy_npmgroovylint_fix_options*

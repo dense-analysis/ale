@@ -9,7 +9,7 @@ After:
 
 Execute(The default npm-groovy-lint command should be correct):
   AssertLinter 'npm-groovy-lint',
-  \ ale#Escape('npm-groovy-lint') . ' --failon none --output json --loglevel warning %t'
+  \ ale#Escape('npm-groovy-lint') . ' --failon none --output json --noserver %t'
 
 Execute(Default options should be configurable):
   let b:ale_groovy_npmgroovylint_options = '--loglevel info'

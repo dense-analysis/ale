@@ -2,7 +2,7 @@
 " Description: Integration of npm-groovy-lint for Groovy files.
 
 call ale#Set('groovy_npmgroovylint_executable', 'npm-groovy-lint')
-call ale#Set('groovy_npmgroovylint_options', '--loglevel warning')
+call ale#Set('groovy_npmgroovylint_options', '--noserver')
 
 function! ale_linters#groovy#npmgroovylint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'groovy_npmgroovylint_options')
@@ -19,9 +19,8 @@ function! ale_linters#groovy#npmgroovylint#Handle(buffer, lines) abort
     for [l:filename, l:file] in items(get(l:json, 'files', {}))
         for l:error in get(l:file, 'errors', [])
             let l:output_line = {
-            \   'filename': l:filename,
             \   'lnum': l:error.line,
-            \   'text': l:error.msg,
+            \   'text': l:error.msg . ' [' . l:error.rule . ']',
             \   'type': toupper(l:error.severity[0]),
             \}
 
