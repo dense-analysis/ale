@@ -75,6 +75,17 @@ See: |ale-javascript-fecs|.
 
 
 ===============================================================================
+glimmer                                                      *ale-html-glimmer*
+
+The `glimmer` filetype in Vim/Neovim refers to Glimmer templates, which use
+the `.gjs` and `.gts` file extensions for JavaScript and TypeScript files
+with embedded Glimmer templates.
+
+For configuration options and LSP setup, see |ale-gts-options| and
+|ale-gjs-options|.
+
+
+===============================================================================
 html-beautify                                               *ale-html-beautify*
 
                                          *ale-options.html_beautify_executable*

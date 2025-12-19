@@ -3566,6 +3566,7 @@ documented in additional help files.
     fusion-lint...........................|ale-fuse-fusionlint|
   git commit..............................|ale-gitcommit-options|
     gitlint...............................|ale-gitcommit-gitlint|
+  glint glimmer...........................|ale-glint-options|
   gleam...................................|ale-gleam-options|
     gleam_format..........................|ale-gleam-gleam_format|
     gleamlsp..............................|ale-gleam-gleamlsp|
