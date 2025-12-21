@@ -10,13 +10,18 @@ function! ale_linters#cpp#cppcheck#GetCommand(buffer) abort
     \   ? ale#handlers#cppcheck#GetBufferPathIncludeOptions(a:buffer)
     \   : ''
     let l:template = ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
+    " Versions >=2.13 don't allow using --project in conjunction with an
+    " explicit source file.
+    let l:source_file = stridx(l:compile_commands_option, '--project=') < 0
+    \   ? ' %t'
+    \   : ''
 
     return '%e -q --language=c++'
     \   . l:template
     \   . ale#Pad(l:compile_commands_option)
     \   . ale#Pad(ale#Var(a:buffer, 'cpp_cppcheck_options'))
     \   . l:buffer_path_include
-    \   . ' %t'
+    \   . l:source_file
 endfunction
 
 call ale#linter#Define('cpp', {

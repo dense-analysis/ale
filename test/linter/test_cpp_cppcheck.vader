@@ -31,7 +31,7 @@ Execute(cppcheck for C++ should detect compile_commands.json files):
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape('compile_commands.json')
   \   . ' --file-filter=' . ale#Escape(ale#test#GetFilename(b:rel_file_path))
-  \   . ' --enable=style %t'
+  \   . ' --enable=style'
 
 Execute(cppcheck for C++ should detect compile_commands.json files in build directories):
   let b:rel_file_path = '../test-files/cppcheck/with_build_dir/foo.cpp'
@@ -43,7 +43,7 @@ Execute(cppcheck for C++ should detect compile_commands.json files in build dire
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
   \   . ' --file-filter=' . ale#Escape(ale#test#GetFilename(b:rel_file_path))
-  \   . ' --enable=style %t'
+  \   . ' --enable=style'
 
 Execute(cppcheck for C++ should include file dir if compile_commands.json file is not found):
   call ale#test#SetFilename('../test-files/cppcheck/foo.cpp')
