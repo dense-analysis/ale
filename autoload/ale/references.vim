@@ -1,5 +1,6 @@
 let g:ale_default_navigation = get(g:, 'ale_default_navigation', 'buffer')
 let g:ale_references_show_contents = get(g:, 'ale_references_show_contents', 1)
+let g:ale_references_use_fzf = get(g:, 'ale_references_use_fzf', 0)
 
 let s:references_map = {}
 
@@ -82,6 +83,16 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
         endtry
     endif
 
+    if get(a:options, 'use_fzf') == 1
+        let l:filename = ale#util#ToResource(a:response_item.uri)
+        let l:nline = a:response_item.range.start.line + 1
+        let l:ncol = a:response_item.range.start.character + 1
+
+        " grep-style output (filename:line:col:text) so that fzf can properly
+        " show matches and previews using ':' as delimiter
+        return l:filename . ':' . l:nline . ':' . l:ncol . ':' . l:line_text
+    endif
+
     if get(a:options, 'open_in') is# 'quickfix'
         return {
         \ 'filename': l:filename,
@@ -100,32 +111,39 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
 endfunction
 
 function! ale#references#HandleLSPResponse(conn_id, response) abort
-    if has_key(a:response, 'id')
-    \&& has_key(s:references_map, a:response.id)
-        let l:options = remove(s:references_map, a:response.id)
+    if ! (has_key(a:response, 'id') && has_key(s:references_map, a:response.id))
+        return
+    endif
 
-        " The result can be a Dictionary item, a List of the same, or null.
-        let l:result = get(a:response, 'result', [])
-        let l:item_list = []
+    let l:options = remove(s:references_map, a:response.id)
 
-        if type(l:result) is v:t_list
-            for l:response_item in l:result
-                call add(l:item_list,
-                \ ale#references#FormatLSPResponseItem(l:response_item, l:options)
-                \)
-            endfor
-        endif
+    " The result can be a Dictionary item, a List of the same, or null.
+    let l:result = get(a:response, 'result', [])
+    let l:item_list = []
 
-        if empty(l:item_list)
-            call ale#util#Execute('echom ''No references found.''')
-        else
-            if get(l:options, 'open_in') is# 'quickfix'
-                call setqflist([], 'r')
-                call setqflist(l:item_list, 'a')
-                call ale#util#Execute('cc 1')
-            else
-                call ale#preview#ShowSelection(l:item_list, l:options)
+    if type(l:result) is v:t_list
+        for l:response_item in l:result
+            call add(l:item_list,
+            \ ale#references#FormatLSPResponseItem(l:response_item, l:options)
+            \)
+        endfor
+    endif
+
+    if empty(l:item_list)
+        call ale#util#Execute('echom ''No references found.''')
+    else
+        if get(l:options, 'use_fzf') == 1
+            if !exists('*fzf#run')
+                throw 'fzf#run function not found. You also need Vim plugin from the main fzf repository (i.e. junegunn/fzf *and* junegunn/fzf.vim)'
             endif
+
+            call ale#fzf#ShowReferences(l:item_list, l:options)
+        elseif get(l:options, 'open_in') is# 'quickfix'
+            call setqflist([], 'r')
+            call setqflist(l:item_list, 'a')
+            call ale#util#Execute('cc 1')
+        else
+            call ale#preview#ShowSelection(l:item_list, l:options)
         endif
     endif
 endfunction
@@ -165,6 +183,7 @@ function! s:OnReady(line, column, options, linter, lsp_details) abort
     \ 'use_relative_paths': has_key(a:options, 'use_relative_paths') ? a:options.use_relative_paths : 0,
     \ 'open_in': get(a:options, 'open_in', 'current-buffer'),
     \ 'show_contents': a:options.show_contents,
+    \ 'use_fzf': get(a:options, 'use_fzf', g:ale_references_use_fzf),
     \}
 endfunction
 
@@ -185,6 +204,8 @@ function! ale#references#Find(...) abort
                 let l:options.open_in = 'quickfix'
             elseif l:option is? '-contents'
                 let l:options.show_contents = 1
+            elseif l:option is? '-fzf'
+                let l:options.use_fzf = 1
             endif
         endfor
     endif

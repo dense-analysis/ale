@@ -121,6 +121,7 @@ Execute(Results should be shown for tsserver responses):
   \     'ignorethis': 'x',
   \     'open_in': 'tab',
   \     'use_relative_paths': 1,
+  \     'use_fzf': 0,
   \   }
   \ }
   \)
@@ -283,7 +284,7 @@ Execute(tsserver reference requests should be sent):
   \   [0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 0, 'use_fzf': 0, }}, ale#references#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServerResponse):
   runtime ale_linters/typescript/tsserver.vim
@@ -293,7 +294,7 @@ Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServe
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 1}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 1, 'use_fzf': 0}}, ale#references#GetMap()
 
 Execute(`-tab` should display results in tabs):
   runtime ale_linters/typescript/tsserver.vim
@@ -303,7 +304,7 @@ Execute(`-tab` should display results in tabs):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'tab', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'tab', 'use_relative_paths': 0, 'use_fzf': 0}}, ale#references#GetMap()
 
 Execute(The default navigation type should be used):
   runtime ale_linters/typescript/tsserver.vim
@@ -314,7 +315,7 @@ Execute(The default navigation type should be used):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'tab', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'tab', 'use_relative_paths': 0, 'use_fzf': 0}}, ale#references#GetMap()
 
 Execute(`-split` should display results in splits):
   runtime ale_linters/typescript/tsserver.vim
@@ -324,7 +325,7 @@ Execute(`-split` should display results in splits):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'split', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'split', 'use_relative_paths': 0, 'use_fzf': 0}}, ale#references#GetMap()
 
 Execute(`-vsplit` should display results in vsplits):
   runtime ale_linters/typescript/tsserver.vim
@@ -334,7 +335,7 @@ Execute(`-vsplit` should display results in vsplits):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'vsplit', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'vsplit', 'use_relative_paths': 0, 'use_fzf': 0}}, ale#references#GetMap()
 
 Execute(`-quickfix` should display results in quickfix):
   runtime ale_linters/typescript/tsserver.vim
@@ -344,7 +345,7 @@ Execute(`-quickfix` should display results in quickfix):
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'quickfix', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'quickfix', 'use_relative_paths': 0, 'use_fzf': 0}}, ale#references#GetMap()
 
 Given python(Some Python file):
   foo
@@ -627,7 +628,7 @@ Execute(LSP reference requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 0, 'use_fzf': 0}}, ale#references#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
   runtime ale_linters/python/pylsp.vim
@@ -638,4 +639,4 @@ Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResp
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 1}}, ale#references#GetMap()
+  AssertEqual {'42': {'show_contents': 1, 'open_in': 'current-buffer', 'use_relative_paths': 1, 'use_fzf': 0}}, ale#references#GetMap()
