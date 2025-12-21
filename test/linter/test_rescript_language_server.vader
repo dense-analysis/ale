@@ -1,0 +1,25 @@
+Before:
+  call ale#assert#SetUpLinterTest('rescript', 'rescript_language_server')
+
+  Save &filetype
+  let &filetype = 'rescript'
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The language string should be correct):
+  AssertLSPLanguage 'rescript'
+
+Execute(The project root should be detected correctly):
+  AssertLSPProject ''
+
+  call ale#test#SetFilename('../test-files/rescript/testfile.res')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/rescript')
+
+Execute(The command should be correct):
+  call ale#test#SetFilename('../test-files/rescript/testfile.res')
+
+  AssertLinter
+  \ 'rescript-language-server',
+  \ ale#Escape('rescript-language-server') . ' --stdio'

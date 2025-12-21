@@ -3862,6 +3862,9 @@ documented in additional help files.
     cspell................................|ale-rego-cspell|
     opacheck..............................|ale-rego-opa-check|
     opafmt................................|ale-rego-opa-fmt-fixer|
+  rescript................................|ale-rescript-options|
+    rescript-language-server..............|ale-rescript-language-server|
+    rescript_format.......................|ale-rescript-format|
   rest....................................|ale-rest-options|
     kulala_fmt............................|ale-rest-kulala_fmt|
   restructuredtext........................|ale-restructuredtext-options|
