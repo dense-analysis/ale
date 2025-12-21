@@ -1,0 +1,81 @@
+Before:
+  Save g:ale_markdown_pymarkdown_executable
+  Save g:ale_markdown_pymarkdown_options
+  Save g:ale_markdown_pymarkdown_auto_pipenv
+  Save g:ale_markdown_pymarkdown_auto_poetry
+  Save g:ale_markdown_pymarkdown_auto_uv
+
+After:
+  Restore
+
+Execute(The pymarkdown callback should return 'pymarkdown' as default command):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('pymarkdown') . ' fix %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#pymarkdown#Fix(bufnr(''))
+
+Execute(The pymarkdown executable and options should be configurable):
+  let g:ale_markdown_pymarkdown_executable = 'foobar'
+  let g:ale_markdown_pymarkdown_options = '--some-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('foobar') . ' fix --some-option %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#pymarkdown#Fix(bufnr(''))
+
+Execute(Setting executable to 'pipenv' appends 'run pymarkdown'):
+  let g:ale_markdown_pymarkdown_executable = 'path/to/pipenv'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('path/to/pipenv') . ' run pymarkdown fix %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#pymarkdown#Fix(bufnr(''))
+
+Execute(Pipenv is detected when markdown_pymarkdown_auto_pipenv is set):
+  let g:ale_markdown_pymarkdown_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('pipenv') . ' run pymarkdown fix %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#pymarkdown#Fix(bufnr(''))
+
+Execute(Setting executable to 'poetry' appends 'run pymarkdown'):
+  let g:ale_markdown_pymarkdown_executable = 'path/to/poetry'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('path/to/poetry') . ' run pymarkdown fix %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#pymarkdown#Fix(bufnr(''))
+
+Execute(Poetry is detected when markdown_pymarkdown_auto_poetry is set):
+  let g:ale_markdown_pymarkdown_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('poetry') . ' run pymarkdown fix %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#pymarkdown#Fix(bufnr(''))
+
+Execute(uv is detected when markdown_pymarkdown_auto_uv is set):
+  let g:ale_markdown_pymarkdown_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('uv') . ' run pymarkdown fix %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#pymarkdown#Fix(bufnr(''))

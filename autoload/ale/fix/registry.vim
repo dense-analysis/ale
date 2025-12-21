@@ -457,6 +457,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['markdown'],
 \       'description': 'Fix markdown files with pandoc.',
 \   },
+\   'pymarkdown': {
+\       'function': 'ale#fixers#pymarkdown#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix markdown files with pymarkdown.',
+\   },
 \   'shfmt': {
 \       'function': 'ale#fixers#shfmt#Fix',
 \       'suggested_filetypes': ['sh'],
