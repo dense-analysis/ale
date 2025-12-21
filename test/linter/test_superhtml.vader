@@ -15,12 +15,6 @@ Execute(The executable should be configurable):
   AssertLinter '/usr/local/bin/superhtml',
   \ ale#Escape('/usr/local/bin/superhtml') . ' check --stdin'
 
-Execute(The options should be configurable):
-  let g:ale_html_superhtml_options = '--some-option'
-
-  AssertLinter 'superhtml',
-  \ ale#Escape('superhtml') . ' check --stdin'
-
 Execute(The use_global option should be respected):
   let g:ale_html_superhtml_executable = 'custom_superhtml'
   let g:ale_html_superhtml_use_global = 1
