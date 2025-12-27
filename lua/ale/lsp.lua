@@ -147,7 +147,7 @@ module.send_message = function(args)
     --
     -- We set the bufnr to -1 to prevent Neovim from flushing anything, as ALE
     -- already flushes changes to files before sending requests.
-    success, request_id = client.request(
+    success, request_id = client:request(
         args.method,
         args.params,
         ---@diagnostic disable-next-line: param-type-mismatch
