@@ -3900,6 +3900,7 @@ documented in additional help files.
     rls...................................|ale-rust-rls|
     rustc.................................|ale-rust-rustc|
     rustfmt...............................|ale-rust-rustfmt|
+    cargo-fmt.............................|ale-rust-cargo-fmt|
   salt....................................|ale-salt-options|
     salt-lint.............................|ale-salt-salt-lint|
   sass....................................|ale-sass-options|

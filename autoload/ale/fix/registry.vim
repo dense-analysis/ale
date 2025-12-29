@@ -387,6 +387,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['rust'],
 \       'description': 'Fix Rust files with Rustfmt.',
 \   },
+\   'cargo-fmt': {
+\       'function': 'ale#fixers#cargo_fmt#Fix',
+\       'suggested_filetypes': ['rust'],
+\       'description': 'Fix Rust files with `cargo-fmt`.',
+\   },
 \   'textlint': {
 \       'function': 'ale#fixers#textlint#Fix',
 \       'suggested_filetypes': ['text','markdown','asciidoc','tex'],

@@ -1,0 +1,17 @@
+Before:
+  call ale#assert#SetUpFixerTest('rust', 'cargo-fmt')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The cargo-fmt callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/rust/testfile.rs')
+
+  AssertFixer {'command': ale#Escape('cargo-fmt') . ' -- '}
+
+Execute(The cargo-fmt callback should include custom cargo-fmt options):
+  let g:ale_rust_cargo_fmt_options = "--skip-children"
+  call ale#test#SetFilename('../test-files/rust/testfile.rs')
+
+  AssertFixer {'command': ale#Escape('cargo-fmt') . ' -- ' . ' ' . g:ale_rust_cargo_fmt_options}
+

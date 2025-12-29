@@ -30,8 +30,8 @@ Integration Information
      contained in Cargo projects or requires the project to be described in
      the rust-project.json format:
      https://rust-analyzer.github.io/manual.html#non-cargo-based-projects
-  5. rustfmt -- If you have `rustfmt` installed, you can use it as a fixer to
-     consistently reformat your Rust code.
+  5. fixers -- If you have `rustfmt` or `cargo-fmt` installed, you can use one of
+     them as a fixer to consistently reformat your Rust code.
 
   Only cargo and rust-analyzer are enabled by default. To switch to using
   rustc instead of cargo, configure |b:ale_linters| in your ftplugin file
@@ -363,6 +363,30 @@ g:ale_rust_rustfmt_executable
   Default: `'rustfmt'`
 
   This variable can be modified to change the executable path for `rustfmt`.
+
+
+===============================================================================
+cargo-fmt                                                  *ale-rust-cargo-fmt*
+
+                                           *ale-options.rust_cargo_fmt_options*
+                                                 *g:ale_rust_cargo_fmt_options*
+                                                 *b:ale_rust_cargo_fmt_options*
+rust_cargo_fmt_options
+g:ale_rust_cargo_fmt_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the cargo-fmt fixer.
+
+                                        *ale-options.rust_cargo_fmt_executable*
+                                              *g:ale_rust_cargo_fmt_executable*
+                                              *b:ale_rust_cargo_fmt_executable*
+rust_cargo_fmt_executable
+g:ale_rust_cargo_fmt_executable
+  Type: |String|
+  Default: `'cargo-fmt'`
+
+  This variable can be modified to change the executable path for `cargo-fmt`.
 
 
 ===============================================================================

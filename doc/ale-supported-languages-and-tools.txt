@@ -623,6 +623,7 @@ Notes:
   * `syntax_tree`
 * Rust
   * `cargo`!!
+  * `cargo-fmt`
   * `cspell`
   * `rls`
   * `rust-analyzer`

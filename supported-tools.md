@@ -633,6 +633,7 @@ formatting.
   * [syntax_tree](https://github.com/ruby-syntax-tree/syntax_tree)
 * Rust
   * [cargo](https://github.com/rust-lang/cargo) :floppy_disk: (see `:help ale-integration-rust` for configuration instructions) :speech_balloon:
+  * [cargo-fmt](https://doc.rust-lang.org/cargo/commands/cargo-fmt.html)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [rls](https://github.com/rust-lang-nursery/rls) :warning:
   * [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer) :warning:
