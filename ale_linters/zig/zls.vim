@@ -17,4 +17,5 @@ call ale#linter#Define('zig', {
 \   'lsp_config': {b -> ale#Var(b, 'zig_zls_config')},
 \   'executable': {b -> ale#Var(b, 'zig_zls_executable')},
 \   'command': '%e',
+\   'project_root': '.',
 \})
