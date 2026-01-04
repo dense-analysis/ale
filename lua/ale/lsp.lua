@@ -83,7 +83,7 @@ module.start = function(config)
         -- we can't get a client via get_client_by_id until after `on_init` is
         -- called. By deferring execution of calling the init callbacks we
         -- can only call them after the client becomes available, which
-        -- will make ications for configuration changes work, etc.
+        -- will make notifications for configuration changes work, etc.
         vim.defer_fn(function()
             vim.fn["ale#lsp#CallInitCallbacks"](config.name)
         end, 0)
