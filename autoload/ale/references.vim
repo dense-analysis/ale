@@ -18,23 +18,87 @@ function! ale#references#ClearLSPData() abort
     let s:references_map = {}
 endfunction
 
-function! ale#references#FormatTSResponseItem(response_item, options) abort
-    let l:match = substitute(a:response_item.lineText, '^\s*\(.\{-}\)\s*$', '\1', '')
+function! ale#references#FormatResponseItem(response_item, options) abort
+    let l:is_tsserver = get(a:options, 'is_tsserver', 0) == 1
+    let l:filename = l:is_tsserver
+    \ ? a:response_item.file
+    \ : ale#util#ToResource(a:response_item.uri)
+
+    let l:line_info_target = l:is_tsserver
+    \ ? a:response_item
+    \ : a:response_item.range
+
+    let l:column_val = l:is_tsserver
+    \ ? l:line_info_target.start.offset
+    \ : l:line_info_target.start.character
+
+    let l:line = l:line_info_target.start.line
+    let l:col = l:column_val
+    let l:nline = l:is_tsserver
+    \ ? l:line
+    \ : l:line + 1
+
+    let l:ncol = l:is_tsserver
+    \ ? l:col
+    \ : l:col + 1
+
+    let l:line_text = ''
+
+    if l:is_tsserver || get(a:options, 'show_contents') == 1
+        try
+            let l:initial_line_text = l:is_tsserver
+            \ ? a:response_item.lineText
+            \ : readfile(l:filename)[l:line]
+            let l:line_text = substitute(
+            \ l:initial_line_text,
+            \ '^\s*\(.\{-}\)\s*$', '\1', ''
+            \)
+        catch
+            " This happens in tests
+        endtry
+    endif
+
+
+    if get(a:options, 'use_fzf') == 1
+        " grep-style output (filename:line:col:text) so that fzf can properly
+        " show matches and previews using ':' as delimiter
+        return l:filename . ':' . l:nline . ':' . l:ncol . ':' . l:line_text
+    endif
 
     if get(a:options, 'open_in') is# 'quickfix'
         return {
-        \ 'filename': a:response_item.file,
-        \ 'lnum': a:response_item.start.line,
-        \ 'col': a:response_item.start.offset,
-        \ 'text': l:match,
+        \ 'filename': l:filename,
+        \ 'lnum': l:nline,
+        \ 'col': l:ncol,
+        \ 'text': l:line_text,
         \}
     else
         return {
-        \ 'filename': a:response_item.file,
-        \ 'line': a:response_item.start.line,
-        \ 'column': a:response_item.start.offset,
-        \ 'match': l:match,
+        \ 'filename': l:filename,
+        \ 'line': l:nline,
+        \ 'column': l:ncol,
+        \ 'match': l:line_text,
         \}
+    endif
+endfunction
+
+function! ale#references#DisplayReferences(item_list, options) abort
+    if empty(a:item_list)
+        call ale#util#Execute('echom ''No references found.''')
+    else
+        if get(a:options, 'use_fzf') == 1
+            if !exists('*fzf#run')
+                throw 'fzf#run function not found. You also need Vim plugin from the main fzf repository (i.e. junegunn/fzf *and* junegunn/fzf.vim)'
+            endif
+
+            call ale#fzf#ShowReferences(a:item_list, a:options)
+        elseif get(a:options, 'open_in') is# 'quickfix'
+            call setqflist([], 'r')
+            call setqflist(a:item_list, 'a')
+            call ale#util#Execute('cc 1')
+        else
+            call ale#preview#ShowSelection(a:item_list, a:options)
+        endif
     endif
 endfunction
 
@@ -45,68 +109,17 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
 
         if get(a:response, 'success', v:false) is v:true
             let l:item_list = []
+            let l:format_options = extend(copy(l:options), {'is_tsserver': 1})
 
             for l:response_item in a:response.body.refs
                 call add(
                 \ l:item_list,
-                \ ale#references#FormatTSResponseItem(l:response_item, l:options)
+                \ ale#references#FormatResponseItem(l:response_item, l:format_options)
                 \)
             endfor
 
-            if empty(l:item_list)
-                call ale#util#Execute('echom ''No references found.''')
-            else
-                if get(l:options, 'open_in') is# 'quickfix'
-                    call setqflist([], 'r')
-                    call setqflist(l:item_list, 'a')
-                    call ale#util#Execute('cc 1')
-                else
-                    call ale#preview#ShowSelection(l:item_list, l:options)
-                endif
-            endif
+            call ale#references#DisplayReferences(l:item_list, l:format_options)
         endif
-    endif
-endfunction
-
-function! ale#references#FormatLSPResponseItem(response_item, options) abort
-    let l:line_text = ''
-
-    let l:line= a:response_item.range.start.line
-    let l:col = a:response_item.range.start.character
-    let l:filename = ale#util#ToResource(a:response_item.uri)
-
-    if get(a:options, 'show_contents') == 1
-        try
-            let l:line_text = substitute(readfile(l:filename)[l:line], '^\s*\(.\{-}\)\s*$', '\1', '')
-        catch
-            " This happens in tests
-        endtry
-    endif
-
-    if get(a:options, 'use_fzf') == 1
-        let l:filename = ale#util#ToResource(a:response_item.uri)
-        let l:nline = a:response_item.range.start.line + 1
-        let l:ncol = a:response_item.range.start.character + 1
-
-        " grep-style output (filename:line:col:text) so that fzf can properly
-        " show matches and previews using ':' as delimiter
-        return l:filename . ':' . l:nline . ':' . l:ncol . ':' . l:line_text
-    endif
-
-    if get(a:options, 'open_in') is# 'quickfix'
-        return {
-        \ 'filename': l:filename,
-        \ 'lnum': a:response_item.range.start.line + 1,
-        \ 'col': a:response_item.range.start.character + 1,
-        \ 'text': l:line_text,
-        \}
-    else
-        return {
-        \ 'filename': l:filename,
-        \ 'line': l:line + 1,
-        \ 'column': l:col + 1,
-        \ 'match': l:line_text,
-        \}
     endif
 endfunction
 
@@ -124,28 +137,12 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
     if type(l:result) is v:t_list
         for l:response_item in l:result
             call add(l:item_list,
-            \ ale#references#FormatLSPResponseItem(l:response_item, l:options)
+            \ ale#references#FormatResponseItem(l:response_item, l:options)
             \)
         endfor
     endif
 
-    if empty(l:item_list)
-        call ale#util#Execute('echom ''No references found.''')
-    else
-        if get(l:options, 'use_fzf') == 1
-            if !exists('*fzf#run')
-                throw 'fzf#run function not found. You also need Vim plugin from the main fzf repository (i.e. junegunn/fzf *and* junegunn/fzf.vim)'
-            endif
-
-            call ale#fzf#ShowReferences(l:item_list, l:options)
-        elseif get(l:options, 'open_in') is# 'quickfix'
-            call setqflist([], 'r')
-            call setqflist(l:item_list, 'a')
-            call ale#util#Execute('cc 1')
-        else
-            call ale#preview#ShowSelection(l:item_list, l:options)
-        endif
-    endif
+    call ale#references#DisplayReferences(l:item_list, l:options)
 endfunction
 
 function! s:OnReady(line, column, options, linter, lsp_details) abort
