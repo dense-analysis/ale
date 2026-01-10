@@ -7,7 +7,8 @@ function! ale#handlers#markdownlint#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:type = 'W'
-        if l:match[4] ==# 'error'
+
+        if l:match[4] is# 'error'
             let l:type = 'E'
         endif
 
