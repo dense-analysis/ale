@@ -19,64 +19,39 @@ function! ale#references#ClearLSPData() abort
 endfunction
 
 function! ale#references#FormatResponseItem(response_item, options) abort
-    let l:is_tsserver = get(a:options, 'is_tsserver', 0) == 1
-    let l:filename = l:is_tsserver
-    \ ? a:response_item.file
-    \ : ale#util#ToResource(a:response_item.uri)
+    let l:filename = get(a:response_item, 'filename', '')
+    let l:column = get(a:response_item, 'column', 0)
+    let l:line = get(a:response_item, 'line', 0)
+    let l:line_text = get(a:response_item, 'line_text', '')
 
-    let l:line_info_target = l:is_tsserver
-    \ ? a:response_item
-    \ : a:response_item.range
-
-    let l:column_val = l:is_tsserver
-    \ ? l:line_info_target.start.offset
-    \ : l:line_info_target.start.character
-
-    let l:line = l:line_info_target.start.line
-    let l:col = l:column_val
-    let l:nline = l:is_tsserver
-    \ ? l:line
-    \ : l:line + 1
-
-    let l:ncol = l:is_tsserver
-    \ ? l:col
-    \ : l:col + 1
-
-    let l:line_text = ''
-
-    if l:is_tsserver || get(a:options, 'show_contents') == 1
-        try
-            let l:initial_line_text = l:is_tsserver
-            \ ? a:response_item.lineText
-            \ : readfile(l:filename)[l:line]
-            let l:line_text = substitute(
-            \ l:initial_line_text,
-            \ '^\s*\(.\{-}\)\s*$', '\1', ''
-            \)
-        catch
-            " This happens in tests
-        endtry
-    endif
+    try
+        let l:line_text = substitute(
+        \ l:line_text,
+        \ '^\s*\(.\{-}\)\s*$', '\1', ''
+        \)
+    catch
+        " This happens in tests
+    endtry
 
 
     if get(a:options, 'use_fzf') == 1
         " grep-style output (filename:line:col:text) so that fzf can properly
         " show matches and previews using ':' as delimiter
-        return l:filename . ':' . l:nline . ':' . l:ncol . ':' . l:line_text
+        return l:filename . ':' . l:line . ':' . l:column . ':' . l:line_text
     endif
 
     if get(a:options, 'open_in') is# 'quickfix'
         return {
         \ 'filename': l:filename,
-        \ 'lnum': l:nline,
-        \ 'col': l:ncol,
+        \ 'lnum': l:line,
+        \ 'col': l:column,
         \ 'text': l:line_text,
         \}
     else
         return {
         \ 'filename': l:filename,
-        \ 'line': l:nline,
-        \ 'column': l:ncol,
+        \ 'line': l:line,
+        \ 'column': l:column,
         \ 'match': l:line_text,
         \}
     endif
@@ -106,15 +81,21 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') is# 'references'
     \&& has_key(s:references_map, a:response.request_seq)
         let l:options = remove(s:references_map, a:response.request_seq)
+        let l:format_options = copy(l:options)
 
         if get(a:response, 'success', v:false) is v:true
             let l:item_list = []
-            let l:format_options = extend(copy(l:options), {'is_tsserver': 1})
 
             for l:response_item in a:response.body.refs
+                let l:format_response_item = {
+                \ 'filename': l:response_item.file,
+                \ 'line': l:response_item.start.line,
+                \ 'column': l:response_item.start.offset,
+                \ 'line_text': l:response_item.lineText,
+                \ }
                 call add(
                 \ l:item_list,
-                \ ale#references#FormatResponseItem(l:response_item, l:format_options)
+                \ ale#references#FormatResponseItem(l:format_response_item, l:format_options)
                 \)
             endfor
 
@@ -136,8 +117,19 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
 
     if type(l:result) is v:t_list
         for l:response_item in l:result
+            let l:filename = ale#util#ToResource(get(l:response_item, 'uri', ''))
+            let l:read_line = l:response_item.range.start.line
+            let l:line = l:read_line + 1
+            let l:format_response_item = {
+            \ 'filename': l:filename,
+            \ 'line': l:line,
+            \ 'column': l:response_item.range.start.character + 1,
+            \ 'line_text': get(l:options, 'show_contents') == 1
+            \   ? readfile(l:filename)[l:read_line]
+            \   : '',
+            \ }
             call add(l:item_list,
-            \ ale#references#FormatResponseItem(l:response_item, l:options)
+            \ ale#references#FormatResponseItem(l:format_response_item, l:options)
             \)
         endfor
     endif
