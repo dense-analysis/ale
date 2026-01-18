@@ -8,7 +8,7 @@ Execute(The default executable path should be correct):
   AssertLinter 'zls', ale#Escape('zls')
 
 Execute(The project root should be detected correctly):
-  AssertLSPProject ''
+  AssertLSPProject '.'
 
   call ale#test#SetFilename('../test-files/zig/main.zig')
 
