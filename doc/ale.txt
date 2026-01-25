@@ -28,10 +28,12 @@ CONTENTS                                                         *ale-contents*
   7. Linter/Fixer Options.................|ale-integration-options|
     7.1 Options for alex..................|ale-alex-options|
     7.2 Options for cspell................|ale-cspell-options|
-    7.3 Options for languagetool..........|ale-languagetool-options|
-    7.4 Options for write-good............|ale-write-good-options|
-    7.5 Options for redpen................|ale-redpen-options|
-    7.6 Other Linter/Fixer Options........|ale-other-integration-options|
+    7.3 Options for dprint................|ale-dprint-options|
+    7.4 Options for languagetool..........|ale-languagetool-options|
+    7.5 Options for write-good............|ale-write-good-options|
+    7.6 Options for redpen................|ale-redpen-options|
+    7.7 Options for vale..................|ale-vale-options|
+    7.8 Other Linter/Fixer Options........|ale-other-integration-options|
   8. Commands/Keybinds....................|ale-commands|
   9. API..................................|ale-api|
   10. Special Thanks......................|ale-special-thanks|
@@ -3359,7 +3361,31 @@ g:ale_redpen_options
 
 
 -------------------------------------------------------------------------------
-7.7. Other Linter/Fixer Options                 *ale-other-integration-options*
+7.7. Options for vale                                        *ale-vale-options*
+
+  The following options can be used to configure the `vale` linter for text
+  files.
+
+g:ale_text_vale_executable                         *g:ale_text_vale_executable*
+  Type: String
+  Default: 'vale'
+
+  This option controls which executable is used for running Vale. Set it to an
+  absolute path or a different command name if needed.
+
+g:ale_text_vale_options                               *g:ale_text_vale_options*
+  Type: String
+  Default: ''
+
+  Extra command-line options to pass to the Vale executable.
+
+  Example:
+
+    let g:ale_text_vale_options = '--minAlertLevel=warning'
+
+
+-------------------------------------------------------------------------------
+7.8. Other Linter/Fixer Options                 *ale-other-integration-options*
 
 ALE supports a very wide variety of tools. Other linter or fixer options are
 documented in additional help files.
