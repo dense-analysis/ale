@@ -32,3 +32,33 @@ Execute(The Markdownlint handler should parse output with multiple slashes in ru
   \ ale#handlers#markdownlint#Handle(0, [
   \ 'README.md:10 MD022/blanks-around-headings/blanks-around-headers Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] [Context: "### something"]'
   \ ])
+
+Execute(The Markdownlint handler should parse output with error severity (0.47.0+)):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'col': 1,
+  \     'code': 'MD051/link-fragments',
+  \     'text': 'Link fragments should be valid [Context: "[Installation](#installation)"]',
+  \     'type': 'E'
+  \   }
+  \ ],
+  \ ale#handlers#markdownlint#Handle(0, [
+  \ 'test.md:3:1 error MD051/link-fragments Link fragments should be valid [Context: "[Installation](#installation)"]'
+  \ ])
+
+Execute(The Markdownlint handler should parse output with warning severity (0.47.0+)):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'col': 1,
+  \     'code': 'MD051/link-fragments',
+  \     'text': 'Link fragments should be valid [Context: "[Installation](#installation)"]',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale#handlers#markdownlint#Handle(0, [
+  \ 'test.md:3:1 warning MD051/link-fragments Link fragments should be valid [Context: "[Installation](#installation)"]'
+  \ ])
