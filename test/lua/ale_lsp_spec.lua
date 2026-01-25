@@ -13,6 +13,10 @@ describe("ale.lsp.start", function()
             defer_fn = function(func, delay)
                 table.insert(defer_calls, {func, delay})
             end,
+            empty_dict = function()
+                -- Returns a table with a metatable to distinguish it from arrays
+                return setmetatable({}, {__empty_dict = true})
+            end,
             fn = setmetatable({}, {
                 __index = function(_, key)
                     return function(...)
@@ -103,6 +107,50 @@ describe("ale.lsp.start", function()
             }
         }, start_calls)
         eq({}, vim_fn_calls)
+    end)
+
+    it("should convert empty init_options to vim.empty_dict", function()
+        -- Mock vim.empty_dict
+        local empty_dict_called = false
+        _G.vim.empty_dict = function()
+            empty_dict_called = true
+            return setmetatable({}, {__empty_dict = true})
+        end
+
+        lsp.start({
+            name = "gopls:/code",
+            cmd = "gopls",
+            root_dir = "/code",
+            -- Empty table without metatable (like from VimScript {})
+            init_options = {},
+        })
+
+        -- Verify that empty_dict was called
+        eq(true, empty_dict_called)
+
+        -- Verify init_options has metatable now
+        eq(1, #start_calls)
+        local init_opts = start_calls[1][1].init_options
+        eq(true, getmetatable(init_opts) ~= nil)
+    end)
+
+    it("should preserve non-empty init_options", function()
+        lsp.start({
+            name = "gopls:/code",
+            cmd = "gopls",
+            root_dir = "/code",
+            init_options = {foo = "bar", nested = {baz = 123}},
+        })
+
+        -- Remove functions we can't compare
+        for _, args in pairs(start_calls) do
+            args[1].handlers = nil
+            args[1].on_init = nil
+            args[1].get_language_id = nil
+        end
+
+        eq(1, #start_calls)
+        eq({foo = "bar", nested = {baz = 123}}, start_calls[1][1].init_options)
     end)
 
     it("should start lsp socket connections with the correct arguments", function()

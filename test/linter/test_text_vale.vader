@@ -1,0 +1,15 @@
+Before:
+  call ale#assert#SetUpLinterTest('text', 'vale')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The Vale command should include extra options when configured):
+  let g:ale_vale_executable = 'vale'
+  let g:ale_vale_options = '--minAlertLevel=warning'
+  AssertLinter 'vale', ale#Escape('vale') . ' --minAlertLevel=warning --output=JSON %t'
+
+Execute(The Vale command should not include extra options by default):
+  let g:ale_vale_executable = 'vale'
+  let g:ale_vale_options = ''
+  AssertLinter 'vale', ale#Escape('vale') . ' --output=JSON %t'

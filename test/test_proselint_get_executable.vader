@@ -1,0 +1,17 @@
+Before:
+  Save g:ale_proselint_executable
+  runtime autoload/ale/proselint.vim
+
+After:
+  Restore
+
+Execute(Default executable should be detected correctly):
+  AssertEqual
+  \ 'proselint',
+  \ ale#proselint#GetExecutable(bufnr(''))
+
+Execute(User specified executable should override default):
+  let g:ale_proselint_executable = '/path/to/proselint-bin'
+  AssertEqual
+  \ '/path/to/proselint-bin',
+  \ ale#proselint#GetExecutable(bufnr(''))

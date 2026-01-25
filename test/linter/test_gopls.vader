@@ -94,3 +94,25 @@ Execute('go.mod' should be ignored if modules are off):
   call delete(b:git_dir, 'd')
   unlet! b:parent_dir
   unlet! b:git_dir
+
+Execute(Init options should handle empty and non-empty values correctly):
+  " Regression test for: Invalid settings: invalid options type []interface {}
+  " This ensures empty init_options {} is passed as an object, not array
+  call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
+  
+  " Test 1: Default empty dict
+  AssertLSPOptions {}
+  
+  " Test 2: Explicitly set to empty
+  let b:ale_go_gopls_init_options = {}
+  AssertLSPOptions {}
+  
+  " Test 3: Non-empty options should be preserved
+  let b:ale_go_gopls_init_options = {
+  \   'ui.diagnostic.analyses': {'composites': v:false},
+  \   'completeUnimported': v:true
+  \}
+  AssertLSPOptions {
+  \   'ui.diagnostic.analyses': {'composites': v:false},
+  \   'completeUnimported': v:true
+  \}

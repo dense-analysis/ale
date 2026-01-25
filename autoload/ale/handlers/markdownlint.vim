@@ -2,15 +2,21 @@
 " Description: Adds support for markdownlint
 
 function! ale#handlers#markdownlint#Handle(buffer, lines) abort
-    let l:pattern=': \?\(\d\+\)\(:\(\d\+\)\?\)\? \(MD\d\{3}/[A-Za-z0-9-/]\+\) \(.*\)$'
+    let l:pattern=': \?\(\d\+\)\(:\(\d\+\)\?\)\? \(error\|warning\)\? \?\(MD\d\{3}/[A-Za-z0-9-/]\+\) \(.*\)$'
     let l:output=[]
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        let l:type = 'W'
+
+        if l:match[4] is# 'error'
+            let l:type = 'E'
+        endif
+
         let l:result = ({
         \ 'lnum': l:match[1] + 0,
-        \ 'code': l:match[4],
-        \ 'text': l:match[5],
-        \ 'type': 'W',
+        \ 'code': l:match[5],
+        \ 'text': l:match[6],
+        \ 'type': l:type,
         \})
 
         if len(l:match[3]) > 0

@@ -8,6 +8,14 @@ module.start = function(config)
         config.init_options[true] = nil
     end
 
+    -- ensure init_options uses empty_dict if empty
+    if type(config.init_options) == "table"
+    and next(config.init_options) == nil
+    and getmetatable(config.init_options) == nil
+    then
+        config.init_options = vim.empty_dict()
+    end
+
     -- If configuring LSP via a socket connection, then generate the cmd
     -- using vim.lsp.rpc.connect(), as defined in Neovim documentation.
     if config.host then
@@ -132,7 +140,7 @@ module.send_message = function(args)
 
     if args.is_notification then
         -- For notifications we send a request and expect no direct response.
-        local success = client.notify(args.method, args.params)
+        local success = client:notify(args.method, args.params)
 
         if success then
             return -1
@@ -147,7 +155,7 @@ module.send_message = function(args)
     --
     -- We set the bufnr to -1 to prevent Neovim from flushing anything, as ALE
     -- already flushes changes to files before sending requests.
-    success, request_id = client.request(
+    success, request_id = client:request(
         args.method,
         args.params,
         ---@diagnostic disable-next-line: param-type-mismatch
