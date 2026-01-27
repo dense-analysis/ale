@@ -87,7 +87,7 @@ function! ale_linters#python#flake8#GetCommand(buffer, version) abort
     let l:options = ale#Var(a:buffer, 'python_flake8_options')
 
     return ale#Escape(l:executable) . l:exec_args
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' --format=default'
     \   . l:display_name_args . ' -'
 endfunction

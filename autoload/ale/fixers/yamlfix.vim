@@ -20,6 +20,6 @@ function! ale#fixers#yamlfix#Fix(buffer) abort
     return {
     \   'cwd': '%s:h',
     \   'command': ale#Escape(l:executable)
-    \       . (!empty(l:options) ? ' ' . l:options : '') . ' -',
+    \       . ale#Pad(l:options) . ' -',
     \}
 endfunction

@@ -40,7 +40,7 @@ function! ale#fixers#prettier_eslint#ApplyFixForVersion(buffer, version) abort
         \   'cwd': '%s:h',
         \   'command': ale#Escape(l:executable)
         \       . l:eslint_config_option
-        \       . (!empty(l:options) ? ' ' . l:options : '')
+        \       . ale#Pad(l:options)
         \       . ' --stdin-filepath %s --stdin',
         \}
     endif
@@ -49,7 +49,7 @@ function! ale#fixers#prettier_eslint#ApplyFixForVersion(buffer, version) abort
     \   'command': ale#Escape(l:executable)
     \       . ' %t'
     \       . l:eslint_config_option
-    \       . (!empty(l:options) ? ' ' . l:options : '')
+    \       . ale#Pad(l:options)
     \       . ' --write',
     \   'read_temporary_file': 1,
     \}

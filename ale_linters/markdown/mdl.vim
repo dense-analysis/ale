@@ -17,7 +17,7 @@ function! ale_linters#markdown#mdl#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'markdown_mdl_options')
 
     return ale#Escape(l:executable) . l:exec_args
-    \   . ' -j' . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ' -j' . ale#Pad(l:options)
 endfunction
 
 function! ale_linters#markdown#mdl#Handle(buffer, lines) abort

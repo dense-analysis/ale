@@ -54,7 +54,7 @@ function! ale#handlers#eslint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'javascript_eslint_options')
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' -f json --stdin --stdin-filename %s'
 endfunction
 

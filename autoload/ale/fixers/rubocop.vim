@@ -26,7 +26,7 @@ function! ale#fixers#rubocop#GetCommand(buffer, version) abort
     let l:editor_mode = ale#semver#GTE(a:version, [1, 61, 0])
 
     return ale#ruby#EscapeExecutable(l:executable, 'rubocop')
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . (l:auto_correct_all ? ' --auto-correct-all' : ' --auto-correct')
     \   . (l:editor_mode ? ' --editor-mode' : '')
     \   . ' --force-exclusion --stdin %s'

@@ -4,7 +4,7 @@ function! ale_linters#cs#mcs#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'cs_mcs_options')
 
     return 'mcs -unsafe --parse'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %t'
 endfunction
 

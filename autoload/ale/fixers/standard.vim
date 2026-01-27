@@ -26,7 +26,7 @@ function! ale#fixers#standard#Fix(buffer) abort
 
     return {
     \   'command': ale#node#Executable(a:buffer, l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \       . ' --fix --stdin < %s > %t',
     \   'read_temporary_file': 1,
     \}

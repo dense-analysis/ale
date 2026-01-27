@@ -13,7 +13,7 @@ function! ale#fixers#mix_format#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'elixir_mix_format_options')
 
     return l:executable . ' format'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %t'
 endfunction
 
