@@ -48,7 +48,7 @@ function! ale#ShouldDoNothing(buffer) abort
     endif
 
     " Do nothing for diff buffers.
-    if getbufvar(a:buffer, '&diff')
+    if getbufvar(a:buffer, '&diff') && !get(g:, 'ale_lint_diff', 0)
         return 1
     endif
 
