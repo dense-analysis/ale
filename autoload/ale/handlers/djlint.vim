@@ -39,7 +39,7 @@ function! ale#handlers#djlint#GetCommand(buffer) abort
     endif
 
     return ale#Escape(l:executable)
-    \ . (!empty(l:options) ? ' ' . l:options : '') . ' %s'
+    \ . ale#Pad(l:options) . ' %s'
 endfunction
 
 function! ale#handlers#djlint#Handle(buffer, lines) abort

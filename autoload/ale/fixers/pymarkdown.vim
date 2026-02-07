@@ -39,7 +39,7 @@ function! ale#fixers#pymarkdown#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable) . l:exec_args
     \       . ' fix'
-    \       . (!empty(l:options) ? ' ' . l:options : '')
+    \       . ale#Pad(l:options)
     \       . ' %t',
     \   'read_temporary_file': 1,
     \}

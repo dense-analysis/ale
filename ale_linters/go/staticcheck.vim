@@ -13,11 +13,11 @@ function! ale_linters#go#staticcheck#GetCommand(buffer) abort
 
     if l:lint_package
         return l:env . '%e'
-        \   . (!empty(l:options) ? ' ' . l:options : '') . ' .'
+        \   . ale#Pad(l:options) . ' .'
     endif
 
     return l:env . '%e'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %s:t'
 endfunction
 

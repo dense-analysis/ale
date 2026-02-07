@@ -11,7 +11,7 @@ function! ale_linters#proto#buf_lint#GetCommand(buffer) abort
 
     return '%e lint'
     \ . (!empty(l:config) ? ' --config=' . ale#Escape(l:config) : '')
-    \ . (!empty(l:options) ? ' ' . l:options : '')
+    \ . ale#Pad(l:options)
     \ . ' %s#include_package_files=true'
 endfunction
 

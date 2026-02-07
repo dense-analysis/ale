@@ -8,7 +8,7 @@ function! ale_linters#go#revive#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'go_revive_options')
 
     return ale#go#EnvString(a:buffer) . '%e'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %t'
 endfunction
 

@@ -16,7 +16,7 @@ function! ale_linters#scss#sasslint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'scss_sasslint_options')
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' -v -q -f compact %t'
 endfunction
 

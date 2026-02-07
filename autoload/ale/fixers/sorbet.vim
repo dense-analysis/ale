@@ -7,7 +7,7 @@ function! ale#fixers#sorbet#GetCommand(buffer) abort
 
     return ale#ruby#EscapeExecutable(l:executable, 'srb')
     \   . ' tc'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' --autocorrect --file %t'
 endfunction
 

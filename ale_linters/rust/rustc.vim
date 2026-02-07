@@ -20,7 +20,7 @@ function! ale_linters#rust#rustc#RustcCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'rust_rustc_options')
 
     return 'rustc --error-format=json'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . l:dependencies . ' -'
 endfunction
 

@@ -8,7 +8,7 @@ function! ale_linters#groovy#npmgroovylint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'groovy_npmgroovylint_options')
 
     return '%e --failon none --output json'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %t'
 endfunction
 

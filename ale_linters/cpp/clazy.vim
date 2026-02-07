@@ -18,7 +18,7 @@ function! ale_linters#cpp#clazy#GetCommand(buffer) abort
     return '%e'
     \   . (!empty(l:checks) ? ' -checks=' . ale#Escape(l:checks) : '')
     \   . (!empty(l:build_dir) ? ' -p ' . ale#Escape(l:build_dir) : '')
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %s'
 endfunction
 
