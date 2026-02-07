@@ -3578,6 +3578,7 @@ documented in additional help files.
     gobuild...............................|ale-go-gobuild|
     gofmt.................................|ale-go-gofmt|
     gofumpt...............................|ale-go-gofumpt|
+    goimports.............................|ale-go-goimports|
     golangci-lint.........................|ale-go-golangci-lint|
     golangserver..........................|ale-go-golangserver|
     golines...............................|ale-go-golines|
