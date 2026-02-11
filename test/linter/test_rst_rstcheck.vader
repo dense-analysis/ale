@@ -1,0 +1,63 @@
+Before:
+  call ale#assert#SetUpLinterTest('rst', 'rstcheck')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should include --config for rstcheck >= 3.4.0):
+  GivenCommandOutput ['rstcheck, version 3.4.0']
+
+  AssertLinter 'rstcheck', [
+  \ ale#Escape('rstcheck') . ' --version',
+  \ ale#Escape('rstcheck')
+  \   . ' --config '
+  \   . ale#Escape(expand('#' . bufnr('') . ':p:h'))
+  \   . ' %t',
+  \]
+
+Execute(The version check should be cached):
+  GivenCommandOutput ['rstcheck, version 3.4.0']
+
+  AssertLinter 'rstcheck', [
+  \ ale#Escape('rstcheck') . ' --version',
+  \ ale#Escape('rstcheck')
+  \   . ' --config '
+  \   . ale#Escape(expand('#' . bufnr('') . ':p:h'))
+  \   . ' %t',
+  \]
+
+  GivenCommandOutput []
+
+  AssertLinter 'rstcheck', [
+  \ ale#Escape('rstcheck')
+  \   . ' --config '
+  \   . ale#Escape(expand('#' . bufnr('') . ':p:h'))
+  \   . ' %t',
+  \]
+
+Execute(The default command should not include --config for older versions):
+  call ale#semver#ResetVersionCache()
+  GivenCommandOutput ['rstcheck, version 3.3.0']
+
+  AssertLinter 'rstcheck', [
+  \ ale#Escape('rstcheck') . ' --version',
+  \ ale#Escape('rstcheck') . ' %t',
+  \]
+
+Execute(The command executable and options should be configurable):
+  call ale#semver#ResetVersionCache()
+  let b:ale_rst_rstcheck_executable = 'rstcheck2'
+  let b:ale_rst_rstcheck_options = '--ignore-language=cpp'
+  GivenCommandOutput ['rstcheck2, version 3.4.0']
+
+  AssertLinter 'rstcheck', [
+  \ ale#Escape('rstcheck2') . ' --version',
+  \ ale#Escape('rstcheck2')
+  \   . ' --ignore-language=cpp'
+  \   . ' --config '
+  \   . ale#Escape(expand('#' . bufnr('') . ':p:h'))
+  \   . ' %t',
+  \]
+
+Execute(The linter should run with the current buffer directory as cwd):
+  AssertLinterCwd '%s:h'

@@ -1,5 +1,13 @@
-" Author: John Nduli https://github.com/jnduli
-" Description: Rstcheck for reStructuredText files
+" Authors:
+"   John Nduli https://github.com/jnduli,
+"   Michael Goerz https://github.com/goerz
+
+call ale#Set('rst_rstcheck_executable', 'rstcheck')
+call ale#Set('rst_rstcheck_options', '')
+
+function! ale_linters#rst#rstcheck#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'rst_rstcheck_executable')
+endfunction
 
 function! ale_linters#rst#rstcheck#Handle(buffer, lines) abort
     " matches: 'bad_rst.rst:1: (SEVERE/4) Title overline & underline
@@ -21,11 +29,35 @@ function! ale_linters#rst#rstcheck#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#rst#rstcheck#GetCommand(buffer, version) abort
+    let l:executable = ale_linters#rst#rstcheck#GetExecutable(a:buffer)
+    let l:options = ale#Var(a:buffer, 'rst_rstcheck_options')
+    let l:dir = expand('#' . a:buffer . ':p:h')
+    let l:exec_args = ale#Pad(l:options)
+
+    if ale#semver#GTE(a:version, [3, 4, 0])
+        let l:exec_args .= ' --config ' . ale#Escape(l:dir)
+    endif
+
+    return ale#Escape(l:executable)
+    \   . l:exec_args
+    \   . ' %t'
+endfunction
+
+function! ale_linters#rst#rstcheck#GetCommandWithVersionCheck(buffer) abort
+    return ale#semver#RunWithVersionCheck(
+    \   a:buffer,
+    \   ale_linters#rst#rstcheck#GetExecutable(a:buffer),
+    \   '%e --version',
+    \   function('ale_linters#rst#rstcheck#GetCommand')
+    \)
+endfunction
+
 call ale#linter#Define('rst', {
 \   'name': 'rstcheck',
 \   'executable': 'rstcheck',
 \   'cwd': '%s:h',
-\   'command': 'rstcheck %t',
+\   'command': function('ale_linters#rst#rstcheck#GetCommandWithVersionCheck'),
 \   'callback': 'ale_linters#rst#rstcheck#Handle',
 \   'output_stream': 'both',
 \})
