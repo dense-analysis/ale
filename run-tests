@@ -175,7 +175,7 @@ find test -name '*.swp' -delete
 set -eu
 
 # Check if docker un image is available locally
-has_image=$(docker images --quiet "${image}:${image_tag}" | wc -l)
+has_image=$(docker images --quiet "denseanalysis/ale:${image_tag}" | wc -l)
 
 if [[ "$DOCKER" == docker ]]; then
   arch=$(docker info -f '{{ .Architecture }}')
@@ -221,7 +221,9 @@ if [ "$has_image" -eq 0 ] && ! download_image; then
     docker push "${image}:${image_tag}"
   fi
 else
-  echo "Docker run image ${image}:${image_tag} ready"
+  if [ -z "$quiet_flag" ]; then
+    echo "Docker run image ${image}:${image_tag} ready"
+  fi
 fi
 
 "$DOCKER" tag "${image}:${image_tag}" "${image}:latest"
