@@ -253,9 +253,10 @@ function! ale#c#FindCompileCommands(buffer) abort
             let l:json_file = l:c_build_dir . s:sep . 'compile_commands.json'
 
             if filereadable(l:json_file)
-                " Use the parent of the build dir for absolute
-                " paths, otherwise use the path found by searching
-                " upwards from the file.
+                " For absolute build dir paths, use the parent
+                " of the build dir as the project root. For
+                " relative paths, use the directory found by
+                " searching upwards from the file.
                 let l:root = ale#path#IsAbsolute(l:dirname)
                 \   ? fnamemodify(l:c_build_dir, ':h')
                 \   : l:path
