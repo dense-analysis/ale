@@ -1,0 +1,33 @@
+Before:
+  Save g:ale_c_build_dir_names
+
+  call ale#test#SetDirectory('/testplugin/test')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(FindCompileCommands should find compile_commands.json with relative build dir names):
+  call ale#test#SetFilename('test-files/c/json_project/subdir/dummy')
+
+  let g:ale_c_build_dir_names = ['build']
+
+  AssertEqual
+  \ [
+  \   ale#path#Simplify(g:dir . '/test-files/c/json_project'),
+  \   ale#path#Simplify(g:dir . '/test-files/c/json_project/build/compile_commands.json'),
+  \ ],
+  \ ale#c#FindCompileCommands(bufnr(''))
+
+Execute(FindCompileCommands should find compile_commands.json with absolute build dir names):
+  call ale#test#SetFilename('test-files/c/json_project/subdir/dummy')
+
+  let g:ale_c_build_dir_names = [ale#path#Simplify(g:dir . '/test-files/c/json_project/build')]
+
+  AssertEqual
+  \ [
+  \   ale#path#Simplify(g:dir . '/test-files/c/json_project'),
+  \   ale#path#Simplify(g:dir . '/test-files/c/json_project/build/compile_commands.json'),
+  \ ],
+  \ ale#c#FindCompileCommands(bufnr(''))

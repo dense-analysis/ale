@@ -249,11 +249,18 @@ function! ale#c#FindCompileCommands(buffer) abort
     " Search in build directories if we can't find it in the project.
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         for l:dirname in ale#Var(a:buffer, 'c_build_dir_names')
-            let l:c_build_dir = l:path . s:sep . l:dirname
+            let l:c_build_dir = ale#path#GetAbsPath(l:path, l:dirname)
             let l:json_file = l:c_build_dir . s:sep . 'compile_commands.json'
 
             if filereadable(l:json_file)
-                return [l:path, l:json_file]
+                " Use the parent of the build dir for absolute
+                " paths, otherwise use the path found by searching
+                " upwards from the file.
+                let l:root = ale#path#IsAbsolute(l:dirname)
+                \   ? fnamemodify(l:c_build_dir, ':h')
+                \   : l:path
+
+                return [l:root, l:json_file]
             endif
         endfor
     endfor
