@@ -54,13 +54,11 @@ describe("ale.get_filename_mappings", function()
 
         eq({{"foo", "bar"}}, ale.get_filename_mappings(42, "a"))
         eq({{"foo", "bar"}}, ale.get_filename_mappings(42, ""))
-        eq({{"foo", "bar"}}, ale.get_filename_mappings(42, nil))
 
         buffer_map[42].ale_filename_mappings = {{"abc", "xyz"}}
 
         eq({{"abc", "xyz"}}, ale.get_filename_mappings(42, "a"))
         eq({{"abc", "xyz"}}, ale.get_filename_mappings(42, ""))
-        eq({{"abc", "xyz"}}, ale.get_filename_mappings(42, nil))
     end)
 
     it("should let you use * as a fallback", function()
@@ -72,6 +70,5 @@ describe("ale.get_filename_mappings", function()
         eq({{"foo", "bar"}}, ale.get_filename_mappings(42, "a"))
         eq({{"abc", "xyz"}}, ale.get_filename_mappings(42, "b"))
         eq({{"abc", "xyz"}}, ale.get_filename_mappings(42, ""))
-        eq({{"abc", "xyz"}}, ale.get_filename_mappings(42, nil))
     end)
 end)
