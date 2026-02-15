@@ -323,6 +323,10 @@ function! ale#virtualtext#SetTexts(buffer, loclist) abort
         \   sort(l:buffer_list, function('ale#virtualtext#CompareSeverityPerLine')),
         \   {a, b -> a.lnum - b.lnum}
         \)
+    else
+        " l:buffer_list is sorted in the wrong order from some reason. the
+        " maintiner doesn't know why...
+        call reverse(l:buffer_list)
     endif
 
     for l:item in l:buffer_list
