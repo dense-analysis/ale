@@ -13,6 +13,13 @@ Execute(command callback executable can be overridden):
   let g:ale_ruby_solargraph_executable = 'foobar'
   AssertLinter 'foobar', ale#Escape('foobar') . ' stdio'
 
+Execute(Setting bundle appends 'exec solargraph'):
+  let g:ale_ruby_solargraph_executable = 'path to/bundle'
+
+  AssertLinter 'path to/bundle', ale#Escape('path to/bundle')
+  \   . ' exec solargraph'
+  \   . ' stdio'
+
 Execute(should set solargraph for rails app):
   call ale#test#SetFilename('../test-files/ruby/valid_rails_app/app/models/thing.rb')
   AssertLSPLanguage 'ruby'
