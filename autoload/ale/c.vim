@@ -246,14 +246,31 @@ function! ale#c#FindCompileCommands(buffer) abort
         return [fnamemodify(l:json_file, ':h'), l:json_file]
     endif
 
+    " Something somewhere seems to delete this setting in tests, so ensure
+    " we always have a default value.
+    call ale#Set('c_build_dir_names', [
+    \   'build',
+    \   'build/Debug',
+    \   'build/Release',
+    \   'bin',
+    \])
+
     " Search in build directories if we can't find it in the project.
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         for l:dirname in ale#Var(a:buffer, 'c_build_dir_names')
-            let l:c_build_dir = l:path . s:sep . l:dirname
+            let l:c_build_dir = ale#path#GetAbsPath(l:path, l:dirname)
             let l:json_file = l:c_build_dir . s:sep . 'compile_commands.json'
 
             if filereadable(l:json_file)
-                return [l:path, l:json_file]
+                " For absolute build dir paths, use the parent
+                " of the build dir as the project root. For
+                " relative paths, use the directory found by
+                " searching upwards from the file.
+                let l:root = ale#path#IsAbsolute(l:dirname)
+                \   ? fnamemodify(l:c_build_dir, ':h')
+                \   : l:path
+
+                return [l:root, l:json_file]
             endif
         endfor
     endfor
