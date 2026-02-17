@@ -246,6 +246,15 @@ function! ale#c#FindCompileCommands(buffer) abort
         return [fnamemodify(l:json_file, ':h'), l:json_file]
     endif
 
+    " Something somewhere seems to delete this setting in tests, so ensure
+    " we always have a default value.
+    call ale#Set('c_build_dir_names', [
+    \   'build',
+    \   'build/Debug',
+    \   'build/Release',
+    \   'bin',
+    \])
+
     " Search in build directories if we can't find it in the project.
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         for l:dirname in ale#Var(a:buffer, 'c_build_dir_names')
