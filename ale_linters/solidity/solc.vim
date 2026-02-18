@@ -8,9 +8,12 @@ function! ale_linters#solidity#solc#Handle(buffer, lines) abort
     " Matches patterns like the following:
     " Error: Expected ';' but got '('
     "    --> /path/to/file/file.sol:1:10:)
-    let l:pattern = '\v(Error|Warning): (.*)$'
-    let l:line_and_column_pattern = '\v\.sol:(\d+):(\d+):'
+    let l:buffer_name = bufname(a:buffer)
+    let l:pattern = '\v(Error|Warning|Note): (.*)$'
+    let l:line_and_column_pattern = '\v--\> (.*\.sol):(\d+):(\d+):'
     let l:output = []
+    let l:type = 'Note'
+    let l:text = ''
 
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
@@ -18,20 +21,17 @@ function! ale_linters#solidity#solc#Handle(buffer, lines) abort
         if len(l:match) == 0
             let l:match = matchlist(l:line, l:line_and_column_pattern)
 
-            if len(l:match) > 0
-                let l:index = len(l:output) - 1
-                let l:output[l:index]['lnum'] = l:match[1] + 0
-                let l:output[l:index]['col'] = l:match[2] + 0
+            if len(l:match) > 0 && l:type isnot# 'Note' && l:match[1] is# l:buffer_name
+                call add(l:output, {
+                \   'lnum': l:match[2] + 0,
+                \   'col': l:match[3] + 0,
+                \   'text': l:text,
+                \   'type': l:type is? 'Error' ? 'E' : 'W',
+                \})
             endif
         else
-            let l:isError = l:match[1] is? 'Error'
-
-            call add(l:output, {
-            \   'lnum': 0,
-            \   'col': 0,
-            \   'text': l:match[2],
-            \   'type': l:isError ? 'E' : 'W',
-            \})
+            let l:type = l:match[1]
+            let l:text = l:match[2]
         endif
     endfor
 
