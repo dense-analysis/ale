@@ -6,7 +6,7 @@
 call ale#Set('terraform_tfsec_options', '')
 call ale#Set('terraform_tfsec_executable', 'tfsec')
 
-let s:separator = has('win32') ? '\' : '/'
+let s:separator =  ale#util#PathSeparator() 
 
 function! ale_linters#terraform#tfsec#Handle(buffer, lines) abort
     let l:output = []
@@ -63,11 +63,12 @@ endfunction
 " Find the nearest configuration file of tfsec.
 function! ale_linters#terraform#tfsec#FindConfig(buffer) abort
     let l:config_dir = ale#path#FindNearestDirectory(a:buffer, '.tfsec')
+    let l:sep = ale#util#PathSeparator(l:config_dir) 
 
     if !empty(l:config_dir)
         " https://aquasecurity.github.io/tfsec/v1.28.0/guides/configuration/config/
         for l:basename in ['config.yml', 'config.json']
-            let l:config = ale#path#Simplify(join([l:config_dir, l:basename], s:separator))
+            let l:config = ale#path#Simplify(join([l:config_dir, l:basename], l:sep))
 
             if filereadable(l:config)
                 return ale#Escape(l:config)

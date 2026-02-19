@@ -173,7 +173,7 @@ function! ale#path#GetAbsPath(base_directory, filename) abort
         return ale#path#Simplify(a:filename)
     endif
 
-    let l:sep = has('win32') ? '\' : '/'
+    let l:sep =  ale#util#Tempname(a:base_directory)
 
     return ale#path#Simplify(a:base_directory . l:sep . a:filename)
 endfunction
@@ -227,8 +227,8 @@ endfunction
 
 " Given a path, return every component of the path, moving upwards.
 function! ale#path#Upwards(path) abort
-    let l:pattern = has('win32') ? '\v/+|\\+' : '\v/+'
-    let l:sep = has('win32') ? '\' : '/'
+    let l:pattern = ale#util#PathSeparator(a:path) == '\' ? '\v/+|\\+' : '\v/+'
+    let l:sep = ale#util#PathSeparator(a:path)
     let l:parts = split(ale#path#Simplify(a:path), l:pattern)
     let l:path_list = []
 

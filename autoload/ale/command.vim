@@ -138,9 +138,12 @@ function! s:TemporaryFilename(buffer) abort
         let l:filename = 'file' . ale#filetypes#GuessExtension(l:ft)
     endif
 
-    " Create a temporary filename, <temp_dir>/<original_basename>
-    " The file itself will not be created by this function.
-    return ale#util#Tempname() . (has('win32') ? '\' : '/') . l:filename
+    " Get temp name first
+    let l:tmpname = ale#util#Tempname()
+    " Gen Sep 
+    let l:sep = ale#util#PathSeparator(l:tmpname)
+
+    return l:tmpname . l:sep . l:filename
 endfunction
 
 " Given part of a command, replace any % with %%, so that no characters in
