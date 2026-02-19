@@ -2331,17 +2331,18 @@ g:ale_root
   Type: |Dictionary| or |String|
   Default: `{}`
 
-  This option is used to determine the project root for a linter. If the value
-  is a |Dictionary|, it maps a linter to either a |String| containing the
-  project root or a |Funcref| to call to look up the root. The |Funcref| is
-  provided the buffer number as its argument.
+  This option is used to determine the project root for a linter. When set to a
+  |String| it will be used for all linters. When set to a |Dictionary|, the
+  keys are linter names and the values are either |Strings| containing project
+  roots or |Funcref|s which are passed the buffer number.
 
-  The buffer-specific variable may additionally be a string containing the
+  The buffer-specific variable may additionally be a |String| containing the
   project root itself.
 
-  If neither variable yields a result, a linter-specific function is invoked to
-  detect a project root. If this, too, yields no result, and the linter is an
-  LSP linter, it will not run.
+  If a value can be found from either variable, ALE uses it directly and skips
+  searching for a project root. If no value is found, a linter-specific
+  function is invoked to detect a project root. If this, too, yields no result
+  and the linter is an LSP linter, it will not run.
 
                                                       *ale-options.save_hidden*
                                                             *g:ale_save_hidden*
