@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('terraform', 'trivy')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'trivy', ale#Escape('trivy') . ' config --format json %t'
+
+Execute(The default executable should be configurable):
+  let b:ale_terraform_trivy_executable = '/usr/bin/trivy'
+
+  AssertLinter '/usr/bin/trivy', ale#Escape('/usr/bin/trivy') . ' config --format json %t'
+
+Execute(Overriding options should work):
+  let g:ale_terraform_trivy_executable = '/usr/local/bin/trivy'
+  let g:ale_terraform_trivy_options = '--severity HIGH,CRITICAL'
+
+  AssertLinter '/usr/local/bin/trivy',
+  \ ale#Escape('/usr/local/bin/trivy') . ' config --format json --severity HIGH,CRITICAL %t'

@@ -3997,6 +3997,7 @@ documented in additional help files.
     terraform-ls..........................|ale-terraform-terraform-ls|
     terraform-lsp.........................|ale-terraform-terraform-lsp|
     tflint................................|ale-terraform-tflint|
+    trivy.................................|ale-terraform-trivy|
     tfsec.................................|ale-terraform-tfsec|
   tex.....................................|ale-tex-options|
     chktex................................|ale-tex-chktex|
