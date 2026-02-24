@@ -698,6 +698,7 @@ formatting.
   * [terraform-lsp](https://github.com/juliosueiras/terraform-lsp) :speech_balloon:
   * [tflint](https://github.com/wata727/tflint)
   * [tfsec](https://github.com/aquasecurity/tfsec)
+  * [trivy](https://github.com/aquasecurity/trivy)
 * Texinfo
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
