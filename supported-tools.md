@@ -197,6 +197,8 @@ formatting.
   * [elm-format](https://github.com/avh4/elm-format)
   * [elm-ls](https://github.com/elm-tooling/elm-language-server)
   * [elm-make](https://github.com/elm/compiler)
+* Ember (filetype glimmer)
+  * [glint](https://github.com/typed-ember/glint) :speech_balloon:
 * Erb
   * [erb](https://apidock.com/ruby/ERB)
   * [erb-formatter](https://github.com/nebulab/erb-formatter)
