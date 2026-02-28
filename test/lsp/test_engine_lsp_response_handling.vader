@@ -534,6 +534,34 @@ Execute(LSP pull model diagnostic responses that are 'unchanged' should be handl
   \ g:ale_buffer_info[bufnr('')].loclist
   AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
 
+Execute(workspace/configuration requests should be answered with the connection config):
+  let g:sent_responses = []
+
+  function! ale#lsp#GetConnectionConfig(conn_id) abort
+    return {'foo': 'bar'}
+  endfunction
+
+  function! ale#lsp#SendResponse(conn_id, id, result) abort
+    call add(g:sent_responses, [a:conn_id, a:id, a:result])
+  endfunction
+
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'pylsp', 'aliases': [], 'lsp': 'stdio'}})
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 7,
+  \ 'method': 'workspace/configuration',
+  \ 'params': {
+  \   'items': [{'section': 'foo'}, {'section': 'bar'}],
+  \ },
+  \})
+
+  AssertEqual
+  \ [[1, 7, [{'foo': 'bar'}, {'foo': 'bar'}]]],
+  \ g:sent_responses
+
+  unlet! g:sent_responses
+  runtime autoload/ale/lsp.vim
+
 Execute(LSP errors should be logged in the history):
   call ale#lsp_linter#SetLSPLinterMap({'347': {'name': 'foobar', 'aliases': [], 'lsp': 'stdio'}})
   call ale#lsp_linter#HandleLSPResponse(347, {

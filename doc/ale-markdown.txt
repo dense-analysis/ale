@@ -15,6 +15,35 @@ See |ale-dprint-options| and https://dprint.dev/plugins/markdown
 
 
 ===============================================================================
+harper                                                    *ale-markdown-harper*
+
+                                           *ale-options.markdown_harper_config*
+                                                  *g:ale_markdown_harper_config*
+                                                  *b:ale_markdown_harper_config*
+markdown_harper_config
+g:ale_markdown_harper_config
+  Type: |Dictionary|
+  Default: `{'harper-ls': {'diagnosticSeverity': 'hint', 'dialect': 'American', ...}}`
+
+  Dictionary passed to harper-ls as LSP workspace configuration. The default
+  enables spell check, sentence capitalization, repeated words, long
+  sentences, a/an errors, and spacing rules, and disables spelled-out numbers
+  and wrong-quote checks.
+
+  Example: >
+    let g:ale_markdown_harper_config = {
+    \   'harper-ls': {
+    \       'diagnosticSeverity': 'warning',
+    \       'linters': {
+    \           'SpellCheck': v:true,
+    \           'LongSentences': v:false,
+    \       },
+    \   },
+    \}
+<
+
+
+===============================================================================
 markdownlint                                        *ale-markdown-markdownlint*
 
                                  *ale-options.markdown_markdownlint_executable*

@@ -1,0 +1,14 @@
+Before:
+  call ale#assert#SetUpLinterTest('markdown', 'harper')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'harper-ls', ale#Escape('harper-ls') . ' --stdio'
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig g:ale_markdown_harper_config
+
+  let b:ale_markdown_harper_config = {'harper-ls': {'diagnosticSeverity': 'warning'}}
+  AssertLSPConfig {'harper-ls': {'diagnosticSeverity': 'warning'}}
