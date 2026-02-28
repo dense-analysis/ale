@@ -51,6 +51,7 @@ function! ale_linters#python#ty#Handle(buffer, lines) abort
     let l:output = []
 
     let l:items = json_decode(join(a:lines, ''))
+
     if empty(l:items)
         return l:output
     endif

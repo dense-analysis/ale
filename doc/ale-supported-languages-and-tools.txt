@@ -557,6 +557,7 @@ Notes:
   * `reorder-python-imports`
   * ruff
   * ruff-format
+  * `ty`
   * `unimport`
   * `vulture`!!
   * `yapf`

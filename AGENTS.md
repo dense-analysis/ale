@@ -1,0 +1,2 @@
+- For `doc/ale-*.txt` help docs, right-align Vim help tags (`*...*`) to the right margin so tag lines meet ALE's alignment check.
+- Keep integration/tool headings in ALE docs sorted in the expected order (alphabetical within each section), and update the corresponding table of contents entries in `doc/ale.txt` when adding/removing headings.

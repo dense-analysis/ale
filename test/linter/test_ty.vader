@@ -1,0 +1,72 @@
+Before:
+  call ale#assert#SetUpLinterTest('python', 'ty')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The ty command callback should return the correct default values):
+  call ale#test#SetFilename('./foo.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'ty', ale#Escape('ty') . ' check --output-format gitlab  %s'
+
+Execute(The option for disabling changing directories should work):
+  let g:ale_python_ty_change_directory = 0
+
+  AssertLinterCwd ''
+  AssertLinter 'ty', ale#Escape('ty') . ' check --output-format gitlab  %s'
+
+Execute(The ty executable should be configurable, and escaped properly):
+  let g:ale_python_ty_executable = 'executable with spaces'
+
+  AssertLinter 'executable with spaces', ale#Escape('executable with spaces') . ' check --output-format gitlab  %s'
+
+Execute(The ty command callback should let you set options):
+  let g:ale_python_ty_options = '--some-option value'
+
+  AssertLinter 'ty', ale#Escape('ty') . ' check --output-format gitlab  --some-option value %s'
+
+Execute(The ty command callback should switch to project root when available):
+  call ale#test#SetFilename('../test-files/python/no_virtualenv/subdir/foo/bar.py')
+
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/no_virtualenv/subdir')
+  AssertLinter 'ty', ale#Escape('ty') . ' check --output-format gitlab  %s'
+
+Execute(The ty command callback should use the global executable by default):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  AssertLinter 'ty', ale#Escape('ty') . ' check --output-format gitlab  %s'
+
+Execute(The ty command callback should fall back to global ty when no virtualenv executable is found):
+  let g:ale_python_ty_use_global = 0
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  AssertLinter 'ty', ale#Escape('ty') . ' check --output-format gitlab  %s'
+
+Execute(Setting executable to 'pipenv' should append 'run ty'):
+  let g:ale_python_ty_executable = 'path/to/pipenv'
+
+  AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run ty  check --output-format gitlab  %s'
+
+Execute(Pipenv is detected when python_ty_auto_pipenv is set):
+  let g:ale_python_ty_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinter 'pipenv', ale#Escape('pipenv') . ' run ty  check --output-format gitlab  %s'
+
+Execute(Setting executable to 'poetry' should append 'run ty'):
+  let g:ale_python_ty_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run ty  check --output-format gitlab  %s'
+
+Execute(poetry is detected when python_ty_auto_poetry is set):
+  let g:ale_python_ty_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry', ale#Escape('poetry') . ' run ty  check --output-format gitlab  %s'
+
+Execute(uv is detected when python_ty_auto_uv is set):
+  let g:ale_python_ty_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv', ale#Escape('uv') . ' run ty  check --output-format gitlab  %s'

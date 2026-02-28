@@ -1,0 +1,37 @@
+Before:
+  runtime! ale_linters/python/ty.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(We should handle basic output from ty correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'col': 2,
+  \     'end_lnum': 3,
+  \     'end_col': 10,
+  \     'code': 'TY001',
+  \     'text': 'Type check failed',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 6,
+  \     'col': 4,
+  \     'end_lnum': 6,
+  \     'end_col': 7,
+  \     'code': 'TY002',
+  \     'text': 'Potential issue',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#python#ty#Handle(bufnr(''), [
+  \   '[',
+  \   '{"check_name":"TY001","description":"Type check failed","severity":"major","location":{"positions":{"begin":{"line":3,"column":2},"end":{"line":3,"column":10}}}},',
+  \   '{"check_name":"TY002","description":"Potential issue","severity":"minor","location":{"positions":{"begin":{"line":6,"column":4},"end":{"line":6,"column":7}}}}',
+  \   ']',
+  \ ])
+
+Execute(We should handle empty output from ty correctly):
+  AssertEqual [], ale_linters#python#ty#Handle(bufnr(''), ['[]'])

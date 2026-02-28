@@ -2107,6 +2107,92 @@ g:ale_python_ruff_format_auto_uv
 
 
 ===============================================================================
+ty                                                              *ale-python-ty*
+
+`ty` will be run from a detected project root, per |ale-python-root|.
+
+                                         *ale-options.python_ty_change_directory*
+                                               *g:ale_python_ty_change_directory*
+                                               *b:ale_python_ty_change_directory*
+python_ty_change_directory
+g:ale_python_ty_change_directory
+  Type: |Number|
+  Default: `1`
+
+  If set to `1`, `ty` will be run from a detected project root, per
+  |ale-python-root|. If no project root is detected, `ty` will be run from the
+  buffer's directory.
+
+                                             *ale-options.python_ty_executable*
+                                                   *g:ale_python_ty_executable*
+                                                   *b:ale_python_ty_executable*
+python_ty_executable
+g:ale_python_ty_executable
+  Type: |String|
+  Default: `'ty'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `ty` `check'`.
+  Set this to `'poetry'` to invoke `'poetry` `run` `ty` `check'`.
+  Set this to `'uv'` to invoke `'uv` `run` `ty` `check'`.
+
+                                                *ale-options.python_ty_options*
+                                                      *g:ale_python_ty_options*
+                                                      *b:ale_python_ty_options*
+python_ty_options
+g:ale_python_ty_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the ty
+  invocation.
+
+                                             *ale-options.python_ty_use_global*
+                                                   *g:ale_python_ty_use_global*
+                                                   *b:ale_python_ty_use_global*
+python_ty_use_global
+g:ale_python_ty_use_global
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 1)`
+
+  See |ale-integrations-local-executables|
+
+                                            *ale-options.python_ty_auto_pipenv*
+                                                  *g:ale_python_ty_auto_pipenv*
+                                                  *b:ale_python_ty_auto_pipenv*
+python_ty_auto_pipenv
+g:ale_python_ty_auto_pipenv
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
+                                            *ale-options.python_ty_auto_poetry*
+                                                  *g:ale_python_ty_auto_poetry*
+                                                  *b:ale_python_ty_auto_poetry*
+python_ty_auto_poetry
+g:ale_python_ty_auto_poetry
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a poetry, and set the executable to `poetry`
+  if true. This is overridden by a manually-set executable.
+
+                                                *ale-options.python_ty_auto_uv*
+                                                      *g:ale_python_ty_auto_uv*
+                                                      *b:ale_python_ty_auto_uv*
+python_ty_auto_uv
+g:ale_python_ty_auto_uv
+  Type: |Number|
+  Default: `0`
+
+  Set the executable to `uv` if true. This is overridden by a manually-set
+  executable.
+
+
+===============================================================================
 unimport                                                  *ale-python-unimport*
 
 `unimport` will be run from a detected project root, per |ale-python-root|.

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "keybinds": {
+    "app_exit": "<leader>q"
+  },
+  "permission": {
+    "bash": {
+      "*": "deny",
+      "ls *": "allow",
+      "grep *": "allow",
+      "rg *": "allow",
+      "git diff *": "allow",
+      "git show *": "allow",
+      "git status *": "allow",
+      "git log *": "allow",
+      "git blame *": "allow",
+      "git reflog show *": "allow",
+      "./run-tests *": "allow"
+    },
+    "read": {
+      "*": "allow"
+    },
+    "edit": {
+      "*": "allow",
+      "opencode.json": "deny"
+    }
+  }
+}

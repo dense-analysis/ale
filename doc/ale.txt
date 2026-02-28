@@ -3589,6 +3589,7 @@ documented in additional help files.
     stylelint.............................|ale-html-stylelint|
     superhtml.............................|ale-html-superhtml|
     tidy..................................|ale-html-tidy|
+    ty....................................|ale-html-ty|
     vscodehtml............................|ale-html-vscode|
     write-good............................|ale-html-write-good|
   html angular template...................|ale-htmlangular-options|
@@ -3831,6 +3832,7 @@ documented in additional help files.
     reorder-python-imports................|ale-python-reorder_python_imports|
     ruff..................................|ale-python-ruff|
     ruff-format...........................|ale-python-ruff-format|
+    ty....................................|ale-python-ty|
     unimport..............................|ale-python-unimport|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|

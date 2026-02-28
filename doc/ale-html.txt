@@ -284,6 +284,12 @@ g:ale_html_tidy_use_global
 
 
 ===============================================================================
+ty                                                                *ale-html-ty*
+
+`ty` is a Python type checker. See |ale-python-ty| for configuration options.
+
+
+===============================================================================
 vscodehtml                                                    *ale-html-vscode*
 
 Website: https://github.com/hrsh7th/vscode-langservers-extracted
