@@ -11,7 +11,7 @@ Execute(The local phpcs executable should be used):
 
   let g:executable = ale#path#Simplify(g:dir . '/../test-files/phpcs/project-with-phpcs/vendor/bin/phpcs')
 
-  AssertLinterCwd '%s:h'
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/phpcs/project-with-phpcs')
   AssertLinter g:executable, ale#Escape(g:executable)
   \ . ' -s --report=emacs --stdin-path=%s'
 

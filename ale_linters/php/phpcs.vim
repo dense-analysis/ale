@@ -7,6 +7,34 @@ call ale#Set('php_phpcs_options', '')
 call ale#Set('php_phpcs_executable', 'phpcs')
 call ale#Set('php_phpcs_use_global', get(g:, 'ale_use_global_executables', 0))
 
+function! ale_linters#php#phpcs#GetCwd(buffer) abort
+    let l:result = ale#path#Dirname(ale_linters#php#phpcs#FindProjectRoot(a:buffer))
+
+    return empty(l:result) ? v:null : l:result
+endfunction
+
+function! ale_linters#php#phpcs#FindProjectRoot(buffer) abort
+    let l:result = ale#path#FindNearestFile(a:buffer, 'phpcs.xml')
+
+    if empty(l:result)
+        let l:result = ale#path#FindNearestFile(a:buffer, 'phpcs.xml.dist')
+    endif
+
+    if empty(l:result)
+        let l:result = ale#path#FindNearestFile(a:buffer, '.phpcs.xml')
+    endif
+
+    if empty(l:result)
+        let l:result = ale#path#FindNearestFile(a:buffer, '.phpcs.xml.dist')
+    endif
+
+    if empty(l:result)
+        let l:result = ale#path#FindNearestFile(a:buffer, 'composer.json')
+    endif
+
+    return l:result
+endfunction
+
 function! ale_linters#php#phpcs#GetCommand(buffer) abort
     let l:standard = ale#Var(a:buffer, 'php_phpcs_standard')
     let l:standard_option = !empty(l:standard)
@@ -48,7 +76,7 @@ call ale#linter#Define('php', {
 \       'vendor/bin/phpcs',
 \       'phpcs'
 \   ])},
-\   'cwd': '%s:h',
+\   'cwd': function('ale_linters#php#phpcs#GetCwd'),
 \   'command': function('ale_linters#php#phpcs#GetCommand'),
 \   'callback': 'ale_linters#php#phpcs#Handle',
 \})
