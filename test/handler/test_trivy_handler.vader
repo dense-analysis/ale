@@ -1,0 +1,174 @@
+Before:
+  runtime ale_linters/terraform/trivy.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The trivy handler should handle empty output):
+  AssertEqual
+  \ [],
+  \ ale_linters#terraform#trivy#Handle(bufnr(''), ['{}'])
+
+Execute(The trivy handler should handle null Results):
+  AssertEqual
+  \ [],
+  \ ale_linters#terraform#trivy#Handle(bufnr(''), ['{"Results": null}'])
+
+Execute(The trivy handler should parse direct findings correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'end_lnum': 6,
+  \     'text': 'Bucket does not have encryption enabled [AVD-AWS-0088]',
+  \     'detail': "AVD-AWS-0088: Bucket does not have encryption enabled\n"
+  \             . 'S3 Buckets should be encrypted to protect the data that is stored within them if access is compromised.',
+  \     'code': 'AVD-AWS-0088',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#terraform#trivy#Handle(bufnr(''), [json_encode(
+  \ {
+  \   'Results': [
+  \     {
+  \       'Target': expand('#' . bufnr('') . ':t'),
+  \       'Misconfigurations': [
+  \         {
+  \           'ID': 'AVD-AWS-0088',
+  \           'Title': 'Bucket does not have encryption enabled',
+  \           'Description': 'S3 Buckets should be encrypted to protect the data that is stored within them if access is compromised.',
+  \           'Severity': 'HIGH',
+  \           'CauseMetadata': {
+  \             'StartLine': 3,
+  \             'EndLine': 6,
+  \           },
+  \         },
+  \       ],
+  \     },
+  \   ],
+  \ }
+  \ )])
+
+Execute(The trivy handler should use Occurrences for module findings):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 12,
+  \     'end_lnum': 17,
+  \     'text': 'S3 Bucket Logging [AWS-0089]',
+  \     'detail': "AWS-0089: S3 Bucket Logging\n"
+  \             . 'Ensures S3 bucket logging is enabled for S3 buckets',
+  \     'code': 'AWS-0089',
+  \     'type': 'I',
+  \   },
+  \ ],
+  \ ale_linters#terraform#trivy#Handle(bufnr(''), [json_encode(
+  \ {
+  \   'Results': [
+  \     {
+  \       'Target': 'git::ssh:/git@github.com/example/terraform-module?ref=v1.0.0/main.tf',
+  \       'Misconfigurations': [
+  \         {
+  \           'ID': 'AWS-0089',
+  \           'Title': 'S3 Bucket Logging',
+  \           'Description': 'Ensures S3 bucket logging is enabled for S3 buckets',
+  \           'Severity': 'LOW',
+  \           'CauseMetadata': {
+  \             'StartLine': 24,
+  \             'EndLine': 33,
+  \             'Occurrences': [
+  \               {
+  \                 'Filename': expand('#' . bufnr('') . ':t'),
+  \                 'Location': {
+  \                   'StartLine': 12,
+  \                   'EndLine': 17,
+  \                 },
+  \               },
+  \             ],
+  \           },
+  \         },
+  \       ],
+  \     },
+  \   ],
+  \ }
+  \ )])
+
+Execute(The trivy handler should skip module findings with no matching Occurrences):
+  AssertEqual
+  \ [],
+  \ ale_linters#terraform#trivy#Handle(bufnr(''), [json_encode(
+  \ {
+  \   'Results': [
+  \     {
+  \       'Target': 'git::ssh:/git@github.com/example/terraform-module?ref=v1.0.0/main.tf',
+  \       'Misconfigurations': [
+  \         {
+  \           'ID': 'AWS-0089',
+  \           'Title': 'S3 Bucket Logging',
+  \           'Description': 'Ensures S3 bucket logging is enabled',
+  \           'Severity': 'LOW',
+  \           'CauseMetadata': {
+  \             'StartLine': 24,
+  \             'EndLine': 33,
+  \             'Occurrences': [
+  \               {
+  \                 'Filename': 'other.tf',
+  \                 'Location': {
+  \                   'StartLine': 5,
+  \                   'EndLine': 10,
+  \                 },
+  \               },
+  \             ],
+  \           },
+  \         },
+  \       ],
+  \     },
+  \   ],
+  \ }
+  \ )])
+
+Execute(The trivy handler should map severity levels correctly):
+  let g:result = ale_linters#terraform#trivy#Handle(bufnr(''), [json_encode(
+  \ {
+  \   'Results': [
+  \     {
+  \       'Target': expand('#' . bufnr('') . ':t'),
+  \       'Misconfigurations': [
+  \         {
+  \           'ID': 'AVD-001',
+  \           'Title': 'Low issue',
+  \           'Description': 'Low',
+  \           'Severity': 'LOW',
+  \           'CauseMetadata': {'StartLine': 1, 'EndLine': 1},
+  \         },
+  \         {
+  \           'ID': 'AVD-002',
+  \           'Title': 'Medium issue',
+  \           'Description': 'Medium',
+  \           'Severity': 'MEDIUM',
+  \           'CauseMetadata': {'StartLine': 2, 'EndLine': 2},
+  \         },
+  \         {
+  \           'ID': 'AVD-003',
+  \           'Title': 'High issue',
+  \           'Description': 'High',
+  \           'Severity': 'HIGH',
+  \           'CauseMetadata': {'StartLine': 3, 'EndLine': 3},
+  \         },
+  \         {
+  \           'ID': 'AVD-004',
+  \           'Title': 'Critical issue',
+  \           'Description': 'Critical',
+  \           'Severity': 'CRITICAL',
+  \           'CauseMetadata': {'StartLine': 4, 'EndLine': 4},
+  \         },
+  \       ],
+  \     },
+  \   ],
+  \ }
+  \ )])
+
+  AssertEqual 'I', g:result[0].type
+  AssertEqual 'W', g:result[1].type
+  AssertEqual 'E', g:result[2].type
+  AssertEqual 'E', g:result[3].type
