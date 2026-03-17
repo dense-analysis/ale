@@ -1,0 +1,3 @@
+Tests: run-tests
+Depends: @
+Restrictions: allow-stderr
