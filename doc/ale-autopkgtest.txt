@@ -1,0 +1,43 @@
+===============================================================================
+ALE Autopkgtest Integration                            *ale-autopkgtest-options*
+
+
+===============================================================================
+debian-lsp                                          *ale-autopkgtest-debian-lsp*
+
+Website: https://github.com/jelmer/debian-lsp
+
+debian-lsp is a Language Server Protocol implementation for Debian packaging
+files. It supports debian/control, debian/copyright, debian/changelog,
+debian/watch, debian/tests/control, debian/upstream/metadata, and
+debian/source/format files with features including diagnostics, completions,
+and code actions.
+
+
+Installation
+-------------------------------------------------------------------------------
+
+debian-lsp can be installed via cargo: >
+
+  cargo install debian-lsp
+<
+Or from Debian repositories (if available): >
+
+  apt install debian-lsp
+<
+
+-------------------------------------------------------------------------------
+Options
+                                  *ale-options.autopkgtest_debian_lsp_executable*
+                                        *g:ale_autopkgtest_debian_lsp_executable*
+                                        *b:ale_autopkgtest_debian_lsp_executable*
+autopkgtest_debian_lsp_executable
+g:ale_autopkgtest_debian_lsp_executable
+  Type: |String|
+  Default: `'debian-lsp'`
+
+  This variable can be set to change the path to debian-lsp.
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
