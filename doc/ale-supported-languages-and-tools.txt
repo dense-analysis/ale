@@ -41,6 +41,8 @@ Notes:
 * Astro
   * `eslint`
   * `prettier`
+* Autopkgtest (filetype autopkgtest)
+  * `debian-lsp`
 * AVRA
   * `avra`
 * Awk
@@ -163,6 +165,18 @@ Notes:
   * `dart-format`!!
   * `dartfmt`!!
   * `language_server`
+* Debian Changelog (filetype debchangelog)
+  * `debian-lsp`
+* Debian Control (filetype debcontrol)
+  * `debian-lsp`
+* Debian Copyright (filetype debcopyright)
+  * `debian-lsp`
+* Debian Sources (filetype debsources)
+  * `debian-lsp`
+* Debian Upstream Metadata (filetype debupstream)
+  * `debian-lsp`
+* Debian Watch (filetype debwatch)
+  * `debian-lsp`
 * desktop
   * `desktop-file-validate`
 * Dhall
