@@ -329,6 +329,27 @@ function! ale#lsp#UpdateConfig(conn_id, buffer, config) abort
     return 1
 endfunction
 
+function! ale#lsp#GetConnectionConfig(conn_id) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    return get(l:conn, 'config', {})
+endfunction
+
+" Send a JSON-RPC response to a server-initiated request (e.g. workspace/configuration).
+" Unlike ale#lsp#Send, which builds outgoing requests/notifications with a 'method' field,
+" this sends a response with 'id' + 'result' fields to reply to a request the server sent us.
+function! ale#lsp#SendResponse(conn_id, id, result) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return
+    endif
+
+    let l:body = json_encode({'jsonrpc': '2.0', 'id': a:id, 'result': a:result})
+    let l:data = 'Content-Length: ' . strlen(l:body) . "\r\n\r\n" . l:body
+    call s:SendMessageData(l:conn, l:data)
+endfunction
+
 function! ale#lsp#CallInitCallbacks(conn_id) abort
     let l:conn = get(s:connections, a:conn_id, {})
 

@@ -1,16 +1,26 @@
 Before:
   runtime autoload/ale/lsp.vim
+  runtime autoload/ale/job.vim
 
   let g:conn_id = ale#lsp#Register('executable', '/foo/bar', '', {})
+  let g:sent_data = []
 
-  " Stub out this function, so we test updating configs.
+  " Stub out these functions to capture calls without side effects.
   function! ale#lsp#Send(conn_id, message) abort
+  endfunction
+
+  function! ale#job#SendRaw(job_id, data) abort
+    call add(g:sent_data, a:data)
   endfunction
 
 After:
   Restore
 
   unlet! g:conn_id
+  unlet! g:conn
+  unlet! g:sent_data
+  unlet! g:remainder
+  unlet! g:messages
 
   runtime autoload/ale/lsp.vim
 
@@ -19,3 +29,27 @@ Execute(Only send updates when the configuration dictionary changes):
   AssertEqual 1, ale#lsp#UpdateConfig(g:conn_id, bufnr(''), {'a': 1})
   AssertEqual 0, ale#lsp#UpdateConfig(g:conn_id, bufnr(''), {'a': 1})
   AssertEqual 1, ale#lsp#UpdateConfig(g:conn_id, bufnr(''), {})
+
+Execute(ale#lsp#GetConnectionConfig() should return empty dict for unknown connections):
+  AssertEqual {}, ale#lsp#GetConnectionConfig('unknown:conn')
+
+Execute(ale#lsp#GetConnectionConfig() should return the current connection config):
+  call ale#lsp#UpdateConfig(g:conn_id, bufnr(''), {'foo': 'bar'})
+  AssertEqual {'foo': 'bar'}, ale#lsp#GetConnectionConfig(g:conn_id)
+
+Execute(ale#lsp#SendResponse() should do nothing for unknown connections):
+  " Should not throw
+  call ale#lsp#SendResponse('unknown:conn', 1, [])
+  AssertEqual [], g:sent_data
+
+Execute(ale#lsp#SendResponse() should send a JSON-RPC response message):
+  " Give the connection a job_id so s:SendMessageData routes to ale#job#SendRaw
+  let g:conn = ale#lsp#GetConnections()[g:conn_id]
+  let g:conn.job_id = 1
+
+  call ale#lsp#SendResponse(g:conn_id, 42, ['result_value'])
+
+  AssertEqual 1, len(g:sent_data)
+  let [g:remainder, g:messages] = ale#lsp#ReadMessageData(g:sent_data[0])
+  AssertEqual '', g:remainder
+  AssertEqual [{'jsonrpc': '2.0', 'id': 42, 'result': ['result_value']}], g:messages
