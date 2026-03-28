@@ -28,7 +28,7 @@ function! ale#fixers#erblint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'eruby_erblint_options')
 
     return ale#ruby#EscapeExecutable(l:executable, 'erblint')
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' --autocorrect --stdin %s'
 endfunction
 

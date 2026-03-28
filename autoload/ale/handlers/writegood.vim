@@ -22,7 +22,7 @@ function! ale#handlers#writegood#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'writegood_options')
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %t'
 endfunction
 

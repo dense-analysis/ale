@@ -6,7 +6,7 @@ ALE Go Integration                                             *ale-go-options*
 Integration Information
 
 ALE enables `gofmt`, `gopls` and `go vet` by default. It also supports `staticcheck`,
-`go build, ``gosimple`, `golangserver`, and `golangci-lint.
+`go build, ``gosimple`, `golangserver`, `golangci-lint`, and `goimports`.
 
 To enable `golangci-lint`, update |g:ale_linters| as appropriate.
 A possible configuration is to enable golangci-lint and `gofmt:
@@ -116,6 +116,30 @@ g:ale_go_gofumpt_options
   Default: `''`
 
   Options to pass to the gofumpt fixer.
+
+
+===============================================================================
+goimports                                                    *ale-go-goimports*
+
+                                          *ale-options.go_goimports_executable*
+                                                *g:ale_go_goimports_executable*
+                                                *b:ale_go_goimports_executable*
+go_goimports_executable
+g:ale_go_goimports_executable
+  Type: |String|
+  Default: `'goimports'`
+
+  This variable can be set to change the executable path for goimports.
+
+                                             *ale-options.go_goimports_options*
+                                                   *g:ale_go_goimports_options*
+                                                   *b:ale_go_goimports_options*
+go_goimports_options
+g:ale_go_goimports_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the goimports fixer.
 
 
 ===============================================================================

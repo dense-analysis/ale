@@ -414,6 +414,7 @@ formatting.
 * Markdown
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [harper](https://github.com/elijah-potter/harper) :speech_balloon:
   * [languagetool](https://languagetool.org/) :floppy_disk: :speech_balloon:
   * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
   * [marksman](https://github.com/artempyanykh/marksman) :speech_balloon:

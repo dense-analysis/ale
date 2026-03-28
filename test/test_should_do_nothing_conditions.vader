@@ -32,6 +32,7 @@ After:
     let b:funky_command_created = 0
   endif
 
+  unlet! g:ale_lint_diff
   unlet! b:funky_command_created
   unlet! b:fake_mode
 
@@ -78,6 +79,12 @@ Execute(DoNothing should return 1 for diff buffers):
   let &diff = 1
 
   AssertEqual 1, ale#ShouldDoNothing(bufnr(''))
+
+Execute(DoNothing should return 0 for diff buffers when ale_lint_diff is set):
+  let &diff = 1
+  let g:ale_lint_diff = 1
+
+  AssertEqual 0, ale#ShouldDoNothing(bufnr(''))
 
 Execute(The DoNothing check should work if the ALE globals aren't defined):
   unlet! g:ale_filetype_blacklist

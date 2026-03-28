@@ -39,7 +39,7 @@ function! ale#fixers#autoimport#Fix(buffer) abort
     return {
     \   'cwd': '%s:h',
     \   'command': ale#Escape(l:executable) . l:exec_args
-    \       . (!empty(l:options) ? ' ' . l:options : '')
+    \       . ale#Pad(l:options)
     \       . ' -',
     \}
 endfunction

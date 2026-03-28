@@ -7,7 +7,7 @@ function! ale#fixers#syntax_tree#GetCommand(buffer) abort
 
     return ale#ruby#EscapeExecutable(l:executable, 'stree')
     \   . ' format'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %t'
 endfunction
 

@@ -19,7 +19,7 @@ function! ale_linters#javascript#standard#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'javascript_standard_options')
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' --stdin %s'
 endfunction
 

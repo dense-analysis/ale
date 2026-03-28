@@ -6,6 +6,6 @@ function! ale#fixers#biome#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable) . ' check '
     \       . '--write --stdin-file-path %s' . l:unsafe
-    \       . (!empty(l:options) ? ' ' . l:options : '')
+    \       . ale#Pad(l:options)
     \}
 endfunction

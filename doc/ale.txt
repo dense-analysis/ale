@@ -1622,10 +1622,21 @@ g:ale_lint_delay
   A buffer-local option, `b:ale_lint_delay`, can be set to change the delay
   for different buffers, such as in |ftplugin| files.
 
+                                                    *ale-options.ale_lint_diff*
+                                                              *g:ale_lint_diff*
+g:ale_lint_diff
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, ALE will lint buffers where `&diff` is set.
+
+
                                                     *ale-options.lint_on_enter*
                                                           *g:ale_lint_on_enter*
 lint_on_enter
 g:ale_lint_on_enter
+
   Type: |Number|
   Default: `1`
 
@@ -3567,6 +3578,7 @@ documented in additional help files.
     gobuild...............................|ale-go-gobuild|
     gofmt.................................|ale-go-gofmt|
     gofumpt...............................|ale-go-gofumpt|
+    goimports.............................|ale-go-goimports|
     golangci-lint.........................|ale-go-golangci-lint|
     golangserver..........................|ale-go-golangserver|
     golines...............................|ale-go-golines|
@@ -3726,6 +3738,7 @@ documented in additional help files.
   markdown................................|ale-markdown-options|
     cspell................................|ale-markdown-cspell|
     dprint................................|ale-markdown-dprint|
+    harper................................|ale-markdown-harper|
     markdownlint..........................|ale-markdown-markdownlint|
     marksman..............................|ale-markdown-marksman|
     mdl...................................|ale-markdown-mdl|

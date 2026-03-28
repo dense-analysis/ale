@@ -8,7 +8,10 @@ call ale#Set('ruby_solargraph_executable', 'solargraph')
 call ale#Set('ruby_solargraph_options', {})
 
 function! ale_linters#ruby#solargraph#GetCommand(buffer) abort
-    return '%e' . ale#Pad('stdio')
+    let l:executable = ale#Var(a:buffer, 'ruby_solargraph_executable')
+
+    return ale#ruby#EscapeExecutable(l:executable, 'solargraph')
+    \   . ale#Pad('stdio')
 endfunction
 
 call ale#linter#Define('ruby', {

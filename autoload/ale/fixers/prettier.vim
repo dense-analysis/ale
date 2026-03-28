@@ -99,7 +99,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
         return {
         \   'cwd': '%s:h',
         \   'command':ale#Escape(l:executable)
-        \       . (!empty(l:options) ? ' ' . l:options : '')
+        \       . ale#Pad(l:options)
         \       . ' --stdin-filepath %s --stdin',
         \   'process_with': 'ale#fixers#prettier#ProcessPrettierDOutput',
         \}
@@ -110,7 +110,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
         return {
         \   'cwd': ale#fixers#prettier#GetCwd(a:buffer),
         \   'command': ale#Escape(l:executable)
-        \       . (!empty(l:options) ? ' ' . l:options : '')
+        \       . ale#Pad(l:options)
         \       . ' --stdin-filepath %s --stdin',
         \}
     endif
@@ -118,7 +118,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' %t'
-    \       . (!empty(l:options) ? ' ' . l:options : '')
+    \       . ale#Pad(l:options)
     \       . ' --write',
     \   'read_temporary_file': 1,
     \}

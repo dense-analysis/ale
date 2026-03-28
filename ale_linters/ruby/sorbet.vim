@@ -10,7 +10,7 @@ function! ale_linters#ruby#sorbet#GetCommand(buffer) abort
 
     return ale#ruby#EscapeExecutable(l:executable, 'srb')
     \   . ' tc'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' --lsp'
     \   . (l:enable_watchman ? '' : ' --disable-watchman')
 endfunction

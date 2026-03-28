@@ -18,7 +18,7 @@ function! ale_linters#typescript#standard#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'typescript_standard_options')
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' --stdin %s'
 endfunction
 

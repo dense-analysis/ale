@@ -10,7 +10,7 @@ function! ale_linters#text#vale#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'vale_options')
 
     return ale#Escape(l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' --output=JSON %t'
 endfunction
 

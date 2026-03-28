@@ -38,7 +38,7 @@ function! ale#fixers#autoflake#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable) . l:exec_args
-    \       . (!empty(l:options) ? ' ' . l:options : '')
+    \       . ale#Pad(l:options)
     \       . ' --in-place '
     \       . ' %t',
     \   'read_temporary_file': 1,

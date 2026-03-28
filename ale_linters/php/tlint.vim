@@ -31,7 +31,7 @@ function! ale_linters#php#tlint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'php_tlint_options')
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' lint %s'
 endfunction
 

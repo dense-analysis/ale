@@ -139,9 +139,19 @@ module.send_message = function(args)
     end
 
     if args.is_notification then
-        -- For notifications we send a request and expect no direct response.
-        local success = client:notify(args.method, args.params)
+        local success
 
+        if vim.version().minor >= 11 then
+            -- Supporting Neovim 0.11+
+            ---@diagnostic disable-next-line
+            success = client.notify(client, args.method, args.params)
+        else
+            -- Supporting Neovim 0.10 and below
+            ---@diagnostic disable-next-line
+            success = client.notify(args.method, args.params)
+        end
+
+        -- For notifications we send a request and expect no direct response.
         if success then
             return -1
         end
@@ -150,24 +160,27 @@ module.send_message = function(args)
     end
 
     local success, request_id
+    local handle_func = function(_, result, _, _)
+        vim.fn["ale#lsp#HandleResponse"](client.name, {
+            id = request_id,
+            result = result,
+        })
+    end
 
-    -- For request we send a request and handle the response.
-    --
-    -- We set the bufnr to -1 to prevent Neovim from flushing anything, as ALE
-    -- already flushes changes to files before sending requests.
-    success, request_id = client:request(
-        args.method,
-        args.params,
-        ---@diagnostic disable-next-line: param-type-mismatch
-        function(_, result, _, _)
-            vim.fn["ale#lsp#HandleResponse"](client.name, {
-                id = request_id,
-                result = result,
-            })
-        end,
-        ---@diagnostic disable-next-line: param-type-mismatch
-        -1
-    )
+    if vim.version().minor >= 11 then
+        -- Supporting Neovim 0.11+
+
+        -- We send a request and handle the response.
+        --
+        -- We set the bufnr to -1 to prevent Neovim from flushing anything, as ALE
+        -- already flushes changes to files before sending requests.
+        ---@diagnostic disable-next-line
+        success, request_id = client.request(client, args.method, args.params, handle_func, -1)
+    else
+        -- Supporting Neovim 0.10 and below
+        ---@diagnostic disable-next-line
+        success, request_id = client.request(args.method, args.params, handle_func, -1)
+    end
 
     if success then
         return request_id

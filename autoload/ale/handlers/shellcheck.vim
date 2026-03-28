@@ -57,7 +57,7 @@ function! ale#handlers#shellcheck#GetCommand(buffer, version) abort
 
     return '%e'
     \   . (!empty(l:dialect) ? ' -s ' . l:dialect : '')
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . (!empty(l:exclude_option) ? ' -e ' . l:exclude_option : '')
     \   . l:external_option
     \   . ' -f ' . l:format . ' -'

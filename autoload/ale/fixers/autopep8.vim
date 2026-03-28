@@ -38,7 +38,7 @@ function! ale#fixers#autopep8#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable) . l:exec_args
-    \       . (!empty(l:options) ? ' ' . l:options : '')
+    \       . ale#Pad(l:options)
     \       . ' -',
     \}
 endfunction

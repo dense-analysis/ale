@@ -14,7 +14,7 @@ function! ale_linters#markdown#markdownlint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'markdown_markdownlint_options')
 
     return ale#Escape(l:executable)
-    \ . (!empty(l:options) ? ' ' . l:options : '') . ' %s'
+    \ . ale#Pad(l:options) . ' %s'
 endfunction
 
 call ale#linter#Define('markdown', {

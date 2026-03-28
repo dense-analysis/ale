@@ -15,7 +15,7 @@ function! ale_linters#html#stylelint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'html_stylelint_options')
 
     return ale#Escape(l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' --no-color --stdin-filename %s'
 endfunction
 

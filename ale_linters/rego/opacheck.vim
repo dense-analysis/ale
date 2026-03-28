@@ -12,7 +12,7 @@ function! ale_linters#rego#opacheck#GetCommand(buffer) abort
 
     return ale#Escape(ale_linters#rego#opacheck#GetExecutable(a:buffer))
     \   . ' check %s:h --format json '
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
 endfunction
 
 function! ale_linters#rego#opacheck#Handle(buffer, lines) abort
