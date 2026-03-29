@@ -1,4 +1,5 @@
 Before:
+  runtime autoload/ale/c.vim
   Save g:ale_c_build_dir_names
 
   call ale#test#SetDirectory('/testplugin/test')

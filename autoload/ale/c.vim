@@ -10,7 +10,7 @@ let s:sep = has('win32') ? '\' : '/'
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
 
-let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [
+call ale#Set('c_build_dir_names', [
 \   'build',
 \   'build/Debug',
 \   'build/Release',
@@ -18,10 +18,6 @@ let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [
 \])
 
 function! s:CanParseMakefile(buffer) abort
-    " Something somewhere seems to delete this setting in tests, so ensure we
-    " always have a default value.
-    call ale#Set('c_parse_makefile', 0)
-
     return ale#Var(a:buffer, 'c_parse_makefile')
 endfunction
 
@@ -245,15 +241,6 @@ function! ale#c#FindCompileCommands(buffer) abort
     if !empty(l:json_file)
         return [fnamemodify(l:json_file, ':h'), l:json_file]
     endif
-
-    " Something somewhere seems to delete this setting in tests, so ensure
-    " we always have a default value.
-    call ale#Set('c_build_dir_names', [
-    \   'build',
-    \   'build/Debug',
-    \   'build/Release',
-    \   'bin',
-    \])
 
     " Search in build directories if we can't find it in the project.
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))

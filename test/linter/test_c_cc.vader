@@ -1,4 +1,6 @@
 Before:
+  call ale#assert#SetUpLinterTest('c', 'cc')
+
   Save g:ale_c_parse_makefile
   Save g:ale_history_enabled
 
@@ -18,8 +20,6 @@ Before:
   function! ale#c#GetCFlags(buffer, output) abort
     return g:get_cflags_return_value
   endfunction
-
-  call ale#assert#SetUpLinterTest('c', 'cc')
 
   let b:command_tail = ' -S -x c'
   \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
