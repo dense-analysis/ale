@@ -1,4 +1,7 @@
 Before:
+
+  runtime autoload/ale/c.vim
+
   Save g:ale_c_parse_makefile
   Save g:ale_c_always_make
   Save b:ale_c_always_make
