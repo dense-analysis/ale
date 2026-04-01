@@ -2,13 +2,13 @@
 " based on the ale ruumba and robocop linters
 " Description: ERB Lint, support for https://github.com/Shopify/erb-lint
 
-call ale#Set('eruby_erblint_executable', 'erblint')
+call ale#Set('eruby_erblint_executable', 'erb_lint')
 call ale#Set('eruby_erblint_options', '')
 
 function! ale_linters#eruby#erblint#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'eruby_erblint_executable')
 
-    return ale#ruby#EscapeExecutable(l:executable, 'erblint')
+    return ale#ruby#EscapeExecutable(l:executable, 'erb_lint')
     \   . ' --format json '
     \   . ale#Var(a:buffer, 'eruby_erblint_options')
     \   . ' --stdin %s'
