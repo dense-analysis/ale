@@ -19,8 +19,8 @@ endfunction
 
 " Rename path relative to root
 function! ale_linters#ruby#steep#RelativeToRoot(buffer, path) abort
-    let l:separator = has('win32') ? '\' : '/'
     let l:steep_root = ale_linters#ruby#steep#FindRoot(a:buffer)
+    let l:separator = ale#util#PathSeparator(l:steep_root) 
 
     " path isn't under root
     if l:steep_root is# ''

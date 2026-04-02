@@ -5,7 +5,7 @@ call ale#Set('c_parse_makefile', 0)
 call ale#Set('c_always_make', has('unix') && !has('macunix'))
 call ale#Set('c_parse_compile_commands', 1)
 
-let s:sep = has('win32') ? '\' : '/'
+let s:sep =  ale#util#PathSeparator() 
 
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']

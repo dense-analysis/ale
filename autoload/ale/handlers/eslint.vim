@@ -7,7 +7,7 @@ let s:executables = [
 \   'node_modules/eslint/bin/eslint.js',
 \   'node_modules/.bin/eslint',
 \]
-let s:sep = has('win32') ? '\' : '/'
+let s:sep =  ale#util#PathSeparator() 
 
 call ale#Set('javascript_eslint_options', '')
 call ale#Set('javascript_eslint_executable', 'eslint')

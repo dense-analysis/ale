@@ -175,7 +175,9 @@ function! ale_linters#elm#make#IsTest(buffer) abort
         return 0
     endif
 
-    let l:tests_dir = join([l:root_dir, 'tests', ''], has('win32') ? '\' : '/')
+    let l:sep = ale#util#PathSeparator(l:root_dir) 
+
+    let l:tests_dir = join([l:root_dir, 'tests', ''], l:sep)
 
     let l:buffer_path = fnamemodify(bufname(a:buffer), ':p')
 
