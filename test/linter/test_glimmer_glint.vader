@@ -1,0 +1,8 @@
+Before:
+  call ale#assert#SetUpLinterTest('glimmer', 'glint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'glint-language-server', ale#Escape('glint-language-server')
