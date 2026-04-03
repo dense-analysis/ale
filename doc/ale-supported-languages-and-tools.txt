@@ -480,6 +480,7 @@ Notes:
   * `languageserver`
   * `perl -c`
   * `perl-critic`
+  * `perlnavigator`
   * `perltidy`
 * Perl6
   * `perl6 -c`
