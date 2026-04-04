@@ -9,9 +9,13 @@ function! ale_linters#markdown#rumdl#GetProjectRoot(buffer) abort
   let l:dotconfig = ale#path#FindNearestFile(a:buffer, '.rumdl.toml')
   let l:config = ale#path#FindNearestFile(a:buffer, 'rumdl.toml')
 
-  if !empty(l:dotconfig) || !empty(l:config)
+  if !empty(l:dotconfig) && !empty(l:config)
     let l:nearest = len(l:dotconfig) >= len(l:config) ? l:dotconfig : l:config
     return fnamemodify(l:nearest, ':h')
+  elseif !empty(l:dotconfig)
+    return fnamemodify(l:dotconfig, ':h')
+  elseif !empty(l:config)
+    return fnamemodify(l:config, ':h')
   endif
 
   let l:project_root = finddir('.git/..', fnamemodify(bufname(a:buffer), ':p:h') . ';')
