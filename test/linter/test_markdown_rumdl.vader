@@ -11,3 +11,8 @@ Execute(The executable should be configurable):
   let b:ale_markdown_rumdl_executable = 'rumdl_custom'
 
   AssertLinter 'rumdl_custom', ale#Escape('rumdl_custom') . ' server --stdio'
+
+Execute(The server options should be configurable):
+  let b:ale_markdown_rumdl_options = '--some-flag'
+
+  AssertLinter 'rumdl', ale#Escape('rumdl') . ' server --stdio --some-flag'

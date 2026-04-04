@@ -3,6 +3,7 @@
 
 
 call ale#Set('markdown_rumdl_executable', 'rumdl')
+call ale#Set('markdown_rumdl_options', '')
 
 function! ale_linters#markdown#rumdl#GetProjectRoot(buffer) abort
   let l:dotconfig = ale#path#FindNearestFile(a:buffer, '.rumdl.toml')
@@ -26,7 +27,9 @@ call ale#linter#Define('markdown', {
 \   'name': 'rumdl',
 \   'lsp': 'stdio',
 \   'executable': {b -> ale#Var(b, 'markdown_rumdl_executable')},
-\   'command': '%e server --stdio',
+\   'command': {b -> ale#Escape(ale#Var(b, 'markdown_rumdl_executable'))
+\       . ' server --stdio'
+\       . ale#Pad(ale#Var(b, 'markdown_rumdl_options'))},
 \   'project_root': function('ale_linters#markdown#rumdl#GetProjectRoot'),
 \   'language': 'markdown',
 \})

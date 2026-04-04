@@ -263,6 +263,16 @@ g:ale_markdown_rumdl_executable
 markdown_rumdl_options
 g:ale_markdown_rumdl_options
   Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to `rumdl server`.
+
+                                      *ale-options.markdown_rumdl_fmt_options*
+                                            *g:ale_markdown_rumdl_fmt_options*
+                                            *b:ale_markdown_rumdl_fmt_options*
+markdown_rumdl_fmt_options
+g:ale_markdown_rumdl_fmt_options
+  Type: |String|
   Default: `'--silent'`
 
   This variable can be set to pass additional options to `rumdl fmt`.

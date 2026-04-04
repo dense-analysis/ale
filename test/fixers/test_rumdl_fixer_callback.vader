@@ -1,6 +1,6 @@
 Before:
   Save g:ale_markdown_rumdl_executable
-  Save g:ale_markdown_rumdl_options
+  Save g:ale_markdown_rumdl_fmt_options
 
 After:
   Restore
@@ -12,9 +12,9 @@ Execute(The rumdl callback should return the default command):
   \ },
   \ ale#fixers#rumdl#Fix(bufnr(''))
 
-Execute(The rumdl executable and options should be configurable):
+Execute(The rumdl executable and fmt options should be configurable):
   let g:ale_markdown_rumdl_executable = 'rumdl_custom'
-  let g:ale_markdown_rumdl_options = ''
+  let g:ale_markdown_rumdl_fmt_options = ''
 
   AssertEqual
   \ {
