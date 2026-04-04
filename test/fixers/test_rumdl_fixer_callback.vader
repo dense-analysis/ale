@@ -1,23 +1,24 @@
 Before:
-  Save g:ale_markdown_rumdl_executable
-  Save g:ale_markdown_rumdl_fmt_options
+  call ale#assert#SetUpFixerTest('markdown', 'rumdl')
 
 After:
-  Restore
+  call ale#assert#TearDownFixerTest()
 
-Execute(The rumdl callback should return the default command):
-  AssertEqual
-  \ {
-  \   'command': ale#Escape('rumdl') . ' fmt - --silent',
-  \ },
-  \ ale#fixers#rumdl#Fix(bufnr(''))
+Execute:
+  AssertFixer {
+  \ 'command': ale#Escape('rumdl') . ' fmt - --silent',
+  \}
 
-Execute(The rumdl executable and fmt options should be configurable):
+Execute:
   let g:ale_markdown_rumdl_executable = 'rumdl_custom'
+
+  AssertFixer {
+  \ 'command': ale#Escape('rumdl_custom') . ' fmt - --silent',
+  \}
+
+Execute:
   let g:ale_markdown_rumdl_fmt_options = ''
 
-  AssertEqual
-  \ {
-  \   'command': ale#Escape('rumdl_custom') . ' fmt -',
-  \ },
-  \ ale#fixers#rumdl#Fix(bufnr(''))
+  AssertFixer {
+  \ 'command': ale#Escape('rumdl') . ' fmt -',
+  \}
