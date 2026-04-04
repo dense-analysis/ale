@@ -1,0 +1,23 @@
+Before:
+  Save g:ale_markdown_rumdl_executable
+  Save g:ale_markdown_rumdl_options
+
+After:
+  Restore
+
+Execute(The rumdl callback should return the default command):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('rumdl') . ' fmt - --silent',
+  \ },
+  \ ale#fixers#rumdl#Fix(bufnr(''))
+
+Execute(The rumdl executable and options should be configurable):
+  let g:ale_markdown_rumdl_executable = 'rumdl_custom'
+  let g:ale_markdown_rumdl_options = ''
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('rumdl_custom') . ' fmt -',
+  \ },
+  \ ale#fixers#rumdl#Fix(bufnr(''))
