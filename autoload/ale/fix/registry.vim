@@ -767,6 +767,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['markdown'],
 \       'description': 'Fix markdown files with markdownlint.',
 \   },
+\   'rumdl': {
+\       'function': 'ale#fixers#rumdl#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix markdown files with rumdl.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

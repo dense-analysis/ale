@@ -415,6 +415,7 @@ Notes:
   * `pymarkdown`
   * `redpen`
   * `remark-lint`
+  * `rumdl`
   * `textlint`
   * `vale`
   * `write-good`
