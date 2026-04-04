@@ -18,10 +18,18 @@ function! ale_linters#markdown#rumdl#GetProjectRoot(buffer) abort
     return fnamemodify(l:config, ':h')
   endif
 
-  let l:project_root = finddir('.git/..', fnamemodify(bufname(a:buffer), ':p:h') . ';')
+  " Try to find nearest pyproject.toml
+  let l:pyproject_file = ale#path#FindNearestFile(a:buffer, 'pyproject.toml')
 
-  if !empty(l:project_root)
-    return l:project_root
+  if !empty(l:pyproject_file)
+      return fnamemodify(l:pyproject_file . '/', ':p:h:h')
+  endif
+
+  " Try to find nearest `git` directory
+  let l:gitdir = ale#path#FindNearestFile(a:buffer, '.git')
+
+  if !empty(l:gitdir)
+      return fnamemodify(l:gitdir . '/', ':p:h:h')
   endif
 
   return fnamemodify(bufname(a:buffer), ':p:h')
