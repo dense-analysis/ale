@@ -86,12 +86,15 @@ function! s:VimShow(lines, options) abort
         call s:VimCreate(a:options)
     endif
 
+    call s:ResetManagedPopupSize()
+
     " Execute commands in window context
     for l:command in get(a:options, 'commands', [])
         call win_execute(w:preview['id'], l:command)
     endfor
 
     call popup_settext(w:preview['id'], a:lines)
+    call s:LockPopupSize(w:preview['id'], a:lines)
 
     if g:ale_close_preview_on_insert
         augroup ale_floating_preview_window
@@ -144,6 +147,170 @@ function! s:NvimCreate(options) abort
     let w:preview = {'id': l:winid, 'buffer': l:buffer}
 endfunction
 
+function! s:GetPageScrollOffset(winid) abort
+    let l:position = popup_getpos(a:winid)
+
+    if empty(l:position)
+        return 1
+    endif
+
+    return max([
+    \   1,
+    \   float2nr(ceil(l:position.core_height / 2.0)),
+    \])
+endfunction
+
+function! s:GetPopupContentWidth(lines) abort
+    if empty(a:lines)
+        return 1
+    endif
+
+    return max(map(copy(a:lines), 'strdisplaywidth(v:val)'))
+endfunction
+
+function! s:GetPopupLineRows(winid) abort
+    let l:position = popup_getpos(a:winid)
+    let l:width = get(l:position, 'core_width', 0)
+    let l:bufnr = winbufnr(a:winid)
+
+    if l:width <= 0 || l:bufnr <= 0
+        return []
+    endif
+
+    return map(
+    \   getbufline(l:bufnr, 1, '$'),
+    \   'max([1, float2nr(ceil(strdisplaywidth(v:val) / (l:width * 1.0)))])',
+    \)
+endfunction
+
+function! s:GetPopupMaxFirstLine(winid) abort
+    let l:position = popup_getpos(a:winid)
+    let l:line_rows = s:GetPopupLineRows(a:winid)
+    let l:remaining_rows = 0
+
+    if empty(l:position) || empty(l:line_rows)
+        return 1
+    endif
+
+    for l:index in reverse(range(0, len(l:line_rows) - 1))
+        let l:remaining_rows += l:line_rows[l:index]
+
+        if l:remaining_rows >= l:position.core_height
+            return l:index + 1
+        endif
+    endfor
+
+    return 1
+endfunction
+
+function! s:LockPopupSize(winid, lines) abort
+    let l:options = popup_getoptions(a:winid)
+    let l:position = popup_getpos(a:winid)
+    let l:managed_size = {}
+    let l:size_options = {}
+
+    if empty(l:options) || empty(l:position)
+        return
+    endif
+
+    if get(l:options, 'minwidth', 0) is# 0
+    \&& get(l:options, 'maxwidth', 0) is# 0
+        let l:size_options.minwidth = s:GetPopupContentWidth(a:lines)
+        let l:size_options.maxwidth = l:size_options.minwidth
+        let l:managed_size.width = 1
+    endif
+
+    if get(l:options, 'minheight', 0) is# 0
+    \&& get(l:options, 'maxheight', 0) is# 0
+        let l:size_options.minheight = l:position.core_height
+        let l:size_options.maxheight = l:position.core_height
+        let l:managed_size.height = 1
+    endif
+
+    if !empty(l:size_options)
+        call popup_setoptions(a:winid, l:size_options)
+        let w:preview.managed_size = l:managed_size
+    endif
+endfunction
+
+function! s:ResetManagedPopupSize() abort
+    let l:managed_size = get(w:preview, 'managed_size', {})
+    let l:size_options = {}
+
+    if empty(l:managed_size)
+        return
+    endif
+
+    if get(l:managed_size, 'width', 0)
+        let l:size_options.minwidth = 0
+        let l:size_options.maxwidth = 0
+    endif
+
+    if get(l:managed_size, 'height', 0)
+        let l:size_options.minheight = 0
+        let l:size_options.maxheight = 0
+    endif
+
+    if !empty(l:size_options)
+        call popup_setoptions(w:preview['id'], l:size_options)
+    endif
+
+    unlet w:preview.managed_size
+endfunction
+
+function! s:ScrollPopup(winid, count, direction) abort
+    let l:position = popup_getpos(a:winid)
+
+    if empty(l:position)
+        return
+    endif
+
+    if a:direction is# 'j'
+        let l:count = min([
+        \   a:count,
+        \   s:GetPopupMaxFirstLine(a:winid) - l:position.firstline,
+        \])
+    else
+        let l:count = min([a:count, l:position.firstline - 1])
+    endif
+
+    if l:count <= 0
+        return
+    endif
+
+    call win_execute(a:winid, 'normal! ' . l:count . a:direction . 'zt')
+endfunction
+
+function! ale#floating_preview#PopupFilter(winid, key) abort
+    if a:key is# "\<C-n>" || a:key is# "\<ScrollWheelDown>"
+        call s:ScrollPopup(a:winid, 1, 'j')
+
+        return 1
+    elseif a:key is# "\<C-p>" || a:key is# "\<ScrollWheelUp>"
+        call s:ScrollPopup(a:winid, 1, 'k')
+
+        return 1
+    elseif a:key is# "\<C-d>"
+        call s:ScrollPopup(a:winid, s:GetPageScrollOffset(a:winid), 'j')
+
+        return 1
+    elseif a:key is# "\<C-u>"
+        call s:ScrollPopup(a:winid, s:GetPageScrollOffset(a:winid), 'k')
+
+        return 1
+    elseif a:key is# "\<Esc>"
+        if exists('w:preview') && get(w:preview, 'id', 0) is# a:winid
+            call s:VimClose()
+        else
+            call popup_close(a:winid)
+        endif
+
+        return 1
+    endif
+
+    return 0
+endfunction
+
 function! s:VimCreate(options) abort
     " default options
     let l:popup_opts = extend({
@@ -164,6 +331,8 @@ function! s:VimCreate(options) abort
     \        get(g:ale_floating_window_border, 4, '+'),
     \        get(g:ale_floating_window_border, 5, '+'),
     \    ],
+    \    'filter': function('ale#floating_preview#PopupFilter'),
+    \    'filtermode': 'n',
     \    'moved': 'any',
     \ }, s:GetPopupOpts())
 

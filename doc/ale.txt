@@ -835,6 +835,40 @@ or |g:ale_floating_preview| is set to `true` or `1`, the hover information
 will show in a floating window. The borders of the floating preview window can
 be customized by setting |g:ale_floating_window_border|.
 
+For Vim with |popupwin|, floating preview windows can be scrolled with the
+keyboard and dismissed with |<Esc>|. The following keys are supported:
+
+  |<C-n>|   - Scroll down one line
+  |<C-p>|   - Scroll up one line
+  |<C-d>|   - Scroll down half a page
+  |<C-u>|   - Scroll up half a page
+  |<Esc>|   - Close the popup
+
+Mouse scroll wheel also works when |'mouse'| is enabled.
+
+If you do not set popup width or height limits yourself, ALE keeps the popup
+at a stable size while it is visible. For width, ALE locks Vim popups to the
+maximum display width across the popup contents, so later long lines do not
+cause the popup to stay stuck at the initial viewport width.
+
+The filter can be overridden via |g:ale_floating_preview_popup_opts| by
+providing a custom `filter` key. For example, to scroll with `j` and `k`
+instead: >
+
+  function! MyPopupFilter(winid, key) abort
+      if a:key is# 'j'
+          return ale#floating_preview#PopupFilter(a:winid, "\<C-n>")
+      elseif a:key is# 'k'
+          return ale#floating_preview#PopupFilter(a:winid, "\<C-p>")
+      elseif a:key is# "\<Esc>" || a:key is# "\<C-d>" || a:key is# "\<C-u>"
+          return ale#floating_preview#PopupFilter(a:winid, a:key)
+      endif
+      return 0
+  endfunction
+
+  let g:ale_floating_preview_popup_opts = {'filter': function('MyPopupFilter')}
+<
+
 For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
 |balloonexpr| commands in terminals can cause scrolling issues in terminals,
 so ALE will not attempt to show balloons unless |g:ale_set_balloons| is set to
@@ -1463,6 +1497,24 @@ g:ale_floating_preview_popup_opts
 
   NOTE: for Vim users see |popup_create-arguments|, for NeoVim users see
   |nvim_open_win| for argument details
+
+  For Vim floating preview popups, if no `minwidth`/`maxwidth` or
+  `minheight`/`maxheight` values are supplied, ALE will temporarily keep the
+  popup at a stable size while it is visible. Width is locked to the maximum
+  display width across the popup contents, while height is locked to the
+  current rendered popup height. If you set those size options yourself, your
+  values will be used as-is.
+
+  To set popup size limits explicitly for Vim, put the values in
+  |g:ale_floating_preview_popup_opts|. For example: >
+
+  let g:ale_floating_preview_popup_opts = {
+  \ 'minwidth': 60,
+  \ 'maxwidth': 100,
+  \ 'minheight': 8,
+  \ 'maxheight': 20,
+  \}
+<
 
   For example, to enhance popups with a title: >
 
