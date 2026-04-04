@@ -1,0 +1,18 @@
+Before:
+  call ale#assert#SetUpLinterTest('css', 'astgrep')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'ast-grep', ale#Escape('ast-grep') . ' lsp'
+
+Execute(The project root should be detected correctly with a configuration file):
+  call ale#test#SetFilename('../test-files/generic/astgrep/subdir/file.css')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/generic/astgrep')
+
+Execute(The project root should be empty when no project files can be detected):
+  call ale#test#SetFilename('../test-files/dummy')
+
+  AssertLSPProject ''
