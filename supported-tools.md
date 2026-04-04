@@ -425,6 +425,7 @@ formatting.
   * [pymarkdown](https://github.com/jackdewinter/pymarkdown) :floppy_disk:
   * [redpen](http://redpen.cc/)
   * [remark-lint](https://github.com/wooorm/remark-lint)
+  * [rumdl](https://github.com/rvben/rumdl/issues) :speech_balloon:
   * [textlint](https://textlint.github.io/)
   * [vale](https://github.com/ValeLint/vale)
   * [write-good](https://github.com/btford/write-good)
