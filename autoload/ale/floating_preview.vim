@@ -263,7 +263,7 @@ function! s:ResetManagedPopupSize() abort
         call popup_setoptions(w:preview['id'], l:size_options)
     endif
 
-    unlet w:preview.managed_size
+    unlet! w:preview.managed_size
 endfunction
 
 function! s:ScrollPopup(winid, count, direction) abort
