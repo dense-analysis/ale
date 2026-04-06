@@ -180,6 +180,70 @@ Before:
     AssertEqual popup_cursor_state, GetPopupCursorState(popup_id)
   endfunction
 
+  function! AssertPopupStopsScrollingAtTop() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {'minheight': 4, 'maxheight': 4}
+    let popup_id = OpenTestPopup()
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-p>")
+    AssertEqual 1, popup_getpos(popup_id).firstline
+    AssertEqual [1, 1], GetPopupCursorState(popup_id)
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-u>")
+    AssertEqual 1, popup_getpos(popup_id).firstline
+    AssertEqual [1, 1], GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertNowrapPopupStopsScrollingAtBottom() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {
+    \ 'minwidth': 20,
+    \ 'maxwidth': 20,
+    \ 'minheight': 4,
+    \ 'maxheight': 4,
+    \ 'wrap': 0,
+    \}
+    let popup_id = OpenTestPopup(map(range(1, 10), 'printf("line %02d", v:val)'))
+
+    for l:index in range(1, 20)
+      call ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    endfor
+
+    AssertEqual 7, popup_getpos(popup_id).firstline
+
+    let popup_cursor_state = GetPopupCursorState(popup_id)
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    AssertEqual 7, popup_getpos(popup_id).firstline
+    AssertEqual popup_cursor_state, GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertUserSizeOptsAreNotOverridden() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {
+    \ 'minwidth': 60,
+    \ 'maxwidth': 100,
+    \ 'minheight': 8,
+    \ 'maxheight': 20,
+    \}
+    let popup_id = OpenTestPopup()
+    let opts = popup_getoptions(popup_id)
+
+    AssertEqual 60, opts.minwidth
+    AssertEqual 100, opts.maxwidth
+    AssertEqual 8, opts.minheight
+    AssertEqual 20, opts.maxheight
+  endfunction
+
   function! AssertWrappedPopupStopsScrollingAtBottom() abort
     if !has('popupwin')
       return
@@ -227,6 +291,9 @@ After:
   delfunction AssertPopupClosesOnEscape
   delfunction AssertPopupPassesThroughUnhandledKeys
   delfunction AssertWrappedPopupKeepsItsSize
+  delfunction AssertPopupStopsScrollingAtTop
+  delfunction AssertNowrapPopupStopsScrollingAtBottom
+  delfunction AssertUserSizeOptsAreNotOverridden
   delfunction AssertPopupStopsScrollingAtBottom
   delfunction AssertWrappedPopupStopsScrollingAtBottom
 
@@ -252,8 +319,17 @@ Execute(PopupFilter should pass through unhandled keys):
 Execute(PopupFilter should preserve wrapped popup size while scrolling):
   call AssertWrappedPopupKeepsItsSize()
 
+Execute(PopupFilter should not scroll past the top):
+  call AssertPopupStopsScrollingAtTop()
+
 Execute(PopupFilter should stop scrolling at the bottom):
   call AssertPopupStopsScrollingAtBottom()
 
+Execute(PopupFilter should stop nowrap popups at the bottom):
+  call AssertNowrapPopupStopsScrollingAtBottom()
+
 Execute(PopupFilter should stop wrapped popups at the bottom):
   call AssertWrappedPopupStopsScrollingAtBottom()
+
+Execute(LockPopupSize should not override user-supplied size opts):
+  call AssertUserSizeOptsAreNotOverridden()
