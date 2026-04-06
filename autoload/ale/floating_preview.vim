@@ -177,8 +177,14 @@ function! s:GetPopupLineRows(winid) abort
         return []
     endif
 
+    let l:lines = getbufline(l:bufnr, 1, '$')
+
+    if !get(popup_getoptions(a:winid), 'wrap', 1)
+        return map(l:lines, '1')
+    endif
+
     return map(
-    \   getbufline(l:bufnr, 1, '$'),
+    \   l:lines,
     \   'max([1, float2nr(ceil(strdisplaywidth(v:val) / (l:width * 1.0)))])',
     \)
 endfunction
