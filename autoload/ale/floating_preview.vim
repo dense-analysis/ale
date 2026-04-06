@@ -234,6 +234,7 @@ function! s:LockPopupSize(winid, lines) abort
     endif
 
     if !empty(l:size_options)
+        let l:size_options.resize = v:false
         call popup_setoptions(a:winid, l:size_options)
         let w:preview.managed_size = l:managed_size
     endif
@@ -258,6 +259,7 @@ function! s:ResetManagedPopupSize() abort
     endif
 
     if !empty(l:size_options)
+        let l:size_options.resize = v:true
         call popup_setoptions(w:preview['id'], l:size_options)
     endif
 
