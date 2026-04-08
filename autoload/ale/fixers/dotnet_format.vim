@@ -11,7 +11,7 @@ function! ale#fixers#dotnet_format#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' format'
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' --folder --include %t "$(dirname %t)"',
     \   'read_temporary_file': 1,
     \}

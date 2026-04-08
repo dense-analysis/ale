@@ -16,7 +16,7 @@ function! ale#fixers#goimports#Fix(buffer) abort
     return {
     \   'command': l:env . ale#Escape(l:executable)
     \       . ' -l -w -srcdir %s'
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' %t',
     \   'read_temporary_file': 1,
     \}
