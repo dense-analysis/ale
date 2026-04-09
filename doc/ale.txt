@@ -3722,6 +3722,8 @@ documented in additional help files.
     lessc.................................|ale-less-lessc|
     prettier..............................|ale-less-prettier|
     stylelint.............................|ale-less-stylelint|
+  lilypond................................|ale-lilypond-options|
+    lilypond..............................|ale-lilypond|
   llvm....................................|ale-llvm-options|
     llc...................................|ale-llvm-llc|
   lua.....................................|ale-lua-options|
