@@ -241,6 +241,8 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
         \   : a:response.result.items
 
         call ale#lsp_linter#HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
+    elseif l:method is# 'client/registerCapability'
+        call ale#lsp#SendResponse(a:conn_id, a:response.id, v:null)
     elseif l:method is# 'workspace/configuration'
         let l:items = get(get(a:response, 'params', {}), 'items', [])
         let l:config = ale#lsp#GetConnectionConfig(a:conn_id)

@@ -7,6 +7,6 @@ call ale#linter#Define('elixir', {
 \   'name': 'expert',
 \   'lsp': 'stdio',
 \   'executable': {b -> ale#Var(b, 'elixir_expert_executable')},
-\   'command': '%e',
+\   'command': '%e --stdio',
 \   'project_root': function('ale#handlers#elixir#FindMixUmbrellaRoot'),
 \})

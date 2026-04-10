@@ -562,6 +562,30 @@ Execute(workspace/configuration requests should be answered with the connection 
   unlet! g:sent_responses
   runtime autoload/ale/lsp.vim
 
+Execute(client/registerCapability requests should be acknowledged):
+  let g:sent_responses = []
+
+  function! ale#lsp#SendResponse(conn_id, id, result) abort
+    call add(g:sent_responses, [a:conn_id, a:id, a:result])
+  endfunction
+
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'expert', 'aliases': [], 'lsp': 'stdio'}})
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 12,
+  \ 'method': 'client/registerCapability',
+  \ 'params': {
+  \   'registrations': [{'id': 'abc', 'method': 'textDocument/didSave'}],
+  \ },
+  \})
+
+  AssertEqual
+  \ [[1, 12, v:null]],
+  \ g:sent_responses
+
+  unlet! g:sent_responses
+  runtime autoload/ale/lsp.vim
+
 Execute(LSP errors should be logged in the history):
   call ale#lsp_linter#SetLSPLinterMap({'347': {'name': 'foobar', 'aliases': [], 'lsp': 'stdio'}})
   call ale#lsp_linter#HandleLSPResponse(347, {
