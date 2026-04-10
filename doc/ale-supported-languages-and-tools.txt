@@ -383,6 +383,8 @@ Notes:
   * `lessc`
   * `prettier`
   * `stylelint`
+* LilyPond
+  * `lilypond`
 * LLVM
   * `llc`
 * Lua

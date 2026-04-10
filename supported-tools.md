@@ -393,6 +393,8 @@ formatting.
   * [lessc](https://www.npmjs.com/package/less)
   * [prettier](https://github.com/prettier/prettier)
   * [stylelint](https://github.com/stylelint/stylelint)
+* LilyPond
+  * [lilypond](https://lilypond.org/)
 * LLVM
   * [llc](https://llvm.org/docs/CommandGuide/llc.html)
 * Lua
