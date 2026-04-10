@@ -450,8 +450,12 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
 
         " Load the flags for this file, or for a source file matching the
         " header file.
+        " On Windows, bufnr() may fail to match when one path has a drive
+        " letter and the other doesn't, so fall back to path comparison.
         if (
         \   bufnr(l:filename) is a:buffer
+        \   || ale#path#RemoveDriveLetter(l:filename)
+        \       is? ale#path#RemoveDriveLetter(l:buffer_filename)
         \   || (
         \       !empty(l:source_file)
         \       && l:filename[-len(l:source_file):] is? l:source_file

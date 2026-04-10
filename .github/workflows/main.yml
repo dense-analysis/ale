@@ -36,3 +36,48 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run tests
         run: ./run-tests -v ${{ matrix.vim-version }}
+  test_ale_windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - editor: vim
+            neovim: false
+            version: v9.0.0000
+            headless: ''
+          - editor: neovim
+            neovim: true
+            version: v0.7.0
+            headless: '--headless'
+          - editor: neovim
+            neovim: true
+            version: v0.8.0
+            headless: '--headless'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup ${{ matrix.editor }} ${{ matrix.version }}
+        uses: rhysd/action-setup-vim@v1
+        id: editor
+        with:
+          neovim: ${{ matrix.neovim }}
+          version: ${{ matrix.version }}
+      - name: Clone Vader
+        shell: cmd
+        run: |
+          git clone https://github.com/junegunn/vader.vim C:\vader
+          git -C C:\vader checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
+      - name: Create testplugin junction
+        shell: cmd
+        run: mklink /J C:\testplugin "%GITHUB_WORKSPACE%"
+      - name: Run tests
+        shell: cmd
+        env:
+          VIM_EXE: ${{ steps.editor.outputs.executable }}
+          VIM_HEADLESS: ${{ matrix.headless }}
+        working-directory: C:\testplugin
+        run: |
+          set TMP=C:\tmp
+          set TEMP=C:\tmp
+          mkdir C:\tmp
+          run-tests.bat
