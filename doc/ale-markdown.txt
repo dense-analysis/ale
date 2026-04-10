@@ -247,9 +247,9 @@ g:ale_markdown_remark_lint_use_global
 ===============================================================================
 rumdl                                                      *ale-markdown-rumdl*
 
-                                       *ale-options.markdown_rumdl_executable*
-                                             *g:ale_markdown_rumdl_executable*
-                                             *b:ale_markdown_rumdl_executable*
+                                        *ale-options.markdown_rumdl_executable*
+                                              *g:ale_markdown_rumdl_executable*
+                                              *b:ale_markdown_rumdl_executable*
 markdown_rumdl_executable
 g:ale_markdown_rumdl_executable
   Type: |String|
@@ -257,9 +257,9 @@ g:ale_markdown_rumdl_executable
 
   Override the invoked `rumdl` binary.
 
-                                          *ale-options.markdown_rumdl_options*
-                                                *g:ale_markdown_rumdl_options*
-                                                *b:ale_markdown_rumdl_options*
+                                           *ale-options.markdown_rumdl_options*
+                                                 *g:ale_markdown_rumdl_options*
+                                                 *b:ale_markdown_rumdl_options*
 markdown_rumdl_options
 g:ale_markdown_rumdl_options
   Type: |String|
@@ -267,9 +267,9 @@ g:ale_markdown_rumdl_options
 
   This variable can be set to pass additional options to `rumdl server`.
 
-                                      *ale-options.markdown_rumdl_fmt_options*
-                                            *g:ale_markdown_rumdl_fmt_options*
-                                            *b:ale_markdown_rumdl_fmt_options*
+                                       *ale-options.markdown_rumdl_fmt_options*
+                                             *g:ale_markdown_rumdl_fmt_options*
+                                             *b:ale_markdown_rumdl_fmt_options*
 markdown_rumdl_fmt_options
 g:ale_markdown_rumdl_fmt_options
   Type: |String|
