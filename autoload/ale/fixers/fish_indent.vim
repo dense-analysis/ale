@@ -12,7 +12,7 @@ function! ale#fixers#fish_indent#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' -w '
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' %t',
     \   'read_temporary_file': 1,
     \}

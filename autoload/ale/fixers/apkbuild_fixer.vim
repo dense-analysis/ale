@@ -12,7 +12,7 @@ function! ale#fixers#apkbuild_fixer#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' -p ' . ale#Var(a:buffer, 'apkbuild_apkbuild_fixer_lint_executable')
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' %t',
     \   'read_temporary_file': 1,
     \}

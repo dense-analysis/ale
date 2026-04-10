@@ -11,6 +11,6 @@ function! ale#fixers#latexindent#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' -l'
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \}
 endfunction

@@ -11,7 +11,7 @@ function! ale#fixers#perltidy#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' -b'
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' %t',
     \   'read_temporary_file': 1,
     \}

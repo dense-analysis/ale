@@ -15,7 +15,7 @@ function! ale#fixers#google_java_format#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
-    \       . ' ' . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ' ' . ale#Pad(l:options)
     \       . ' --replace'
     \       . ' %t',
     \   'read_temporary_file': 1,
