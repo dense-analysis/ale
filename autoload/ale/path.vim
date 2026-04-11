@@ -205,7 +205,7 @@ function! ale#path#IsBufferPath(buffer, complex_filename) abort
 
     let l:test_filename = ale#path#Simplify(a:complex_filename)
 
-    if l:test_filename[:1] is# './'
+    if l:test_filename[:1] is# './' || l:test_filename[:1] is# '.\'
         let l:test_filename = l:test_filename[2:]
     endif
 
@@ -219,7 +219,7 @@ function! ale#path#IsBufferPath(buffer, complex_filename) abort
         let l:test_filename = fnamemodify(l:test_filename, ':t')
     endif
 
-    let l:buffer_filename = expand('#' . a:buffer . ':p')
+    let l:buffer_filename = ale#path#Simplify(expand('#' . a:buffer . ':p'))
 
     return l:buffer_filename is# l:test_filename
     \   || l:buffer_filename[-len(l:test_filename):] is# l:test_filename

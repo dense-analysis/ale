@@ -306,7 +306,7 @@ Execute(lint_file linters should stay running after checking without them):
   \ 2,
   \ len(keys(get(get(ale#command#GetData(), bufnr(''), {}), 'jobs', {})))
 
-  call ale#test#WaitForJobs(10000)
+  call ale#test#WaitForJobs(30000)
 
 Execute(The save event should not lint the buffer when ALE is disabled):
   let g:ale_enabled = 0

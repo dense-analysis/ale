@@ -11,6 +11,13 @@ Execute(The language string should be correct):
   AssertLSPLanguage 'ocaml'
 
 Execute(The project root should be detected correctly):
+  " Use a path outside any project tree to verify no root is found.
+  if has('win32')
+    silent! noautocmd file! C:\dummy_no_project.ml
+  else
+    silent! noautocmd file! /dummy_no_project.ml
+  endif
+
   AssertLSPProject ''
 
   call ale#test#SetFilename('../test-files/ocamllsp/file.ml')

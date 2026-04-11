@@ -14,7 +14,16 @@ function! ale#filename_mapping#Map(filename, filename_mappings) abort
         let l:mapping_from = ale#path#Simplify(l:mapping_from)
 
         if l:simplified_filename[:len(l:mapping_from) - 1] is# l:mapping_from
-            return l:mapping_to . l:simplified_filename[len(l:mapping_from):]
+            let l:suffix = l:simplified_filename[len(l:mapping_from):]
+
+            " On Windows, the simplified suffix uses backslashes, but the
+            " mapping target may use forward slashes for a remote path.
+            " Normalize the suffix separator to match the mapping target.
+            if has('win32') && l:mapping_to =~# '/'
+                let l:suffix = substitute(l:suffix, '\\', '/', 'g')
+            endif
+
+            return l:mapping_to . l:suffix
         endif
     endfor
 

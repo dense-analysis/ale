@@ -387,22 +387,39 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
 
     " We may have to look for /foo/bar instead of C:\foo\bar
     if empty(l:file_list) && has('win32')
-        let l:file_list = get(
-        \   a:file_lookup,
-        \   ale#path#RemoveDriveLetter(l:buffer_filename),
-        \   []
-        \)
+        " Try without the drive letter.
+        let l:no_drive = ale#path#RemoveDriveLetter(l:buffer_filename)
+
+        let l:file_list = get(a:file_lookup, l:no_drive, [])
+
+        " Also try by iterating keys in case Simplify produced different
+        " results for the key and the lookup value.
+        if empty(l:file_list)
+            for [l:key, l:val] in items(a:file_lookup)
+                if ale#path#RemoveDriveLetter(l:key) is? l:no_drive
+                    let l:file_list = l:val
+                    break
+                endif
+            endfor
+        endif
     endif
 
     " Try the absolute path to the directory second.
     let l:dir_list = get(a:dir_lookup, l:dir, [])
 
     if empty(l:dir_list) && has('win32')
-        let l:dir_list = get(
-        \   a:dir_lookup,
-        \   ale#path#RemoveDriveLetter(l:dir),
-        \   []
-        \)
+        let l:no_drive_dir = ale#path#RemoveDriveLetter(l:dir)
+
+        let l:dir_list = get(a:dir_lookup, l:no_drive_dir, [])
+
+        if empty(l:dir_list)
+            for [l:key, l:val] in items(a:dir_lookup)
+                if ale#path#RemoveDriveLetter(l:key) is? l:no_drive_dir
+                    let l:dir_list = l:val
+                    break
+                endif
+            endfor
+        endif
     endif
 
     if empty(l:file_list) && empty(l:dir_list)
