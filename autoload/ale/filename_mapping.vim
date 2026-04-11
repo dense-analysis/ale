@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Logic for handling mappings between files
 
+let s:is_windows = has('win32') || has('win64') || has('win32unix')
+
 " Invert filesystem mappings so they can be mapped in reverse.
 function! ale#filename_mapping#Invert(filename_mappings) abort
     return map(copy(a:filename_mappings), '[v:val[1], v:val[0]]')
@@ -19,7 +21,7 @@ function! ale#filename_mapping#Map(filename, filename_mappings) abort
             " On Windows, the simplified suffix uses backslashes, but the
             " mapping target may use forward slashes for a remote path.
             " Normalize the suffix separator to match the mapping target.
-            if has('win32') && l:mapping_to =~# '/'
+            if s:is_windows && l:mapping_to =~# '/'
                 let l:suffix = substitute(l:suffix, '\\', '/', 'g')
             endif
 
