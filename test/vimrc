@@ -15,9 +15,9 @@ hi link aleerrorline spellbad
 if has('win32')
     " C:\testplugin and C:\vader are set up as directory junctions or copies.
     " $PWD paths are included for running tests directly from the repo.
-    set runtimepath=$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,C:\vader,$PWD/vader,C:\testplugin,$PWD
+    set runtimepath=$VIM/../../lib/nvim,$VIMRUNTIME,$VIM/vimfiles/after,C:\vader,$PWD/vader,C:\testplugin,$PWD
 else
-    set runtimepath=/home/vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,/testplugin,/vader
+    set runtimepath=/home/vim,$VIM/../../lib/nvim,$VIMRUNTIME,$VIM/vimfiles/after,/testplugin,/vader
 endif
 
 " The following is just an example

@@ -26,10 +26,10 @@ tests='test/*.vader test/*/*.vader test/*/*/*.vader'
 # These flags are forwarded to the script for running Vader tests.
 verbose_flag=''
 quiet_flag=''
-run_neovim_07_tests=1
-run_neovim_08_tests=1
-run_vim_80_tests=1
+run_neovim_010_tests=1
+run_neovim_012_tests=1
 run_vim_90_tests=1
+run_vim_92_tests=1
 run_lua_tests=1
 run_linters=1
 
@@ -44,81 +44,81 @@ while [ $# -ne 0 ]; do
         shift
     ;;
     --build-image)
-        run_vim_80_tests=0
         run_vim_90_tests=0
-        run_neovim_07_tests=0
-        run_neovim_08_tests=0
+        run_vim_92_tests=0
+        run_neovim_010_tests=0
+        run_neovim_012_tests=0
         run_lua_tests=0
         run_linters=0
         shift
     ;;
     --neovim-only)
-        run_vim_80_tests=0
         run_vim_90_tests=0
+        run_vim_92_tests=0
         run_lua_tests=0
         run_linters=0
         shift
     ;;
-    --neovim-07-only)
-        run_neovim_08_tests=0
-        run_vim_80_tests=0
+    --neovim-010-only)
+        run_neovim_012_tests=0
         run_vim_90_tests=0
+        run_vim_92_tests=0
         run_lua_tests=0
         run_linters=0
         shift
     ;;
-    --neovim-08-only)
-        run_neovim_07_tests=0
-        run_vim_80_tests=0
+    --neovim-012-only)
+        run_neovim_010_tests=0
         run_vim_90_tests=0
+        run_vim_92_tests=0
         run_lua_tests=0
         run_linters=0
         shift
     ;;
     --vim-only)
-        run_neovim_07_tests=0
-        run_neovim_08_tests=0
-        run_lua_tests=0
-        run_linters=0
-        shift
-    ;;
-    --vim-80-only)
-        run_neovim_07_tests=0
-        run_neovim_08_tests=0
-        run_vim_90_tests=0
+        run_neovim_010_tests=0
+        run_neovim_012_tests=0
         run_lua_tests=0
         run_linters=0
         shift
     ;;
     --vim-90-only)
-        run_neovim_07_tests=0
-        run_neovim_08_tests=0
-        run_vim_80_tests=0
+        run_neovim_010_tests=0
+        run_neovim_012_tests=0
+        run_vim_92_tests=0
+        run_lua_tests=0
+        run_linters=0
+        shift
+    ;;
+    --vim-92-only)
+        run_neovim_010_tests=0
+        run_neovim_012_tests=0
+        run_vim_90_tests=0
         run_lua_tests=0
         run_linters=0
         shift
     ;;
     --linters-only)
-        run_vim_80_tests=0
         run_vim_90_tests=0
-        run_neovim_07_tests=0
-        run_neovim_08_tests=0
+        run_vim_92_tests=0
+        run_neovim_010_tests=0
+        run_neovim_012_tests=0
         run_lua_tests=0
         shift
     ;;
     --lua-only)
-        run_vim_80_tests=0
         run_vim_90_tests=0
-        run_neovim_07_tests=0
-        run_neovim_08_tests=0
+        run_vim_92_tests=0
+        run_neovim_010_tests=0
+        run_neovim_012_tests=0
         run_linters=0
         shift
     ;;
     --fast)
-        run_vim_80_tests=0
         run_vim_90_tests=0
-        run_neovim_07_tests=0
-        run_neovim_08_tests=1
+        run_vim_92_tests=0
+        run_neovim_010_tests=0
+        run_neovim_012_tests=1
         shift
     ;;
     --help)
@@ -132,11 +132,11 @@ while [ $# -ne 0 ]; do
         echo '  -q                Hide output for successful tests'
         echo '  --build-image     Run docker image build only.'
         echo '  --neovim-only     Run tests only for Neovim'
-        echo '  --neovim-07-only  Run tests only for Neovim 0.7'
-        echo '  --neovim-08-only  Run tests only for Neovim 0.8'
+        echo '  --neovim-010-only Run tests only for Neovim 0.10'
+        echo '  --neovim-012-only Run tests only for Neovim 0.12'
         echo '  --vim-only        Run tests only for Vim'
-        echo '  --vim-80-only     Run tests only for Vim 8.2'
         echo '  --vim-90-only     Run tests only for Vim 9.0'
+        echo '  --vim-92-only     Run tests only for Vim 9.2'
         echo '  --lua-only        Run only Lua tests'
         echo '  --linters-only    Run only Vint and custom checks'
         echo '  --fast            Run only the fastest Vim and custom checks'
@@ -203,13 +203,6 @@ if [ "$has_image" -eq 0 ] && ! download_image; then
 
   build_args=( --build-arg GIT_VERSION="$git_version" )
 
-  if [[ $arch != x86_64 ]]; then
-    echo "Building testbed/vim:24 for $arch"
-    testbed_vim_ref=902917c4caa50db2f2e80009b839605602f9f014
-    "$DOCKER" build -t "testbed/vim:$testbed_vim_ref" "https://github.com/Vimjas/vim-testbed.git#$testbed_vim_ref"
-    build_args+=( --build-arg TESTBED_VIM_VERSION="$testbed_vim_ref" )
-  fi
-
   "$DOCKER" build "${build_args[@]}" -t "${image}:${image_tag}" .
   "$DOCKER" tag "${image}:${image_tag}" "${image}:latest"
 
@@ -260,10 +253,10 @@ cancel_tests() {
 trap cancel_tests INT TERM
 
 for vim in $("$DOCKER" run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
-    if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
-    || ( [[ $vim =~ ^vim-v9.0 ]] && ((run_vim_90_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.7 ]] && ((run_neovim_07_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.8 ]] && ((run_neovim_08_tests)) ); then
+    if ( [[ $vim =~ ^vim-v9.0 ]] && ((run_vim_90_tests)) ) \
+    || ( [[ $vim =~ ^vim-v9.2 ]] && ((run_vim_92_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.10 ]] && ((run_neovim_010_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.12 ]] && ((run_neovim_012_tests)) ); then
         echo "Starting Vim: $vim..."
         file_number=$((file_number+1))
         test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" \

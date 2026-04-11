@@ -26,10 +26,10 @@ jobs:
     strategy:
       matrix:
         vim-version:
-          - '--vim-80-only'
           - '--vim-90-only'
-          - '--neovim-07-only'
-          - '--neovim-08-only'
+          - '--vim-92-only'
+          - '--neovim-010-only'
+          - '--neovim-012-only'
           - '--lua-only'
           - '--linters-only'
     steps:
@@ -44,15 +44,19 @@ jobs:
         include:
           - editor: vim
             neovim: false
-            version: v9.0.0000
+            version: v9.0.2189
+            headless: ''
+          - editor: vim
+            neovim: false
+            version: v9.2.0329
             headless: ''
           - editor: neovim
             neovim: true
-            version: v0.7.0
+            version: v0.10.4
             headless: '--headless'
           - editor: neovim
             neovim: true
-            version: v0.8.0
+            version: v0.12.1
             headless: '--headless'
     steps:
       - uses: actions/checkout@v4

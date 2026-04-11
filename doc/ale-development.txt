@@ -50,7 +50,7 @@ documented functions and options, until a major version is planned. Breaking
 changes should be preceded by a deprecation phase complete with warnings.
 Changes required for security may be an exception.
 
-ALE supports Vim 8 and above, and Neovim 0.7.0 or newer. These are the
+ALE supports Vim 9 and above, and Neovim 0.10.0 or newer. These are the
 earliest versions of Vim and Neovim which support |+job|, |+timer|,
 |+closure|, and |+lambda| features. All ALE code should be written so it is
 compatible with these versions of Vim, or with version checks so particular
@@ -159,13 +159,10 @@ Apply the following rules when writing Bash scripts.
 ALE is tested with a suite of tests executed via GitHub Actions. ALE runs
 tests with the following versions of Vim in the following environments.
 
-1. Vim 8.0.0027 on Linux via GitHub Actions.
-2. Vim 9.0.0297 on Linux via GitHub Actions.
-3. Neovim 0.7.0 on Linux via GitHub Actions.
-4. Neovim 0.8.0 on Linux via GitHub Actions.
-5. Vim 9.0.0000 on Windows via GitHub Actions.
-6. Neovim 0.7.0 on Windows via GitHub Actions.
-7. Neovim 0.8.0 on Windows via GitHub Actions.
+1. Vim 9.0 on Linux and Windows via GitHub Actions.
+2. Vim 9.2 on Linux and Windows via GitHub Actions.
+3. Neovim 0.10 on Linux and Windows via GitHub Actions.
+4. Neovim 0.12 on Linux and Windows via GitHub Actions.
 
 If you are developing ALE code on Linux, Mac OSX, or BSD, you can run ALEs
 tests by installing Docker and running the `run-tests` script. Follow the
