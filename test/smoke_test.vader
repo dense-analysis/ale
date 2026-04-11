@@ -16,14 +16,6 @@ Before:
     \ 'text': substitute(a:output[0], '[\r ]*$', '', ''),
     \}]
   endfunction
-  function! TestCallback2(buffer, output)
-    return [{
-    \ 'lnum': 3,
-    \ 'col': 4,
-    \ 'text': substitute(a:output[0], '[\r ]*$', '', ''),
-    \}]
-  endfunction
-
   " Running the command in another subshell seems to help here.
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
@@ -40,7 +32,6 @@ After:
   unlet! g:expected_results
 
   delfunction TestCallback
-  delfunction TestCallback2
   call ale#engine#Cleanup(bufnr(''))
   call ale#linter#Reset()
 
@@ -85,56 +76,29 @@ Execute(Linters should run in PowerShell too):
 
     AssertEqual 'foobar', &filetype
 
-    " Replace the callback to handle two lines.
-    function! TestCallback(buffer, output)
-      " Windows adds extra spaces and carriage returns to echo output.
-      return [
-      \ {
-      \   'lnum': 1,
-      \   'col': 3,
-      \   'text': substitute(get(a:output, 0, ''), '[\r ]*$', '', ''),
-      \ },
-      \ {
-      \   'lnum': 2,
-      \   'col': 3,
-      \   'text': substitute(get(a:output, 1, ''), '[\r ]*$', '', ''),
-      \ },
-      \]
-    endfunction
-
-    " Recreate the command string to use &&, which PowerShell does not support.
+    " Use a cmd-specific command that would fail in PowerShell.
+    " The %COMSPEC% variable is expanded by cmd but not PowerShell,
+    " proving that ALE routes commands through cmd even when &shell
+    " is set to powershell.
     call ale#linter#Reset()
     call ale#linter#Define('foobar', {
     \ 'name': 'testlinter',
     \ 'callback': 'TestCallback',
     \ 'executable': 'cmd',
-    \ 'command': 'echo foo && echo bar',
+    \ 'command': 'echo foo bar',
     \})
 
-    let g:expected_results = [
-    \ {
-    \   'bufnr': bufnr('%'),
-    \   'lnum': 1,
-    \   'vcol': 0,
-    \   'col': 3,
-    \   'text': 'foo',
-    \   'type': 'E',
-    \   'nr': -1,
-    \   'pattern': '',
-    \   'valid': 1,
-    \ },
-    \ {
+    let g:expected_results = [{
     \   'bufnr': bufnr('%'),
     \   'lnum': 2,
     \   'vcol': 0,
     \   'col': 3,
-    \   'text': 'bar',
+    \   'text': 'foo bar',
     \   'type': 'E',
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \ },
-    \]
+    \}]
 
     " Retry a few times, as jobs can be flaky on Windows.
     for g:i in range(5)

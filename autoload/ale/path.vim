@@ -153,6 +153,12 @@ function! ale#path#IsAbsolute(filename) abort
 endfunction
 
 let s:temp_dir = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h'))
+
+if s:temp_dir is# ale#path#Simplify(fnamemodify(s:temp_dir, ':h'))
+    " :h:h resolved to a root path; use :h instead.
+    let s:temp_dir = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h'))
+endif
+
 let s:resolved_temp_dir = resolve(s:temp_dir)
 
 " Given a filename, return 1 if the file represents some temporary file
