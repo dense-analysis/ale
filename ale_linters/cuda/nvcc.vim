@@ -23,7 +23,7 @@ function! ale_linters#cuda#nvcc#HandleNVCCFormat(buffer, lines) abort
         \   'lnum': str2nr(l:match[2]),
         \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
         \   'text': l:match[5],
-        \   'filename': fnamemodify(ale#path#Simplify(l:match[1]), ':p'),
+        \   'filename': ale#path#Simplify(fnamemodify(l:match[1], ':p')),
         \}
 
         if !empty(l:match[3])

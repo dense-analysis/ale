@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for working with paths in the filesystem.
 
+let s:is_windows = has('win32') || has('win64') || has('win32unix')
+
 " simplify a path, and fix annoying issues with paths on Windows.
 "
 " Forward slashes are changed to back slashes so path equality works better
@@ -27,7 +29,7 @@ endfunction
 " Simplify a path without a Windows drive letter.
 " This function can be used for checking if paths are equal.
 function! ale#path#RemoveDriveLetter(path) abort
-    return has('win32') && a:path[1:2] is# ':\'
+    return s:is_windows && a:path[1:2] =~# '^:[/\\]$'
     \   ? ale#path#Simplify(a:path[2:])
     \   : ale#path#Simplify(a:path)
 endfunction
@@ -145,7 +147,7 @@ endfunction
 
 " Return 1 if a path is an absolute path.
 function! ale#path#IsAbsolute(filename) abort
-    if has('win32')
+    if s:is_windows
         return a:filename[:0] =~# '[\\/]' || a:filename[0:2] =~? '[A-Z]:[/\\]'
     else
         return a:filename[:0] is# '/'
@@ -179,7 +181,7 @@ function! ale#path#GetAbsPath(base_directory, filename) abort
         return ale#path#Simplify(a:filename)
     endif
 
-    let l:sep = has('win32') ? '\' : '/'
+    let l:sep = s:is_windows ? '\' : '/'
 
     return ale#path#Simplify(a:base_directory . l:sep . a:filename)
 endfunction
@@ -192,7 +194,7 @@ function! ale#path#Dirname(path) abort
     endif
 
     " For /foo/bar/ we need :h:h to get /foo
-    if a:path[-1:] is# '/' || (has('win32') && a:path[-1:] is# '\')
+    if a:path[-1:] is# '/' || (s:is_windows && a:path[-1:] is# '\')
         return fnamemodify(a:path, ':h:h')
     endif
 
@@ -233,8 +235,8 @@ endfunction
 
 " Given a path, return every component of the path, moving upwards.
 function! ale#path#Upwards(path) abort
-    let l:pattern = has('win32') ? '\v/+|\\+' : '\v/+'
-    let l:sep = has('win32') ? '\' : '/'
+    let l:pattern = s:is_windows ? '\v/+|\\+' : '\v/+'
+    let l:sep = s:is_windows ? '\' : '/'
     let l:parts = split(ale#path#Simplify(a:path), l:pattern)
     let l:path_list = []
 
@@ -243,7 +245,7 @@ function! ale#path#Upwards(path) abort
         let l:parts = l:parts[:-2]
     endwhile
 
-    if has('win32') && a:path =~# '^[a-zA-z]:\'
+    if s:is_windows && a:path =~# '^[a-zA-z]:\'
         " Add \ to C: for C:\, etc.
         let l:path_list[-1] .= '\'
     elseif a:path[0] is# '/'
@@ -283,7 +285,7 @@ function! ale#path#FromFileURI(uri) abort
     let l:path = ale#uri#Decode(l:encoded_path)
 
     " If the path is like /C:/foo/bar, it should be C:\foo\bar instead.
-    if has('win32') && l:path =~# '^/[a-zA-Z][:|]'
+    if s:is_windows && l:path =~# '^/[a-zA-Z][:|]'
         let l:path = substitute(l:path[1:], '/', '\\', 'g')
         let l:path = l:path[0] . ':' . l:path[2:]
     endif
