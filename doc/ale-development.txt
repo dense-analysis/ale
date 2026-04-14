@@ -13,7 +13,7 @@ CONTENTS                                             *ale-development-contents*
   4. Testing ALE..........................|ale-development-tests|
     4.1. Writing Linter Tests.............|ale-development-linter-tests|
     4.2. Writing Fixer Tests..............|ale-development-fixer-tests|
-    4.3. Running Tests on Windows..........|ale-development-windows-tests|
+    4.3. Running Tests on Windows.........|ale-development-windows-tests|
   5. Contributing.........................|ale-development-contributing|
     5.1. Preparing a Release..............|ale-development-release|
 

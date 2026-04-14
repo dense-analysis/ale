@@ -22,6 +22,8 @@ ENV PACKAGES="\
     lua5.1-busted \
     bash \
     git \
+    grep \
+    sed \
     python3 \
     py3-pip \
     gettext-dev \

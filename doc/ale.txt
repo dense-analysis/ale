@@ -3454,6 +3454,8 @@ documented in additional help files.
     cspell................................|ale-c-cspell|
     flawfinder............................|ale-c-flawfinder|
     uncrustify............................|ale-c-uncrustify|
+  c3......................................|ale-c3-options|
+    c3lsp.................................|ale-c3-c3lsp|
   cairo...................................|ale-cairo-options|
     scarb.................................|ale-cairo-scarb|
     starknet..............................|ale-cairo-starknet|
@@ -3505,8 +3507,6 @@ documented in additional help files.
     clang-format..........................|ale-cuda-clangformat|
     clangd................................|ale-cuda-clangd|
     nvcc..................................|ale-cuda-nvcc|
-  c3......................................|ale-c3-options|
-    c3lsp.................................|ale-c3-c3lsp|
   d.......................................|ale-d-options|
     dfmt..................................|ale-d-dfmt|
     dls...................................|ale-d-dls|
@@ -3698,14 +3698,14 @@ documented in additional help files.
     prettier..............................|ale-json-prettier|
     spectral..............................|ale-json-spectral|
     vscodejson............................|ale-json-vscode|
+  json5...................................|ale-json5-options|
+    eslint................................|ale-json5-eslint|
   jsonc...................................|ale-jsonc-options|
     biome.................................|ale-jsonc-biome|
     eslint................................|ale-jsonc-eslint|
   jsonnet.................................|ale-jsonnet-options|
     jsonnetfmt............................|ale-jsonnet-jsonnetfmt|
     jsonnet-lint..........................|ale-jsonnet-jsonnet-lint|
-  json5...................................|ale-json5-options|
-    eslint................................|ale-json5-eslint|
   julia...................................|ale-julia-options|
     languageserver........................|ale-julia-languageserver|
   kotlin..................................|ale-kotlin-options|
@@ -4057,11 +4057,11 @@ documented in additional help files.
     hdl-checker...........................|ale-vhdl-hdl-checker|
     vcom..................................|ale-vhdl-vcom|
     xvhdl.................................|ale-vhdl-xvhdl|
-  vim help................................|ale-vim-help-options|
-    write-good............................|ale-vim-help-write-good|
   vim.....................................|ale-vim-options|
     vimls.................................|ale-vim-vimls|
     vint..................................|ale-vim-vint|
+  vim help................................|ale-vim-help-options|
+    write-good............................|ale-vim-help-write-good|
   vue.....................................|ale-vue-options|
     cspell................................|ale-vue-cspell|
     prettier..............................|ale-vue-prettier|

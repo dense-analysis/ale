@@ -45,7 +45,11 @@ Before:
     return empty(l:lines) ? '' : l:lines[-1]
   endfunction
 
-  echomsg ''
+  try
+    silent messages clear
+  catch
+    echomsg ''
+  endtry
 
 After:
   Restore
