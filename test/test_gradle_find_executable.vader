@@ -11,17 +11,14 @@ Before:
 After:
   Restore
 
-  unlet! g:wrapped_gradlew
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(Should return 'gradlew' if found in parent directory):
   call ale#test#SetFilename('test-files/gradle/wrapped-project/src/main/kotlin/dummy.kt')
 
-  let g:wrapped_gradlew = ale#path#Simplify(resolve(g:dir . '/test-files/gradle/wrapped-project/gradlew'))
-
   AssertEqual
-  \ g:wrapped_gradlew,
+  \ ale#path#Simplify(g:dir . '/test-files/gradle/wrapped-project/gradlew'),
   \ ale#gradle#FindExecutable(bufnr(''))
 
 Execute(Should return 'gradle' if 'gradlew' not found in parent directory):
