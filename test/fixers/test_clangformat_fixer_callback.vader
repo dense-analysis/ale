@@ -7,7 +7,7 @@ Before:
   let g:ale_c_clangformat_executable = 'xxxinvalid'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  let g:dir = ale#path#Simplify(resolve(getcwd()))
+  let g:dir = getcwd()
 
 After:
   Restore
