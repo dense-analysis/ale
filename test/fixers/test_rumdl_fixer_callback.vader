@@ -1,0 +1,24 @@
+Before:
+  call ale#assert#SetUpFixerTest('markdown', 'rumdl')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute:
+  AssertFixer {
+  \ 'command': ale#Escape('rumdl') . ' fmt - --silent',
+  \}
+
+Execute:
+  let g:ale_markdown_rumdl_executable = 'rumdl_custom'
+
+  AssertFixer {
+  \ 'command': ale#Escape('rumdl_custom') . ' fmt - --silent',
+  \}
+
+Execute:
+  let g:ale_markdown_rumdl_fmt_options = ''
+
+  AssertFixer {
+  \ 'command': ale#Escape('rumdl') . ' fmt -',
+  \}

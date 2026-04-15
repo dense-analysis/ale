@@ -245,6 +245,40 @@ g:ale_markdown_remark_lint_use_global
 
 
 ===============================================================================
+rumdl                                                      *ale-markdown-rumdl*
+
+                                        *ale-options.markdown_rumdl_executable*
+                                              *g:ale_markdown_rumdl_executable*
+                                              *b:ale_markdown_rumdl_executable*
+markdown_rumdl_executable
+g:ale_markdown_rumdl_executable
+  Type: |String|
+  Default: `'rumdl'`
+
+  Override the invoked `rumdl` binary.
+
+                                           *ale-options.markdown_rumdl_options*
+                                                 *g:ale_markdown_rumdl_options*
+                                                 *b:ale_markdown_rumdl_options*
+markdown_rumdl_options
+g:ale_markdown_rumdl_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to `rumdl server`.
+
+                                       *ale-options.markdown_rumdl_fmt_options*
+                                             *g:ale_markdown_rumdl_fmt_options*
+                                             *b:ale_markdown_rumdl_fmt_options*
+markdown_rumdl_fmt_options
+g:ale_markdown_rumdl_fmt_options
+  Type: |String|
+  Default: `'--silent'`
+
+  This variable can be set to pass additional options to `rumdl fmt`.
+
+
+===============================================================================
 textlint                                                *ale-markdown-textlint*
 
 See |ale-text-textlint|
