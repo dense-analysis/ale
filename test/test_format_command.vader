@@ -175,8 +175,9 @@ Execute(FormatCommand should apply filename mappings to temporary files):
   Assert g:result[1] =~# '/foo/bar'
 
 Execute(FormatCommand should apply filename modifiers to mapped filenames):
+  let g:mapped_filename = '/foo/bar/dummy.txt'
   let g:result = ale#command#FormatCommand(bufnr('%'), '', '%s:h', 0, v:null, v:null, [
-  \ [expand('%:p:h'), '/foo/bar'],
+  \ [expand('%:p'), g:mapped_filename],
   \])
 
   AssertEqual ale#Escape('/foo/bar'), g:result[1]

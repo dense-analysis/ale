@@ -9,11 +9,17 @@ Before:
   let g:ale_set_lists_synchronously = 1
 
   function! TestCallback(buffer, output)
+    let l:text = substitute(get(a:output, 0, ''), '[\r ]*$', '', '')
+
+    if empty(l:text)
+      return []
+    endif
+
     " Windows adds extra spaces and carriage returns to echo output.
     return [{
     \ 'lnum': 2,
     \ 'col': 3,
-    \ 'text': substitute(a:output[0], '[\r ]*$', '', ''),
+    \ 'text': l:text,
     \}]
   endfunction
   " Running the command in another subshell seems to help here.

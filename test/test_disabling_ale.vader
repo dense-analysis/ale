@@ -4,6 +4,7 @@ Before:
   Save b:ale_enabled
   Save g:ale_maximum_file_size
   Save b:ale_maximum_file_size
+  Save g:starting_message
 
   function! SetUpCursorData()
     let g:ale_buffer_info = {
@@ -51,6 +52,8 @@ Before:
     echomsg ''
   endtry
 
+  let g:starting_message = GetLastMessage()
+
 After:
   Restore
   call ale#linter#Reset()
@@ -72,7 +75,7 @@ Execute(Linting shouldn't happen when ALE is disabled globally):
   AssertEqual {}, g:ale_buffer_info
   call SetUpCursorData()
   call ale#cursor#EchoCursorWarning()
-  AssertEqual '', GetLastMessage()
+  AssertEqual g:starting_message, GetLastMessage()
 
 Execute(Linting shouldn't happen when ALE is disabled locally):
   let b:ale_enabled = 0
@@ -83,7 +86,7 @@ Execute(Linting shouldn't happen when ALE is disabled locally):
   AssertEqual {}, g:ale_buffer_info
   call SetUpCursorData()
   call ale#cursor#EchoCursorWarning()
-  AssertEqual '', GetLastMessage()
+  AssertEqual g:starting_message, GetLastMessage()
 
 Execute(Linting shouldn't happen when the file is too large with global options):
   let g:ale_maximum_file_size = 12
@@ -95,7 +98,7 @@ Execute(Linting shouldn't happen when the file is too large with global options)
   " We shouldn't show cursor warnings.
   call SetUpCursorData()
   call ale#cursor#EchoCursorWarning()
-  AssertEqual '', GetLastMessage()
+  AssertEqual g:starting_message, GetLastMessage()
 
 Execute(Linting shouldn't happen when the file is too large with local options):
   let b:ale_maximum_file_size = 12
@@ -106,4 +109,4 @@ Execute(Linting shouldn't happen when the file is too large with local options):
   AssertEqual {}, g:ale_buffer_info
   call SetUpCursorData()
   call ale#cursor#EchoCursorWarning()
-  AssertEqual '', GetLastMessage()
+  AssertEqual g:starting_message, GetLastMessage()

@@ -7,21 +7,25 @@ After:
   unlet! b:temp_name
   unlet! b:other_bufnr
   unlet! b:other_path
+  unlet! g:temp_base
 
   Restore
 
 
 Execute(FixLocList should map filenames):
+  let g:temp_base = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h'))
+
+  if g:temp_base is# ale#path#Simplify(fnamemodify(g:temp_base, ':h'))
+    let g:temp_base = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h'))
+  endif
+
   " Paths converted back into temporary filenames shouldn't be included.
   let g:ale_filename_mappings = {
   \ 'linter2': [['/xxx/', '/data/']],
   \ 'linter1': [
   \   ['/bar/', '/data/special/'],
   \   ['/foo/', '/data/'],
-  \   [
-  \     ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h')) . '/',
-  \     '/x-tmp/',
-  \   ],
+  \   [g:temp_base . '/', '/x-tmp/'],
   \ ],
   \}
 
