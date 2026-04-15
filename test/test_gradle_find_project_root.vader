@@ -3,28 +3,38 @@ Before:
   runtime ale_linters/kotlin/kotlinc.vim
 
 After:
+  unlet! g:wrapped_root
+  unlet! g:settings_root
+  unlet! g:build_root
+
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(Should return directory for 'gradlew' if found in parent directory):
   call ale#test#SetFilename('test-files/gradle/wrapped-project/src/main/kotlin/dummy.kt')
 
+  let g:wrapped_root = ale#path#Simplify(resolve(g:dir . '/test-files/gradle/wrapped-project'))
+
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/test-files/gradle/wrapped-project'),
+  \ g:wrapped_root,
   \ ale#gradle#FindProjectRoot(bufnr(''))
 
 Execute(Should return directory for 'settings.gradle' if found in parent directory):
   call ale#test#SetFilename('test-files/gradle/settings-gradle-project/src/main/kotlin/dummy.kt')
 
+  let g:settings_root = ale#path#Simplify(resolve(g:dir . '/test-files/gradle/settings-gradle-project'))
+
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/test-files/gradle/settings-gradle-project'),
+  \ g:settings_root,
   \ ale#gradle#FindProjectRoot(bufnr(''))
 
 Execute(Should return directory for 'build.gradle' if found in parent directory):
   call ale#test#SetFilename('test-files/gradle/build-gradle-project/src/main/kotlin/dummy.kt')
 
+  let g:build_root = ale#path#Simplify(resolve(g:dir . '/test-files/gradle/build-gradle-project'))
+
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/test-files/gradle/build-gradle-project'),
+  \ g:build_root,
   \ ale#gradle#FindProjectRoot(bufnr(''))
 
 Execute(Should return empty string if gradle files are not found in parent directory):

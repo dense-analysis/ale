@@ -7,7 +7,7 @@ Before:
   let g:ale_python_autoflake_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  let g:dir = getcwd()
+  let g:dir = ale#path#Simplify(resolve(getcwd()))
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 

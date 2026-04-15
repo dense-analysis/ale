@@ -1,6 +1,6 @@
 Before:
   silent! cd /testplugin/test/util
-  let g:dir = getcwd()
+  let g:dir = ale#path#Simplify(resolve(getcwd()))
 
 After:
   silent execute 'cd ' . fnameescape(g:dir)

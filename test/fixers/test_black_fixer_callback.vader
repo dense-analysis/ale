@@ -1,7 +1,7 @@
 Before:
   call ale#assert#SetUpFixerTest('python', 'black')
 
-  let g:dir = getcwd()
+  let g:dir = ale#path#Simplify(resolve(getcwd()))
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
 After:
