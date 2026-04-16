@@ -219,7 +219,8 @@ function! ale#completion#Filter(
     if empty(a:prefix)
         let l:filtered_suggestions = a:suggestions
     else
-        let l:triggers = s:GetFiletypeValue(s:trigger_character_map, a:filetype)
+        let l:conn_id = get(get(b:, 'ale_completion_info', {}), 'conn_id', '')
+        let l:triggers = s:GetTriggerCharacters(a:filetype, l:conn_id)
 
         " For completing...
         "   foo.
