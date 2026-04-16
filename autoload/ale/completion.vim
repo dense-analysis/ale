@@ -817,7 +817,7 @@ function! s:OnReady(linter, lsp_details) abort
         \   l:buffer,
         \   b:ale_completion_info.line,
         \   b:ale_completion_info.column,
-        \   ale#completion#GetTriggerCharacter(&filetype, b:ale_completion_info.prefix),
+        \   ale#completion#GetTriggerCharacter(&filetype, b:ale_completion_info.prefix, l:id),
         \)
     endif
 
