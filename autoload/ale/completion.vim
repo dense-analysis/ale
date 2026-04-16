@@ -145,6 +145,7 @@ let s:omni_start_map = {
 
 " A map of exact characters for triggering LSP completions. Do not forget to
 " update self.input_patterns in ale.py in updating entries in this map.
+" These are used as a fallback when LSP servers don't provide trigger chars.
 let s:trigger_character_map = {
 \   '<default>': ['.'],
 \   'typescript': ['.', '''', '"'],
@@ -152,6 +153,19 @@ let s:trigger_character_map = {
 \   'cpp': ['.', '::', '->'],
 \   'c': ['.', '->'],
 \}
+
+" Get trigger characters, preferring LSP-provided ones over hardcoded.
+function! s:GetTriggerCharacters(filetype, conn_id) abort
+    if !empty(a:conn_id)
+        let l:lsp_triggers = ale#lsp#GetCompletionTriggerCharacters(a:conn_id)
+
+        if !empty(l:lsp_triggers)
+            return l:lsp_triggers
+        endif
+    endif
+
+    return s:GetFiletypeValue(s:trigger_character_map, a:filetype)
+endfunction
 
 function! s:GetFiletypeValue(map, filetype) abort
     for l:part in reverse(split(a:filetype, '\.'))
@@ -178,12 +192,13 @@ function! ale#completion#GetPrefix(filetype, line, column) abort
     return matchstr(getline(a:line)[: a:column - 2], l:regex)
 endfunction
 
-function! ale#completion#GetTriggerCharacter(filetype, prefix) abort
+function! ale#completion#GetTriggerCharacter(filetype, prefix, ...) abort
     if empty(a:prefix)
         return ''
     endif
 
-    let l:char_list = s:GetFiletypeValue(s:trigger_character_map, a:filetype)
+    let l:conn_id = get(a:, 1, '')
+    let l:char_list = s:GetTriggerCharacters(a:filetype, l:conn_id)
 
     if index(l:char_list, a:prefix) >= 0
         return a:prefix
