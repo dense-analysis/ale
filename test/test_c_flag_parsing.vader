@@ -30,7 +30,7 @@ Execute(The make command should be correct):
 
   AssertEqual
   \ [
-  \   ale#path#Simplify(g:dir. '/test-files/c/makefile_project'),
+  \   ale#path#Simplify(resolve(g:dir) . '/test-files/c/makefile_project'),
   \   'make -n --always-make',
   \ ],
   \ ale#c#GetMakeCommand(bufnr(''))
@@ -40,7 +40,7 @@ Execute(The make command should be correct):
 
   AssertEqual
   \ [
-  \   ale#path#Simplify(g:dir. '/test-files/c/makefile_project'),
+  \   ale#path#Simplify(resolve(g:dir) . '/test-files/c/makefile_project'),
   \   'make -n',
   \ ],
   \ ale#c#GetMakeCommand(bufnr(''))
@@ -50,7 +50,7 @@ Execute(Should recognize GNUmakefile as a makefile):
 
   AssertEqual
   \ [
-  \   ale#path#Simplify(g:dir. '/test-files/c/gnumakefile_project'),
+  \   ale#path#Simplify(resolve(g:dir) . '/test-files/c/gnumakefile_project'),
   \   'make -n --always-make',
   \ ],
   \ ale#c#GetMakeCommand(bufnr(''))
@@ -59,7 +59,7 @@ Execute(The CFlags parser should be able to parse include directives):
   call ale#test#SetFilename('test-files/c/makefile_project/subdir/file.c')
 
   AssertEqual
-  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test-files/c/makefile_project/subdir')),
+  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/test-files/c/makefile_project/subdir')),
   \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -Isubdir -c file.c'])
 
   AssertEqual
@@ -70,14 +70,14 @@ Execute(ParseCFlags should ignore -c and -o):
   call ale#test#SetFilename('test-files/c/makefile_project/subdir/file.c')
 
   AssertEqual
-  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test-files/c/makefile_project/subdir')),
+  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/test-files/c/makefile_project/subdir')),
   \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -Isubdir -c file.c -o a.out'])
 
 Execute(The CFlags parser should be able to parse macro directives):
   call ale#test#SetFilename('test-files/c/makefile_project/subdir/file.c')
 
   AssertEqual
-  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test-files/c/makefile_project/subdir'))
+  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/test-files/c/makefile_project/subdir'))
   \   . ' -DTEST=1',
   \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -Isubdir -DTEST=1 -c file.c'])
 
@@ -85,7 +85,7 @@ Execute(The CFlags parser should be able to parse macro directives with spaces):
   call ale#test#SetFilename('test-files/c/makefile_project/subdir/file.c')
 
   AssertEqual
-  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test-files/c/makefile_project/subdir'))
+  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/test-files/c/makefile_project/subdir'))
   \   . ' -DTEST=$(( 2 * 4 ))',
   \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -Isubdir -DTEST=$(( 2 * 4 )) -c file.c'])
 
@@ -93,7 +93,7 @@ Execute(The CFlags parser should be able to parse shell directives with spaces):
   call ale#test#SetFilename('test-files/c/makefile_project/subdir/file.c')
 
   AssertEqual
-  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test-files/c/makefile_project/subdir'))
+  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/test-files/c/makefile_project/subdir'))
   \   .  ' -DTEST=`date +%s`',
   \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -Isubdir -DTEST=`date +%s` -c file.c'])
 

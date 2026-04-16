@@ -16,7 +16,7 @@ Execute(The yamlfix callback should return the correct default values):
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yamlfix')) . ' -',
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yamlfix')) . ' -',
   \ },
   \ ale#fixers#yamlfix#Fix(bufnr(''))
 
@@ -27,7 +27,7 @@ Execute(The yamlfix callback should respect custom options):
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yamlfix'))
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yamlfix'))
   \     . ' --multi-line=3 --trailing-comma -',
   \ },
   \ ale#fixers#yamlfix#Fix(bufnr(''))

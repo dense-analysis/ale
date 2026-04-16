@@ -16,5 +16,5 @@ Execute(The inko callback should include tests/ for test paths):
   AssertLinter 'inko',
   \ ale#Escape('inko')
   \   . ' build --check --format=json --include '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/inko/tests/'))
+  \   . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/inko/tests/'))
   \   . ' %s'

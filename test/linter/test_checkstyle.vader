@@ -33,7 +33,7 @@ Execute(configuration files set in _config should be supported):
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
-  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/checkstyle/other_config.xml'))
+  \ . ' -c ' . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/checkstyle/other_config.xml'))
   \ . ' %s'
 
 Execute(configuration files set in _options should be preferred over _config):
@@ -59,7 +59,7 @@ Execute(Other relative paths should be supported):
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
-  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/checkstyle/other_config.xml'))
+  \ . ' -c ' . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/checkstyle/other_config.xml'))
   \ . ' %s'
 
   call ale#test#SetFilename('../test-files/checkstyle/test.java')
@@ -68,5 +68,5 @@ Execute(Other relative paths should be supported):
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
-  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/checkstyle/other_config.xml'))
+  \ . ' -c ' . ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/checkstyle/other_config.xml'))
   \ . ' %s'

@@ -21,7 +21,7 @@ Execute(The ruff callback should not change directory if the option is set to 0)
   AssertFixer
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff')) . ' format --stdin-filename ' . fname . ' -',
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff')) . ' format --stdin-filename ' . fname . ' -',
   \ }
 
 Execute(The ruff callback should respect custom options):
@@ -35,8 +35,8 @@ Execute(The ruff callback should respect custom options):
 
   AssertFixer
   \ {
-  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir'),
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff'))
+  \   'cwd': ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/subdir'),
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff'))
   \     . ' format --ignore F401 -q --stdin-filename '. fname . ' -',
   \ }
 
