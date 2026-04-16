@@ -870,3 +870,14 @@ function! ale#lsp#HasCapability(conn_id, capability) abort
 
     return l:conn.capabilities[a:capability]
 endfunction
+
+" Get the completion trigger characters for a connection.
+function! ale#lsp#GetCompletionTriggerCharacters(conn_id) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return []
+    endif
+
+    return get(l:conn.capabilities, 'completion_trigger_characters', [])
+endfunction
