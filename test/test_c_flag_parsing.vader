@@ -18,8 +18,16 @@ Before:
     return ale#c#ParseCFlags(a:path_prefix, 0, l:args)
   endfunction
 
+  " Return a fully-qualified path, matching what expand(':p') produces.
+  " This ensures dict keys match the buffer filename lookup in
+  " ParseCompileCommandsFlags on all platforms.
+  function FullPath(path) abort
+    return ale#path#Simplify(fnamemodify(a:path, ':p'))
+  endfunction
+
 After:
   delfunction SplitAndParse
+  delfunction FullPath
 
   Restore
 
@@ -194,7 +202,7 @@ Execute(ParseCompileCommandsFlags should tolerate empty values):
   AssertEqual '', ale#c#ParseCompileCommandsFlags(bufnr(''), {}, {})
 
 Execute(ParseCompileCommandsFlags should parse some basic flags):
-  silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+  silent noautocmd execute 'file! ' . fnameescape(FullPath('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   " We should read the absolute path filename entry, not the other ones.
   AssertEqual
@@ -202,7 +210,7 @@ Execute(ParseCompileCommandsFlags should parse some basic flags):
   \ ale#c#ParseCompileCommandsFlags(
   \   bufnr(''),
   \   {
-  \     ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'): [
+  \     FullPath('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'): [
   \       {
   \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
   \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
@@ -222,7 +230,7 @@ Execute(ParseCompileCommandsFlags should parse some basic flags):
   \     ],
   \   },
   \   {
-  \     ale#path#Simplify('/foo/bar/xmms2-mpris/src'): [
+  \     FullPath('/foo/bar/xmms2-mpris/src'): [
   \       {
   \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris/src'),
   \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/ignoreme')
@@ -244,7 +252,7 @@ Execute(ParseCompileCommandsFlags should parse some basic flags):
   \ )
 
 Execute(ParseCompileCommandsFlags should fall back to files with the same name):
-  silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+  silent noautocmd execute 'file! ' . fnameescape(FullPath('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   " We should prefer the basename file flags, not the base dirname flags.
   AssertEqual
@@ -276,7 +284,7 @@ Execute(ParseCompileCommandsFlags should fall back to files with the same name):
   \ )
 
 Execute(ParseCompileCommandsFlags should parse flags for exact directory matches):
-  silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+  silent noautocmd execute 'file! ' . fnameescape(FullPath('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   " We should ues the exact directory flags, not the file basename flags.
   AssertEqual
@@ -295,7 +303,7 @@ Execute(ParseCompileCommandsFlags should parse flags for exact directory matches
   \     ],
   \   },
   \   {
-  \     ale#path#Simplify('/foo/bar/xmms2-mpris/src'): [
+  \     FullPath('/foo/bar/xmms2-mpris/src'): [
   \       {
   \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris/src'),
   \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
@@ -317,7 +325,7 @@ Execute(ParseCompileCommandsFlags should parse flags for exact directory matches
   \ )
 
 Execute(ParseCompileCommandsFlags should fall back to files in the same directory):
-  silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+  silent noautocmd execute 'file! ' . fnameescape(FullPath('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   AssertEqual
   \ '-I ' . ale#Escape(ale#path#Simplify('/usr/include/xmms2')),
@@ -331,14 +339,14 @@ Execute(ParseCompileCommandsFlags should fall back to files in the same director
   \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
   \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
   \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
-  \         'file': ale#path#Simplify((has('win32') ? 'C:' : '') . '/foo/bar/xmms2-mpris/src/xmms2-other.c'),
+  \         'file': FullPath('/foo/bar/xmms2-mpris/src/xmms2-other.c'),
   \       },
   \     ],
   \   },
   \ )
 
 Execute(ParseCompileCommandsFlags should tolerate items without commands):
-  silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+  silent noautocmd execute 'file! ' . fnameescape(FullPath('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   AssertEqual
   \ '',
