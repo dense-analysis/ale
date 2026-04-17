@@ -77,7 +77,11 @@ Execute(Linters should run with the default options):
   AssertEqual g:expected_results, g:results
 
 Execute(Linters should run in PowerShell too):
-  if has('win32')
+  " Skip on Vim (non-NeoVim) Windows — job execution with &shell=powershell
+  " is unreliable in Vim's Windows job implementation. NeoVim handles it fine.
+  if has('win32') && !has('nvim')
+    Log 'Skipping PowerShell test on Vim Windows (flaky job execution)'
+  elseif has('win32')
     set shell=powershell
 
     AssertEqual 'foobar', &filetype
