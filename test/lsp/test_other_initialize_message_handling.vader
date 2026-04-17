@@ -250,3 +250,22 @@ Execute(GetCompletionTriggerCharacters should return empty when no triggers):
   \})
 
   AssertEqual [], ale#lsp#GetCompletionTriggerCharacters(b:conn.id)
+
+Execute(GetAllCompletionTriggerCharactersForBuffer should return triggers for open buffers):
+  call ale#lsp#HandleInitResponse(b:conn, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 1,
+  \ 'result': {
+  \   'capabilities': {
+  \     'completionProvider': {
+  \       'triggerCharacters': ['>', '$'],
+  \     },
+  \   },
+  \ },
+  \})
+
+  call ale#lsp#MarkDocumentAsOpen(b:conn.id, 1)
+  AssertEqual sort(['>', '$']), sort(ale#lsp#GetAllCompletionTriggerCharactersForBuffer(1))
+
+Execute(GetAllCompletionTriggerCharactersForBuffer should return empty for unknown buffer):
+  AssertEqual [], ale#lsp#GetAllCompletionTriggerCharactersForBuffer(99999)
