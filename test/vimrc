@@ -13,9 +13,10 @@ hi link aleerrorline spellbad
 " Load builtin plugins
 " We need this because run_vim.sh sets -i NONE
 if has('win32')
-    " C:\testplugin and C:\vader are set up as directory junctions or copies.
-    " $PWD paths are included for running tests directly from the repo.
-    set runtimepath=$VIM/../../lib/nvim,$VIMRUNTIME,$VIM/vimfiles/after,C:\vader,$PWD/vader,C:\testplugin,$PWD
+    " Use the current working directory for ALE plugin path.
+    " C:\vader is cloned by CI. $PWD/vader is for local runs.
+    let s:ale_root = getcwd()
+    let &runtimepath = '$VIM/../../lib/nvim,$VIMRUNTIME,$VIM/vimfiles/after,C:\vader,' . s:ale_root . '/vader,' . s:ale_root
 else
     set runtimepath=/home/vim,$VIM/../../lib/nvim,$VIMRUNTIME,$VIM/vimfiles/after,/testplugin,/vader
 endif
