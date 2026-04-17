@@ -58,7 +58,7 @@ function! ale#path#FindNearestDirectory(buffer, directory_name) abort
     let l:relative_path = finddir(a:directory_name, l:buffer_filename . ';')
 
     if !empty(l:relative_path)
-        return ale#path#Simplify(resolve(fnamemodify(l:relative_path, ':p'))) . '/'
+        return ale#path#Simplify(resolve(fnamemodify(l:relative_path, ':p')) . '/')
     endif
 
     return ''
@@ -88,7 +88,7 @@ function! ale#path#FindNearestFileOrDirectory(buffer, filename) abort
     endif
 
     if !empty(l:relative_path_dir)
-        return resolve(fnamemodify(l:relative_path_dir, ':p')) . '/'
+        return ale#path#Simplify(resolve(fnamemodify(l:relative_path_dir, ':p')) . '/')
     endif
 
     return ''
