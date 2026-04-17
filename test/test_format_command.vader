@@ -182,7 +182,17 @@ Execute(FormatCommand should apply filename modifiers to mapped filenames):
 
   AssertEqual ale#Escape('/foo/bar'), g:result[1]
 
-  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%t:h:h:h', 0, v:null, v:null, [
+  " Compute the number of :h modifiers needed to get from the temp file
+  " (tempname()/dummy.txt) back to GetTempBase(). This varies by platform:
+  " NeoVim uses nested temp dirs, Vim 9.x Windows uses flat ones.
+  let g:tbase = GetTempBase()
+  let g:tname = ale#util#Tempname()
+  let g:rel = substitute(g:tname, '^\V' . escape(g:tbase, '\'), '', '')
+  " +1 for dummy.txt appended by TemporaryFilename
+  let g:depth = len(split(g:rel, '[/\\]')) + 1
+  let g:modifiers = repeat(':h', g:depth)
+
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%t' . g:modifiers, 0, v:null, v:null, [
   \ [GetTempBase(), '/foo/bar']
   \])
 

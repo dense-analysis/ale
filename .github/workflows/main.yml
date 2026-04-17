@@ -77,7 +77,7 @@ jobs:
           VIM_EXE: ${{ steps.editor.outputs.executable }}
           VIM_HEADLESS: ${{ matrix.headless }}
         run: |
-          set TMP=C:\tmp
-          set TEMP=C:\tmp
-          mkdir C:\tmp
+          set TMP=%CD:~0,2%\tmp
+          set TEMP=%CD:~0,2%\tmp
+          if not exist "%CD:~0,2%\tmp" mkdir "%CD:~0,2%\tmp"
           run-tests.bat

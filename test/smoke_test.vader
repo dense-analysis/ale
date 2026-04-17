@@ -109,13 +109,16 @@ Execute(Linters should run in PowerShell too):
     " Retry a few times, as jobs can be flaky on Windows.
     for g:i in range(5)
       call ale#Queue(0, '')
-      call ale#test#WaitForJobs(4000)
+      call ale#test#WaitForJobs(5000)
 
       let g:results = ale#test#GetLoclistWithoutNewerKeys()
 
       if g:results == g:expected_results
         break
       endif
+
+      " Wait between retries to let the system settle.
+      sleep 500m
     endfor
 
     AssertEqual g:expected_results, g:results
