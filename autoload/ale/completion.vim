@@ -189,7 +189,23 @@ function! ale#completion#GetPrefix(filetype, line, column) abort
     "   abc
     "      ^
     " So we need check the text in the column before that position.
-    return matchstr(getline(a:line)[: a:column - 2], l:regex)
+    let l:line_text = getline(a:line)[: a:column - 2]
+    let l:prefix = matchstr(l:line_text, l:regex)
+
+    if !empty(l:prefix)
+        return l:prefix
+    endif
+
+    " Check LSP trigger characters for active connections on this buffer.
+    let l:triggers = ale#lsp#GetAllCompletionTriggerCharactersForBuffer(bufnr(''))
+
+    for l:char in l:triggers
+        if l:line_text[-len(l:char):] is# l:char
+            return l:char
+        endif
+    endfor
+
+    return ''
 endfunction
 
 function! ale#completion#GetTriggerCharacter(filetype, prefix, ...) abort
