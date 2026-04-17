@@ -71,15 +71,11 @@ jobs:
         run: |
           git clone https://github.com/junegunn/vader.vim C:\vader
           git -C C:\vader checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
-      - name: Create testplugin junction
-        shell: cmd
-        run: mklink /J C:\testplugin "%GITHUB_WORKSPACE%"
       - name: Run tests
         shell: cmd
         env:
           VIM_EXE: ${{ steps.editor.outputs.executable }}
           VIM_HEADLESS: ${{ matrix.headless }}
-        working-directory: C:\testplugin
         run: |
           set TMP=C:\tmp
           set TEMP=C:\tmp
