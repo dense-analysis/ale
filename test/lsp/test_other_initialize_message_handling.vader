@@ -221,3 +221,32 @@ Execute(Results that are not dictionaries should be handled correctly):
   \ 'result': v:null,
   \})
   AssertEqual [], g:message_list
+
+Execute(GetCompletionTriggerCharacters should return stored characters):
+  call ale#lsp#HandleInitResponse(b:conn, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 1,
+  \ 'result': {
+  \   'capabilities': {
+  \     'completionProvider': {
+  \       'triggerCharacters': ['@', '#', '.'],
+  \     },
+  \   },
+  \ },
+  \})
+
+  AssertEqual ['@', '#', '.'], ale#lsp#GetCompletionTriggerCharacters(b:conn.id)
+
+Execute(GetCompletionTriggerCharacters should return empty for missing connection):
+  AssertEqual [], ale#lsp#GetCompletionTriggerCharacters('nonexistent-connection')
+
+Execute(GetCompletionTriggerCharacters should return empty when no triggers):
+  call ale#lsp#HandleInitResponse(b:conn, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 1,
+  \ 'result': {
+  \   'capabilities': {},
+  \ },
+  \})
+
+  AssertEqual [], ale#lsp#GetCompletionTriggerCharacters(b:conn.id)

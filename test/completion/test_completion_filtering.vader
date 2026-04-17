@@ -140,3 +140,58 @@ Execute(Filtering should respect filetype triggers):
   AssertEqual b:suggestions, ale#completion#Filter(bufnr(''), '', b:suggestions, '.', 0)
   AssertEqual b:suggestions, ale#completion#Filter(bufnr(''), 'rust', b:suggestions, '.', 0)
   AssertEqual b:suggestions, ale#completion#Filter(bufnr(''), 'rust', b:suggestions, '::', 0)
+
+Execute(GetTriggerCharacter should return trigger characters from hardcoded map):
+  AssertEqual '.', ale#completion#GetTriggerCharacter('python', '.')
+  AssertEqual '::', ale#completion#GetTriggerCharacter('rust', '::')
+  AssertEqual '->', ale#completion#GetTriggerCharacter('c', '->')
+  AssertEqual '', ale#completion#GetTriggerCharacter('python', '@')
+
+Execute(GetTriggerCharacter should return empty for empty prefix):
+  AssertEqual '', ale#completion#GetTriggerCharacter('python', '')
+
+Execute(GetTriggerCharacter should use LSP triggers when conn_id provided):
+  call ale#lsp#Register('test-lsp', '/project', '', {})
+  let l:conn_id = 'test-lsp:/project'
+  call ale#lsp#UpdateCapabilities(l:conn_id, {
+  \   'completionProvider': {'triggerCharacters': ['@', '#']},
+  \})
+
+  " '@' is in LSP triggers
+  AssertEqual '@', ale#completion#GetTriggerCharacter('python', '@', l:conn_id)
+  " '.' is NOT in LSP triggers (should not match even though it's in hardcoded)
+  AssertEqual '', ale#completion#GetTriggerCharacter('python', '.', l:conn_id)
+  " '#' is in LSP triggers
+  AssertEqual '#', ale#completion#GetTriggerCharacter('python', '#', l:conn_id)
+
+  call ale#lsp#RemoveConnectionWithID(l:conn_id)
+
+Execute(GetTriggerCharacter should fall back to hardcoded when no LSP triggers):
+  call ale#lsp#Register('test-lsp-empty', '/project', '', {})
+  let l:conn_id = 'test-lsp-empty:/project'
+  call ale#lsp#UpdateCapabilities(l:conn_id, {})
+
+  " Falls back to hardcoded map
+  AssertEqual '.', ale#completion#GetTriggerCharacter('python', '.', l:conn_id)
+  AssertEqual '', ale#completion#GetTriggerCharacter('python', '@', l:conn_id)
+
+  call ale#lsp#RemoveConnectionWithID(l:conn_id)
+
+Execute(Filtering should use LSP trigger characters):
+  call ale#lsp#Register('test-lsp-filter', '/project', '', {})
+  let l:conn_id = 'test-lsp-filter:/project'
+  call ale#lsp#UpdateCapabilities(l:conn_id, {
+  \   'completionProvider': {'triggerCharacters': ['@']},
+  \})
+
+  " Set up completion info with conn_id
+  let b:ale_completion_info = {'conn_id': l:conn_id}
+  let b:suggestions = [{'word': 'foo'}, {'word': 'bar'}]
+
+  " '@' is LSP trigger - should return all suggestions
+  AssertEqual b:suggestions, ale#completion#Filter(bufnr(''), 'python', b:suggestions, '@', 0)
+  " '.' is NOT LSP trigger - should filter
+  AssertEqual [], ale#completion#Filter(bufnr(''), 'python', b:suggestions, '.', 0)
+
+  unlet b:ale_completion_info
+  call ale#lsp#RemoveConnectionWithID(l:conn_id)
