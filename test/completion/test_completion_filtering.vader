@@ -152,40 +152,42 @@ Execute(GetTriggerCharacter should return empty for empty prefix):
 
 Execute(GetTriggerCharacter should use LSP triggers when conn_id provided):
   call ale#lsp#Register('test-lsp', '/project', '', {})
-  let l:conn_id = 'test-lsp:/project'
-  call ale#lsp#UpdateCapabilities(l:conn_id, {
+  let g:conn_id = 'test-lsp:/project'
+  call ale#lsp#UpdateCapabilities(g:conn_id, {
   \   'completionProvider': {'triggerCharacters': ['@', '#']},
   \})
 
   " '@' is in LSP triggers
-  AssertEqual '@', ale#completion#GetTriggerCharacter('python', '@', l:conn_id)
+  AssertEqual '@', ale#completion#GetTriggerCharacter('python', '@', g:conn_id)
   " '.' is NOT in LSP triggers (should not match even though it's in hardcoded)
-  AssertEqual '', ale#completion#GetTriggerCharacter('python', '.', l:conn_id)
+  AssertEqual '', ale#completion#GetTriggerCharacter('python', '.', g:conn_id)
   " '#' is in LSP triggers
-  AssertEqual '#', ale#completion#GetTriggerCharacter('python', '#', l:conn_id)
+  AssertEqual '#', ale#completion#GetTriggerCharacter('python', '#', g:conn_id)
 
-  call ale#lsp#RemoveConnectionWithID(l:conn_id)
+  call ale#lsp#RemoveConnectionWithID(g:conn_id)
+  unlet g:conn_id
 
 Execute(GetTriggerCharacter should fall back to hardcoded when no LSP triggers):
   call ale#lsp#Register('test-lsp-empty', '/project', '', {})
-  let l:conn_id = 'test-lsp-empty:/project'
-  call ale#lsp#UpdateCapabilities(l:conn_id, {})
+  let g:conn_id = 'test-lsp-empty:/project'
+  call ale#lsp#UpdateCapabilities(g:conn_id, {})
 
   " Falls back to hardcoded map
-  AssertEqual '.', ale#completion#GetTriggerCharacter('python', '.', l:conn_id)
-  AssertEqual '', ale#completion#GetTriggerCharacter('python', '@', l:conn_id)
+  AssertEqual '.', ale#completion#GetTriggerCharacter('python', '.', g:conn_id)
+  AssertEqual '', ale#completion#GetTriggerCharacter('python', '@', g:conn_id)
 
-  call ale#lsp#RemoveConnectionWithID(l:conn_id)
+  call ale#lsp#RemoveConnectionWithID(g:conn_id)
+  unlet g:conn_id
 
 Execute(Filtering should use LSP trigger characters):
   call ale#lsp#Register('test-lsp-filter', '/project', '', {})
-  let l:conn_id = 'test-lsp-filter:/project'
-  call ale#lsp#UpdateCapabilities(l:conn_id, {
+  let g:conn_id = 'test-lsp-filter:/project'
+  call ale#lsp#UpdateCapabilities(g:conn_id, {
   \   'completionProvider': {'triggerCharacters': ['@']},
   \})
 
   " Set up completion info with conn_id
-  let b:ale_completion_info = {'conn_id': l:conn_id}
+  let b:ale_completion_info = {'conn_id': g:conn_id}
   let b:suggestions = [{'word': 'foo'}, {'word': 'bar'}]
 
   " '@' is LSP trigger - should return all suggestions
@@ -194,4 +196,5 @@ Execute(Filtering should use LSP trigger characters):
   AssertEqual [], ale#completion#Filter(bufnr(''), 'python', b:suggestions, '.', 0)
 
   unlet b:ale_completion_info
-  call ale#lsp#RemoveConnectionWithID(l:conn_id)
+  call ale#lsp#RemoveConnectionWithID(g:conn_id)
+  unlet g:conn_id
