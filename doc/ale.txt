@@ -3722,6 +3722,8 @@ documented in additional help files.
     lessc.................................|ale-less-lessc|
     prettier..............................|ale-less-prettier|
     stylelint.............................|ale-less-stylelint|
+  lilypond................................|ale-lilypond-options|
+    lilypond..............................|ale-lilypond|
   llvm....................................|ale-llvm-options|
     llc...................................|ale-llvm-llc|
   lua.....................................|ale-lua-options|
@@ -3746,6 +3748,7 @@ documented in additional help files.
     prettier..............................|ale-markdown-prettier|
     pymarkdown............................|ale-markdown-pymarkdown|
     remark-lint...........................|ale-markdown-remark-lint|
+    rumdl.................................|ale-markdown-rumdl|
     textlint..............................|ale-markdown-textlint|
     write-good............................|ale-markdown-write-good|
     redpen................................|ale-markdown-redpen|
@@ -3805,6 +3808,7 @@ documented in additional help files.
     perl..................................|ale-perl-perl|
     perl language server..................|ale-perl-languageserver|
     perlcritic............................|ale-perl-perlcritic|
+    perlnavigator.........................|ale-perl-perlnavigator|
     perltidy..............................|ale-perl-perltidy|
   perl6...................................|ale-perl6-options|
     perl6.................................|ale-perl6-perl6|

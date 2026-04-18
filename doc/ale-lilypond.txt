@@ -1,0 +1,29 @@
+===============================================================================
+ALE LilyPond Integration                                 *ale-lilypond-options*
+
+
+===============================================================================
+lilypond                                                         *ale-lilypond*
+
+g:ale_lilypond_lilypond_executable           *g:ale_lilypond_lilypond_executable*
+                                             *b:ale_lilypond_lilypond_executable*
+  Type: |String|
+  Default: `'lilypond'`
+
+  This variable can be changed to modify the executable used for lilypond.
+
+
+g:ale_lilypond_lilypond_options                 *g:ale_lilypond_lilypond_options*
+                                                *b:ale_lilypond_lilypond_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to lilypond.
+
+  For example, to add custom include paths: >
+
+    let g:ale_lilypond_lilypond_options = '--include=/path/to/includes'
+<
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

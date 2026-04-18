@@ -1,0 +1,49 @@
+Before:
+  runtime ale_linters/lilypond/lilypond.vim
+  call ale#linter#Reset()
+
+Execute(The lilypond handler should parse a single error correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'col': 5,
+  \     'type': 'E',
+  \     'text': 'syntax error, unexpected NOT_A_TOKEN',
+  \   }
+  \ ],
+  \ ale_linters#lilypond#lilypond#Handle(0, [
+  \   'test.ly:2:5: error: syntax error, unexpected NOT_A_TOKEN'
+  \ ])
+
+Execute(The lilypond handler should parse warnings and errors):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'text': 'deprecated syntax',
+  \   },
+  \   {
+  \     'lnum': 5,
+  \     'col': 12,
+  \     'type': 'E',
+  \     'text': 'unknown symbol',
+  \   }
+  \ ],
+  \ ale_linters#lilypond#lilypond#Handle(0, [
+  \   'test.ly:3:1: warning: deprecated syntax',
+  \   'test.ly:5:12: error: unknown symbol'
+  \ ])
+
+Execute(The lilypond handler should ignore non-matching lines):
+  AssertEqual
+  \ [],
+  \ ale_linters#lilypond#lilypond#Handle(0, [
+  \   'This is some unrelated output',
+  \   'Another line without structure'
+  \ ])
+
+After:
+  call ale#linter#Reset()

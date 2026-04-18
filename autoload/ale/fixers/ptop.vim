@@ -10,7 +10,7 @@ function! ale#fixers#ptop#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' %s %t',
     \   'read_temporary_file': 1,
     \}

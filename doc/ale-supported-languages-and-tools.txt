@@ -383,6 +383,8 @@ Notes:
   * `lessc`
   * `prettier`
   * `stylelint`
+* LilyPond
+  * `lilypond`
 * LLVM
   * `llc`
 * Lua
@@ -415,6 +417,7 @@ Notes:
   * `pymarkdown`
   * `redpen`
   * `remark-lint`
+  * `rumdl`
   * `textlint`
   * `vale`
   * `write-good`
@@ -480,6 +483,7 @@ Notes:
   * `languageserver`
   * `perl -c`
   * `perl-critic`
+  * `perlnavigator`
   * `perltidy`
 * Perl6
   * `perl6 -c`
