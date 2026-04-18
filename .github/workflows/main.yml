@@ -13,7 +13,7 @@ jobs:
   build_image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build docker run image
         shell: bash
         env:
@@ -33,7 +33,7 @@ jobs:
           - '--lua-only'
           - '--linters-only'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run tests
         run: ./run-tests -v ${{ matrix.vim-version }}
   test_ale_windows:
@@ -59,7 +59,7 @@ jobs:
             version: v0.12.1
             headless: '--headless'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup ${{ matrix.editor }} ${{ matrix.version }}
         uses: rhysd/action-setup-vim@v1
         id: editor
