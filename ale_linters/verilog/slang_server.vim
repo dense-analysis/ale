@@ -11,13 +11,14 @@ function! ale_linters#verilog#slang_server#GetProjectRoot(buffer) abort
     if !empty(l:project_dir)
         return fnamemodify(l:project_dir, ':h:h')
     else
-        return fnamemodify('', ':h')
+        return fnamemodify('', ':p')
     endif
 endfunction
 
 function! ale_linters#verilog#slang_server#GetCommand(buffer) abort
-    let l:command = ale#Escape(ale#Var(a:buffer, 'verilog_slang_server_executable'))
     let l:options = ale#Var(a:buffer, 'verilog_slang_server_options')
+    let l:project_dir = ale_linters#verilog#slang_server#GetProjectRoot(a:buffer)
+    let l:command = ale#command#CdString(l:project_dir) . ale#Escape(ale#Var(a:buffer, 'verilog_slang_server_executable'))
 
     if l:options isnot# ''
         let l:command .= ' ' . l:options
