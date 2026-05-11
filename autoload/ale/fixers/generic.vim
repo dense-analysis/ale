@@ -1,6 +1,10 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Generic functions for fixing files with.
 
+function! ale#fixers#generic#ReplaceEmDash(buffer, lines) abort
+    return map(copy(a:lines), {_, line -> substitute(line, "\u2014", '--', 'g')})
+endfunction
+
 function! ale#fixers#generic#RemoveTrailingBlankLines(buffer, lines) abort
     let l:end_index = len(a:lines) - 1
 
