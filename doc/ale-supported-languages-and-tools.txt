@@ -39,6 +39,7 @@ Notes:
   * `gcc`
   * `llvm-mc`
 * Astro
+  * dprint
   * `eslint`
   * `prettier`
 * AVRA
@@ -88,6 +89,7 @@ Notes:
   * `csc`!!
   * `cspell`
   * `dotnet-format`
+  * dprint
   * `mcs`
   * `mcsc`!!
   * `uncrustify`
@@ -137,6 +139,7 @@ Notes:
   * `cspell`
   * `css-beautify`
   * `csslint`
+  * dprint
   * `fecs`
   * `prettier`
   * `stylelint`
@@ -225,6 +228,7 @@ Notes:
 * Go
   * `bingo`
   * `cspell`
+  * dprint
   * `go build`!!
   * `go mod`!!
   * `go vet`!!
@@ -242,6 +246,7 @@ Notes:
 * Go HTML Templates
   * djlint
 * GraphQL
+  * dprint
   * `eslint`
   * `gqlint`
   * `prettier`
@@ -283,6 +288,7 @@ Notes:
   * `angular`
   * `cspell`
   * djlint
+  * dprint
   * `eslint`
   * `fecs`
   * `html-beautify`
@@ -338,6 +344,7 @@ Notes:
   * `xo`
 * Jinja
   * djlint
+  * dprint
   * j2lint
 * JSON
   * `VSCode JSON language server`
@@ -380,6 +387,7 @@ Notes:
 * Lean 4
   * `lake`
 * Less
+  * dprint
   * `lessc`
   * `prettier`
   * `stylelint`
@@ -406,6 +414,7 @@ Notes:
 * Markdown
   * `alex`
   * `cspell`
+  * dprint
   * `harper`
   * `languagetool`!!
   * `markdownlint`!!
@@ -425,6 +434,8 @@ Notes:
   * `mlint`
 * Mercury
   * `mmc`!!
+* Mustache
+  * dprint
 * NASM
   * `nasm`!!
 * Nickel
@@ -447,6 +458,7 @@ Notes:
   * `write-good`
 * Nunjucks
   * djlint
+  * dprint
 * Objective-C
   * `ccls`
   * `clang`
@@ -489,6 +501,7 @@ Notes:
   * `perl6 -c`
 * PHP
   * `cspell`
+  * dprint
   * `intelephense`
   * `langserver`
   * `phan`
@@ -542,6 +555,7 @@ Notes:
   * `bandit`
   * `black`
   * `cspell`
+  * dprint
   * `flake8`
   * `flakehell`
   * `isort`
@@ -636,6 +650,7 @@ Notes:
 * Salt
   * `salt-lint`
 * Sass
+  * dprint
   * `sass-lint`
   * `stylelint`
 * Scala
@@ -647,6 +662,7 @@ Notes:
   * `scalafmt`
   * `scalastyle`
 * SCSS
+  * dprint
   * `prettier`
   * `sass-lint`
   * `scss-lint`
@@ -673,6 +689,7 @@ Notes:
 * SugarSS
   * `stylelint`
 * Svelte
+  * dprint
   * `prettier`
   * `svelteserver`
 * Swift
@@ -713,6 +730,8 @@ Notes:
 * TOML
   * `dprint`
   * `tombi`
+* Twig
+  * `dprint`
 * TypeScript
   * `biome`
   * `cspell`
@@ -733,6 +752,8 @@ Notes:
 * VALA
   * `uncrustify`
   * `vala_lint`!!
+* Vento
+  * `dprint`
 * Verilog
   * `hdl-checker`
   * `iverilog`
@@ -755,6 +776,7 @@ Notes:
   * `write-good`
 * Vue
   * `cspell`
+  * `dprint`
   * `prettier`
   * `vls`
   * `volar`
@@ -766,10 +788,12 @@ Notes:
   * `proselint`
   * `write-good`
 * XML
+  * `dprint`
   * `xmllint`
 * YAML
   * `actionlint`
   * `circleci`!!
+  * `dprint`
   * `gitlablint`
   * `prettier`
   * `spectral`

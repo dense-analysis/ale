@@ -152,6 +152,12 @@ g:ale_cs_dotnet_format_options
 
 
 ===============================================================================
+dprint                                                          *ale-cs-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/roslyn/.
+
+
+===============================================================================
 mcs                                                                *ale-cs-mcs*
 
 The `mcs` linter looks only for syntax errors while you type. See
