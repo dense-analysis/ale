@@ -7,6 +7,8 @@ if !exists('s:buffer_data')
     let s:buffer_data = {}
 endif
 
+let s:is_windows = has('win32') || has('win64') || has('win32unix')
+
 " The regular expression used for formatting filenames with modifiers.
 let s:path_format_regex = '\v\%s(%(:h|:t|:r|:e)*)'
 
@@ -140,7 +142,7 @@ function! s:TemporaryFilename(buffer) abort
 
     " Create a temporary filename, <temp_dir>/<original_basename>
     " The file itself will not be created by this function.
-    return ale#util#Tempname() . (has('win32') ? '\' : '/') . l:filename
+    return ale#util#Tempname() . (s:is_windows ? '\' : '/') . l:filename
 endfunction
 
 " Given part of a command, replace any % with %%, so that no characters in
@@ -178,7 +180,7 @@ function! ale#command#CdString(directory) abort
     \   ? a:directory
     \   : ale#Escape(a:directory)
 
-    if has('win32')
+    if s:is_windows
         return 'cd /d ' . l:directory . ' && '
     endif
 
@@ -392,7 +394,7 @@ function! ale#command#Run(buffer, command, Callback, ...) abort
             let s:fake_job_id = get(s:, 'fake_job_id', 0) + 1
             let l:job_id = s:fake_job_id
         endif
-    elseif has('win32')
+    elseif s:is_windows
         let l:job_id = ale#job#StartWithCmd(l:command, l:job_options)
     else
         let l:job_id = ale#job#Start(l:command, l:job_options)

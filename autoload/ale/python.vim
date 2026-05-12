@@ -44,7 +44,7 @@ function! ale#python#FindProjectRootIni(buffer) abort
         \|| filereadable(l:path . '/pyproject.toml')
         \|| filereadable(l:path . '/.tool-versions')
         \|| filereadable(l:path . '/uv.lock')
-            return l:path
+            return resolve(l:path)
         endif
     endfor
 
@@ -69,7 +69,7 @@ function! ale#python#FindProjectRoot(buffer) abort
 
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         if !filereadable(l:path . '/__init__.py')
-            return l:path
+            return resolve(l:path)
         endif
     endfor
 
@@ -93,7 +93,7 @@ function! ale#python#FindVirtualenv(buffer) abort
             \)
 
             if filereadable(l:script_filename)
-                return l:venv_dir
+                return resolve(l:venv_dir)
             endif
         endfor
     endfor

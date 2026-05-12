@@ -13,7 +13,7 @@ CONTENTS                                             *ale-development-contents*
   4. Testing ALE..........................|ale-development-tests|
     4.1. Writing Linter Tests.............|ale-development-linter-tests|
     4.2. Writing Fixer Tests..............|ale-development-fixer-tests|
-    4.3. Running Tests in a Windows VM....|ale-development-windows-tests|
+    4.3. Running Tests on Windows.........|ale-development-windows-tests|
   5. Contributing.........................|ale-development-contributing|
     5.1. Preparing a Release..............|ale-development-release|
 
@@ -50,7 +50,7 @@ documented functions and options, until a major version is planned. Breaking
 changes should be preceded by a deprecation phase complete with warnings.
 Changes required for security may be an exception.
 
-ALE supports Vim 8 and above, and Neovim 0.7.0 or newer. These are the
+ALE supports Vim 8.2 and above, and Neovim 0.10.0 or newer. These are the
 earliest versions of Vim and Neovim which support |+job|, |+timer|,
 |+closure|, and |+lambda| features. All ALE code should be written so it is
 compatible with these versions of Vim, or with version checks so particular
@@ -156,15 +156,13 @@ Apply the following rules when writing Bash scripts.
 ===============================================================================
 4. Testing ALE              *ale-development-tests* *ale-dev-tests* *ale-tests*
 
-ALE is tested with a suite of tests executed via GitHub Actions and AppVeyor.
-ALE runs tests with the following versions of Vim in the following
-environments.
+ALE is tested with a suite of tests executed via GitHub Actions. ALE runs
+tests with the following versions of Vim in the following environments.
 
-1. Vim 8.0.0027 on Linux via GitHub Actions.
-2. Vim 9.0.0297 on Linux via GitHub Actions.
-3. Neovim 0.7.0 on Linux via GitHub Actions.
-4. Neovim 0.8.0 on Linux via GitHub Actions.
-6. Vim 8 (stable builds) on Windows via AppVeyor.
+1. Vim 8.2 on Linux and Windows via GitHub Actions.
+2. Vim 9.2 on Linux and Windows via GitHub Actions.
+3. Neovim 0.10 on Linux and Windows via GitHub Actions.
+4. Neovim 0.12 on Linux and Windows via GitHub Actions.
 
 If you are developing ALE code on Linux, Mac OSX, or BSD, you can run ALEs
 tests by installing Docker and running the `run-tests` script. Follow the
@@ -377,15 +375,25 @@ given the above setup are as follows.
 
 
 ===============================================================================
-4.3 Running Tests in a Windows VM               *ale-development-windows-tests*
+4.3 Running Tests on Windows                    *ale-development-windows-tests*
 
-Tests are run for ALE in a build of Vim 8 for Windows via AppVeyor. These
-tests can frequently break due to minor differences in paths and how escaping
-is done for commands on Windows. If you are a Linux or Mac user, running these
-tests locally can be difficult. Here is a process that will make that easier.
+Tests are run for ALE on Windows via GitHub Actions using the
+`rhysd/action-setup-vim` action to install Vim and Neovim. These tests can
+frequently break due to minor differences in paths and how escaping is done
+for commands on Windows.
 
-First, you want to install a Windows image with VirtualBox. Install VirtualBox
-and grab a VirtualBox image for Windows such as from here:
+The GitHub Actions workflow automatically:
+1. Installs the specified Vim or Neovim version.
+2. Clones Vader to `C:\vader` at the pinned commit.
+3. Creates a directory junction from `C:\testplugin` to the repository
+   checkout, so all test paths referencing `/testplugin/` resolve correctly.
+4. Runs `run-tests.bat` with the installed editor.
+
+If you are a Linux or Mac user and need to run Windows tests locally, you
+can use a Windows virtual machine. Here is a process for that.
+
+First, install a Windows image with VirtualBox. Install VirtualBox and grab
+a VirtualBox image for Windows such as from here:
 https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/
 
 NOTE: If you need to enter a password for the virtual machine at any point,
@@ -393,9 +401,6 @@ the password is "Passw0rd!" without the double quotes.
 
 NOTE: If your trial period for Windows runs out, run the commands like the
 wallpaper tells you to.
-
-Your virtual machine will need to have PowerShell installed. Before you go any
-further, confirm that PowerShell is installed in your Windows virtual machine.
 
 Consult the VirtualBox documentation on how to install "Guest Additions."
 You probably want to install "Guest Additions" for most things to work
@@ -408,49 +413,41 @@ example: "/home/w0rp/ale"
 
 Find out which drive letter "ale" has been mounted as in Windows. We'll use
 "E:" as the drive letter, for example. Open the command prompt as an
-administrator by typing in `cmd` in the start menu, right clicking on the
-command prompt application, and clicking "Run as administrator." Click "Yes"
-when prompted to ask if you're sure you want to run the command prompt. You
-should type in the following command to mount the "ale" directory for testing,
-where "E:" is replaced with your drive letter. >
+administrator and type the following command to create a junction for the
+"ale" directory, where "E:" is replaced with your drive letter. >
 
-  mklink /D C:\testplugin E:
+  mklink /J C:\testplugin E:
 <
-Close the administrator Command Prompt, and try running the command
-`type C:\testplugin\LICENSE` in a new Command Prompt which you are NOT running
-as administrator. You should see the license for ALE in your terminal. After
-you have confirmed that you have mounted ALE on your machine, search in the
-Start Menu for "power shell," run PowerShell as an administrator, and issue
-the following commands to install the correct Vim and Vader versions for
-running tests. >
+Install Vader by opening PowerShell and running: >
 
-  Add-Type -A System.IO.Compression.FileSystem
-
-  Invoke-WebRequest https://github.com/dense-analysis/ale/releases/download/v4.0.0/vim80-586w32.zip -OutFile C:\vim.zip
-  [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
-  rm C:\vim.zip
-
-  Invoke-WebRequest https://github.com/dense-analysis/ale/releases/download/v4.0.0/vim80-586rt.zip -OutFile C:\rt.zip
-  [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
-  rm C:\rt.zip
-
-  Invoke-WebRequest https://github.com/junegunn/vader.vim/archive/c6243dd81c98350df4dec608fa972df98fa2a3af.zip -OutFile C:\vader.zip
-  [IO.Compression.ZipFile]::ExtractToDirectory('C:\vader.zip', 'C:\')
-  mv C:\vader.vim-c6243dd81c98350df4dec608fa972df98fa2a3af C:\vader
-  rm C:\vader.zip
+  git clone https://github.com/junegunn/vader.vim C:\vader
+  cd C:\vader
+  git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
 <
-After you have finished installing everything, you can run all of the tests
-in Windows by opening a Command Prompt NOT as an administrator by navigating
-to the directory where you've mounted the ALE code, which must be named
-`C:\testplugin`, and by running the `run-tests.bat` batch file. >
+Install Vim or Neovim on your Windows machine. You can download Vim from
+https://github.com/vim/vim-win32-installer/releases or Neovim from
+https://github.com/neovim/neovim/releases .
+
+After you have finished installing everything, you can run the tests by
+setting the `VIM_EXE` environment variable to the path of your Vim or
+Neovim executable and running `run-tests.bat`. For Neovim, also set
+`VIM_HEADLESS` to `--headless`. >
 
   cd C:\testplugin
+  set VIM_EXE=C:\path\to\vim.exe
   run-tests
 <
-It will probably take several minutes for all of the tests to run. Be patient.
-You can run a specific test by passing the filename as an argument to the
-batch file, for example: `run-tests test/test_c_flag_parsing.vader` . This will
-give you results much more quickly.
+For Neovim: >
+
+  cd C:\testplugin
+  set VIM_EXE=C:\path\to\nvim.exe
+  set VIM_HEADLESS=--headless
+  run-tests
+<
+It will probably take several minutes for all of the tests to run. Be
+patient. You can run a specific test by passing the filename as an argument
+to the batch file, for example: `run-tests test/test_c_flag_parsing.vader`.
+This will give you results much more quickly.
 
 
 ===============================================================================

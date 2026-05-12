@@ -81,7 +81,7 @@ Execute(The bandit command callback should add .bandit by default):
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_bandit/namespace/foo/bar.py')
 
   let b:config_path = ale#path#Simplify(
-  \ g:dir . '/../test-files/python/with_bandit/.bandit'
+  \ resolve(g:dir) . '/../test-files/python/with_bandit/.bandit'
   \)
 
   AssertLinter 'bandit',
