@@ -59,7 +59,7 @@ jobs:
             version: v0.12.1
           - name: Vim 8.2 Windows
             editor: vim
-            version: v8.2.5172
+            version: v8.2.4843
           - name: Vim 9.2 Windows
             editor: vim
             version: v9.2.0329
