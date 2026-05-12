@@ -207,6 +207,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['puppet'],
 \       'description': 'Run puppet-lint -f on a file.',
 \   },
+\   'replace_emdash': {
+\       'function': 'ale#fixers#generic#ReplaceEmDash',
+\       'suggested_filetypes': [],
+\       'description': 'Replace em dash with -- ASCII characters.',
+\   },
 \   'remove_trailing_lines': {
 \       'function': 'ale#fixers#generic#RemoveTrailingBlankLines',
 \       'suggested_filetypes': [],
