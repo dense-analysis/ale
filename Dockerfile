@@ -69,7 +69,7 @@ ENTRYPOINT ["/sbin/run_vim"]
 #
 FROM testbed
 
-RUN install_vim -tag v9.0.2189 -build \
+RUN install_vim -tag v8.2.5172 -build \
                 -tag v9.2.0329 -build \
                 -tag neovim:v0.10.4 -build \
                 -tag neovim:v0.12.1 -build

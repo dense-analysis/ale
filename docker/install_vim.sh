@@ -232,10 +232,19 @@ build() {
       fi
     fi
 
+    # Older xxd sources redeclare libc functions without arguments, which
+    # newer system headers reject.
+    if grep -q '^extern long int strtol();$' src/xxd/xxd.c; then
+      sed -i '/^extern long int strtol();$/d' src/xxd/xxd.c
+    fi
+    if grep -q '^extern long int ftell();$' src/xxd/xxd.c; then
+      sed -i '/^extern long int ftell();$/d' src/xxd/xxd.c
+    fi
+
     echo "Configuring with: $VIM_CONFIG_ARGS"
     # shellcheck disable=SC2086
     ./configure $VIM_CONFIG_ARGS || bail "Could not configure"
-    make CFLAGS="-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2" -j4 || bail "Make failed"
+    make CFLAGS="-Wno-error=incompatible-pointer-types -Wno-incompatible-pointer-types -Wno-error=int-conversion -Wno-int-conversion -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2" -j4 || bail "Make failed"
     make install || bail "Install failed"
 
   elif [ "$FLAVOR" = neovim ]; then

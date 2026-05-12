@@ -11,6 +11,7 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   build_image:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -21,50 +22,54 @@ jobs:
           DOCKER_HUB_PASS: ${{ secrets.DOCKER_HUB_PASS }}
         run: ./run-tests --build-image
   test_ale:
+    name: ${{ matrix.name }}
     needs: build_image
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        vim-version:
-          - '--vim-90-only'
-          - '--vim-92-only'
-          - '--neovim-010-only'
-          - '--neovim-012-only'
-          - '--lua-only'
-          - '--linters-only'
+        include:
+          - name: Lint
+            test-args: --linters-only
+          - name: Lua
+            test-args: --lua-only
+          - name: Neovim 0.10 Linux
+            test-args: --neovim-010-only
+          - name: Neovim 0.12 Linux
+            test-args: --neovim-012-only
+          - name: Vim 8.2 Linux
+            test-args: --vim-82-only
+          - name: Vim 9.2 Linux
+            test-args: --vim-92-only
     steps:
       - uses: actions/checkout@v6
       - name: Run tests
-        run: ./run-tests -v ${{ matrix.vim-version }}
+        run: ./run-tests -v ${{ matrix.test-args }}
   test_ale_windows:
+    name: ${{ matrix.name }}
     runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - editor: vim
-            neovim: false
-            version: v9.0.2189
-            headless: ''
-          - editor: vim
-            neovim: false
-            version: v9.2.0329
-            headless: ''
-          - editor: neovim
-            neovim: true
+          - name: Neovim 0.10 Windows
+            editor: neovim
             version: v0.10.4
-            headless: '--headless'
-          - editor: neovim
-            neovim: true
+          - name: Neovim 0.12 Windows
+            editor: neovim
             version: v0.12.1
-            headless: '--headless'
+          - name: Vim 8.2 Windows
+            editor: vim
+            version: v8.2.5172
+          - name: Vim 9.2 Windows
+            editor: vim
+            version: v9.2.0329
     steps:
       - uses: actions/checkout@v6
       - name: Setup ${{ matrix.editor }} ${{ matrix.version }}
         uses: rhysd/action-setup-vim@v1
         id: editor
         with:
-          neovim: ${{ matrix.neovim }}
+          neovim: ${{ matrix.editor == 'neovim' }}
           version: ${{ matrix.version }}
       - name: Clone Vader
         shell: cmd
@@ -75,7 +80,7 @@ jobs:
         shell: cmd
         env:
           VIM_EXE: ${{ steps.editor.outputs.executable }}
-          VIM_HEADLESS: ${{ matrix.headless }}
+          VIM_HEADLESS: ${{ matrix.editor == 'neovim' && '--headless' || '--not-a-term' }}
         run: |
           set TMP=%CD:~0,2%\tmp
           set TEMP=%CD:~0,2%\tmp
