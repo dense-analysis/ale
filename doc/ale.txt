@@ -3760,10 +3760,10 @@ documented in additional help files.
     textlint..............................|ale-markdown-textlint|
     write-good............................|ale-markdown-write-good|
     redpen................................|ale-markdown-redpen|
-  mustache................................|ale-mustache-options|
-    dprint................................|ale-mustache-dprint|
   mercury.................................|ale-mercury-options|
     mmc...................................|ale-mercury-mmc|
+  mustache................................|ale-mustache-options|
+    dprint................................|ale-mustache-dprint|
   nasm....................................|ale-nasm-options|
     nasm..................................|ale-nasm-nasm|
   nickel..................................|ale-nickel-options|

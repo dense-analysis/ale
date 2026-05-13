@@ -440,12 +440,12 @@ formatting.
   * [textlint](https://textlint.github.io/)
   * [vale](https://github.com/ValeLint/vale)
   * [write-good](https://github.com/btford/write-good)
-* Mustache
-  * [dprint](https://dprint.dev)
 * MATLAB
   * [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) :speech_balloon:
 * Mercury
   * [mmc](http://mercurylang.org) :floppy_disk:
+* Mustache
+  * [dprint](https://dprint.dev)
 * NASM
   * [nasm](https://www.nasm.us/) :floppy_disk:
 * Nickel
