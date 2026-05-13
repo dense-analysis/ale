@@ -373,6 +373,7 @@ Notes:
   * `lacheck`
   * `proselint`
   * `redpen`
+  * `tex-fmt`
   * `texlab`
   * `textlint`
   * `vale`
