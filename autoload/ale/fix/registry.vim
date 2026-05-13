@@ -774,7 +774,7 @@ let s:default_registry = {
 \   },
 \   'tex-fmt': {
 \       'function': 'ale#fixers#tex_fmt#Fix',
-\       'suggested_filetypes': ['bib', 'plaintex', 'tex'],
+\       'suggested_filetypes': ['bib', 'tex'],
 \       'description': 'Fix LaTeX and bibliography files with tex-fmt.',
 \   }
 \}
