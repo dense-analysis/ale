@@ -8,8 +8,8 @@ function! s:TemporaryPSScript(buffer, input) abort
     " Create a temp dir to house our temp .ps1 script
     " a temp dir is needed as powershell needs the .ps1
     " extension
-    let l:tempdir = ale#util#Tempname() . (has('win32') ? '\' : '/')
-    let l:tempscript = l:tempdir . l:filename
+    let l:tempscript = ale#path#GetAbsPath(ale#util#Tempname(), l:filename)
+    let l:tempdir = fnamemodify(l:tempscript, ':h')
     " Create the temporary directory for the file, unreadable by 'other'
     " users.
     call mkdir(l:tempdir, '', 0750)

@@ -142,7 +142,7 @@ function! s:TemporaryFilename(buffer) abort
 
     " Create a temporary filename, <temp_dir>/<original_basename>
     " The file itself will not be created by this function.
-    return ale#util#Tempname() . (s:is_windows ? '\' : '/') . l:filename
+    return ale#path#GetAbsPath(ale#util#Tempname(), l:filename)
 endfunction
 
 " Given part of a command, replace any % with %%, so that no characters in

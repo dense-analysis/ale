@@ -1,0 +1,39 @@
+Before:
+  runtime autoload/ale/powershell.vim
+
+  let g:ale_powershell_powershell_executable = 'pwsh'
+
+After:
+  if exists('g:tempname')
+    call delete(g:tempname, 'rf')
+  endif
+
+  unlet! g:command
+  unlet! g:tempname
+  unlet! g:tempscript
+  unlet! g:ale_powershell_powershell_executable
+
+  runtime autoload/ale/util.vim
+
+Execute(RunPowerShell should normalize mixed Windows temporary paths):
+  if has('win32')
+    let g:tempname = substitute(ale#util#Tempname(), '\\', '/', 'g')
+
+    function! ale#util#Tempname() abort
+      return g:tempname
+    endfunction
+
+    let g:tempscript = ale#path#GetAbsPath(g:tempname, 'script.ps1')
+    let g:command = ale#powershell#RunPowerShell(
+    \   bufnr(''),
+    \   'powershell_powershell',
+    \   ['Write-Output ''ok'''],
+    \)
+
+    AssertEqual
+    \ ale#Escape('pwsh')
+    \   . ' -Exe Bypass -NoProfile -File '
+    \   . ale#Escape(g:tempscript)
+    \   . ' %t',
+    \ g:command
+  endif

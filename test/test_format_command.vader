@@ -34,6 +34,7 @@ After:
   delfunction CheckTempFile
   delfunction GetTempBase
 
+  runtime autoload/ale/util.vim
   runtime autoload/ale/command.vim
 
 Execute(FormatCommand should do nothing to basic command strings):
@@ -68,6 +69,18 @@ Execute(FormatCommand should convert %t to a new temporary filename):
   AssertEqual ale#Escape(g:result[0]), g:match[1]
   " The two temporary filenames formatted in should be the same.
   AssertEqual g:match[1], g:match[2]
+
+Execute(FormatCommand should normalize mixed Windows temporary paths):
+  if has('win32')
+    function! ale#util#Tempname() abort
+      return 'D:/Personal/Temp/V6UA83E.tmp'
+    endfunction
+
+    let g:result = ale#command#FormatCommand(bufnr('%'), '', '%t', 0, v:null, v:null, [])
+
+    AssertEqual 'D:\Personal\Temp\V6UA83E.tmp\dummy.txt', g:result[0]
+    AssertEqual ale#Escape(g:result[0]), g:result[1]
+  endif
 
 Execute(FormatCommand should not convert %t to a new temporary filename when the input is given as v:false):
   let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %t', 0, v:false, v:null, [])
