@@ -383,6 +383,7 @@ formatting.
   * [lacheck](https://www.ctan.org/pkg/lacheck)
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
+  * [tex-fmt](https://github.com/WGUNDERWOOD/tex-fmt)
   * [texlab](https://texlab.netlify.com) :speech_balloon:
   * [textlint](https://textlint.github.io/)
   * [vale](https://github.com/ValeLint/vale)

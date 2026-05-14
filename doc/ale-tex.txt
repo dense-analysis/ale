@@ -71,6 +71,30 @@ g:ale_tex_latexindent_options
 
 
 ===============================================================================
+tex-fmt                                                       *ale-tex-tex-fmt*
+
+                                           *ale-options.tex_tex_fmt_executable*
+                                                 *g:ale_tex_tex_fmt_executable*
+                                                 *b:ale_tex_tex_fmt_executable*
+tex_tex_fmt_executable
+g:ale_tex_tex_fmt_executable
+  Type: |String|
+  Default: `'tex-fmt'`
+
+  See |ale-integrations-local-executables|.
+
+                                              *ale-options.tex_tex_fmt_options*
+                                                    *g:ale_tex_tex_fmt_options*
+                                                    *b:ale_tex_tex_fmt_options*
+tex_tex_fmt_options
+g:ale_tex_tex_fmt_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to tex-fmt.
+
+
+===============================================================================
 texlab                                                         *ale-tex-texlab*
 
                                             *ale-options.tex_texlab_executable*

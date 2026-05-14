@@ -4008,6 +4008,7 @@ documented in additional help files.
     cspell................................|ale-tex-cspell|
     lacheck...............................|ale-tex-lacheck|
     latexindent...........................|ale-tex-latexindent|
+    tex-fmt...............................|ale-tex-tex-fmt|
     texlab................................|ale-tex-texlab|
     redpen................................|ale-tex-redpen|
   texinfo.................................|ale-texinfo-options|
