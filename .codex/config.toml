@@ -1,0 +1,3 @@
+# Project-local Codex configuration.
+#
+# Command safety policy lives in .codex/rules/git-state.rules.
