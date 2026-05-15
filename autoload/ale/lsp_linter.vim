@@ -210,6 +210,24 @@ function! s:HandleLSPErrorMessage(linter, response) abort
     call ale#lsp_linter#AddErrorMessage(a:linter.name, l:message)
 endfunction
 
+function! s:SendPullDiagnosticsForOpenDocuments(conn_id) abort
+    let l:linter = get(s:lsp_linter_map, a:conn_id)
+
+    if empty(l:linter)
+        return
+    endif
+
+    for l:request in ale#lsp#SendDiagnosticsForOpenDocuments(a:conn_id)
+        let l:info = get(g:ale_buffer_info, l:request.buffer, {})
+
+        if !empty(l:info)
+            call ale#engine#MarkLinterActive(l:info, l:linter)
+        endif
+
+        let s:diagnostic_uri_map[l:request.id] = l:request.uri
+    endfor
+endfunction
+
 function! ale#lsp_linter#AddErrorMessage(linter_name, message) abort
     " This global variable is set here so we don't load the debugging.vim file
     " until someone uses :ALEInfo.
@@ -228,20 +246,39 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
     if get(a:response, 'jsonrpc', '') is# '2.0' && has_key(a:response, 'error')
         let l:linter = get(s:lsp_linter_map, a:conn_id, {})
 
+        " Clean up values in the map on error.
+        if empty(l:method) && has_key(s:diagnostic_uri_map, get(a:response, 'id'))
+            call remove(s:diagnostic_uri_map, a:response.id)
+        endif
+
         call s:HandleLSPErrorMessage(l:linter, a:response)
     elseif l:method is# 'textDocument/publishDiagnostics'
         let l:uri = a:response.params.uri
         let l:diagnostics = a:response.params.diagnostics
 
         call ale#lsp_linter#HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
-    elseif has_key(s:diagnostic_uri_map, get(a:response, 'id'))
-        let l:uri = remove(s:diagnostic_uri_map, a:response.id)
-        let l:diagnostics = a:response.result.kind is# 'unchanged'
-        \   ? 'unchanged'
-        \   : a:response.result.items
-
-        call ale#lsp_linter#HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
+    elseif l:method is# 'workspace/diagnostic/refresh'
+        call ale#lsp#SendResponse(a:conn_id, a:response.id, v:null)
+        call s:SendPullDiagnosticsForOpenDocuments(a:conn_id)
     elseif l:method is# 'client/registerCapability'
+        let l:registered_pull_diagnostics = ale#lsp#RegisterCapabilities(
+        \   a:conn_id,
+        \   get(get(a:response, 'params', {}), 'registrations', []),
+        \)
+
+        call ale#lsp#SendResponse(a:conn_id, a:response.id, v:null)
+
+        if l:registered_pull_diagnostics
+            call s:SendPullDiagnosticsForOpenDocuments(a:conn_id)
+        endif
+    elseif l:method is# 'client/unregisterCapability'
+        let l:unregisterations = get(
+        \   get(a:response, 'params', {}),
+        \   'unregisterations',
+        \   get(get(a:response, 'params', {}), 'unregistrations', []),
+        \)
+
+        call ale#lsp#UnregisterCapabilities(a:conn_id, l:unregisterations)
         call ale#lsp#SendResponse(a:conn_id, a:response.id, v:null)
     elseif l:method is# 'workspace/configuration'
         let l:items = get(get(a:response, 'params', {}), 'items', [])
@@ -253,6 +290,18 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
         \   g:ale_lsp_show_message_format,
         \   a:response.params
         \)
+    elseif empty(l:method) && has_key(s:diagnostic_uri_map, get(a:response, 'id'))
+        let l:uri = remove(s:diagnostic_uri_map, a:response.id)
+        let l:diagnostics = 'unchanged'
+
+        if type(get(a:response, 'result')) is v:t_dict
+            if get(a:response.result, 'kind', '') isnot# 'unchanged'
+            \&& type(get(a:response.result, 'items')) is v:t_list
+                let l:diagnostics = a:response.result.items
+            endif
+        endif
+
+        call ale#lsp_linter#HandleLSPDiagnostics(a:conn_id, l:uri, l:diagnostics)
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'semanticDiag'
         call s:HandleTSServerDiagnostics(a:response, 'semantic')
