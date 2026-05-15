@@ -2334,10 +2334,8 @@ g:ale_root
   This option is used to determine the project root for a linter. If the value
   is a |Dictionary|, it maps a linter to either a |String| containing the
   project root or a |Funcref| to call to look up the root. The |Funcref| is
-  provided the buffer number as its argument.
-
-  The buffer-specific variable may additionally be a string containing the
-  project root itself.
+  provided the buffer number as its argument. If the the value is a string, it
+  will be interpreted as the project root itself.
 
   If neither variable yields a result, a linter-specific function is invoked to
   detect a project root. If this, too, yields no result, and the linter is an

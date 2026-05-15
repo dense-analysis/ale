@@ -320,6 +320,11 @@ function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
         endif
     endif
 
+    " If the global setting is a string, return that right away.
+    if type(g:ale_root) is v:t_string
+        return g:ale_root
+    endif
+
     " Try to get a global setting for the root
     if has_key(g:ale_root, a:linter.name)
         let l:Root = g:ale_root[a:linter.name]
