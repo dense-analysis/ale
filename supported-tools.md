@@ -17,7 +17,7 @@ formatting.
 |      Key       |             Definition                                            |
 | -------------- | ----------------------------------------------------------------- |
 |:speech_balloon:| Language Server Protocol (LSP)                                    |
-| :floppy_disk:  | May only run on files on disk (see: `help ale-lint-file-linters`  |
+| :floppy_disk:  | May only run on files on disk (see: `help ale-lint-file-linters`) |
 |   :warning:    | Disabled by default                                               |
 
 ---

@@ -202,9 +202,24 @@ See |ale-development-linter-tests| for more information on how to write linter
 tests.
 
 When you add new linters or fixers, make sure to add them into the tables in
-supported-tools.md and |ale-supported-languages-and-tools.txt|. If you forget to
-keep them both in sync, you should see an error like the following in the
-builds run for GitHub Actions.
+`../supported-tools.md` and |ale-supported-languages-and-tools.txt|.
+
+The supported tools lists are very long, so please bear in mind the meanings
+of the emojis and special characters in the Vim help file.
+>
+    |      Key       |             Definition                                |
+    | -------------- | ----------------------------------------------------- |
+    |:speech_balloon:| Language Server Protocol (LSP)                        |
+    | :floppy_disk:  | Only runs on disk (see: `help ale-lint-file-linters`) |
+    |   :warning:    | Disabled by default                                   |
+<
+>
+    `^` No linters for text or Vim help filetypes are enabled by default.
+    `!!` These linters check only files on disk. See |ale-lint-file-linters|
+<
+
+If you forget to keep them both in sync, you should see an error like the
+following in the builds run for GitHub Actions.
 >
   ========================================
   diff supported-tools.md and doc/ale-supported-languages-and-tools.txt tables
