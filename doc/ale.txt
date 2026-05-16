@@ -3422,6 +3422,8 @@ documented in additional help files.
   astro...................................|ale-astro-options|
     eslint................................|ale-astro-eslint|
     prettier..............................|ale-astro-prettier|
+  autopkgtest.............................|ale-autopkgtest-options|
+    debian-lsp............................|ale-autopkgtest-debian-lsp|
   avra....................................|ale-avra-options|
     avra..................................|ale-avra-avra|
   awk.....................................|ale-awk-options|
@@ -3516,6 +3518,18 @@ documented in additional help files.
     dart-analyze..........................|ale-dart-analyze|
     dart-format...........................|ale-dart-format|
     dartfmt...............................|ale-dart-dartfmt|
+  debian changelog........................|ale-debchangelog-options|
+    debian-lsp............................|ale-debchangelog-debian-lsp|
+  debian control..........................|ale-debcontrol-options|
+    debian-lsp............................|ale-debcontrol-debian-lsp|
+  debian copyright........................|ale-debcopyright-options|
+    debian-lsp............................|ale-debcopyright-debian-lsp|
+  debian sources..........................|ale-debsources-options|
+    debian-lsp............................|ale-debsources-debian-lsp|
+  debian upstream metadata................|ale-debupstream-options|
+    debian-lsp............................|ale-debupstream-debian-lsp|
+  debian watch............................|ale-debwatch-options|
+    debian-lsp............................|ale-debwatch-debian-lsp|
   desktop.................................|ale-desktop-options|
     desktop-file-validate.................|ale-desktop-desktop-file-validate|
   dhall...................................|ale-dhall-options|

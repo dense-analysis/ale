@@ -1,0 +1,51 @@
+===============================================================================
+ALE Debian Watch Integration                              *ale-debwatch-options*
+
+
+===============================================================================
+debian-lsp                                              *ale-debwatch-debian-lsp*
+
+Website: https://github.com/jelmer/debian-lsp
+
+debian-lsp is a Language Server Protocol implementation for Debian packaging
+files. It supports debian/control, debian/copyright, debian/changelog,
+debian/watch, and debian/source/format files with features including
+diagnostics, completions, and code actions.
+
+
+Installation
+-------------------------------------------------------------------------------
+
+debian-lsp can be installed via cargo: >
+
+  cargo install debian-lsp
+<
+Or from Debian repositories (if available): >
+
+  apt install debian-lsp
+<
+
+Filetype Detection
+-------------------------------------------------------------------------------
+
+Vim does not detect debian/watch files by default. To enable detection, add
+the following to your vimrc: >
+
+  autocmd BufNewFile,BufRead */debian/watch setfiletype debwatch
+<
+
+-------------------------------------------------------------------------------
+Options
+                                     *ale-options.debwatch_debian_lsp_executable*
+                                           *g:ale_debwatch_debian_lsp_executable*
+                                           *b:ale_debwatch_debian_lsp_executable*
+debwatch_debian_lsp_executable
+g:ale_debwatch_debian_lsp_executable
+  Type: |String|
+  Default: `'debian-lsp'`
+
+  This variable can be set to change the path to debian-lsp.
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
