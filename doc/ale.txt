@@ -1944,7 +1944,7 @@ g:ale_linters
   \   'jsonc': [],
   \   'perl': ['perlcritic'],
   \   'perl6': [],
-  \   'python': ['flake8', 'mypy', 'pylint', 'pyright', 'ruff'],
+  \   'python': ['flake8', 'mypy', 'pylint', 'pyright', 'ruff', 'ty'],
   \   'rust': ['analyzer', 'cargo'],
   \   'spec': [],
   \   'text': [],
@@ -3882,6 +3882,7 @@ documented in additional help files.
     reorder-python-imports................|ale-python-reorder_python_imports|
     ruff..................................|ale-python-ruff|
     ruff-format...........................|ale-python-ruff-format|
+    ty....................................|ale-python-ty|
     unimport..............................|ale-python-unimport|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|
