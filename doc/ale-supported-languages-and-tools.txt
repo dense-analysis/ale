@@ -187,6 +187,8 @@ Notes:
   * `elm-format`
   * `elm-ls`
   * `elm-make`
+* Ember (filetype glimmer)
+  * `glint`
 * Erb
   * `erb`
   * `erb-formatter`
