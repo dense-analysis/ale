@@ -3420,6 +3420,7 @@ documented in additional help files.
     gcc...................................|ale-asm-gcc|
     llvm_mc...............................|ale-asm-llvm_mc|
   astro...................................|ale-astro-options|
+    dprint................................|ale-astro-dprint|
     eslint................................|ale-astro-eslint|
     prettier..............................|ale-astro-prettier|
   avra....................................|ale-avra-options|
@@ -3491,12 +3492,14 @@ documented in additional help files.
     csc...................................|ale-cs-csc|
     cspell................................|ale-cs-cspell|
     dotnet-format.........................|ale-cs-dotnet-format|
+    dprint................................|ale-cs-dprint|
     mcs...................................|ale-cs-mcs|
     mcsc..................................|ale-cs-mcsc|
     uncrustify............................|ale-cs-uncrustify|
   css.....................................|ale-css-options|
     cspell................................|ale-css-cspell|
     css-beautify..........................|ale-css-css-beautify|
+    dprint................................|ale-css-dprint|
     fecs..................................|ale-css-fecs|
     prettier..............................|ale-css-prettier|
     stylelint.............................|ale-css-stylelint|
@@ -3573,6 +3576,7 @@ documented in additional help files.
   go......................................|ale-go-options|
     bingo.................................|ale-go-bingo|
     cspell................................|ale-go-cspell|
+    dprint................................|ale-go-dprint|
     gobuild...............................|ale-go-gobuild|
     gofmt.................................|ale-go-gofmt|
     gofumpt...............................|ale-go-gofumpt|
@@ -3587,6 +3591,7 @@ documented in additional help files.
   go html template........................|ale-gohtmltmpl-options|
     djlint................................|ale-gohtmltmpl-djlint|
   graphql.................................|ale-graphql-options|
+    dprint................................|ale-graphql-dprint|
     eslint................................|ale-graphql-eslint|
     gqlint................................|ale-graphql-gqlint|
     prettier..............................|ale-graphql-prettier|
@@ -3627,6 +3632,7 @@ documented in additional help files.
     angular...............................|ale-html-angular|
     cspell................................|ale-html-cspell|
     djlint................................|ale-html-djlint|
+    dprint................................|ale-html-dprint|
     fecs..................................|ale-html-fecs|
     html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
@@ -3682,6 +3688,7 @@ documented in additional help files.
     xo....................................|ale-javascript-xo|
   jinja...................................|ale-jinja-options|
     djlint................................|ale-jinja-djlint|
+    dprint................................|ale-jinja-dprint|
     j2lint................................|ale-jinja-j2lint|
   json....................................|ale-json-options|
     biome.................................|ale-json-biome|
@@ -3717,6 +3724,7 @@ documented in additional help files.
   lean....................................|ale-lean-options|
     lake..................................|ale-lean-lake|
   less....................................|ale-less-options|
+    dprint................................|ale-less-dprint|
     lessc.................................|ale-less-lessc|
     prettier..............................|ale-less-prettier|
     stylelint.............................|ale-less-stylelint|
@@ -3752,6 +3760,8 @@ documented in additional help files.
     redpen................................|ale-markdown-redpen|
   mercury.................................|ale-mercury-options|
     mmc...................................|ale-mercury-mmc|
+  mustache................................|ale-mustache-options|
+    dprint................................|ale-mustache-dprint|
   nasm....................................|ale-nasm-options|
     nasm..................................|ale-nasm-nasm|
   nickel..................................|ale-nickel-options|
@@ -3770,6 +3780,7 @@ documented in additional help files.
     write-good............................|ale-nroff-write-good|
   nunjucks................................|ale-nunjucks-options|
     djlint................................|ale-nunjucks-djlint|
+    dprint................................|ale-nunjucks-dprint|
   objc....................................|ale-objc-options|
     ccls..................................|ale-objc-ccls|
     clang.................................|ale-objc-clang|
@@ -3812,6 +3823,7 @@ documented in additional help files.
     perl6.................................|ale-perl6-perl6|
   php.....................................|ale-php-options|
     cspell................................|ale-php-cspell|
+    dprint................................|ale-php-dprint|
     langserver............................|ale-php-langserver|
     phan..................................|ale-php-phan|
     phpactor..............................|ale-php-phpactor|
@@ -3862,6 +3874,7 @@ documented in additional help files.
     bandit................................|ale-python-bandit|
     black.................................|ale-python-black|
     cspell................................|ale-python-cspell|
+    dprint................................|ale-python-dprint|
     flake8................................|ale-python-flake8|
     flakehell.............................|ale-python-flakehell|
     isort.................................|ale-python-isort|
@@ -3944,6 +3957,7 @@ documented in additional help files.
   salt....................................|ale-salt-options|
     salt-lint.............................|ale-salt-salt-lint|
   sass....................................|ale-sass-options|
+    dprint................................|ale-sass-dprint|
     sasslint..............................|ale-sass-sasslint|
     stylelint.............................|ale-sass-stylelint|
   scala...................................|ale-scala-options|
@@ -3953,6 +3967,7 @@ documented in additional help files.
     scalafmt..............................|ale-scala-scalafmt|
     scalastyle............................|ale-scala-scalastyle|
   scss....................................|ale-scss-options|
+    dprint................................|ale-scss-dprint|
     prettier..............................|ale-scss-prettier|
     sasslint..............................|ale-scss-sasslint|
     stylelint.............................|ale-scss-stylelint|
@@ -3983,6 +3998,7 @@ documented in additional help files.
   sugarss.................................|ale-sugarss-options|
     stylelint.............................|ale-sugarss-stylelint|
   svelte..................................|ale-svelte-options|
+    dprint................................|ale-svelte-dprint|
     prettier..............................|ale-svelte-prettier|
     svelteserver..........................|ale-svelte-svelteserver|
   swift...................................|ale-swift-options|
@@ -4023,6 +4039,8 @@ documented in additional help files.
   toml....................................|ale-toml-options|
     dprint................................|ale-toml-dprint|
     tombi.................................|ale-toml-tombi|
+  twig....................................|ale-twig-options|
+    dprint................................|ale-twig-dprint|
   typescript..............................|ale-typescript-options|
     biome.................................|ale-typescript-biome|
     cspell................................|ale-typescript-cspell|
@@ -4041,6 +4059,8 @@ documented in additional help files.
     vfmt..................................|ale-v-vfmt|
   vala....................................|ale-vala-options|
     uncrustify............................|ale-vala-uncrustify|
+  vento...................................|ale-vento-options|
+    dprint................................|ale-vento-dprint|
   verilog/systemverilog...................|ale-verilog-options|
     hdl-checker...........................|ale-verilog-hdl-checker|
     iverilog..............................|ale-verilog-iverilog|
@@ -4063,6 +4083,7 @@ documented in additional help files.
     write-good............................|ale-vim-help-write-good|
   vue.....................................|ale-vue-options|
     cspell................................|ale-vue-cspell|
+    dprint................................|ale-vue-dprint|
     prettier..............................|ale-vue-prettier|
     vls...................................|ale-vue-vls|
     volar.................................|ale-vue-volar|
@@ -4072,10 +4093,12 @@ documented in additional help files.
     cspell................................|ale-xhtml-cspell|
     write-good............................|ale-xhtml-write-good|
   xml.....................................|ale-xml-options|
+    dprint................................|ale-xml-dprint|
     xmllint...............................|ale-xml-xmllint|
   yaml....................................|ale-yaml-options|
     actionlint............................|ale-yaml-actionlint|
     circleci..............................|ale-yaml-circleci|
+    dprint................................|ale-yaml-dprint|
     prettier..............................|ale-yaml-prettier|
     spectral..............................|ale-yaml-spectral|
     swaglint..............................|ale-yaml-swaglint|

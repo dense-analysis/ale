@@ -8,6 +8,13 @@ djlint                                                       *ale-jinja-djlint*
 
 See |ale-html-djlint|
 
+
+===============================================================================
+dprint                                                       *ale-jinja-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/markup_fmt/.
+
+
 ===============================================================================
 j2lint                                                       *ale-jinja-j2lint*
 

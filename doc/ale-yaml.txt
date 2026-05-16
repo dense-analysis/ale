@@ -74,6 +74,12 @@ servers.
 
 
 ===============================================================================
+dprint                                                        *ale-yaml-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/pretty_yaml/.
+
+
+===============================================================================
 prettier                                                    *ale-yaml-prettier*
 
 Website: https://github.com/prettier/prettier

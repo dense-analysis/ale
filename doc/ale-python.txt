@@ -459,6 +459,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+dprint                                                      *ale-python-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/ruff/.
+
+
+===============================================================================
 flake8                                                      *ale-python-flake8*
 
                                    *ale-options.python_flake8_change_directory*

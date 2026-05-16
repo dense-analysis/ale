@@ -3,6 +3,12 @@ ALE Less Integration                                         *ale-less-options*
 
 
 ===============================================================================
+dprint                                                        *ale-less-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/malva/.
+
+
+===============================================================================
 lessc                                                          *ale-less-lessc*
 
                                             *ale-options.less_lessc_executable*

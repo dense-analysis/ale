@@ -51,7 +51,7 @@ Check the docs over at |ale-typescript-deno|.
 ===============================================================================
 dprint                                                  *ale-javascript-dprint*
 
-See |ale-dprint-options| and https://dprint.dev/plugins/typescript
+See |ale-dprint-options| and https://dprint.dev/plugins/typescript/.
 
 
 ===============================================================================
