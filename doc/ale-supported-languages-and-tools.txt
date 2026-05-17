@@ -199,6 +199,7 @@ Notes:
   * `SyntaxErl`
   * `dialyzer`!!
   * `elvis`!!
+  * `elp`
   * `erlang-mode` (The Erlang mode for Emacs)
   * `erlang_ls`
   * `erlc`

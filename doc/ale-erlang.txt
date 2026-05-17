@@ -65,6 +65,20 @@ g:ale_erlang_elvis_executable
 
 
 ===============================================================================
+elp                                                          *ale-erlang-elp*
+
+                                          *ale-options.erlang_elp_executable*
+                                                *g:ale_erlang_elp_executable*
+                                                *b:ale_erlang_elp_executable*
+erlang_elp_executable
+g:ale_erlang_elp_executable
+  Type: |String|
+  Default: `'elp'`
+
+  This variable can be changed to specify the elp executable.
+
+
+===============================================================================
 erlang-mode                                            *ale-erlang-erlang-mode*
 
                               *ale-options.erlang_erlang_mode_emacs_executable*
