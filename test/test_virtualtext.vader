@@ -219,3 +219,12 @@ Execute(We should not set cursor messages when Neovim diagnostics are enabled):
 
     AssertEqual '', ale#virtualtext#GetLastMessageForTests()
   endif
+
+Execute(We should add new messages on the next line):
+  if has('patch-9.0.0297')
+    call ale#virtualtext#SetTexts(bufnr(''), g:ale_buffer_info[bufnr('')].loclist)
+
+    let l:line_props = prop_list(2, { 'bufnr': bufnr(''), 'types': [ 'ALEVirtualTextError', 'ALEVirtualTextWarning' ] })
+    AssertEqual get(l:line_props[0] 'text_align', 'below'), 'below'
+    AssertEqual get(l:line_props[1] 'text_align', 'below'), 'after'
+  endif
