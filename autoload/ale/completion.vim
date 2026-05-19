@@ -945,8 +945,18 @@ function! ale#completion#OmniFunc(findstart, base) abort
     else
         let l:result = ale#completion#GetCompletionResult()
 
+        let l:timeout = get(g:, 'ale_completion_timeout', 3)
+        let l:timeout_start = reltime()
+
         while l:result is v:null && !complete_check()
+            if reltimefloat(reltime(l:timeout_start)) > l:timeout
+                " no-custom-checks
+                echoerr 'no result within timeout (' . l:timeout . 's)'
+                break
+            endif
+
             sleep 2ms
+
             let l:result = ale#completion#GetCompletionResult()
         endwhile
 
