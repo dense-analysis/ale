@@ -58,3 +58,9 @@ Execute(The omnifunc function should parse and return async responses):
 
     AssertEqual ['foo'], ale#completion#OmniFunc(0, '')
   endif
+
+Execute(The omnifunc function should timeout, if no result is returned):
+  " WARNING: This will lock the whole test-suite, if the timeout does not work!
+  let g:ale_completion_timeout = 0.2
+
+  AssertEqual v:null, ale#completion#OmniFunc(0, '')
