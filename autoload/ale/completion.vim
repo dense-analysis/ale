@@ -764,6 +764,9 @@ function! s:OnReady(linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
 
     if !ale#lsp#HasCapability(l:id, 'completion')
+        " Return at least an empty result to avoid OmniFunc timeout
+        call ale#completion#Show([])
+
         return
     endif
 
