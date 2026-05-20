@@ -25,7 +25,7 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'linter_one',
   \ 'callback': 'WhoCares',
-  \ 'executable': 'echo',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
   \ 'command': 'sleep 1000',
   \ 'lint_file': 1,
   \})

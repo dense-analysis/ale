@@ -5,7 +5,8 @@ call ale#Set('c_parse_makefile', 0)
 call ale#Set('c_always_make', has('unix') && !has('macunix'))
 call ale#Set('c_parse_compile_commands', 1)
 
-let s:sep = has('win32') ? '\' : '/'
+let s:is_windows = has('win32') || has('win64') || has('win32unix')
+let s:sep = s:is_windows ? '\' : '/'
 
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
@@ -386,23 +387,40 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
     let l:file_list = get(a:file_lookup, l:buffer_filename, [])
 
     " We may have to look for /foo/bar instead of C:\foo\bar
-    if empty(l:file_list) && has('win32')
-        let l:file_list = get(
-        \   a:file_lookup,
-        \   ale#path#RemoveDriveLetter(l:buffer_filename),
-        \   []
-        \)
+    if empty(l:file_list) && s:is_windows
+        " Try without the drive letter.
+        let l:no_drive = ale#path#RemoveDriveLetter(l:buffer_filename)
+
+        let l:file_list = get(a:file_lookup, l:no_drive, [])
+
+        " Also try by iterating keys in case Simplify produced different
+        " results for the key and the lookup value.
+        if empty(l:file_list)
+            for [l:key, l:val] in items(a:file_lookup)
+                if ale#path#RemoveDriveLetter(l:key) is? l:no_drive
+                    let l:file_list = l:val
+                    break
+                endif
+            endfor
+        endif
     endif
 
     " Try the absolute path to the directory second.
     let l:dir_list = get(a:dir_lookup, l:dir, [])
 
-    if empty(l:dir_list) && has('win32')
-        let l:dir_list = get(
-        \   a:dir_lookup,
-        \   ale#path#RemoveDriveLetter(l:dir),
-        \   []
-        \)
+    if empty(l:dir_list) && s:is_windows
+        let l:no_drive_dir = ale#path#RemoveDriveLetter(l:dir)
+
+        let l:dir_list = get(a:dir_lookup, l:no_drive_dir, [])
+
+        if empty(l:dir_list)
+            for [l:key, l:val] in items(a:dir_lookup)
+                if ale#path#RemoveDriveLetter(l:key) is? l:no_drive_dir
+                    let l:dir_list = l:val
+                    break
+                endif
+            endfor
+        endif
     endif
 
     if empty(l:file_list) && empty(l:dir_list)
@@ -424,7 +442,7 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
             let l:key = fnamemodify(l:buffer_filename, ':r') . l:suffix
             let l:file_list = get(a:file_lookup, l:key, [])
 
-            if empty(l:file_list) && has('win32')
+            if empty(l:file_list) && s:is_windows
                 let l:file_list = get(
                 \   a:file_lookup,
                 \   ale#path#RemoveDriveLetter(l:key),
@@ -450,8 +468,12 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
 
         " Load the flags for this file, or for a source file matching the
         " header file.
+        " On Windows, bufnr() may fail to match when one path has a drive
+        " letter and the other doesn't, so fall back to path comparison.
         if (
         \   bufnr(l:filename) is a:buffer
+        \   || ale#path#RemoveDriveLetter(l:filename)
+        \       is? ale#path#RemoveDriveLetter(l:buffer_filename)
         \   || (
         \       !empty(l:source_file)
         \       && l:filename[-len(l:source_file):] is? l:source_file

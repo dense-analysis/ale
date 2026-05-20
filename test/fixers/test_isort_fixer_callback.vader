@@ -17,7 +17,7 @@ Execute(The isort callback should return the correct default values):
   AssertFixer
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' --filename %s' . ' -',
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' --filename %s' . ' -',
   \ }
 
 Execute(The isort callback should respect custom options):
@@ -30,7 +30,7 @@ Execute(The isort callback should respect custom options):
   AssertFixer
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort'))
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort'))
   \     . ' --filename %s' . ' --multi-line=3 --trailing-comma -',
   \ }
 
@@ -79,5 +79,5 @@ Execute(The isort callback should not use --filename for older versions):
   AssertFixer
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' -',
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' -',
   \ }

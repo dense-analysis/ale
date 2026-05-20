@@ -14,11 +14,11 @@ formatting.
 
 **Legend**
 
-|      Key       |             Definition                                            |
-| -------------- | ----------------------------------------------------------------- |
-|:speech_balloon:| Language Server Protocol (LSP)                                    |
-| :floppy_disk:  | May only run on files on disk (see: `help ale-lint-file-linters`  |
-|   :warning:    | Disabled by default                                               |
+|      Key       |             Definition                                |
+| -------------- | ----------------------------------------------------- |
+|:speech_balloon:| Language Server Protocol (LSP)                        |
+| :floppy_disk:  | Only runs on disk (see: `help ale-lint-file-linters`) |
+|   :warning:    | Disabled by default                                   |
 
 ---
 
@@ -383,6 +383,7 @@ formatting.
   * [lacheck](https://www.ctan.org/pkg/lacheck)
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
+  * [tex-fmt](https://github.com/WGUNDERWOOD/tex-fmt)
   * [texlab](https://texlab.netlify.com) :speech_balloon:
   * [textlint](https://textlint.github.io/)
   * [vale](https://github.com/ValeLint/vale)
@@ -572,6 +573,7 @@ formatting.
   * [reorder-python-imports](https://github.com/asottile/reorder_python_imports)
   * [ruff](https://github.com/charliermarsh/ruff)
   * [ruff-format](https://docs.astral.sh/ruff/formatter/)
+  * [ty](https://github.com/astral-sh/ty) :speech_balloon:
   * [unimport](https://github.com/hakancelik96/unimport)
   * [vulture](https://github.com/jendrikseipp/vulture) :warning: :floppy_disk:
   * [yapf](https://github.com/google/yapf)

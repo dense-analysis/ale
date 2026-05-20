@@ -32,8 +32,12 @@ Execute(The project root should be globally configurable):
 
     AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl')
     unlet g:ale_root.perlnavigator
-    " As tracked by <https://github.com/dense-analysis/ale/issues/5002>, there
-    " is a bug with g:ale_root which is thus missing here.
+
+    " Configuring g:ale_root using a String works.
+    let g:ale_root = ale#path#Simplify(g:dir . '/../test-files/perl')
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl')
+    let g:ale_root = {}
   endfor
 
 Execute(The project root should be per buffer configurable):

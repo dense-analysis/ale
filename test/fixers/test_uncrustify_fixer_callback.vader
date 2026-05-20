@@ -35,7 +35,7 @@ Execute(The uncrustify callback should include any additional options):
 Execute(The uncrustify callback should set proper language):
   unlet b:ale_c_uncrustify_options
 
-  set filetype=c
+  noautocmd set filetype=c
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
@@ -43,7 +43,7 @@ Execute(The uncrustify callback should set proper language):
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-  set filetype=cpp
+  noautocmd set filetype=cpp
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
@@ -51,7 +51,7 @@ Execute(The uncrustify callback should set proper language):
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-  set filetype=cs
+  noautocmd set filetype=cs
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
@@ -59,7 +59,7 @@ Execute(The uncrustify callback should set proper language):
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-  set filetype=objc
+  noautocmd set filetype=objc
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
@@ -67,7 +67,7 @@ Execute(The uncrustify callback should set proper language):
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-  set filetype=objcpp
+  noautocmd set filetype=objcpp
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
@@ -75,7 +75,7 @@ Execute(The uncrustify callback should set proper language):
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-  set filetype=d
+  noautocmd set filetype=d
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
@@ -83,7 +83,7 @@ Execute(The uncrustify callback should set proper language):
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-  set filetype=java
+  noautocmd set filetype=java
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
@@ -91,7 +91,7 @@ Execute(The uncrustify callback should set proper language):
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-  set filetype=vala
+  noautocmd set filetype=vala
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
@@ -99,7 +99,7 @@ Execute(The uncrustify callback should set proper language):
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-  set filetype=p
+  noautocmd set filetype=p
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)

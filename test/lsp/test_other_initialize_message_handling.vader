@@ -214,6 +214,128 @@ Execute(Capabilities should be enabled when sent as Dictionaries):
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list
 
+Execute(Pull model diagnostics should be enabled when registered dynamically):
+  AssertEqual 0, b:conn.capabilities.pull_model
+
+  AssertEqual
+  \ 1,
+  \ ale#lsp#RegisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'pyright-diagnostics',
+  \     'method': 'textDocument/diagnostic',
+  \     'registerOptions': {
+  \       'interFileDependencies': v:true,
+  \       'workspaceDiagnostics': v:false,
+  \       'documentSelector': v:null,
+  \       'identifier': 'Pyright',
+  \     },
+  \   },
+  \ ])
+
+  AssertEqual 1, b:conn.capabilities.pull_model
+
+Execute(Pull model diagnostics should be disabled when unregistered dynamically):
+  call ale#lsp#RegisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'pyright-diagnostics',
+  \     'method': 'textDocument/diagnostic',
+  \     'registerOptions': {
+  \       'interFileDependencies': v:true,
+  \     },
+  \   },
+  \ ])
+
+  AssertEqual 1, b:conn.capabilities.pull_model
+
+  AssertEqual
+  \ 1,
+  \ ale#lsp#UnregisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'pyright-diagnostics',
+  \     'method': 'textDocument/diagnostic',
+  \   },
+  \ ])
+
+  AssertEqual 0, b:conn.capabilities.pull_model
+
+Execute(Pull model diagnostics should stay enabled while another registration exists):
+  call ale#lsp#RegisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'pyright-diagnostics-one',
+  \     'method': 'textDocument/diagnostic',
+  \     'registerOptions': {
+  \       'interFileDependencies': v:true,
+  \     },
+  \   },
+  \   {
+  \     'id': 'pyright-diagnostics-two',
+  \     'method': 'textDocument/diagnostic',
+  \     'registerOptions': {
+  \       'interFileDependencies': v:true,
+  \     },
+  \   },
+  \ ])
+
+  call ale#lsp#UnregisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'pyright-diagnostics-one',
+  \     'method': 'textDocument/diagnostic',
+  \   },
+  \ ])
+
+  AssertEqual 1, b:conn.capabilities.pull_model
+
+Execute(Unregistering non-diagnostic registrations should not change diagnostics):
+  call ale#lsp#RegisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'pyright-diagnostics',
+  \     'method': 'textDocument/diagnostic',
+  \     'registerOptions': {
+  \       'interFileDependencies': v:true,
+  \     },
+  \   },
+  \   {
+  \     'id': 'workspace-symbols',
+  \     'method': 'workspace/symbol',
+  \     'registerOptions': {},
+  \   },
+  \ ])
+
+  call ale#lsp#UnregisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'workspace-symbols',
+  \     'method': 'workspace/symbol',
+  \   },
+  \ ])
+
+  AssertEqual 1, b:conn.capabilities.pull_model
+
+Execute(Static pull model diagnostics should not be disabled by unregistering dynamic registrations):
+  call ale#lsp#UpdateCapabilities(b:conn.id, {
+  \ 'diagnosticProvider': {
+  \   'interFileDependencies': v:false,
+  \ },
+  \})
+
+  call ale#lsp#RegisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'pyright-diagnostics',
+  \     'method': 'textDocument/diagnostic',
+  \     'registerOptions': {
+  \       'interFileDependencies': v:true,
+  \     },
+  \   },
+  \ ])
+
+  call ale#lsp#UnregisterCapabilities(b:conn.id, [
+  \   {
+  \     'id': 'pyright-diagnostics',
+  \     'method': 'textDocument/diagnostic',
+  \   },
+  \ ])
+
+  AssertEqual 1, b:conn.capabilities.pull_model
+
 Execute(Results that are not dictionaries should be handled correctly):
   call ale#lsp#HandleInitResponse(b:conn, {
   \ 'jsonrpc': '2.0',

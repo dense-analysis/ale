@@ -207,6 +207,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['puppet'],
 \       'description': 'Run puppet-lint -f on a file.',
 \   },
+\   'replace_emdash': {
+\       'function': 'ale#fixers#generic#ReplaceEmDash',
+\       'suggested_filetypes': [],
+\       'description': 'Replace em dash with -- ASCII characters.',
+\   },
 \   'remove_trailing_lines': {
 \       'function': 'ale#fixers#generic#RemoveTrailingBlankLines',
 \       'suggested_filetypes': [],
@@ -772,6 +777,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['markdown'],
 \       'description': 'Fix markdown files with rumdl.',
 \   },
+\   'tex-fmt': {
+\       'function': 'ale#fixers#tex_fmt#Fix',
+\       'suggested_filetypes': ['bib', 'tex'],
+\       'description': 'Fix LaTeX and bibliography files with tex-fmt.',
+\   }
 \}
 
 " Reset the function registry to the default entries.

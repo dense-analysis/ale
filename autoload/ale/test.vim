@@ -3,6 +3,10 @@
 "
 " This file should not typically be loaded during the normal execution of ALE.
 
+" Determine the repository root from this script's location.
+" autoload/ale/test.vim -> :h:h:h = repo root
+let s:repo_root = expand('<sfile>:p:h:h:h')
+
 " Change the directory for checking things in particular test directories
 "
 " This function will set the g:dir variable, which represents the working
@@ -16,9 +20,16 @@ function! ale#test#SetDirectory(docker_path) abort
         throw 'docker_path must start with /testplugin/!'
     endif
 
-    " Try to switch directory, which will fail when running tests directly,
-    " and not through the Docker image.
-    silent! execute 'cd ' . fnameescape(a:docker_path)
+    if has('win32')
+        " On Windows (outside Docker), map /testplugin/ to the repo root.
+        let l:win_path = s:repo_root . a:docker_path[len('/testplugin'):]
+        silent! execute 'cd ' . fnameescape(l:win_path)
+    else
+        " Try to switch directory, which will fail when running tests directly,
+        " and not through the Docker image.
+        silent! execute 'cd ' . fnameescape(a:docker_path)
+    endif
+
     let g:dir = getcwd() " no-custom-checks
 endfunction
 
