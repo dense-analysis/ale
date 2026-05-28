@@ -1143,6 +1143,20 @@ g:ale_completion_max_suggestions
   Adjust this option as needed, depending on the complexity of your codebase
   and your available processing power.
 
+                                               *ale-options.completion_timeout*
+                                                     *g:ale_completion_timeout*
+completion_timeout
+g:ale_completion_timeout
+  Type: |Number|
+  Default: `3`
+
+  The maximum time in seconds ale#completion#OmniFunc() will wait for a
+  completion result from the language server.
+
+  When the timeout is exceeded ale#completion#OmniFunc() will print an error
+  message and return an empty result. Setting a higher value allows longer
+  response times, but it may also keep Vim unresponsible for a longer time.
+
                                                     *ale-options.cursor_detail*
                                                           *g:ale_cursor_detail*
 cursor_detail
