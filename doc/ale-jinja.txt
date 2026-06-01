@@ -11,6 +11,78 @@ See |ale-html-djlint|
 ===============================================================================
 j2lint                                                       *ale-jinja-j2lint*
 
+                                          *ale-options.jinja_j2lint_executable*
+                                                *g:ale_jinja_j2lint_executable*
+                                                *b:ale_jinja_j2lint_executable*
+jinja_j2lint_executable
+g:ale_jinja_j2lint_executable
+  Type: |String|
+  Default: `'j2lint'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `j2lint'`.
+  Set this to `'poetry'` to invoke `'poetry` `run` `j2lint'`.
+  Set this to `'uv'` to invoke `'uv` `run` `j2lint'`.
+
+                                             *ale-options.jinja_j2lint_options*
+                                                   *g:ale_jinja_j2lint_options*
+                                                   *b:ale_jinja_j2lint_options*
+
+jinja_j2lint_options
+g:ale_jinja_j2lint_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the
+  j2lint invocation.
+
+                                          *ale-options.jinja_j2lint_use_global*
+                                                *g:ale_jinja_j2lint_use_global*
+                                                *b:ale_jinja_j2lint_use_global*
+
+jinja_j2lint_use_global
+g:ale_jinja_j2lint_use_global
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+                                         *ale-options.jinja_j2lint_auto_pipenv*
+                                               *g:ale_jinja_j2lint_auto_pipenv*
+                                               *b:ale_jinja_j2lint_auto_pipenv*
+
+jinja_j2lint_auto_pipenv
+g:ale_jinja_j2lint_auto_pipenv
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
+                                         *ale-options.jinja_j2lint_auto_poetry*
+                                               *g:ale_jinja_j2lint_auto_poetry*
+                                               *b:ale_jinja_j2lint_auto_poetry*
+
+jinja_j2lint_auto_poetry
+g:ale_jinja_j2lint_auto_poetry
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a poetry, and set the executable to `poetry`
+  if true. This is overridden by a manually-set executable.
+
+                                             *ale-options.jinja_j2lint_auto_uv*
+                                                   *g:ale_jinja_j2lint_auto_uv*
+                                                   *b:ale_jinja_j2lint_auto_uv*
+
+jinja_j2lint_auto_uv
+g:ale_jinja_j2lint_auto_uv
+  Type: |Number|
+  Default: `0`
+
+  Set the executable to `uv` if true. This is overridden by a manually-set
+  executable.
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
