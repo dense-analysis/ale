@@ -208,6 +208,7 @@ formatting.
 * Erlang
   * [SyntaxErl](https://github.com/ten0s/syntaxerl)
   * [dialyzer](http://erlang.org/doc/man/dialyzer.html) :floppy_disk:
+  * [elp](https://github.com/WhatsApp/erlang-language-platform) :speech_balloon:
   * [elvis](https://github.com/inaka/elvis) :floppy_disk:
   * [erlang-mode](https://www.erlang.org/doc/apps/tools/erlang_mode_chapter.html) (The Erlang mode for Emacs) :speech_balloon:
   * [erlang_ls](https://github.com/erlang-ls/erlang_ls) :speech_balloon:
