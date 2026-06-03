@@ -1,15 +1,9 @@
 ===============================================================================
-ALE Nunjucks Integration                                 *ale-nunjucks-options*
+ALE Twig Integration                                         *ale-twig-options*
 
 
 ===============================================================================
-djlint                                                    *ale-nunjucks-djlint*
-
-See |ale-html-djlint|
-
-
-===============================================================================
-dprint                                                    *ale-nunjucks-dprint*
+dprint                                                        *ale-twig-dprint*
 
 See |ale-dprint-options| and https://dprint.dev/plugins/markup_fmt/.
 

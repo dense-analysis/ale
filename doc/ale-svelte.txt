@@ -3,6 +3,12 @@ ALE Svelte Integration                                     *ale-svelte-options*
 
 
 ===============================================================================
+dprint                                                      *ale-svelte-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/markup_fmt/.
+
+
+===============================================================================
 prettier                                                  *ale-svelte-prettier*
 
 See |ale-javascript-prettier| for information about the available options.

@@ -3,6 +3,12 @@ ALE SCSS Integration                                         *ale-scss-options*
 
 
 ===============================================================================
+dprint                                                        *ale-scss-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/malva/.
+
+
+===============================================================================
 prettier                                                    *ale-scss-prettier*
 
 See |ale-javascript-prettier| for information about the available options.
