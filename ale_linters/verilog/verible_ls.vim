@@ -7,10 +7,10 @@ call ale#Set('verilog_verible_ls_executable', 'verible-verilog-ls')
 call ale#Set('verilog_verible_ls_config', {})
 
 function! ale_linters#verilog#verible_ls#GetProjectRoot(buffer) abort
-    let l:git_dir = ale#path#FindNearestFile(a:buffer, 'verible.filelist')
+    let l:project_file = ale#path#FindNearestFile(a:buffer, 'verible.filelist')
 
-    if !empty(l:git_dir)
-        return fnamemodify(l:git_dir, ':p:h')
+    if !empty(l:project_file)
+        return fnamemodify(l:project_file, ':p:h')
     else
         return fnamemodify('', ':h')
     endif
