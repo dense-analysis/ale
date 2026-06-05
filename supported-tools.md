@@ -51,6 +51,8 @@ formatting.
 * Astro
   * [eslint](http://eslint.org/)
   * [prettier](https://github.com/prettier/prettier)
+* Autopkgtest (filetype autopkgtest)
+  * [debian-lsp](https://github.com/jelmer/debian-lsp) :speech_balloon:
 * AVRA
   * [avra](https://github.com/Ro5bert/avra)
 * Awk
@@ -173,6 +175,18 @@ formatting.
   * [dart-format](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt)
   * [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt)
   * [language_server](https://github.com/natebosch/dart_language_server)
+* Debian Changelog (filetype debchangelog)
+  * [debian-lsp](https://github.com/jelmer/debian-lsp) :speech_balloon:
+* Debian Control (filetype debcontrol)
+  * [debian-lsp](https://github.com/jelmer/debian-lsp) :speech_balloon:
+* Debian Copyright (filetype debcopyright)
+  * [debian-lsp](https://github.com/jelmer/debian-lsp) :speech_balloon:
+* Debian Sources (filetype debsources)
+  * [debian-lsp](https://github.com/jelmer/debian-lsp) :speech_balloon:
+* Debian Upstream Metadata (filetype debupstream)
+  * [debian-lsp](https://github.com/jelmer/debian-lsp) :speech_balloon:
+* Debian Watch (filetype debwatch)
+  * [debian-lsp](https://github.com/jelmer/debian-lsp) :speech_balloon:
 * desktop
   * [desktop-file-validate](https://www.freedesktop.org/wiki/Software/desktop-file-utils/)
 * Dhall
