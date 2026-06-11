@@ -29,17 +29,12 @@ function! ale_linters#elixir#mix#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-function! ale_linters#elixir#mix#GetCommand(buffer) abort
-    let l:temp_dir = ale#command#CreateDirectory(a:buffer)
-
-    return ale#Env('MIX_BUILD_PATH', l:temp_dir) . 'mix compile %s'
-endfunction
-
 call ale#linter#Define('elixir', {
 \   'name': 'mix',
 \   'executable': 'mix',
 \   'cwd': function('ale#handlers#elixir#FindMixProjectRoot'),
-\   'command': function('ale_linters#elixir#mix#GetCommand'),
+\   'command': '%e compile',
+\   'output_stream': 'stderr',
 \   'callback': 'ale_linters#elixir#mix#Handle',
 \   'lint_file': 1,
 \})
