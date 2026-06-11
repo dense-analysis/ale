@@ -1,20 +1,85 @@
 Before:
   runtime ale_linters/elixir/mix.vim
+  call ale#test#SetFilename('/testplugin/lib/foo.ex')
 
 After:
   call ale#linter#Reset()
 
 Execute(The mix handler should parse lines correctly):
+  let input_lines = [
+  \ '    warning: variable "a" is unused (if the variable is not meant to be used, prefix it with an underscore)',
+  \ '    │',
+  \ ' 16 │     a = missing_var',
+  \ '    │     ~',
+  \ '    │',
+  \ '    └─ /testplugin/lib/foo.ex:16:5: Foo.hello/0',
+  \ '',
+  \ '    warning: variable "b" is unused (if the variable is not meant to be used, prefix it with an underscore)',
+  \ '    │',
+  \ ' 17 │     b = another_missing_var',
+  \ '    │     ~',
+  \ '    │',
+  \ '    └─ /testplugin/lib/foo.ex:17:5: Foo.hello/0',
+  \ '',
+  \ '    error: undefined variable "another_missing_var"',
+  \ '    │',
+  \ ' 17 │     b = another_missing_var',
+  \ '    │         ^^^^^^^^^^^^^^^^^^^',
+  \ '    │',
+  \ '    └─ /testplugin/lib/foo.ex:17:9: Foo.hello/0',
+  \ '',
+  \ '    error: undefined variable "missing_var"',
+  \ '    │',
+  \ ' 16 │     a = missing_var',
+  \ '    │         ^^^^^^^^^^^',
+  \ '    │',
+  \ '    └─ /testplugin/lib/foo.ex:16:9: Foo.hello/0',
+  \ '',
+  \ '    error: undefined variable "unrelated_var"',
+  \ '    │',
+  \ ' 16 │     a = unrelated_var',
+  \ '    │         ^^^^^^^^^^^',
+  \ '    │',
+  \ '    └─ /testplugin/lib/unrelated.ex:16:9: Foo.hello/0',
+  \ '',
+  \ '',
+  \ '== Compilation error in file /testplugin/lib/foo.ex ==',
+  \ '** (CompileError) /testplugin/lib/foo.ex: cannot compile module Foo (errors have been logged)',
+  \ ]
+
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
-  \     'lnum': 87,
-  \     'col': 0,
-  \     'text': 'undefined function update_in/4',
+  \     'bufnr': bufnr(''),
+  \     'lnum': 16,
+  \     'col': 5,
+  \     'type': 'W',
+  \     'text': 'variable "a" is unused (if the variable is not meant to be used, prefix it with an underscore)',
+  \     'detail': join(input_lines, "\n"),
+  \   },
+  \   {
+  \     'bufnr': bufnr(''),
+  \     'lnum': 17,
+  \     'col': 5,
+  \     'type': 'W',
+  \     'text': 'variable "b" is unused (if the variable is not meant to be used, prefix it with an underscore)',
+  \     'detail': join(input_lines, "\n"),
+  \   },
+  \   {
+  \     'bufnr': bufnr(''),
+  \     'lnum': 17,
+  \     'col': 9,
   \     'type': 'E',
+  \     'text': 'undefined variable "another_missing_var"',
+  \     'detail': join(input_lines, "\n"),
+  \   },
+  \   {
+  \     'bufnr': bufnr(''),
+  \     'lnum': 16,
+  \     'col': 9,
+  \     'type': 'E',
+  \     'text': 'undefined variable "missing_var"',
+  \     'detail': join(input_lines, "\n"),
   \   },
   \ ],
-  \ ale_linters#elixir#mix#Handle(347, [
-  \   '** (CompileError) apps/sim/lib/sim/server.ex:87: undefined function update_in/4'
-  \ ])
+  \ ale_linters#elixir#mix#Handle(bufnr(''), input_lines)
