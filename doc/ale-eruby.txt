@@ -40,7 +40,7 @@ erblint                                                     *ale-eruby-erblint*
 eruby_erblint_executable
 g:ale_eruby_erblint_executable
   Type: |String|
-  Default: `'erblint'`
+  Default: `'erb_lint'`
 
   Override the invoked erblint binary. This is useful for running erblint
   from binstubs or a bundle.
