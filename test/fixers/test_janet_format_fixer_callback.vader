@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpFixerTest('janet', 'janet-format')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The janet-format callback should return the correct default values):
+  AssertFixer {
+  \    'command': ale#Escape('janet-format') . ' %t',
+  \    'read_temporary_file': 1,
+  \}
+
+Execute(The janet-format callback should allow a custom executable):
+  let g:ale_janet_janet_format_executable = '/custom/path/to/janet-format'
+
+  AssertFixer {
+  \    'command': ale#Escape('/custom/path/to/janet-format') . ' %t',
+  \    'read_temporary_file': 1,
+  \}
