@@ -737,6 +737,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['clojure'],
 \       'description': 'formatter and linter for clojure files',
 \   },
+\   'janet-format': {
+\       'function': 'ale#fixers#janet_format#Fix',
+\       'suggested_filetypes': ['janet'],
+\       'description': 'Formatter for janet files',
+\   },
 \   'typstyle': {
 \       'function': 'ale#fixers#typstyle#Fix',
 \       'suggested_filetypes': ['typst'],

@@ -1,0 +1,19 @@
+===============================================================================
+ALE Janet Integration                                       *ale-janet-options*
+
+
+===============================================================================
+janet-format                                           *ale-janet-janet-format*
+
+                                    *ale-options.janet_janet_format_executable*
+                                          *g:ale_janet_janet_format_executable*
+                                          *b:ale_janet_janet_format_executable*
+janet_janet_format_executable
+g:ale_janet_janet_format_executable
+  Type: |String|
+  Default: `'janet-format'`
+
+  This variable sets the executable used for janet-format.
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

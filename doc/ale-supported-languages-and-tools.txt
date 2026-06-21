@@ -329,6 +329,8 @@ Notes:
   * `inko` !!
 * ISPC
   * `ispc`!!
+* Janet
+  * `janet-format`
 * Java
   * `PMD`
   * `checkstyle`!!
