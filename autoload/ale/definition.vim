@@ -108,17 +108,22 @@ function! ale#definition#FormatLSPResponse(response_item, options) abort
         let l:column = a:response_item.range.start.character + 1
     endif
 
+    let l:filename = ale#util#ToResource(l:uri)
+    let l:content = ale#util#SafeReadFileLine(l:filename, l:line)
+
     if get(a:options, 'open_in') is# 'quickfix'
         return {
-        \ 'filename': ale#util#ToResource(l:uri),
+        \ 'filename': l:filename,
         \ 'lnum': l:line,
         \ 'col': l:column,
+        \ 'text': l:content,
         \}
     else
         return {
-        \ 'filename': ale#util#ToResource(l:uri),
+        \ 'filename': l:filename,
         \ 'line': l:line,
         \ 'column': l:column,
+        \ 'match': l:content,
         \}
     endif
 endfunction
@@ -238,6 +243,7 @@ function! s:OnReady(line, column, options, capability, linter, lsp_details) abor
     let l:request_id = ale#lsp#Send(l:id, l:message)
 
     let s:go_to_definition_map[l:request_id] = {
+    \   'use_relative_paths': get(a:options, 'use_relative_paths', 0),
     \   'open_in': get(a:options, 'open_in', 'current-buffer'),
     \}
 endfunction
@@ -277,7 +283,9 @@ function! ale#definition#GoToCommandHandler(command, ...) abort
 
     if len(a:000) > 0
         for l:option in a:000
-            if l:option is? '-tab'
+            if l:option is? '-relative'
+                let l:options.use_relative_paths = 1
+            elseif l:option is? '-tab'
                 let l:options.open_in = 'tab'
             elseif l:option is? '-split'
                 let l:options.open_in = 'split'
