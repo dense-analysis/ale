@@ -1,0 +1,335 @@
+Before:
+  Save g:ale_close_preview_on_insert
+  Save g:ale_floating_preview_popup_opts
+
+  let g:ale_close_preview_on_insert = 0
+
+  runtime autoload/ale/floating_preview.vim
+
+  function! OpenTestPopup(...) abort
+    return ale#floating_preview#Show(get(
+    \ a:000,
+    \ 0,
+    \ map(range(1, 40), 'string(v:val)')
+    \)
+    \)
+  endfunction
+
+  function! GetPopupCursorState(popup_id) abort
+    let g:popup_cursor_state = []
+
+    call win_execute(
+    \ a:popup_id,
+    \ 'let g:popup_cursor_state = [line("."), winline()]'
+    \)
+
+    return g:popup_cursor_state
+  endfunction
+
+  function! AssertPopupFilterConfigured() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let popup_id = OpenTestPopup()
+
+    AssertEqual
+    \ string(function('ale#floating_preview#PopupFilter')),
+    \ string(popup_getoptions(popup_id).filter)
+  endfunction
+
+  function! AssertPopupScrollsDown() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {'minheight': 4, 'maxheight': 4}
+    let popup_id = OpenTestPopup()
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    AssertEqual [2, 1], GetPopupCursorState(popup_id)
+
+    AssertEqual
+    \ 1,
+    \ ale#floating_preview#PopupFilter(popup_id, "\<ScrollWheelDown>")
+    AssertEqual [3, 1], GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertPopupScrollsUp() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {'minheight': 4, 'maxheight': 4}
+    let popup_id = OpenTestPopup()
+
+    call ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    call ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-p>")
+    AssertEqual [2, 1], GetPopupCursorState(popup_id)
+
+    AssertEqual
+    \ 1,
+    \ ale#floating_preview#PopupFilter(popup_id, "\<ScrollWheelUp>")
+    AssertEqual [1, 1], GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertPopupScrollsByHalfPage() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {'minheight': 4, 'maxheight': 4}
+    let popup_id = OpenTestPopup()
+    let page_size = max([
+    \ 1,
+    \ float2nr(ceil(popup_getpos(popup_id).core_height / 2.0)),
+    \])
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-d>")
+    AssertEqual [page_size + 1, 1], GetPopupCursorState(popup_id)
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-u>")
+    AssertEqual [1, 1], GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertPopupClosesOnEscape() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let popup_id = OpenTestPopup()
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<Esc>")
+    AssertEqual -1, index(popup_list(), popup_id)
+    AssertEqual 0, exists('w:preview')
+  endfunction
+
+  function! AssertPopupPassesThroughUnhandledKeys() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let popup_id = OpenTestPopup()
+    let popup_position = popup_getpos(popup_id)
+    let popup_cursor_state = GetPopupCursorState(popup_id)
+
+    AssertEqual 0, ale#floating_preview#PopupFilter(popup_id, 'j')
+    AssertEqual 0, ale#floating_preview#PopupFilter(popup_id, 'k')
+    AssertEqual 0, ale#floating_preview#PopupFilter(popup_id, 'q')
+    AssertEqual popup_position.firstline, popup_getpos(popup_id).firstline
+    AssertEqual popup_position.width, popup_getpos(popup_id).width
+    AssertEqual popup_position.height, popup_getpos(popup_id).height
+    AssertEqual popup_cursor_state, GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertWrappedPopupKeepsItsSize() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {
+    \ 'minheight': 4,
+    \ 'maxheight': 4,
+    \}
+    let popup_id = OpenTestPopup([
+    \ 'short',
+    \ 'medium line',
+    \ 'tiny',
+    \ 'line 04',
+    \ 'line 05',
+    \ 'line 06',
+    \ repeat('a', 40),
+    \ 'line 08',
+    \ 'line 09',
+    \])
+    let position = popup_getpos(popup_id)
+
+    AssertEqual 40, position.core_width
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    AssertEqual [2, 1], GetPopupCursorState(popup_id)
+    AssertEqual position.width, popup_getpos(popup_id).width
+    AssertEqual position.height, popup_getpos(popup_id).height
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    AssertEqual [3, 1], GetPopupCursorState(popup_id)
+    AssertEqual position.width, popup_getpos(popup_id).width
+    AssertEqual position.height, popup_getpos(popup_id).height
+  endfunction
+
+  function! AssertPopupStopsScrollingAtBottom() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {'minheight': 4, 'maxheight': 4}
+    let popup_id = OpenTestPopup(map(range(1, 10), 'printf("line %02d", v:val)'))
+
+    for l:index in range(1, 20)
+      call ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    endfor
+
+    AssertEqual 7, popup_getpos(popup_id).firstline
+
+    let popup_cursor_state = GetPopupCursorState(popup_id)
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    AssertEqual 7, popup_getpos(popup_id).firstline
+    AssertEqual popup_cursor_state, GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertPopupStopsScrollingAtTop() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {'minheight': 4, 'maxheight': 4}
+    let popup_id = OpenTestPopup()
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-p>")
+    AssertEqual 1, popup_getpos(popup_id).firstline
+    AssertEqual [1, 1], GetPopupCursorState(popup_id)
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-u>")
+    AssertEqual 1, popup_getpos(popup_id).firstline
+    AssertEqual [1, 1], GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertNowrapPopupStopsScrollingAtBottom() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {
+    \ 'minwidth': 20,
+    \ 'maxwidth': 20,
+    \ 'minheight': 4,
+    \ 'maxheight': 4,
+    \ 'wrap': 0,
+    \}
+    let popup_id = OpenTestPopup(map(range(1, 10), 'printf("line %02d", v:val)'))
+
+    for l:index in range(1, 20)
+      call ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    endfor
+
+    AssertEqual 7, popup_getpos(popup_id).firstline
+
+    let popup_cursor_state = GetPopupCursorState(popup_id)
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    AssertEqual 7, popup_getpos(popup_id).firstline
+    AssertEqual popup_cursor_state, GetPopupCursorState(popup_id)
+  endfunction
+
+  function! AssertUserSizeOptsAreNotOverridden() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {
+    \ 'minwidth': 60,
+    \ 'maxwidth': 100,
+    \ 'minheight': 8,
+    \ 'maxheight': 20,
+    \}
+    let popup_id = OpenTestPopup()
+    let opts = popup_getoptions(popup_id)
+
+    AssertEqual 60, opts.minwidth
+    AssertEqual 100, opts.maxwidth
+    AssertEqual 8, opts.minheight
+    AssertEqual 20, opts.maxheight
+  endfunction
+
+  function! AssertWrappedPopupStopsScrollingAtBottom() abort
+    if !has('popupwin')
+      return
+    endif
+
+    let g:ale_floating_preview_popup_opts = {
+    \ 'minwidth': 40,
+    \ 'maxwidth': 40,
+    \ 'minheight': 4,
+    \ 'maxheight': 4,
+    \}
+    let popup_id = OpenTestPopup([
+    \ 'short',
+    \ repeat('a', 80),
+    \ repeat('b', 80),
+    \ 'last',
+    \])
+
+    for l:index in range(1, 20)
+      call ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    endfor
+
+    AssertEqual 2, popup_getpos(popup_id).firstline
+
+    let popup_cursor_state = GetPopupCursorState(popup_id)
+
+    AssertEqual 1, ale#floating_preview#PopupFilter(popup_id, "\<C-n>")
+    AssertEqual 2, popup_getpos(popup_id).firstline
+    AssertEqual popup_cursor_state, GetPopupCursorState(popup_id)
+  endfunction
+
+After:
+  Restore
+
+  if has('popupwin')
+    call popup_clear(1)
+  endif
+
+  delfunction OpenTestPopup
+  delfunction GetPopupCursorState
+  delfunction AssertPopupFilterConfigured
+  delfunction AssertPopupScrollsDown
+  delfunction AssertPopupScrollsUp
+  delfunction AssertPopupScrollsByHalfPage
+  delfunction AssertPopupClosesOnEscape
+  delfunction AssertPopupPassesThroughUnhandledKeys
+  delfunction AssertWrappedPopupKeepsItsSize
+  delfunction AssertPopupStopsScrollingAtTop
+  delfunction AssertNowrapPopupStopsScrollingAtBottom
+  delfunction AssertUserSizeOptsAreNotOverridden
+  delfunction AssertPopupStopsScrollingAtBottom
+  delfunction AssertWrappedPopupStopsScrollingAtBottom
+
+
+Execute(Floating previews should configure the popup filter):
+  call AssertPopupFilterConfigured()
+
+Execute(PopupFilter should scroll down one line):
+  call AssertPopupScrollsDown()
+
+Execute(PopupFilter should scroll up one line):
+  call AssertPopupScrollsUp()
+
+Execute(PopupFilter should scroll half a page):
+  call AssertPopupScrollsByHalfPage()
+
+Execute(PopupFilter should close the popup on Escape):
+  call AssertPopupClosesOnEscape()
+
+Execute(PopupFilter should pass through unhandled keys):
+  call AssertPopupPassesThroughUnhandledKeys()
+
+Execute(PopupFilter should preserve wrapped popup size while scrolling):
+  call AssertWrappedPopupKeepsItsSize()
+
+Execute(PopupFilter should not scroll past the top):
+  call AssertPopupStopsScrollingAtTop()
+
+Execute(PopupFilter should stop scrolling at the bottom):
+  call AssertPopupStopsScrollingAtBottom()
+
+Execute(PopupFilter should stop nowrap popups at the bottom):
+  call AssertNowrapPopupStopsScrollingAtBottom()
+
+Execute(PopupFilter should stop wrapped popups at the bottom):
+  call AssertWrappedPopupStopsScrollingAtBottom()
+
+Execute(LockPopupSize should not override user-supplied size opts):
+  call AssertUserSizeOptsAreNotOverridden()
