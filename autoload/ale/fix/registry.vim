@@ -634,7 +634,7 @@ let s:default_registry = {
 \   },
 \   'dprint': {
 \       'function': 'ale#fixers#dprint#Fix',
-\       'suggested_filetypes': ['dockerfile', 'javascript', 'json', 'markdown', 'toml', 'typescript'],
+\       'suggested_filetypes': ['astro', 'cs', 'css', 'dockerfile', 'go', 'graphql', 'html', 'javascript', 'jinja', 'json', 'less', 'markdown', 'mustache', 'nunjucks', 'php', 'python', 'sass', 'scss', 'sql', 'svelte', 'toml', 'twig', 'typescript', 'vento', 'vue', 'xml', 'yaml'],
 \       'description': 'Pluggable and configurable code formatting platform',
 \   },
 \   'stylua': {

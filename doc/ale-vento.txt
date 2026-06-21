@@ -1,15 +1,9 @@
 ===============================================================================
-ALE Nunjucks Integration                                 *ale-nunjucks-options*
+ALE Vento Integration                                       *ale-vento-options*
 
 
 ===============================================================================
-djlint                                                    *ale-nunjucks-djlint*
-
-See |ale-html-djlint|
-
-
-===============================================================================
-dprint                                                    *ale-nunjucks-dprint*
+dprint                                                       *ale-vento-dprint*
 
 See |ale-dprint-options| and https://dprint.dev/plugins/markup_fmt/.
 

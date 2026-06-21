@@ -3,6 +3,12 @@ ALE Astro Integration                                       *ale-astro-options*
 
 
 ===============================================================================
+dprint                                                       *ale-astro-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/markup_fmt/.
+
+
+===============================================================================
 eslint                                                       *ale-astro-eslint*
 
 See |ale-javascript-eslint| for information about the available options.

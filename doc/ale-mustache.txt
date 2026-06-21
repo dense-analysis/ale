@@ -1,0 +1,12 @@
+===============================================================================
+ALE Mustache Integration                                 *ale-mustache-options*
+
+
+===============================================================================
+dprint                                                    *ale-mustache-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/markup_fmt/.
+
+
+===============================================================================
+vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
