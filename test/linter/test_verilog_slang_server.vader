@@ -1,0 +1,27 @@
+Before:
+  call ale#assert#SetUpLinterTest('verilog', 'slang_server')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path and arguments should be correct):
+  AssertLinter 'slang-server', ale#command#CdString(fnamemodify(g:dir, ':p')) . ale#Escape('slang-server')
+
+Execute(The verible LSP callback should allow custom options):
+  let g:ale_verilog_slang_server_options = '--foo --bar'
+  AssertLinter 'slang-server', ale#command#CdString(fnamemodify(g:dir, ':p')) . ale#Escape('slang-server') . ' --foo --bar'
+
+Execute(The project root should be detected correctly in empty directory):
+  AssertLSPProject fnamemodify(".", ':p')
+
+Execute(The project root should be detected correctly with .slang):
+  call ale#test#SetFilename('../test-files/verilog/slang_server/module.sv')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/verilog/slang_server')
+
+Execute(The LSP values should be set correctly):
+  call ale#test#SetFilename('../test-files/verilog/slang_server/module.sv')
+
+  AssertLSPLanguage 'verilog'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/verilog/slang_server')
