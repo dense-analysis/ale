@@ -13,7 +13,7 @@ function! ale#fixers#fourmolu#Fix(buffer) abort
 
     return {
     \   'command': l:executable
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' --stdin-input-file '
     \       . ale#Escape(@%),
     \}

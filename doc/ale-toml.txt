@@ -5,7 +5,7 @@ ALE TOML Integration                                         *ale-toml-options*
 ===============================================================================
 dprint                                                        *ale-toml-dprint*
 
-See |ale-dprint-options| and https://dprint.dev/plugins/toml
+See |ale-dprint-options| and https://dprint.dev/plugins/toml/.
 
 
 ===============================================================================

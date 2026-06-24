@@ -1,0 +1,35 @@
+Before:
+  call ale#assert#SetUpLinterTest('lilypond', 'lilypond')
+  call ale#test#SetFilename('test.ly')
+
+  let g:ale_lilypond_lilypond_executable = 'lilypond'
+  let g:ale_lilypond_lilypond_options = ''
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The executable should default to lilypond):
+  AssertLinter 'lilypond',
+  \ ale#Escape('lilypond') . ' --loglevel=WARNING -dbackend=null -dno-print-pages -o /tmp %t 2>&1'
+
+Execute(Should be able to set a custom executable):
+  let g:ale_lilypond_lilypond_executable = 'bin/lilypond'
+
+  AssertLinter 'bin/lilypond',
+  \ ale#Escape('bin/lilypond') . ' --loglevel=WARNING -dbackend=null -dno-print-pages -o /tmp %t 2>&1'
+
+Execute(Should be able to set custom options):
+  let g:ale_lilypond_lilypond_options = '--include=/path/to/includes'
+
+  AssertLinter 'lilypond',
+  \ ale#Escape('lilypond') . ' --loglevel=WARNING -dbackend=null -dno-print-pages -o /tmp'
+  \ . ' --include=/path/to/includes %t 2>&1'
+
+Execute(Should be able to set both custom executable and options):
+  let g:ale_lilypond_lilypond_executable = '/usr/local/bin/lilypond'
+  let g:ale_lilypond_lilypond_options = '--include=/custom/path -dlog-file=/tmp/lily.log'
+
+  AssertLinter '/usr/local/bin/lilypond',
+  \ ale#Escape('/usr/local/bin/lilypond') . ' --loglevel=WARNING -dbackend=null -dno-print-pages -o /tmp'
+  \ . ' --include=/custom/path -dlog-file=/tmp/lily.log %t 2>&1'
+

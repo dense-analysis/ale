@@ -11,6 +11,6 @@ function! ale#fixers#gofmt#Fix(buffer) abort
 
     return {
     \   'command': l:env . ale#Escape(l:executable)
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \}
 endfunction

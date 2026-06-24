@@ -13,7 +13,7 @@ function! ale#handlers#languagetool#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'languagetool_options')
 
     return ale#Escape(l:executable)
-    \ . (empty(l:options) ? '' : ' ' . l:options) . ' %s'
+    \ . ale#Pad(l:options) . ' %s'
 endfunction
 
 function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort

@@ -26,8 +26,8 @@ Execute(Should use 'mvnw' in classpath command if available):
 
   AssertEqual
   \ [
-  \   ale#path#Simplify(g:dir . '/test-files/maven/maven-java-project/module1'),
-  \   ale#Escape(ale#path#Simplify(g:dir . '/test-files/maven/maven-java-project/module1/' . g:expected_wrapper))
+  \   ale#path#Simplify(resolve(g:dir) . '/test-files/maven/maven-java-project/module1'),
+  \   ale#Escape(ale#path#Simplify(resolve(g:dir) . '/test-files/maven/maven-java-project/module1/' . g:expected_wrapper))
   \   . ' dependency:build-classpath',
   \ ],
   \ ale#maven#BuildClasspathCommand(bufnr(''))
@@ -39,7 +39,7 @@ Execute(Should use 'mvn' in classpath command if it is executable and 'mvnw' is 
 
   AssertEqual
   \ [
-  \   ale#path#Simplify(g:dir . '/test-files/maven/maven-java-project/module2'),
+  \   ale#path#Simplify(resolve(g:dir) . '/test-files/maven/maven-java-project/module2'),
   \   ale#Escape('mvn')
   \   . ' dependency:build-classpath',
   \ ],

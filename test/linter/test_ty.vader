@@ -1,0 +1,91 @@
+Before:
+  call ale#assert#SetUpLinterTest('python', 'ty')
+  Save b:ale_python_auto_virtualenv
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  unlet! b:bin_dir
+  unlet! b:executable
+
+  call ale#test#SetFilename('..')
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default ty command should be correct):
+  call ale#test#SetFilename('./foo.py')
+
+  AssertLinter 'ty', ale#Escape('ty') . ' server'
+
+Execute(The ty executable should be configurable):
+  let g:ale_python_ty_executable = '~/.local/bin/ty'
+
+  AssertLinter '~/.local/bin/ty',
+  \ ale#Escape('~/.local/bin/ty') . ' server'
+
+Execute(The cwd and project root should be detected correctly):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  AssertLinterCwd ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
+  AssertLSPProject ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
+
+Execute(FindProjectRoot should detect the project root directory via ty.toml):
+  call ale#test#SetFilename('../test-files/python/namespace_package_ty/namespace/foo/bar.py')
+
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_ty'),
+  \ ale#python#FindProjectRoot(bufnr(''))
+
+Execute(The ty executable should be run from the virtualenv path):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let b:executable = ale#path#Simplify(
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ty'
+  \)
+
+  AssertLinter b:executable, ale#Escape(b:executable) . ' server'
+
+Execute(You should be able to override the ty virtualenv lookup):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let g:ale_python_ty_use_global = 1
+
+  AssertLinter 'ty', ale#Escape('ty') . ' server'
+
+Execute(Setting executable to 'pipenv' appends 'run ty'):
+  let g:ale_python_ty_executable = 'path/to/pipenv'
+  call ale#test#SetFilename('../test-files/dummy')
+
+  AssertLinter 'path/to/pipenv',
+  \ ale#Escape('path/to/pipenv') . ' run ty server'
+
+Execute(Pipenv is detected when python_ty_auto_pipenv is set):
+  let g:ale_python_ty_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run ty server'
+
+Execute(Setting executable to 'poetry' appends 'run ty'):
+  let g:ale_python_ty_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run ty server'
+
+Execute(Poetry is detected when python_ty_auto_poetry is set):
+  let g:ale_python_ty_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run ty server'
+
+Execute(uv is detected when python_ty_auto_uv is set):
+  let g:ale_python_ty_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertLinter 'uv',
+  \ ale#Escape('uv') . ' run ty server'
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_python_ty_config = {'ty': {'diagnosticMode': 'workspace'}}
+  AssertLSPConfig {'ty': {'diagnosticMode': 'workspace'}}

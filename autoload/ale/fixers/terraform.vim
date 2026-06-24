@@ -11,7 +11,7 @@ function! ale#fixers#terraform#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' fmt'
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' -'
     \}
 endfunction

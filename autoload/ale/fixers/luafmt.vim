@@ -7,7 +7,7 @@ function! ale#fixers#luafmt#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' --stdin',
     \}
 endfunction

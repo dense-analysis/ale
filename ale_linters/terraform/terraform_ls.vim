@@ -25,6 +25,10 @@ endfunction
 function! ale_linters#terraform#terraform_ls#GetProjectRoot(buffer) abort
     let l:tf_dir = ale#path#FindNearestDirectory(a:buffer, '.terraform')
 
+    if empty(l:tf_dir)
+        let l:tf_dir = ale#path#FindNearestDirectory(a:buffer, '.')
+    endif
+
     return !empty(l:tf_dir) ? fnamemodify(l:tf_dir, ':h:h') : ''
 endfunction
 

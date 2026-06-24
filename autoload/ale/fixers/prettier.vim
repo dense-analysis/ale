@@ -8,6 +8,7 @@ call ale#Set('javascript_prettier_options', '')
 
 function! ale#fixers#prettier#GetExecutable(buffer) abort
     return ale#path#FindExecutable(a:buffer, 'javascript_prettier', [
+    \   '.yarn/sdks/prettier/bin/prettier.cjs',
     \   'node_modules/.bin/prettier_d',
     \   'node_modules/prettier-cli/index.js',
     \   'node_modules/.bin/prettier',

@@ -3,6 +3,12 @@ ALE GraphQL Integration                                   *ale-graphql-options*
 
 
 ===============================================================================
+dprint                                                     *ale-graphql-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/pretty_graphql/.
+
+
+===============================================================================
 eslint                                                     *ale-graphql-eslint*
 
 The `eslint` linter for GraphQL uses the JavaScript options for `eslint`; see:

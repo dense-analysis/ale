@@ -10,6 +10,6 @@ function! ale#fixers#raco_fmt#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable) . ' fmt'
-    \       . (empty(l:options) ? '' : ' ' . l:options),
+    \       . ale#Pad(l:options),
     \}
 endfunction

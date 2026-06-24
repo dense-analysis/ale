@@ -26,7 +26,7 @@ Execute(Should return 'mvnw' if found in parent directory):
   call ale#test#SetFilename('test-files/maven/maven-java-project/module1/src/main/java/dummy1.java')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/test-files/maven/maven-java-project/module1/' . g:expected_wrapper),
+  \ ale#path#Simplify(resolve(g:dir) . '/test-files/maven/maven-java-project/module1/' . g:expected_wrapper),
   \ ale#maven#FindExecutable(bufnr(''))
 
 Execute(Should return 'mvn' if 'mvnw' not found in parent directory):

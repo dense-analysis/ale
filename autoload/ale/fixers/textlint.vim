@@ -8,7 +8,7 @@ function! ale#fixers#textlint#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' --fix'
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \       . ale#Pad(l:options)
     \       . ' %t',
     \   'read_temporary_file': 1,
     \}

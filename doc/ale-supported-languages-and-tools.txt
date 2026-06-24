@@ -39,8 +39,11 @@ Notes:
   * `gcc`
   * `llvm-mc`
 * Astro
+  * dprint
   * `eslint`
   * `prettier`
+* Autopkgtest (filetype autopkgtest)
+  * `debian-lsp`
 * AVRA
   * `avra`
 * Awk
@@ -88,6 +91,7 @@ Notes:
   * `csc`!!
   * `cspell`
   * `dotnet-format`
+  * dprint
   * `mcs`
   * `mcsc`!!
   * `uncrustify`
@@ -137,6 +141,7 @@ Notes:
   * `cspell`
   * `css-beautify`
   * `csslint`
+  * dprint
   * `fecs`
   * `prettier`
   * `stylelint`
@@ -163,6 +168,18 @@ Notes:
   * `dart-format`!!
   * `dartfmt`!!
   * `language_server`
+* Debian Changelog (filetype debchangelog)
+  * `debian-lsp`
+* Debian Control (filetype debcontrol)
+  * `debian-lsp`
+* Debian Copyright (filetype debcopyright)
+  * `debian-lsp`
+* Debian Sources (filetype debsources)
+  * `debian-lsp`
+* Debian Upstream Metadata (filetype debupstream)
+  * `debian-lsp`
+* Debian Watch (filetype debwatch)
+  * `debian-lsp`
 * desktop
   * `desktop-file-validate`
 * Dhall
@@ -225,6 +242,7 @@ Notes:
 * Go
   * `bingo`
   * `cspell`
+  * dprint
   * `go build`!!
   * `go mod`!!
   * `go vet`!!
@@ -242,6 +260,7 @@ Notes:
 * Go HTML Templates
   * djlint
 * GraphQL
+  * dprint
   * `eslint`
   * `gqlint`
   * `prettier`
@@ -283,6 +302,7 @@ Notes:
   * `angular`
   * `cspell`
   * djlint
+  * dprint
   * `eslint`
   * `fecs`
   * `html-beautify`
@@ -338,6 +358,7 @@ Notes:
   * `xo`
 * Jinja
   * djlint
+  * dprint
   * j2lint
 * JSON
   * `VSCode JSON language server`
@@ -373,6 +394,7 @@ Notes:
   * `lacheck`
   * `proselint`
   * `redpen`
+  * `tex-fmt`
   * `texlab`
   * `textlint`
   * `vale`
@@ -380,9 +402,12 @@ Notes:
 * Lean 4
   * `lake`
 * Less
+  * dprint
   * `lessc`
   * `prettier`
   * `stylelint`
+* LilyPond
+  * `lilypond`
 * LLVM
   * `llc`
 * Lua
@@ -404,6 +429,7 @@ Notes:
 * Markdown
   * `alex`
   * `cspell`
+  * dprint
   * `harper`
   * `languagetool`!!
   * `markdownlint`!!
@@ -415,6 +441,7 @@ Notes:
   * `pymarkdown`
   * `redpen`
   * `remark-lint`
+  * `rumdl`
   * `textlint`
   * `vale`
   * `write-good`
@@ -422,6 +449,8 @@ Notes:
   * `mlint`
 * Mercury
   * `mmc`!!
+* Mustache
+  * dprint
 * NASM
   * `nasm`!!
 * Nickel
@@ -444,6 +473,7 @@ Notes:
   * `write-good`
 * Nunjucks
   * djlint
+  * dprint
 * Objective-C
   * `ccls`
   * `clang`
@@ -480,11 +510,13 @@ Notes:
   * `languageserver`
   * `perl -c`
   * `perl-critic`
+  * `perlnavigator`
   * `perltidy`
 * Perl6
   * `perl6 -c`
 * PHP
   * `cspell`
+  * dprint
   * `intelephense`
   * `langserver`
   * `phan`
@@ -538,6 +570,7 @@ Notes:
   * `bandit`
   * `black`
   * `cspell`
+  * dprint
   * `flake8`
   * `flakehell`
   * `isort`
@@ -558,6 +591,7 @@ Notes:
   * `reorder-python-imports`
   * ruff
   * ruff-format
+  * `ty`
   * `unimport`
   * `vulture`!!
   * `yapf`
@@ -632,6 +666,7 @@ Notes:
 * Salt
   * `salt-lint`
 * Sass
+  * dprint
   * `sass-lint`
   * `stylelint`
 * Scala
@@ -643,6 +678,7 @@ Notes:
   * `scalafmt`
   * `scalastyle`
 * SCSS
+  * dprint
   * `prettier`
   * `sass-lint`
   * `scss-lint`
@@ -669,6 +705,7 @@ Notes:
 * SugarSS
   * `stylelint`
 * Svelte
+  * dprint
   * `prettier`
   * `svelteserver`
 * Swift
@@ -709,6 +746,8 @@ Notes:
 * TOML
   * `dprint`
   * `tombi`
+* Twig
+  * `dprint`
 * TypeScript
   * `biome`
   * `cspell`
@@ -729,6 +768,8 @@ Notes:
 * VALA
   * `uncrustify`
   * `vala_lint`!!
+* Vento
+  * `dprint`
 * Verilog
   * `hdl-checker`
   * `iverilog`
@@ -751,6 +792,7 @@ Notes:
   * `write-good`
 * Vue
   * `cspell`
+  * `dprint`
   * `prettier`
   * `vls`
   * `volar`
@@ -762,10 +804,12 @@ Notes:
   * `proselint`
   * `write-good`
 * XML
+  * `dprint`
   * `xmllint`
 * YAML
   * `actionlint`
   * `circleci`!!
+  * `dprint`
   * `gitlablint`
   * `prettier`
   * `spectral`

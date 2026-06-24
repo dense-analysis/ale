@@ -17,7 +17,7 @@ function! ale#fixers#elm_format#Fix(buffer) abort
     return {
     \   'command': ale#Escape(ale#fixers#elm_format#GetExecutable(a:buffer))
     \       . ' %t'
-    \       . (empty(l:options) ? '' : ' ' . l:options),
+    \       . ale#Pad(l:options),
     \   'read_temporary_file': 1,
     \}
 endfunction

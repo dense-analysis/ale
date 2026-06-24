@@ -10,14 +10,14 @@ Execute(Should return current directory if called on the project root):
   call ale#test#SetFilename('test-files/ant/ant-project/Main.java')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/test-files/ant/ant-project'),
+  \ ale#path#Simplify(resolve(g:dir) . '/test-files/ant/ant-project'),
   \ ale#ant#FindProjectRoot(bufnr(''))
 
 Execute(Should return root directory if called on a deeply nested source file):
   call ale#test#SetFilename('test-files/ant/ant-project/src/several/namespace/layers/A.java')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/test-files/ant/ant-project'),
+  \ ale#path#Simplify(resolve(g:dir) . '/test-files/ant/ant-project'),
   \ ale#ant#FindProjectRoot(bufnr(''))
 
 Execute(Should return empty string if called on a non-ant project):

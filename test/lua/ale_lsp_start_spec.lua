@@ -153,6 +153,43 @@ describe("ale.lsp.start", function()
         eq({foo = "bar", nested = {baz = 123}}, start_calls[1][1].init_options)
     end)
 
+    it("should remove nested Boolean keys from init_options", function()
+        lsp.start({
+            name = "gopls:/code",
+            cmd = "gopls",
+            root_dir = "/code",
+            init_options = {
+                settings = {
+                    [true] = "invalid",
+                    gopls = {
+                        analyses = {
+                            unusedparams = true,
+                            [false] = "invalid",
+                        },
+                    },
+                },
+            },
+        })
+
+        -- Remove functions we can't compare
+        for _, args in pairs(start_calls) do
+            args[1].handlers = nil
+            args[1].on_init = nil
+            args[1].get_language_id = nil
+        end
+
+        eq(1, #start_calls)
+        eq({
+            settings = {
+                gopls = {
+                    analyses = {
+                        unusedparams = true,
+                    },
+                },
+            },
+        }, start_calls[1][1].init_options)
+    end)
+
     it("should start lsp socket connections with the correct arguments", function()
         lsp.start({
             name = "localhost:1234:/code",

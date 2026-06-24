@@ -13,7 +13,7 @@ function! ale#fixers#scalafmt#GetCommand(buffer) abort
     \   : ''
 
     return ale#Escape(l:executable) . l:exec_args
-    \   . (empty(l:options) ? '' : ' ' . l:options)
+    \   . ale#Pad(l:options)
     \   . ' %t'
 endfunction
 

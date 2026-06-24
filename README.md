@@ -1,11 +1,11 @@
 # Asynchronous Lint Engine
 
-[![Vim](https://img.shields.io/badge/VIM-%2311AB00.svg?style=for-the-badge&logo=vim&logoColor=white)](https://www.vim.org/) [![Neovim](https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white)](https://neovim.io/) [![CI](https://img.shields.io/github/actions/workflow/status/dense-analysis/ale/main.yml?branch=master&label=CI&logo=github&style=for-the-badge)](https://github.com/dense-analysis/ale/actions?query=event%3Apush+workflow%3ACI+branch%3Amaster++) [![AppVeyor Build Status](https://img.shields.io/appveyor/build/dense-analysis/ale?label=Windows&style=for-the-badge)](https://ci.appveyor.com/project/dense-analysis/ale) [![Join the Dense Analysis Discord server](https://img.shields.io/badge/chat-Discord-5865F2?style=for-the-badge&logo=appveyor)](https://discord.gg/5zFD6pQxDk)
+[![Vim](https://img.shields.io/badge/VIM-%2311AB00.svg?style=for-the-badge&logo=vim&logoColor=white)](https://www.vim.org/) [![Neovim](https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white)](https://neovim.io/) [![CI](https://img.shields.io/github/actions/workflow/status/dense-analysis/ale/main.yml?branch=master&label=CI&logo=github&style=for-the-badge)](https://github.com/dense-analysis/ale/actions?query=event%3Apush+workflow%3ACI+branch%3Amaster++) [![Join the Dense Analysis Discord server](https://img.shields.io/badge/chat-Discord-5865F2?style=for-the-badge&logo=appveyor)](https://discord.gg/5zFD6pQxDk)
 
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](https://user-images.githubusercontent.com/3518142/59195920-2c339500-8b85-11e9-9c22-f6b7f69637b8.jpg)
 
 ALE (Asynchronous Lint Engine) is a plugin providing linting (syntax checking
-and semantic errors) in Neovim 0.7.0+ and Vim 8.0+ while you edit your text files,
+and semantic errors) in Neovim 0.7.0+ and Vim 8.2+ while you edit your text files,
 and acts as a Vim [Language Server Protocol](https://langserver.org/) client.
 
 <video autoplay="true" muted="true" loop="true" controls="false" src="https://user-images.githubusercontent.com/3518142/210141215-8f2ff760-6a87-4704-a11e-c109b8e9ec41.mp4" title="An example showing what ALE can do."></video>

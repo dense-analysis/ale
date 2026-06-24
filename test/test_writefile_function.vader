@@ -4,8 +4,9 @@ Before:
   let g:new_line_test_file = tempname()
 
 After:
-  noautocmd :e! ++ff=unix
-  setlocal buftype=nofile
+  " Dissociate the buffer from the temp file BEFORE deleting it, to avoid
+  " E211 on Windows when Vim detects the file no longer exists.
+  silent! noautocmd file dummy.txt
 
   if filereadable(g:new_line_test_file)
     call delete(g:new_line_test_file)
@@ -14,6 +15,8 @@ After:
   unlet! g:new_line_test_file
 
   call ale#test#RestoreDirectory()
+  noautocmd :e! ++ff=unix
+  setlocal buftype=nofile
 
 Given(A file with Windows line ending characters):
   first

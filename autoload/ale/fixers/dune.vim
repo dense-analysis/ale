@@ -11,6 +11,6 @@ function! ale#fixers#dune#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' format'
-    \       . (empty(l:options) ? '' : ' ' . l:options),
+    \       . ale#Pad(l:options),
     \}
 endfunction

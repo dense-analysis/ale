@@ -41,6 +41,12 @@ Execute(The global variable can be a dictionary):
 
   AssertLSPProject '/some/path'
 
+Execute(The global variable can be a string):
+  let g:ale_root = '/some/path'
+  call ale#test#SetFilename('other-file.c')
+
+  AssertLSPProject '/some/path'
+
 Execute(The global variable can have funcrefs):
   let g:ale_root = {'clangd': function('Hook1'), 'golangserver': '/path'}
   call ale#test#SetFilename('other-file.c')

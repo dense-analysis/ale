@@ -3,6 +3,12 @@ ALE XML Integration                                           *ale-xml-options*
 
 
 ===============================================================================
+dprint                                                         *ale-xml-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/markup_fmt/.
+
+
+===============================================================================
 xmllint                                                       *ale-xml-xmllint*
 
                                            *ale-options.xml_xmllint_executable*

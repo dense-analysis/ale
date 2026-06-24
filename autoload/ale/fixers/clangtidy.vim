@@ -36,7 +36,7 @@ function! ale#fixers#clangtidy#GetCommand(buffer) abort
 
     return ' -fix' . (l:fix_errors ? ' -fix-errors' : '')
     \   . (empty(l:checks) ? '' : ' -checks=' . ale#Escape(l:checks))
-    \   . (empty(l:extra_options) ? '' : ' ' . l:extra_options)
+    \   . ale#Pad(l:extra_options)
     \   . (empty(l:build_dir) ? '' : ' -p ' . ale#Escape(l:build_dir))
     \   . ' %t' . (empty(l:options) ? '' : ' -- ' . l:options)
 endfunction

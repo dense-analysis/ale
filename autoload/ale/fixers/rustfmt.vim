@@ -10,6 +10,6 @@ function! ale#fixers#rustfmt#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
-    \       . (empty(l:options) ? '' : ' ' . l:options),
+    \       . ale#Pad(l:options),
     \}
 endfunction
