@@ -12,7 +12,9 @@ function! ale_linters#tex#chktex#GetCommand(buffer, version) abort
     let l:options = ''
 
     " Avoid bug when used without -p (last warning has gibberish for a filename)
-    let l:options .= ' -v0 -p stdin -q'
+    " Do not use -v0 as the meaning of v0 might be modified by the user in
+    " their chktexrc file; instead, use --format to specify the output format.
+    let l:options .= " --format $'%f%b%l%b%c%b%n%b%m\n' -p stdin -q"
 
     " Avoid bug of reporting wrong column when using tabs (issue #723)
     if ale#semver#GTE(a:version, [1, 7, 7])
@@ -43,7 +45,8 @@ function! ale_linters#tex#chktex#Handle(buffer, lines) abort
         call add(l:output, {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:match[4] . ' (' . (l:match[3]+0) . ')',
+        \   'text': l:match[4],
+        \   'code': l:match[3] + 0,
         \   'type': 'W',
         \})
     endfor

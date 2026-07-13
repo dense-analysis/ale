@@ -10,7 +10,7 @@ Execute(The default command should be correct):
   AssertLinter 'chktex', [
   \ ale#Escape('chktex') . ' --version',
   \ ale#Escape('chktex')
-  \   . ' -v0 -p stdin -q'
+  \   . " --format $'%f%b%l%b%c%b%n%b%m\n' -p stdin -q"
   \   . ' -I',
   \]
 
@@ -18,7 +18,7 @@ Execute(The default command should be correct):
   GivenCommandOutput []
   AssertLinter 'chktex', [
   \ ale#Escape('chktex')
-  \   . ' -v0 -p stdin -q'
+  \   . " --format $'%f%b%l%b%c%b%n%b%m\n' -p stdin -q"
   \   . ' -I',
   \]
 
@@ -28,7 +28,7 @@ Execute(The default command should be correct):
   AssertLinter 'chktex', [
   \ ale#Escape('chktex') . ' --version',
   \ ale#Escape('chktex')
-  \   . ' -v0 -p stdin -q'
+  \   . " --format $'%f%b%l%b%c%b%n%b%m\n' -p stdin -q"
   \   . ' -S TabSize=1'
   \   . ' -I',
   \]
@@ -38,7 +38,7 @@ Execute(The executable should be configurable):
 
   AssertLinter 'bin/foo',
   \ ale#Escape('bin/foo')
-  \   . ' -v0 -p stdin -q'
+  \   . " --format $'%f%b%l%b%c%b%n%b%m\n' -p stdin -q"
   \   . ' -I'
 
 Execute(The options should be configurable):
@@ -46,5 +46,5 @@ Execute(The options should be configurable):
 
   AssertLinter 'chktex',
   \ ale#Escape('chktex')
-  \   . ' -v0 -p stdin -q'
+  \   . " --format $'%f%b%l%b%c%b%n%b%m\n' -p stdin -q"
   \   . ' --something'
