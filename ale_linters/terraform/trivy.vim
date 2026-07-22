@@ -39,7 +39,7 @@ function! ale_linters#terraform#trivy#Handle(buffer, lines) abort
 
             if !empty(l:occurrences)
                 for l:occurrence in l:occurrences
-                    if get(l:occurrence, 'Filename', '') ==# l:fname
+                    if get(l:occurrence, 'Filename', '') is# l:fname
                         let l:loc = get(l:occurrence, 'Location', {})
 
                         call add(l:output, {
@@ -52,7 +52,7 @@ function! ale_linters#terraform#trivy#Handle(buffer, lines) abort
                         \})
                     endif
                 endfor
-            elseif get(l:result, 'Target', '') ==# l:fname
+            elseif get(l:result, 'Target', '') is# l:fname
                 call add(l:output, {
                 \   'lnum': get(l:cause, 'StartLine', 1),
                 \   'end_lnum': get(l:cause, 'EndLine', get(l:cause, 'StartLine', 1)),
