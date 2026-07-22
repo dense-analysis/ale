@@ -1721,7 +1721,7 @@ g:ale_python_pyright_config
   Settings for configuring the `pyright` language server.
 
   See pyright's documentation for a full list of options:
-  https://github.com/microsoft/pyright/blob/master/docs/settings.md
+  https://microsoft.github.io/pyright/#/settings
 
   ALE will automatically try to set defaults for `venvPath` and `pythonPath`
   so your project can automatically be checked with the right libraries.
@@ -1780,6 +1780,22 @@ g:ale_python_pyright_auto_uv
 
   Set the executable to `uv` if true. This is overridden by a manually-set
   executable.
+
+                                           *ale-options.python_pyright_options*
+                                                 *g:ale_python_pyright_options*
+                                                 *b:ale_python_pyright_options*
+python_pyright_options
+g:ale_python_pyright_options
+  Type: |String|
+  Default: `'--stdio'`
+
+  This variable can be changed to add command-line arguments to the pyright
+  invocation. Note that this is different from ale_python_pyright_config,
+  which allows configuration of how pyright functions; this is intended to
+  provide flexibility in how the pyright command is invoked.
+
+  For all available options and explanations, visit
+  https://microsoft.github.io/pyright/#/command-line
 
 
 ===============================================================================

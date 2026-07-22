@@ -27,6 +27,13 @@ Execute(The executable should be configurable):
   \ '/bin/foo-bar',
   \ ale#Escape('/bin/foo-bar') . ' --stdio'
 
+Execute(The command invokation arguments should be configurable):
+  let g:ale_python_pyright_options = '--some-option'
+
+  AssertLinter
+  \ 'pyright-langserver',
+  \ ale#Escape('pyright-langserver') . ' --some-option'
+
 Execute(The default configuration should be mostly empty):
   " The default configuration needs to have at least one key in it,
   " or the server won't start up properly.
