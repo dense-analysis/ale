@@ -3777,6 +3777,7 @@ documented in additional help files.
     harper................................|ale-markdown-harper|
     markdownlint..........................|ale-markdown-markdownlint|
     marksman..............................|ale-markdown-marksman|
+    mdformat..............................|ale-markdown-mdformat|
     mdl...................................|ale-markdown-mdl|
     pandoc................................|ale-markdown-pandoc|
     prettier..............................|ale-markdown-prettier|

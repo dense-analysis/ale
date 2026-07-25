@@ -83,6 +83,77 @@ g:ale_markdown_marksman_executable
 
 
 ===============================================================================
+mdformat                                                *ale-markdown-mdformat*
+
+                                      *ale-options.markdown_mdformat_executable*
+                                            *g:ale_markdown_mdformat_executable*
+                                            *b:ale_markdown_mdformat_executable*
+markdown_mdformat_executable
+g:ale_markdown_mdformat_executable
+  Type: |String|
+  Default: `'mdformat'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `pipenv run mdformat`.
+  Set this to `'poetry'` to invoke `poetry run mdformat`.
+  Set this to `'uv'` to invoke `uv run mdformat`.
+
+                                         *ale-options.markdown_mdformat_options*
+                                               *g:ale_markdown_mdformat_options*
+                                               *b:ale_markdown_mdformat_options*
+markdown_mdformat_options
+g:ale_markdown_mdformat_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to mdformat.
+
+                                      *ale-options.markdown_mdformat_use_global*
+                                            *g:ale_markdown_mdformat_use_global*
+                                            *b:ale_markdown_mdformat_use_global*
+markdown_mdformat_use_global
+g:ale_markdown_mdformat_use_global
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+                                     *ale-options.markdown_mdformat_auto_pipenv*
+                                           *g:ale_markdown_mdformat_auto_pipenv*
+                                           *b:ale_markdown_mdformat_auto_pipenv*
+markdown_mdformat_auto_pipenv
+g:ale_markdown_mdformat_auto_pipenv
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to
+  `pipenv` if true. This is overridden by a manually-set executable.
+
+                                     *ale-options.markdown_mdformat_auto_poetry*
+                                           *g:ale_markdown_mdformat_auto_poetry*
+                                           *b:ale_markdown_mdformat_auto_poetry*
+markdown_mdformat_auto_poetry
+g:ale_markdown_mdformat_auto_poetry
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a Poetry project, and set the executable
+  to `poetry` if true. This is overridden by a manually-set executable.
+
+                                         *ale-options.markdown_mdformat_auto_uv*
+                                               *g:ale_markdown_mdformat_auto_uv*
+                                               *b:ale_markdown_mdformat_auto_uv*
+markdown_mdformat_auto_uv
+g:ale_markdown_mdformat_auto_uv
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a uv project, and set the executable to
+  `uv` if true. This is overridden by a manually-set executable.
+
+
+===============================================================================
 mdl                                                          *ale-markdown-mdl*
 
                                           *ale-options.markdown_mdl_executable*
