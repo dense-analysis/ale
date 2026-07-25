@@ -66,6 +66,12 @@ g:ale_html_djlint_options
 
 
 ===============================================================================
+dprint                                                        *ale-html-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/markup_fmt/.
+
+
+===============================================================================
 fecs                                                            *ale-html-fecs*
 
 `fecs` options for HTML are the same as the options for JavaScript, and both

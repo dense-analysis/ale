@@ -24,7 +24,7 @@ Execute(The autoflake callback should include options):
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoflake'))
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoflake'))
   \     . ' --some-option'
   \     . ' --in-place '
   \     . ' %t',

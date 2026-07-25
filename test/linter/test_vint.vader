@@ -10,7 +10,7 @@ After:
 
 Execute(The default command should be correct):
   AssertLinter 'vint', [
-  \ ale#Escape('vint') .' --version',
+  \ 'PYTHONWARNINGS=ignore '. ale#Escape('vint') .' --version',
   \ ale#Escape('vint') .' -s --no-color' . b:common_flags . ' %t',
   \]
 
@@ -18,7 +18,7 @@ Execute(The executable should be configurable):
   let g:ale_vim_vint_executable = 'foobar'
 
   AssertLinter 'foobar', [
-  \ ale#Escape('foobar') .' --version',
+  \ 'PYTHONWARNINGS=ignore '. ale#Escape('foobar') .' --version',
   \ ale#Escape('foobar') .' -s --no-color' . b:common_flags . ' %t',
   \]
 

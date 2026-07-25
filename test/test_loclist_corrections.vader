@@ -6,21 +6,26 @@ Before:
 After:
   unlet! b:temp_name
   unlet! b:other_bufnr
+  unlet! b:other_path
+  unlet! g:temp_base
 
   Restore
 
 
 Execute(FixLocList should map filenames):
+  let g:temp_base = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h'))
+
+  if g:temp_base is# ale#path#Simplify(fnamemodify(g:temp_base, ':h'))
+    let g:temp_base = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h'))
+  endif
+
   " Paths converted back into temporary filenames shouldn't be included.
   let g:ale_filename_mappings = {
   \ 'linter2': [['/xxx/', '/data/']],
   \ 'linter1': [
   \   ['/bar/', '/data/special/'],
   \   ['/foo/', '/data/'],
-  \   [
-  \     ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h')) . '/',
-  \     '/x-tmp/',
-  \   ],
+  \   [g:temp_base . '/', '/x-tmp/'],
   \ ],
   \}
 
@@ -280,7 +285,8 @@ Execute(FixLocList should allow subtypes to be set):
   \ )
 
 Execute(FixLocList should accept filenames):
-  let b:other_bufnr = bufnr('/foo/bar/baz', 1)
+  let b:other_path = ale#path#Simplify('/foo/bar/baz')
+  let b:other_bufnr = bufnr(b:other_path, 1)
 
   " Make sure we actually get another buffer number, or the test is invalid.
   AssertNotEqual -1, b:other_bufnr
@@ -316,7 +322,7 @@ Execute(FixLocList should accept filenames):
   \     'lnum': 4,
   \     'col': 0,
   \     'bufnr': b:other_bufnr,
-  \     'filename': '/foo/bar/baz',
+  \     'filename': b:other_path,
   \     'vcol': 0,
   \     'type': 'E',
   \     'nr': -1,
@@ -327,7 +333,7 @@ Execute(FixLocList should accept filenames):
   \     'lnum': 5,
   \     'col': 0,
   \     'bufnr': b:other_bufnr,
-  \     'filename': '/foo/bar/baz',
+  \     'filename': b:other_path,
   \     'vcol': 0,
   \     'type': 'E',
   \     'nr': -1,
@@ -341,8 +347,8 @@ Execute(FixLocList should accept filenames):
   \   [
   \     {'text': 'a', 'lnum': 2, 'filename': expand('%:p')},
   \     {'text': 'a', 'lnum': 3, 'filename': expand('%:p')},
-  \     {'text': 'a', 'lnum': 4, 'filename': '/foo/bar/baz'},
-  \     {'text': 'a', 'lnum': 5, 'filename': '/foo/bar/baz'},
+  \     {'text': 'a', 'lnum': 4, 'filename': b:other_path},
+  \     {'text': 'a', 'lnum': 5, 'filename': b:other_path},
   \   ],
   \ )
 

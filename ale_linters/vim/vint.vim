@@ -58,7 +58,7 @@ call ale#linter#Define('vim', {
 \   'command': {buffer -> ale#semver#RunWithVersionCheck(
 \       buffer,
 \       ale#Var(buffer, 'vim_vint_executable'),
-\       '%e --version',
+\       'PYTHONWARNINGS=ignore %e --version',
 \       function('ale_linters#vim#vint#GetCommand'),
 \   )},
 \   'callback': 'ale_linters#vim#vint#Handle',

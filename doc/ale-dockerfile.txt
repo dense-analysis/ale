@@ -58,7 +58,7 @@ g:ale_dockerfile_dockerlinter_options
 ===============================================================================
 dprint                                                  *ale-dockerfile-dprint*
 
-See |ale-dprint-options| and https://dprint.dev/plugins/dockerfile
+See |ale-dprint-options| and https://dprint.dev/plugins/dockerfile/.
 
 
 ===============================================================================

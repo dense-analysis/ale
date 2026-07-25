@@ -132,12 +132,26 @@ Execute(ale#sign#GetSignName should return the right sign names):
   \ {'type': 'W', 'sub_type': 'style'},
   \])
 
+## This test file must have at least 16 lines since subsequent tests
+## set signs on lines 15 and 16. Since nvim 0.12 signs placed past
+## EOF are clamped to the last real buffer line.
 Given testft(A file with warnings/errors):
   Foo
   Bar
   Baz
   Fourth line
   Fifth line
+  Sixth line
+  7 line
+  8 line
+  Nueve lines
+  Ten lines
+  Juichi lines
+  Juuni lines
+  13 lines
+  14 lines
+  Fifthteen lines
+  Sixthteen line
 
 Execute(The current signs should be set for running a job):
   ALELint

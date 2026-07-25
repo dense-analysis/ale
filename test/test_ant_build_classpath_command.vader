@@ -16,7 +16,7 @@ Execute(Should return `cd '[dir]' && 'ant' classpath -S -q`):
 
   AssertEqual
   \ [
-  \   ale#path#Simplify(g:dir . '/test-files/ant/ant-project'),
+  \   ale#path#Simplify(resolve(g:dir) . '/test-files/ant/ant-project'),
   \   ale#Escape('ant') . ' classpath' . ' -S' . ' -q',
   \ ],
   \ ale#ant#BuildClasspathCommand(bufnr(''))

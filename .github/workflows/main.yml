@@ -11,9 +11,10 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   build_image:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build docker run image
         shell: bash
         env:
@@ -21,18 +22,67 @@ jobs:
           DOCKER_HUB_PASS: ${{ secrets.DOCKER_HUB_PASS }}
         run: ./run-tests --build-image
   test_ale:
+    name: ${{ matrix.name }}
     needs: build_image
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        vim-version:
-          - '--vim-80-only'
-          - '--vim-90-only'
-          - '--neovim-07-only'
-          - '--neovim-08-only'
-          - '--lua-only'
-          - '--linters-only'
+        include:
+          - name: Lint
+            test-args: --linters-only
+          - name: Lua
+            test-args: --lua-only
+          - name: Neovim 0.10 Linux
+            test-args: --neovim-010-only
+          - name: Neovim 0.12 Linux
+            test-args: --neovim-012-only
+          - name: Vim 8.2 Linux
+            test-args: --vim-82-only
+          - name: Vim 9.2 Linux
+            test-args: --vim-92-only
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run tests
-        run: ./run-tests -v ${{ matrix.vim-version }}
+        run: ./run-tests -v ${{ matrix.test-args }}
+  test_ale_windows:
+    name: ${{ matrix.name }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Neovim 0.10 Windows
+            editor: neovim
+            version: v0.10.4
+          - name: Neovim 0.12 Windows
+            editor: neovim
+            version: v0.12.1
+          - name: Vim 8.2 Windows
+            editor: vim
+            version: v8.2.4843
+          - name: Vim 9.2 Windows
+            editor: vim
+            version: v9.2.0329
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup ${{ matrix.editor }} ${{ matrix.version }}
+        uses: rhysd/action-setup-vim@v1
+        id: editor
+        with:
+          neovim: ${{ matrix.editor == 'neovim' }}
+          version: ${{ matrix.version }}
+      - name: Clone Vader
+        shell: cmd
+        run: |
+          git clone https://github.com/junegunn/vader.vim C:\vader
+          git -C C:\vader checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
+      - name: Run tests
+        shell: cmd
+        env:
+          VIM_EXE: ${{ steps.editor.outputs.executable }}
+          VIM_HEADLESS: ${{ matrix.editor == 'neovim' && '--headless' || '--not-a-term' }}
+        run: |
+          set TMP=%CD:~0,2%\tmp
+          set TEMP=%CD:~0,2%\tmp
+          if not exist "%CD:~0,2%\tmp" mkdir "%CD:~0,2%\tmp"
+          run-tests.bat

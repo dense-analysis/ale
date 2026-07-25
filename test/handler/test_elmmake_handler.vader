@@ -21,7 +21,7 @@ Execute(The elm-make handler should parse Elm 0.19 general problems correctly):
   \ ale_linters#elm#make#Handle(347, [
   \   json_encode({
   \     'type': 'error',
-  \     'path': ale#util#Tempname() . '/Module.elm',
+  \     'path': ale#path#GetAbsPath(ale#util#Tempname(), 'Module.elm'),
   \     'title': 'UNKNOWN IMPORT',
   \     'message': ["error details\n\n", { 'string': 'styled details' }]
   \   }),
@@ -60,7 +60,7 @@ Execute(The elm-make handler should parse Elm 0.19 compilation errors correctly)
   \      'type': 'compile-errors',
   \      'errors': [
   \        {
-  \          'path': ale#util#Tempname() . '/Module.elm',
+  \          'path': ale#path#GetAbsPath(ale#util#Tempname(), 'Module.elm'),
   \          'problems': [
   \            {
   \              'title': 'TYPE MISMATCH',
@@ -186,7 +186,7 @@ Execute(The elm-make handler should parse Elm 0.18 compilation errors correctly)
   \         'details': 'warning details',
   \         'region': {'start': { 'line': 33, 'column': 1 }, 'end': { 'line': 33, 'column': 19 } },
   \         'type': 'warning',
-  \         'file': ale#util#Tempname() . '/Module.elm',
+  \         'file': ale#path#GetAbsPath(ale#util#Tempname(), 'Module.elm'),
   \      }
   \    ]),
   \   json_encode([
@@ -197,7 +197,7 @@ Execute(The elm-make handler should parse Elm 0.18 compilation errors correctly)
   \        'details': 'error details 1',
   \        'region': { 'start': { 'line': 404, 'column': 1 }, 'end': { 'line': 408, 'column': 18 } },
   \        'type': 'error',
-  \        'file': ale#util#Tempname() . '/Module.elm',
+  \        'file': ale#path#GetAbsPath(ale#util#Tempname(), 'Module.elm'),
   \      },
   \      {
   \        'tag': 'TYPE MISMATCH',
@@ -206,7 +206,7 @@ Execute(The elm-make handler should parse Elm 0.18 compilation errors correctly)
   \        'details': 'error details 2',
   \        'region': { 'start': { 'line': 406, 'column': 5}, 'end': { 'line': 407, 'column': 17 } },
   \        'type':'error',
-  \        'file': ale#util#Tempname() . '/Module.elm',
+  \        'file': ale#path#GetAbsPath(ale#util#Tempname(), 'Module.elm'),
   \      },
   \      {
   \        'tag': 'TYPE MISMATCH',
@@ -215,7 +215,7 @@ Execute(The elm-make handler should parse Elm 0.18 compilation errors correctly)
   \        'details': 'error details 3',
   \        'region': { 'start': { 'line': 406, 'column': 5 }, 'end': { 'line': 406, 'column': 93 } },
   \        'type':'error',
-  \        'file': ale#util#Tempname() . '/Module.elm',
+  \        'file': ale#path#GetAbsPath(ale#util#Tempname(), 'Module.elm'),
   \      }
   \    ]),
   \ ])
@@ -276,7 +276,7 @@ Execute(The elm-make handler should put an error on the first line if a line can
   \      'type': 'compile-errors',
   \      'errors': [
   \        {
-  \          'path': ale#util#Tempname() . '/Module.elm',
+  \          'path': ale#path#GetAbsPath(ale#util#Tempname(), 'Module.elm'),
   \          'problems': [
   \            {
   \              'title': 'TYPE MISMATCH',

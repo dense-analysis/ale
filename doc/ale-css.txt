@@ -43,6 +43,12 @@ g:ale_css_css_beautify_use_global
 
 
 ===============================================================================
+dprint                                                         *ale-css-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/malva/.
+
+
+===============================================================================
 fecs                                                             *ale-css-fecs*
 
 `fecs` options for CSS is the same as the options for JavaScript, and both of

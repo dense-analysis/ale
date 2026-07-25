@@ -76,6 +76,53 @@ describe("ale.lsp.send_message", function()
         eq({}, vim_fn_calls)
     end)
 
+    it("should remove Boolean table keys before sending notifications", function()
+        local notify_calls = {}
+        clients[1] = {
+            notify = function(...)
+                table.insert(notify_calls, {...})
+
+                return true
+            end,
+        }
+
+        eq(-1, lsp.send_message({
+            client_id = 1,
+            is_notification = true,
+            method = "workspace/didChangeConfiguration",
+            params = {
+                settings = {
+                    [true] = "invalid",
+                    python = {
+                        analysis = true,
+                        typeCheckingMode = "basic",
+                        [false] = "invalid",
+                    },
+                    array = {
+                        {
+                            enabled = false,
+                            [true] = "invalid",
+                        },
+                    },
+                },
+            },
+        }))
+        eq(1, #notify_calls)
+        eq({
+            settings = {
+                python = {
+                    analysis = true,
+                    typeCheckingMode = "basic",
+                },
+                array = {
+                    {
+                        enabled = false,
+                    },
+                },
+            },
+        }, notify_calls[1][3])
+    end)
+
     it("should return 0 if a notification fails for Neovim 0.11+", function()
         local notify_calls = {}
 

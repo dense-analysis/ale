@@ -10,6 +10,7 @@
 
 " A setting for wrapping commands.
 let g:ale_command_wrapper = get(g:, 'ale_command_wrapper', '')
+let s:is_windows = has('win32') || has('win64') || has('win32unix')
 
 if !has_key(s:, 'job_map')
     let s:job_map = {}
@@ -199,7 +200,7 @@ function! ale#job#PrepareCommand(buffer, command) abort
         return split(l:ale_shell) + split(l:shell_arguments) + [l:command]
     endif
 
-    if has('win32')
+    if s:is_windows
         return 'cmd /s/c "' . l:command . '"'
     endif
 

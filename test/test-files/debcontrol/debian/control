@@ -1,0 +1,12 @@
+Source: example
+Section: misc
+Priority: optional
+Maintainer: Example <example@example.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.0
+
+Package: example
+Architecture: all
+Depends: ${misc:Depends}
+Description: Example package
+ This is an example package.

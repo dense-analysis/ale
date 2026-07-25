@@ -1,12 +1,34 @@
 local module = {}
 
+local function remove_invalid_lsp_table_keys(value, seen)
+    if type(value) ~= "table" then
+        return value
+    end
+
+    seen = seen or {}
+
+    if seen[value] then
+        return value
+    end
+
+    seen[value] = true
+
+    for key, child in pairs(value) do
+        local key_type = type(key)
+
+        if key_type ~= "number" and key_type ~= "string" then
+            value[key] = nil
+        else
+            remove_invalid_lsp_table_keys(child, seen)
+        end
+    end
+
+    return value
+end
+
 module.start = function(config)
     -- Neovim's luaeval sometimes adds a Boolean key to table we need to remove.
-    if type(config.init_options) == "table"
-    and config.init_options[true] ~= nil
-    then
-        config.init_options[true] = nil
-    end
+    remove_invalid_lsp_table_keys(config.init_options)
 
     -- ensure init_options uses empty_dict if empty
     if type(config.init_options) == "table"
@@ -138,17 +160,19 @@ module.send_message = function(args)
         return 0
     end
 
+    local params = remove_invalid_lsp_table_keys(args.params)
+
     if args.is_notification then
         local success
 
         if vim.version().minor >= 11 then
             -- Supporting Neovim 0.11+
             ---@diagnostic disable-next-line
-            success = client.notify(client, args.method, args.params)
+            success = client.notify(client, args.method, params)
         else
             -- Supporting Neovim 0.10 and below
             ---@diagnostic disable-next-line
-            success = client.notify(args.method, args.params)
+            success = client.notify(args.method, params)
         end
 
         -- For notifications we send a request and expect no direct response.
@@ -175,11 +199,11 @@ module.send_message = function(args)
         -- We set the bufnr to -1 to prevent Neovim from flushing anything, as ALE
         -- already flushes changes to files before sending requests.
         ---@diagnostic disable-next-line
-        success, request_id = client.request(client, args.method, args.params, handle_func, -1)
+        success, request_id = client.request(client, args.method, params, handle_func, -1)
     else
         -- Supporting Neovim 0.10 and below
         ---@diagnostic disable-next-line
-        success, request_id = client.request(args.method, args.params, handle_func, -1)
+        success, request_id = client.request(args.method, params, handle_func, -1)
     end
 
     if success then

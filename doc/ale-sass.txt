@@ -3,6 +3,12 @@ ALE Sass Integration                                         *ale-sass-options*
 
 
 ===============================================================================
+dprint                                                        *ale-sass-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/malva/.
+
+
+===============================================================================
 sasslint                                                    *ale-sass-sasslint*
 
 See |ale-scss-sasslint| for information about the available options.

@@ -87,7 +87,9 @@ function! ale_linters#d#dmd#Handle(buffer, lines) abort
     " Matches patterns lines like the following:
     " /tmp/tmp.qclsa7qLP7/file.d(1): Error: function declaration without return type. (Note that constructors are always named 'this')
     " /tmp/tmp.G1L5xIizvB.d(8,8): Error: module weak_reference is in file 'dstruct/weak_reference.d' which cannot be read
-    let l:pattern = '\v^(\f+)\((\d+)(,(\d+))?\): (\w+): (.+)$'
+    " Use [^(]+ instead of \f+ because NeoVim's 'isfname' on Windows does
+    " not include \ or :, so \f+ cannot match Windows absolute paths.
+    let l:pattern = '\v^([^(]+)\((\d+)(,(\d+))?\): (\w+): (.+)$'
     let l:output = []
     let l:dir = expand('#' . a:buffer . ':p:h')
 

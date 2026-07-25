@@ -18,7 +18,7 @@ Execute(The black callback should return the correct default values):
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --stdin-filename ' . fname  . ' -'},
+  \   'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --stdin-filename ' . fname  . ' -'},
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(The black callback should include options):
@@ -30,7 +30,7 @@ Execute(The black callback should include options):
   let fname = ale#Escape(ale#path#Simplify(file_path))
   
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option --stdin-filename ' . fname . ' -'},
+  \ {'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option --stdin-filename ' . fname . ' -'},
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(The black callback should include --pyi for .pyi files):
@@ -41,7 +41,7 @@ Execute(The black callback should include --pyi for .pyi files):
   let fname = ale#Escape(ale#path#Simplify(file_path))
 
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --stdin-filename ' . fname . ' --pyi -'},
+  \ {'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --stdin-filename ' . fname . ' --pyi -'},
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(The black callback should not concatenate options):
@@ -53,7 +53,7 @@ Execute(The black callback should not concatenate options):
   let fname = ale#Escape(ale#path#Simplify(file_path))
 
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option --stdin-filename ' . fname. ' --pyi -'},
+  \ {'command': ale#Escape(ale#path#Simplify(resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option --stdin-filename ' . fname. ' --pyi -'},
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(Pipenv is detected when python_black_auto_pipenv is set):

@@ -22,7 +22,7 @@ Execute(The pyre executable should be run from the virtualenv path):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   let b:executable = ale#path#Simplify(
-  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/pyre'
+  \ resolve(g:dir) . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/pyre'
   \)
 
   AssertLinter b:executable, ale#Escape(b:executable) . ' persistent'
@@ -72,5 +72,5 @@ Execute(The FindProjectRoot should detect the project root directory for namespa
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/pyre_configuration_dir/foo/bar.py')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/../test-files/python/pyre_configuration_dir'),
+  \ ale#path#Simplify(resolve(g:dir) . '/../test-files/python/pyre_configuration_dir'),
   \ ale#python#FindProjectRoot(bufnr(''))

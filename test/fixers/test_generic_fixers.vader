@@ -1,0 +1,29 @@
+Execute(ReplaceEmDash should not change existing dashes):
+  AssertEqual
+  \ ['foo - bar', 'baz -- qux -- end'],
+  \ ale#fixers#generic#ReplaceEmDash(bufnr(''), ["foo - bar", "baz -- qux \u2014 end"])
+
+Execute(ReplaceEmDash should replace em dashes with double hyphens):
+  AssertEqual
+  \ ['foo -- bar', 'baz -- qux -- end'],
+  \ ale#fixers#generic#ReplaceEmDash(bufnr(''), ["foo \u2014 bar", "baz \u2014 qux \u2014 end"])
+
+Execute(ReplaceEmDash should handle lines without em dashes):
+  AssertEqual
+  \ ['no dashes here', 'just -- normal'],
+  \ ale#fixers#generic#ReplaceEmDash(bufnr(''), ['no dashes here', 'just -- normal'])
+
+Execute(ReplaceEmDash should handle empty input):
+  AssertEqual
+  \ [],
+  \ ale#fixers#generic#ReplaceEmDash(bufnr(''), [])
+
+Execute(RemoveTrailingBlankLines should remove trailing empty lines):
+  AssertEqual
+  \ ['foo', 'bar'],
+  \ ale#fixers#generic#RemoveTrailingBlankLines(bufnr(''), ['foo', 'bar', '', ''])
+
+Execute(RemoveTrailingBlankLines should preserve content when no trailing blanks):
+  AssertEqual
+  \ ['foo', 'bar'],
+  \ ale#fixers#generic#RemoveTrailingBlankLines(bufnr(''), ['foo', 'bar'])

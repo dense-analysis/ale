@@ -1,0 +1,5 @@
+*
+!scripts/argecho.sh
+!scripts/install_vim.sh
+!scripts/run_vim.sh
+!scripts/rtp.vim
