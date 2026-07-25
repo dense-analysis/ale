@@ -444,4 +444,31 @@ describe("ale.lsp.start", function()
             },
         }, vim_fn_calls)
     end)
+
+    it("should ignore pull model diagnostics with a nil result", function()
+        lsp.start({name = "server:/code"})
+
+        eq(1, #start_calls)
+
+        local handlers = start_calls[1][1].handlers
+
+        eq("function", type(handlers["textDocument/diagnostic"]))
+
+        -- A stale request can be answered with a nil result and no error,
+        -- which is valid per the LSP specification. The handler should do
+        -- nothing rather than index the nil result.
+        handlers["textDocument/diagnostic"](
+            nil,
+            nil,
+            {
+                params = {
+                    textDocument = {
+                        uri = "file://code/foo.py",
+                    },
+                },
+            }
+        )
+
+        eq({}, vim_fn_calls)
+    end)
 end)
