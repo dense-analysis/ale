@@ -1,0 +1,46 @@
+Before:
+  call ale#assert#SetUpFixerTest('markdown', 'mdformat')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The mdformat callback should return the default command):
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('mdformat') . ' -',
+  \ }
+
+Execute(The mdformat executable and options should be configurable):
+  let g:ale_markdown_mdformat_executable = 'foobar'
+  let g:ale_markdown_mdformat_options = '--wrap 80'
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('foobar') . ' --wrap 80 -',
+  \ }
+
+Execute(Setting executable to pipenv should append run mdformat):
+  let g:ale_markdown_mdformat_executable = 'path/to/pipenv'
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('path/to/pipenv') . ' run mdformat -',
+  \ }
+
+Execute(Poetry should be detected when auto_poetry is set):
+  let g:ale_markdown_mdformat_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('poetry') . ' run mdformat -',
+  \ }
+
+Execute(uv should be detected when auto_uv is set):
+  let g:ale_markdown_mdformat_auto_uv = 1
+  call ale#test#SetFilename('../test-files/python/uv/whatever.py')
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('uv') . ' run mdformat -',
+  \ }

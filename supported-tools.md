@@ -446,6 +446,7 @@ formatting.
   * [languagetool](https://languagetool.org/) :floppy_disk: :speech_balloon:
   * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
   * [marksman](https://github.com/artempyanykh/marksman) :speech_balloon:
+  * [mdformat](https://github.com/hukkin/mdformat)
   * [mdl](https://github.com/mivok/markdownlint)
   * [pandoc](https://pandoc.org)
   * [prettier](https://github.com/prettier/prettier)

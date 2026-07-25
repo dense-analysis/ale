@@ -462,6 +462,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['markdown'],
 \       'description': 'Fix markdown files with pandoc.',
 \   },
+\   'mdformat': {
+\       'function': 'ale#fixers#mdformat#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix Markdown files with mdformat.',
+\   },
 \   'pymarkdown': {
 \       'function': 'ale#fixers#pymarkdown#Fix',
 \       'suggested_filetypes': ['markdown'],

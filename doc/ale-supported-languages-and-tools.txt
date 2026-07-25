@@ -436,6 +436,7 @@ Notes:
   * `languagetool`!!
   * `markdownlint`!!
   * `marksman`
+  * `mdformat`
   * `mdl`
   * `pandoc`
   * `prettier`
