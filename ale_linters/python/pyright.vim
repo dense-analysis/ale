@@ -1,5 +1,6 @@
 call ale#Set('python_pyright_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_pyright_executable', 'pyright-langserver')
+call ale#Set('python_pyright_options', '--stdio')
 call ale#Set('python_pyright_config', {})
 call ale#Set('python_pyright_auto_pipenv', 0)
 call ale#Set('python_pyright_auto_poetry', 0)
@@ -79,7 +80,8 @@ function! ale_linters#python#pyright#GetCommand(buffer) abort
         let l:env_string = ale#python#AutoVirtualenvEnvString(a:buffer)
     endif
 
-    return l:env_string . ale#Escape(l:executable) . l:exec_args . ' --stdio'
+    return l:env_string . ale#Escape(l:executable) . l:exec_args .
+    \   ale#Pad(ale#Var(a:buffer, 'python_pyright_options'))
 endfunction
 
 call ale#linter#Define('python', {

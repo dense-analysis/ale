@@ -3687,6 +3687,8 @@ documented in additional help files.
     inko..................................|ale-inko-inko|
   ispc....................................|ale-ispc-options|
     ispc..................................|ale-ispc-ispc|
+  janet...................................|ale-janet-options|
+    janet-format..........................|ale-janet-janet-format|
   java....................................|ale-java-options|
     checkstyle............................|ale-java-checkstyle|
     clang-format..........................|ale-java-clangformat|
@@ -3777,6 +3779,7 @@ documented in additional help files.
     harper................................|ale-markdown-harper|
     markdownlint..........................|ale-markdown-markdownlint|
     marksman..............................|ale-markdown-marksman|
+    mdformat..............................|ale-markdown-mdformat|
     mdl...................................|ale-markdown-mdl|
     pandoc................................|ale-markdown-pandoc|
     prettier..............................|ale-markdown-prettier|
@@ -4045,6 +4048,7 @@ documented in additional help files.
     terraform-ls..........................|ale-terraform-terraform-ls|
     terraform-lsp.........................|ale-terraform-terraform-lsp|
     tflint................................|ale-terraform-tflint|
+    trivy.................................|ale-terraform-trivy|
     tfsec.................................|ale-terraform-tfsec|
   tex.....................................|ale-tex-options|
     chktex................................|ale-tex-chktex|

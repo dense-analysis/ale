@@ -339,6 +339,8 @@ formatting.
   * [inko](https://inko-lang.org/) :floppy_disk:
 * ISPC
   * [ispc](https://ispc.github.io/) :floppy_disk:
+* Janet
+  * [janet-format](https://github.com/janet-lang/spork)
 * Java
   * [PMD](https://pmd.github.io/)
   * [checkstyle](http://checkstyle.sourceforge.net) :floppy_disk:
@@ -444,6 +446,7 @@ formatting.
   * [languagetool](https://languagetool.org/) :floppy_disk: :speech_balloon:
   * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
   * [marksman](https://github.com/artempyanykh/marksman) :speech_balloon:
+  * [mdformat](https://github.com/hukkin/mdformat)
   * [mdl](https://github.com/mivok/markdownlint)
   * [pandoc](https://pandoc.org)
   * [prettier](https://github.com/prettier/prettier)
@@ -736,6 +739,7 @@ formatting.
   * [terraform-lsp](https://github.com/juliosueiras/terraform-lsp) :speech_balloon:
   * [tflint](https://github.com/wata727/tflint)
   * [tfsec](https://github.com/aquasecurity/tfsec)
+  * [trivy](https://github.com/aquasecurity/trivy)
 * Texinfo
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)

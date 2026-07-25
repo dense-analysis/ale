@@ -77,7 +77,7 @@ module.start = function(config)
         end,
         -- Handle pull model diagnostic data.
         ["textDocument/diagnostic"] = function(err, result, request, _)
-            if err == nil then
+            if err == nil and result ~= nil then
                 local diagnostics
 
                 if result.kind == "unchanged" then

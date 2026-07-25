@@ -462,6 +462,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['markdown'],
 \       'description': 'Fix markdown files with pandoc.',
 \   },
+\   'mdformat': {
+\       'function': 'ale#fixers#mdformat#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix Markdown files with mdformat.',
+\   },
 \   'pymarkdown': {
 \       'function': 'ale#fixers#pymarkdown#Fix',
 \       'suggested_filetypes': ['markdown'],
@@ -736,6 +741,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#cljfmt#Fix',
 \       'suggested_filetypes': ['clojure'],
 \       'description': 'formatter and linter for clojure files',
+\   },
+\   'janet-format': {
+\       'function': 'ale#fixers#janet_format#Fix',
+\       'suggested_filetypes': ['janet'],
+\       'description': 'Formatter for janet files',
 \   },
 \   'typstyle': {
 \       'function': 'ale#fixers#typstyle#Fix',

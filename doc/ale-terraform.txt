@@ -140,6 +140,30 @@ g:ale_terraform_tflint_options
 
 
 ===============================================================================
+trivy                                                     *ale-terraform-trivy*
+
+                                       *ale-options.terraform_trivy_executable*
+                                             *g:ale_terraform_trivy_executable*
+                                             *b:ale_terraform_trivy_executable*
+terraform_trivy_executable
+g:ale_terraform_trivy_executable
+  Type: |String|
+  Default: `'trivy'`
+
+  This variable can be changed to use a different executable for trivy.
+
+                                          *ale-options.terraform_trivy_options*
+                                                *g:ale_terraform_trivy_options*
+                                                *b:ale_terraform_trivy_options*
+terraform_trivy_options
+g:ale_terraform_trivy_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to pass custom CLI flags to trivy.
+
+
+===============================================================================
 tfsec                                                     *ale-terraform-tfsec*
 
                                        *ale-options.terraform_tfsec_executable*
