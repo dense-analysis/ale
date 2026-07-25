@@ -241,6 +241,8 @@ formatting.
   * [proselint](http://proselint.com/)
 * FusionScript
   * [fusion-lint](https://github.com/RyanSquared/fusionscript)
+* Generic
+  * [ast-grep](https://ast-grep.github.io/)
 * Git Commit Messages
   * [gitlint](https://github.com/jorisroovers/gitlint)
 * Gleam
