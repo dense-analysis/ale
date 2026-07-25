@@ -339,6 +339,8 @@ formatting.
   * [inko](https://inko-lang.org/) :floppy_disk:
 * ISPC
   * [ispc](https://ispc.github.io/) :floppy_disk:
+* Janet
+  * [janet-format](https://github.com/janet-lang/spork)
 * Java
   * [PMD](https://pmd.github.io/)
   * [checkstyle](http://checkstyle.sourceforge.net) :floppy_disk:

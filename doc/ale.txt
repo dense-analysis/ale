@@ -3687,6 +3687,8 @@ documented in additional help files.
     inko..................................|ale-inko-inko|
   ispc....................................|ale-ispc-options|
     ispc..................................|ale-ispc-ispc|
+  janet...................................|ale-janet-options|
+    janet-format..........................|ale-janet-janet-format|
   java....................................|ale-java-options|
     checkstyle............................|ale-java-checkstyle|
     clang-format..........................|ale-java-clangformat|
