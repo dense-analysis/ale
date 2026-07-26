@@ -2007,6 +2007,17 @@ g:ale_python_ruff_use_global
 
   See |ale-integrations-local-executables|
 
+                                       *ale-options.python_ruff_human_readable*
+                                             *g:ale_python_ruff_human_readable*
+                                             *b:ale_python_ruff_human_readable*
+python_ruff_human_readable
+g:ale_python_ruff_human_readable
+  Type: |Number|
+  Default: `0`
+
+  Show human-readable error names (usable by `ruff:ignore` comments) instead
+  of the default numeric error codes.
+
                                           *ale-options.python_ruff_auto_pipenv*
                                                 *g:ale_python_ruff_auto_pipenv*
                                                 *b:ale_python_ruff_auto_pipenv*
