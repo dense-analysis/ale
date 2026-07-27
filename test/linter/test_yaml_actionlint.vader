@@ -1,6 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('yaml', 'actionlint')
-  call ale#test#SetFilename('/.github/file.yml')
+  call ale#test#SetFilename('/.github/workflows/file.yml')
 
 After:
   call ale#assert#TearDownLinterTest()
