@@ -265,7 +265,8 @@ function! ale#lsp#UpdateCapabilities(conn_id, capabilities) abort
         let l:conn.capabilities.code_actions = 1
     endif
 
-    if !empty(get(a:capabilities, 'completionProvider'))
+    let l:completion = get(a:capabilities, 'completionProvider', v:false)
+    if type(l:completion) is v:t_dict || l:completion is v:true
         let l:conn.capabilities.completion = 1
     endif
 
