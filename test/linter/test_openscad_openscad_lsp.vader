@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('openscad', 'openscad_lsp')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'openscad-lsp', ale#Escape('openscad-lsp') . ' --stdio'
+
+Execute(The executable should be configurable):
+  let g:ale_openscad_openscad_lsp_executable = '/custom/path/openscad-lsp'
+
+  AssertLinter '/custom/path/openscad-lsp',
+  \ ale#Escape('/custom/path/openscad-lsp') . ' --stdio'
+
+Execute(Options should be appended to the command):
+  let b:ale_openscad_openscad_lsp_options = '--ignore-default'
+
+  AssertLinter 'openscad-lsp',
+  \ ale#Escape('openscad-lsp') . ' --stdio --ignore-default'
