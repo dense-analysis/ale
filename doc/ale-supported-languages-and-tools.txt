@@ -386,6 +386,7 @@ Notes:
   * `jsonnet-lint`
   * `jsonnetfmt`
 * Julia
+  * `fatou`
   * `languageserver`
 * Kotlin
   * `kotlinc`!!

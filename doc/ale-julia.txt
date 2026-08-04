@@ -3,6 +3,39 @@ ALE Julia Integration                                       *ale-julia-options*
 
 
 ===============================================================================
+fatou                                                           *ale-julia-fatou*
+
+fatou is a language server, formatter, and linter for Julia. The `fatou` linter
+runs the language server (`fatou lsp`) to report diagnostics, and the `fatou`
+fixer formats Julia with `fatou format`.
+
+Project-level configuration is read from a `fatou.toml` file discovered by
+walking up from the file being edited. See https://github.com/jolars/fatou for
+more information.
+
+                                           *ale-options.julia_fatou_executable*
+                                                 *g:ale_julia_fatou_executable*
+                                                 *b:ale_julia_fatou_executable*
+julia_fatou_executable
+g:ale_julia_fatou_executable
+  Type: |String|
+  Default: `'fatou'`
+
+  This variable can be changed to change the path to fatou.
+
+                                              *ale-options.julia_fatou_options*
+                                                    *g:ale_julia_fatou_options*
+                                                    *b:ale_julia_fatou_options*
+julia_fatou_options
+g:ale_julia_fatou_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to pass additional arguments to the `fatou
+  format` command used by the fixer.
+
+
+===============================================================================
 languageserver                                       *ale-julia-languageserver*
 
 To enable Julia LSP linter you need to install the LanguageServer.jl package
