@@ -124,6 +124,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['erlang'],
 \       'description': 'Format Erlang code with erlfmt',
 \   },
+\   'fatou': {
+\       'function': 'ale#fixers#fatou#Fix',
+\       'suggested_filetypes': ['julia'],
+\       'description': 'Format Julia files with fatou.',
+\   },
 \   'fecs': {
 \       'function': 'ale#fixers#fecs#Fix',
 \       'suggested_filetypes': ['javascript', 'css', 'html'],

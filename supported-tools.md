@@ -396,6 +396,7 @@ formatting.
   * [jsonnet-lint](https://jsonnet.org/learning/tools.html) :speech_balloon:
   * [jsonnetfmt](https://jsonnet.org/learning/tools.html) :speech_balloon:
 * Julia
+  * [fatou](https://github.com/jolars/fatou) :speech_balloon:
   * [languageserver](https://github.com/JuliaEditorSupport/LanguageServer.jl)
 * Kotlin
   * [kotlinc](https://kotlinlang.org) :floppy_disk:
