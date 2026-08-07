@@ -22,8 +22,8 @@ function! ale_linters#fortran#fortitude#Handle(buffer, lines) abort
         let l:type = get(s:severity_map, l:prefix, 'I')
 
         call add(l:output, {
-        \   'lnum': l:error['location']['row'],
-        \   'end_lnum': l:error['end_location']['row'],
+        \   'lnum': l:error['location']['line'],
+        \   'end_lnum': l:error['end_location']['line'],
         \   'col': l:error['location']['column'],
         \   'end_col': l:error['end_location']['column'],
         \   'text': l:error['message'],
