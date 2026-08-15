@@ -220,6 +220,13 @@ function! ale#completion#GetTriggerCharacter(filetype, prefix, ...) abort
         return a:prefix
     endif
 
+    for l:char in l:char_list
+        if len(a:prefix) >= len(l:char)
+        \&& strpart(a:prefix, len(a:prefix) - len(l:char)) is# l:char
+            return l:char
+        endif
+    endfor
+
     return ''
 endfunction
 
@@ -242,7 +249,8 @@ function! ale#completion#Filter(
         "   foo.
         "       ^
         " We need to include all of the given suggestions.
-        if index(l:triggers, a:prefix) >= 0 || empty(a:prefix)
+        if !empty(ale#completion#GetTriggerCharacter(a:filetype, a:prefix, l:conn_id))
+        \|| empty(a:prefix)
             let l:filtered_suggestions = a:suggestions
         else
             let l:filtered_suggestions = []
