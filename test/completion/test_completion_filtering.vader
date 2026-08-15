@@ -154,7 +154,7 @@ Execute(GetTriggerCharacter should use LSP triggers when conn_id provided):
   call ale#lsp#Register('test-lsp', '/project', '', {})
   let g:conn_id = 'test-lsp:/project'
   call ale#lsp#UpdateCapabilities(g:conn_id, {
-  \   'completionProvider': {'triggerCharacters': ['@', '#']},
+  \   'completionProvider': {'triggerCharacters': ['@', '#', ':']},
   \})
 
   " '@' is in LSP triggers
@@ -163,6 +163,8 @@ Execute(GetTriggerCharacter should use LSP triggers when conn_id provided):
   AssertEqual '', ale#completion#GetTriggerCharacter('python', '.', g:conn_id)
   " '#' is in LSP triggers
   AssertEqual '#', ale#completion#GetTriggerCharacter('python', '#', g:conn_id)
+  " '::' ends with the ':' trigger advertised by rust-analyzer
+  AssertEqual ':', ale#completion#GetTriggerCharacter('rust', '::', g:conn_id)
 
   call ale#lsp#RemoveConnectionWithID(g:conn_id)
   unlet g:conn_id
@@ -183,7 +185,7 @@ Execute(Filtering should use LSP trigger characters):
   call ale#lsp#Register('test-lsp-filter', '/project', '', {})
   let g:conn_id = 'test-lsp-filter:/project'
   call ale#lsp#UpdateCapabilities(g:conn_id, {
-  \   'completionProvider': {'triggerCharacters': ['@']},
+  \   'completionProvider': {'triggerCharacters': ['@', ':']},
   \})
 
   " Set up completion info with conn_id
@@ -192,6 +194,8 @@ Execute(Filtering should use LSP trigger characters):
 
   " '@' is LSP trigger - should return all suggestions
   AssertEqual b:suggestions, ale#completion#Filter(bufnr(''), 'python', b:suggestions, '@', 0)
+  " '::' ends with the ':' trigger advertised by rust-analyzer
+  AssertEqual b:suggestions, ale#completion#Filter(bufnr(''), 'rust', b:suggestions, '::', 0)
   " '.' is NOT LSP trigger - should filter
   AssertEqual [], ale#completion#Filter(bufnr(''), 'python', b:suggestions, '.', 0)
 
