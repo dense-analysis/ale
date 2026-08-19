@@ -3,6 +3,27 @@ ALE OpenSCAD Integration                                 *ale-openscad-options*
 
 
 ===============================================================================
+openscad-lsp                                         *ale-openscad-openscad_lsp*
+
+`openscad-lsp` is a Language Server Protocol implementation for OpenSCAD.
+
+g:ale_openscad_openscad_lsp_executable    *g:ale_openscad_openscad_lsp_executable*
+                                          *b:ale_openscad_openscad_lsp_executable*
+  Type: |String|
+  Default: `'openscad-lsp'`
+
+  This variable can be changed to use a different executable for openscad-lsp.
+
+
+g:ale_openscad_openscad_lsp_options          *g:ale_openscad_openscad_lsp_options*
+                                             *b:ale_openscad_openscad_lsp_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to pass additional flags to openscad-lsp.
+
+
+===============================================================================
 sca2d                                                      *ale-openscad-sca2d*
 
                                         *ale-options.openscad_sca2d_executable*

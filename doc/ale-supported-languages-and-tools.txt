@@ -505,6 +505,7 @@ Notes:
   * `yamllint`
 * OpenSCAD
   * `SCA2D`
+  * `openscad-lsp`
   * `scadformat`
 * Packer
   * `packer-fmt-fixer`
