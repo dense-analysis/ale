@@ -1,0 +1,23 @@
+Before:
+  call ale#assert#SetUpLinterTest('julia', 'fatou')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'fatou', ale#Escape('fatou') . ' lsp'
+
+Execute(The executable should be configurable):
+  let g:ale_julia_fatou_executable = '/path/to/fatou'
+
+  AssertLinter '/path/to/fatou', ale#Escape('/path/to/fatou') . ' lsp'
+
+Execute(The project root should be detected correctly with a configuration file):
+  call ale#test#SetFilename('../test-files/fatou/subdir/file.jl')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/fatou')
+
+Execute(The project root should be empty when no project files can be detected):
+  call ale#test#SetFilename('../test-files/dummy')
+
+  AssertLSPProject ''

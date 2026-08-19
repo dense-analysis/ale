@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpFixerTest('julia', 'fatou')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The default command should be correct):
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('fatou') . ' format',
+  \ }
+
+Execute(The executable and options should be configurable):
+  let g:ale_julia_fatou_executable = 'foobar'
+  let g:ale_julia_fatou_options = '--line-width 80'
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('foobar') . ' format --line-width 80',
+  \ }
