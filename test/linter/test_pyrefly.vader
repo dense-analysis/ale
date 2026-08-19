@@ -67,3 +67,10 @@ Execute(uv is detected when python_pyrefly_auto_uv is set):
 
   AssertLinter 'uv',
   \ ale#Escape('uv') . ' run pyrefly lsp'
+
+Execute(Assert the default config):
+  AssertLSPConfig {'python': {'pyrefly': {'displayTypeErrors': 'force-on'}}}
+
+  let b:ale_python_pyrefly_config = {}
+
+  AssertLSPConfig {}
