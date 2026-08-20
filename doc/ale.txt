@@ -3744,6 +3744,7 @@ documented in additional help files.
     jsonnetfmt............................|ale-jsonnet-jsonnetfmt|
     jsonnet-lint..........................|ale-jsonnet-jsonnet-lint|
   julia...................................|ale-julia-options|
+    fatou.................................|ale-julia-fatou|
     languageserver........................|ale-julia-languageserver|
   kotlin..................................|ale-kotlin-options|
     kotlinc...............................|ale-kotlin-kotlinc|
@@ -3838,6 +3839,7 @@ documented in additional help files.
     prettier..............................|ale-openapi-prettier|
     yamllint..............................|ale-openapi-yamllint|
   openscad................................|ale-openscad-options|
+    openscad-lsp..........................|ale-openscad-openscad_lsp|
     sca2d.................................|ale-openscad-sca2d|
     scadformat............................|ale-openscad-scadformat|
   packer..................................|ale-packer-options|

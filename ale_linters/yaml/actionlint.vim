@@ -5,8 +5,8 @@ call ale#Set('yaml_actionlint_executable', 'actionlint')
 call ale#Set('yaml_actionlint_options', '')
 
 function! ale_linters#yaml#actionlint#GetCommand(buffer) abort
-    " Only execute actionlint on YAML files in /.github/ paths.
-    if expand('#' . a:buffer . ':p') !~# '\v[/\\]\.github[/\\]'
+    " Only execute actionlint on YAML files in /.github/workflows/ paths.
+    if expand('#' . a:buffer . ':p') !~# '\v[/\\]\.github[/\\]workflows[/\\]'
         return ''
     endif
 

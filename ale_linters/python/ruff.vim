@@ -8,6 +8,7 @@ call ale#Set('python_ruff_change_directory', 1)
 call ale#Set('python_ruff_auto_pipenv', 0)
 call ale#Set('python_ruff_auto_poetry', 0)
 call ale#Set('python_ruff_auto_uv', 0)
+call ale#Set('python_ruff_human_readable', 0)
 
 call ale#fix#registry#Add('ruff',
 \   'ale#fixers#ruff#Fix',
@@ -113,7 +114,7 @@ function! ale_linters#python#ruff#Handle(buffer, lines) abort
         \   'col': l:item.location.column,
         \   'end_lnum': l:item.end_location.row,
         \   'end_col': l:item.end_location.column - 1,
-        \   'code': l:item.code,
+        \   'code': ale#Var(a:buffer, 'python_ruff_human_readable') ? l:item.name : l:item.code,
         \   'text': l:item.message,
         \   'type': l:item.code =~? '\vE\d+' ? 'E' : 'W',
         \})

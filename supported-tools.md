@@ -396,6 +396,7 @@ formatting.
   * [jsonnet-lint](https://jsonnet.org/learning/tools.html) :speech_balloon:
   * [jsonnetfmt](https://jsonnet.org/learning/tools.html) :speech_balloon:
 * Julia
+  * [fatou](https://github.com/jolars/fatou) :speech_balloon:
   * [languageserver](https://github.com/JuliaEditorSupport/LanguageServer.jl)
 * Kotlin
   * [kotlinc](https://kotlinlang.org) :floppy_disk:
@@ -514,6 +515,7 @@ formatting.
   * [yamllint](https://yamllint.readthedocs.io/)
 * OpenSCAD
   * [SCA2D](https://gitlab.com/bath_open_instrumentation_group/sca2d) :floppy_disk:
+  * [openscad-lsp](https://github.com/Leathong/openscad-LSP)
   * [scadformat](https://github.com/hugheaves/scadformat)
 * Packer (HCL)
   * [packer-fmt-fixer](https://github.com/hashicorp/packer)
