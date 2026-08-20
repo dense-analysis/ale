@@ -1,7 +1,7 @@
 :scriptencoding utf-8
 
 call ale#Set('markdownlint_executable', 'markdownlint')
-call ale#Set('markdownlint_options', '--fix')
+call ale#Set('markdownlint_options', '')
 
 function! ale#fixers#markdownlint#Fix(buffer) abort
     let l:executable = ale#Var(a:buffer, 'markdownlint_executable')
@@ -9,7 +9,10 @@ function! ale#fixers#markdownlint#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
-    \       . ' ' . l:options,
+    \       . ' --fix'
+    \       . ale#Pad(l:options)
+    \       . ' %t',
+    \   'read_temporary_file': 1,
     \}
 endfunction
 
