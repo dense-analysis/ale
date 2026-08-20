@@ -3,3 +3,18 @@ Execute(prettier-eslint should be aliased):
 
 Execute(prettier-standard should be aliased):
   AssertEqual 'ale#fixers#prettier_standard#Fix', ale#fix#registry#GetFunc('prettier-standard')
+
+Execute(markdownlint should be aliased to markdownlint-cli):
+  AssertEqual
+  \ 'ale#fixers#markdownlint#Fix',
+  \ ale#fix#registry#GetFunc('markdownlint')
+
+Execute(markdownlint-cli should be available directly):
+  AssertEqual
+  \ 'ale#fixers#markdownlint#Fix',
+  \ ale#fix#registry#GetFunc('markdownlint-cli')
+
+Execute(markdownlint-cli2 should be available directly):
+  AssertEqual
+  \ 'ale#fixers#markdownlint_cli2#Fix',
+  \ ale#fix#registry#GetFunc('markdownlint-cli2')

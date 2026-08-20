@@ -787,10 +787,16 @@ let s:default_registry = {
 \       'suggested_filetypes': ['verilog'],
 \       'description': 'Formats verilog files using verible.',
 \   },
-\   'markdownlint': {
+\   'markdownlint-cli': {
 \       'function': 'ale#fixers#markdownlint#Fix',
 \       'suggested_filetypes': ['markdown'],
-\       'description': 'Fix markdown files with markdownlint.',
+\       'description': 'Fix markdown files with markdownlint-cli.',
+\       'aliases': ['markdownlint'],
+\   },
+\   'markdownlint-cli2': {
+\       'function': 'ale#fixers#markdownlint_cli2#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix markdown files with markdownlint-cli2.',
 \   },
 \   'rumdl': {
 \       'function': 'ale#fixers#rumdl#Fix',

@@ -437,7 +437,8 @@ Notes:
   * dprint
   * `harper`
   * `languagetool`!!
-  * `markdownlint`!!
+  * `markdownlint-cli`!!
+  * `markdownlint-cli2`!!
   * `marksman`
   * `mdformat`
   * `mdl`
