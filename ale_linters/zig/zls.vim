@@ -7,7 +7,9 @@ call ale#Set('zig_zls_config', {})
 function! ale_linters#zig#zls#GetProjectRoot(buffer) abort
     let l:build_rs = ale#path#FindNearestFile(a:buffer, 'build.zig')
 
-    return !empty(l:build_rs) ? fnamemodify(l:build_rs, ':h') : ''
+    return !empty(l:build_rs) 
+          \ ? fnamemodify(l:build_rs, ':h') 
+          \ : expand('#' . a:buffer . ':p:h')
 endfunction
 
 call ale#linter#Define('zig', {
