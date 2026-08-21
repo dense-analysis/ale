@@ -447,7 +447,8 @@ formatting.
   * [dprint](https://dprint.dev)
   * [harper](https://github.com/elijah-potter/harper) :speech_balloon:
   * [languagetool](https://languagetool.org/) :floppy_disk: :speech_balloon:
-  * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
+  * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) :floppy_disk:
+  * [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) :floppy_disk:
   * [marksman](https://github.com/artempyanykh/marksman) :speech_balloon:
   * [mdformat](https://github.com/hukkin/mdformat)
   * [mdl](https://github.com/mivok/markdownlint)

@@ -44,7 +44,14 @@ g:ale_markdown_harper_config
 
 
 ===============================================================================
-markdownlint                                        *ale-markdown-markdownlint*
+markdownlint-cli                                *ale-markdown-markdownlint-cli*
+                                                    *ale-markdown-markdownlint*
+
+  https://github.com/igorshubovych/markdownlint-cli
+
+  The linter name is `markdownlint_cli`. `markdownlint` and
+  `markdownlint-cli` are aliases. The fixer name is `markdownlint-cli`;
+  `markdownlint` is an alias.
 
                                  *ale-options.markdown_markdownlint_executable*
                                        *g:ale_markdown_markdownlint_executable*
@@ -54,8 +61,7 @@ g:ale_markdown_markdownlint_executable
   Type: |String|
   Default: `'markdownlint'`
 
-  Override the invoked `markdownlint` binary. You can use other binaries such as
-  `markdownlint-cli2`.
+  Override the `markdownlint-cli` executable used by the linter.
 
                                     *ale-options.markdown_markdownlint_options*
                                           *g:ale_markdown_markdownlint_options*
@@ -65,7 +71,80 @@ g:ale_markdown_markdownlint_options
   Type: |String|
   Default: `''`
 
-  This variable can be set to pass additional options to markdownlint.
+  This variable can be set to pass additional linter options to
+  `markdownlint-cli`.
+
+                                          *ale-options.markdownlint_executable*
+                                                *g:ale_markdownlint_executable*
+                                                *b:ale_markdownlint_executable*
+markdownlint_executable
+g:ale_markdownlint_executable
+  Type: |String|
+  Default: `'markdownlint'`
+
+  Override the `markdownlint-cli` executable used by the fixer.
+
+                                             *ale-options.markdownlint_options*
+                                                   *g:ale_markdownlint_options*
+                                                   *b:ale_markdownlint_options*
+markdownlint_options
+g:ale_markdownlint_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional fixer options to
+  `markdownlint-cli`. ALE always adds the required `--fix` option.
+
+
+===============================================================================
+markdownlint-cli2                              *ale-markdown-markdownlint-cli2*
+
+  https://github.com/DavidAnson/markdownlint-cli2
+
+  The linter name is `markdownlint_cli2`, with `markdownlint-cli2` as an
+  alias. The fixer name is `markdownlint-cli2`.
+
+                            *ale-options.markdown_markdownlint_cli2_executable*
+                                  *g:ale_markdown_markdownlint_cli2_executable*
+                                  *b:ale_markdown_markdownlint_cli2_executable*
+markdown_markdownlint_cli2_executable
+g:ale_markdown_markdownlint_cli2_executable
+  Type: |String|
+  Default: `'markdownlint-cli2'`
+
+  Override the `markdownlint-cli2` executable used by the linter.
+
+                               *ale-options.markdown_markdownlint_cli2_options*
+                                     *g:ale_markdown_markdownlint_cli2_options*
+                                     *b:ale_markdown_markdownlint_cli2_options*
+markdown_markdownlint_cli2_options
+g:ale_markdown_markdownlint_cli2_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional linter options to
+  `markdownlint-cli2`.
+
+                                     *ale-options.markdownlint_cli2_executable*
+                                           *g:ale_markdownlint_cli2_executable*
+                                           *b:ale_markdownlint_cli2_executable*
+markdownlint_cli2_executable
+g:ale_markdownlint_cli2_executable
+  Type: |String|
+  Default: `'markdownlint-cli2'`
+
+  Override the `markdownlint-cli2` executable used by the fixer.
+
+                                        *ale-options.markdownlint_cli2_options*
+                                              *g:ale_markdownlint_cli2_options*
+                                              *b:ale_markdownlint_cli2_options*
+markdownlint_cli2_options
+g:ale_markdownlint_cli2_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional fixer options to
+  `markdownlint-cli2`. ALE always adds the required `--fix` option.
 
 
 ===============================================================================

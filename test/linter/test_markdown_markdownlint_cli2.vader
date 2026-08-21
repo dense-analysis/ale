@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_linters
+  call ale#assert#SetUpLinterTest('markdown', 'markdownlint_cli2')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default markdownlint-cli2 command should be correct):
+  AssertLinter
+  \ 'markdownlint-cli2',
+  \ ale#Escape('markdownlint-cli2') . ' %s'
+
+Execute(The executable and options should be configurable):
+  let g:ale_markdown_markdownlint_cli2_executable = 'foo bar'
+  let g:ale_markdown_markdownlint_cli2_options = '--no-globs'
+
+  AssertLinter 'foo bar', ale#Escape('foo bar') . ' --no-globs %s'
+
+Execute(markdownlint-cli2 should select the markdownlint-cli2 linter):
+  let g:ale_linters = {'markdown': ['markdownlint-cli2']}
+
+  AssertEqual
+  \ ['markdownlint_cli2'],
+  \ map(ale#linter#Get('markdown'), 'v:val.name')

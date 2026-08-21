@@ -3780,7 +3780,8 @@ documented in additional help files.
     cspell................................|ale-markdown-cspell|
     dprint................................|ale-markdown-dprint|
     harper................................|ale-markdown-harper|
-    markdownlint..........................|ale-markdown-markdownlint|
+    markdownlint-cli......................|ale-markdown-markdownlint-cli|
+    markdownlint-cli2.....................|ale-markdown-markdownlint-cli2|
     marksman..............................|ale-markdown-marksman|
     mdformat..............................|ale-markdown-mdformat|
     mdl...................................|ale-markdown-mdl|

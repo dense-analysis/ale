@@ -4,14 +4,25 @@ Before:
 After:
   call ale#assert#TearDownFixerTest()
 
-Execute:
+Execute(The default command should use a temporary file):
   AssertFixer {
-  \ 'command': ale#Escape('markdownlint') . ' --fix',
+  \ 'command': ale#Escape('markdownlint') . ' --fix %t',
+  \ 'read_temporary_file': 1,
   \}
 
-Execute:
+Execute(The executable should be configurable):
   let g:ale_markdownlint_executable = 'custom_markdownlint'
-  
+
   AssertFixer {
-  \ 'command': ale#Escape('custom_markdownlint') . ' --fix',
+  \ 'command': ale#Escape('custom_markdownlint') . ' --fix %t',
+  \ 'read_temporary_file': 1,
+  \}
+
+Execute(Custom options should not remove the required --fix option):
+  let g:ale_markdownlint_executable = 'markdownlint'
+  let g:ale_markdownlint_options = '--quiet'
+
+  AssertFixer {
+  \ 'command': ale#Escape('markdownlint') . ' --fix --quiet %t',
+  \ 'read_temporary_file': 1,
   \}

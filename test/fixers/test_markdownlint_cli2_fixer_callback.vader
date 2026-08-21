@@ -1,0 +1,28 @@
+Before:
+  call ale#assert#SetUpFixerTest('markdown', 'markdownlint-cli2')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The default command should use a temporary file):
+  AssertFixer {
+  \ 'command': ale#Escape('markdownlint-cli2') . ' --fix %t',
+  \ 'read_temporary_file': 1,
+  \}
+
+Execute(The executable should be configurable):
+  let g:ale_markdownlint_cli2_executable = 'custom_markdownlint_cli2'
+
+  AssertFixer {
+  \ 'command': ale#Escape('custom_markdownlint_cli2') . ' --fix %t',
+  \ 'read_temporary_file': 1,
+  \}
+
+Execute(Custom options should not remove the required --fix option):
+  let g:ale_markdownlint_cli2_executable = 'markdownlint-cli2'
+  let g:ale_markdownlint_cli2_options = '--no-globs'
+
+  AssertFixer {
+  \ 'command': ale#Escape('markdownlint-cli2') . ' --fix --no-globs %t',
+  \ 'read_temporary_file': 1,
+  \}

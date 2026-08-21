@@ -1,6 +1,23 @@
 " Author: Ty-Lucas Kelley <tylucaskelley@gmail.com>
 " Description: Adds support for markdownlint
 
+function! ale#handlers#markdownlint#GetExecutable(buffer, name) abort
+    return ale#Var(a:buffer, 'markdown_' . a:name . '_executable')
+endfunction
+
+function! ale#handlers#markdownlint#GetCommand(buffer, name) abort
+    let l:executable = ale#handlers#markdownlint#GetExecutable(
+    \   a:buffer,
+    \   a:name,
+    \)
+    let l:options = ale#Var(
+    \   a:buffer,
+    \   'markdown_' . a:name . '_options',
+    \)
+
+    return ale#Escape(l:executable) . ale#Pad(l:options) . ' %s'
+endfunction
+
 function! ale#handlers#markdownlint#Handle(buffer, lines) abort
     let l:pattern=': \?\(\d\+\)\(:\(\d\+\)\?\)\? \(error\|warning\)\? \?\(MD\d\{3}/[A-Za-z0-9-/]\+\) \(.*\)$'
     let l:output=[]
