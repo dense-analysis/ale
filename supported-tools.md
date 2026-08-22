@@ -144,7 +144,7 @@ formatting.
   * [coffee](http://coffeescript.org/)
   * [coffeelint](https://www.npmjs.com/package/coffeelint)
 * Crystal
-  * [ameba](https://github.com/veelenga/ameba) :floppy_disk:
+  * [ameba](https://github.com/crystal-ameba/ameba) :floppy_disk:
   * [crystal](https://crystal-lang.org/) :floppy_disk:
 * CSS
   * [VSCode CSS language server](https://github.com/hrsh7th/vscode-langservers-extracted)
