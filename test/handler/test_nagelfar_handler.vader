@@ -172,3 +172,18 @@ Execute(The nagelfar handler should parse lines correctly):
   \   'Line  90: E Wrong number of arguments (1) to "if"',
   \   'Line  93: N Close brace not aligned with line 90 (4 0)',
   \ ])
+
+Execute(Test with file name prefix):
+  file def.tcl
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 7,
+  \     'type': 'E',
+  \     'text': 'Unknown variable "cep"'
+  \   },
+  \ ],
+  \ ale_linters#tcl#nagelfar#Handle(bufnr(''), [
+  \   'abc.tcl: Line   5: W Found constant "bepa" which is also a variable.',
+  \   expand('%:p') . ': Line   7: E Unknown variable "cep"',
+  \ ])
