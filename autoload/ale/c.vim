@@ -140,33 +140,43 @@ function! ale#c#ParseCFlags(path_prefix, should_quote, raw_arguments) abort
     let l:items = []
     let l:option_index = 0
 
+    " Options that can have a relative path as argument or attached.
+    let l:path_opts
+        \ = [ '-I', '-iquote', '-isystem', '-idirafter', '-iframework' ]
+
     while l:option_index < len(l:arguments)
         let l:option = l:arguments[l:option_index]
         let l:option_index = l:option_index + 1
 
         " Include options, that may need relative path fix
-        if stridx(l:option, '-I') == 0
-        \ || stridx(l:option, '-iquote') == 0
-        \ || stridx(l:option, '-isystem') == 0
-        \ || stridx(l:option, '-idirafter') == 0
-        \ || stridx(l:option, '-iframework') == 0
-            if stridx(l:option, '-I') == 0 && l:option isnot# '-I'
-                let l:arg = join(split(l:option, '\zs')[2:], '')
-                let l:option = '-I'
-            else
-                let l:arg = l:arguments[l:option_index]
-                let l:option_index = l:option_index + 1
-            endif
+        let l:did_relpath = v:false
+        for l:opt in l:path_opts
+            if stridx(l:option, l:opt) == 0
+                if l:option is# l:opt " with a space, e.g. -iquote <dir>
+                    let l:arg = l:arguments[l:option_index]
+                    let l:option_index = l:option_index + 1
+                else " without space, e.g. -iquote<dir>
+                    let l:arg = l:option[strlen(l:opt):]
+                    let l:option = l:opt
+                endif
 
-            " Fix relative paths if needed
-            if !ale#path#IsAbsolute(l:arg)
-                let l:rel_path = substitute(l:arg, '"', '', 'g')
-                let l:rel_path = substitute(l:rel_path, '''', '', 'g')
-                let l:arg = ale#path#GetAbsPath(a:path_prefix, l:rel_path)
-            endif
+                " Fix relative paths if needed
+                if !ale#path#IsAbsolute(l:arg)
+                    let l:rel_path = substitute(l:arg, '"', '', 'g')
+                    let l:rel_path = substitute(l:rel_path, '''', '', 'g')
+                    let l:arg = ale#path#GetAbsPath(a:path_prefix, l:rel_path)
+                endif
 
-            call add(l:items, [1, l:option])
-            call add(l:items, [1, ale#Escape(l:arg)])
+                call add(l:items, [1, l:option])
+                call add(l:items, [1, ale#Escape(l:arg)])
+
+                let l:did_relpath = v:true
+                break
+            endif
+        endfor
+
+        if l:did_relpath
+            continue
         " Options with arg that can be grouped with the option or separate
         elseif stridx(l:option, '-D') == 0 || stridx(l:option, '-B') == 0
             if l:option is# '-D' || l:option is# '-B'
