@@ -171,6 +171,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['eruby'],
 \       'description': 'Apply erblint --autocorrect to a file.',
 \   },
+\   'hamllint': {
+\       'function': 'ale#fixers#hamllint#Fix',
+\       'suggested_filetypes': ['haml'],
+\       'description': 'Fix Haml files with haml-lint --auto-correct-only.',
+\   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
 \       'suggested_filetypes': ['javascript', 'typescript', 'astro'],

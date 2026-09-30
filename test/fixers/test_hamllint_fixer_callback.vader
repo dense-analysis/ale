@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpFixerTest('haml', 'hamllint')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The default command should be correct):
+  AssertFixer {
+  \ 'command': ale#Escape('haml-lint')
+  \   . ' --auto-correct-only --stderr --stdin %s',
+  \}
+
+Execute(The executable can be overridden):
+  let b:ale_haml_hamllint_executable = 'bin/haml-lint'
+
+  AssertFixer {
+  \ 'command': ale#Escape('bin/haml-lint')
+  \   . ' --auto-correct-only --stderr --stdin %s',
+  \}
