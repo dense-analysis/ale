@@ -1,0 +1,122 @@
+Before:
+  Save g:ale_close_preview_on_insert
+  Save g:ale_floating_preview_popup_opts
+
+  let g:ale_close_preview_on_insert = 0
+  let g:ale_floating_preview_popup_opts = {'maxheight': 4}
+
+  runtime autoload/ale/floating_preview.vim
+
+  " Press keys through the popup filter, and return the first line shown
+  " after each key along with the height of the popup.
+  function! Press(id, keys) abort
+    let l:result = []
+
+    for l:key in a:keys
+      call call(popup_getoptions(a:id).filter, [a:id, l:key])
+      call add(l:result, [
+      \ popup_getpos(a:id).firstline,
+      \ popup_getpos(a:id).core_height,
+      \])
+    endfor
+
+    return l:result
+  endfunction
+
+After:
+  Restore
+
+  if has('popupwin')
+    call popup_clear(1)
+  endif
+
+  unlet! w:preview
+  delfunction Press
+
+Execute(Scroll keys should scroll Vim popups and stop at the edges):
+  if has('popupwin')
+    let id = ale#floating_preview#Show(map(range(1, 10), 'string(v:val)'))
+
+    AssertEqual
+    \ [[2, 4], [4, 4], [7, 4], [7, 4], [5, 4], [4, 4], [1, 4], [1, 4]],
+    \ Press(id, [
+    \   "\<C-e>", "\<C-d>", "\<C-f>", "\<C-d>",
+    \   "\<C-u>", "\<C-y>", "\<C-b>", "\<C-u>",
+    \ ])
+  endif
+
+Execute(Scrolling should reach the end of wrapped text):
+  if has('popupwin')
+    let g:ale_floating_preview_popup_opts = {'maxheight': 4, 'maxwidth': 20}
+    let id = ale#floating_preview#Show(
+    \ ['first', repeat('a', 50), repeat('b', 50), 'last']
+    \)
+
+    call Press(id, repeat(["\<C-e>"], 5))
+
+    AssertEqual
+    \ [3, 4, 4],
+    \ [
+    \   popup_getpos(id).firstline,
+    \   popup_getpos(id).lastline,
+    \   popup_getpos(id).core_height,
+    \ ]
+  endif
+
+Execute(Keys should pass through when there is nothing to scroll):
+  if has('popupwin')
+    let id = ale#floating_preview#Show(['one', 'two'])
+    let Filter = popup_getoptions(id).filter
+    " Vim draws the popup before keys are typed.
+    redraw
+
+    AssertEqual 0, Filter(id, "\<C-d>")
+    AssertEqual 0, Filter(id, "\<C-e>")
+  endif
+
+Execute(Other keys should pass through):
+  if has('popupwin')
+    let id = ale#floating_preview#Show(map(range(1, 10), 'string(v:val)'))
+    let Filter = popup_getoptions(id).filter
+
+    AssertEqual 0, Filter(id, 'j')
+    AssertEqual 0, Filter(id, "\<C-n>")
+    AssertEqual 1, popup_getpos(id).firstline
+  endif
+
+Execute(Escape should close the popup):
+  if has('popupwin')
+    let id = ale#floating_preview#Show(['one'])
+
+    AssertEqual 1, call(popup_getoptions(id).filter, [id, "\<Esc>"])
+    AssertEqual -1, index(popup_list(), id)
+  endif
+
+Execute(Typed keys should reach the filter in normal mode):
+  if has('popupwin')
+    let id = ale#floating_preview#Show(map(range(1, 10), 'string(v:val)'))
+
+    call feedkeys("\<C-d>", 'xt')
+
+    AssertEqual 3, popup_getpos(id).firstline
+  endif
+
+Execute(The popup width should cover all lines on older Vim versions):
+  if has('popupwin')
+    let id = ale#floating_preview#Show(
+    \ map(range(1, 9), 'string(v:val)') + [repeat('x', 30)]
+    \)
+
+    AssertEqual
+    \ has('patch-9.2.0419') ? 0 : 30,
+    \ popup_getoptions(id).minwidth
+  endif
+
+Execute(The popup width should not be changed when users set it):
+  if has('popupwin')
+    let g:ale_floating_preview_popup_opts = {'maxheight': 4, 'maxwidth': 10}
+    let id = ale#floating_preview#Show([repeat('x', 30)])
+
+    AssertEqual 0, popup_getoptions(id).minwidth
+    AssertEqual 10, popup_getoptions(id).maxwidth
+  endif
