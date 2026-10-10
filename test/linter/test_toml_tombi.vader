@@ -2,7 +2,13 @@ Before:
   Save g:ale_toml_tombi_online
   call ale#assert#SetUpLinterTest('toml', 'tombi')
 
+  let g:tombi_vcs_root_temp_dir = ale#path#Simplify(tempname())
+  call mkdir(g:tombi_vcs_root_temp_dir, 'p')
+
 After:
+  call delete(g:tombi_vcs_root_temp_dir, 'rf')
+  unlet! g:tombi_vcs_root_temp_dir
+
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
@@ -22,3 +28,11 @@ Execute(The project root should be detected correctly in Python projects):
   call ale#test#SetFilename('../test-files/toml/tombi/pyprojecttoml/subdir/file.ext')
 
   AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/toml/tombi/pyprojecttoml')
+
+Execute(The project root should be detected correctly with a VCS root):
+  call mkdir(g:tombi_vcs_root_temp_dir . '/project/subdir', 'p')
+  call mkdir(g:tombi_vcs_root_temp_dir . '/project/.git')
+  call writefile([], g:tombi_vcs_root_temp_dir . '/project/subdir/file.ext')
+  call ale#test#SetFilename(g:tombi_vcs_root_temp_dir . '/project/subdir/file.ext')
+
+  AssertLSPProject ale#path#Simplify(g:tombi_vcs_root_temp_dir . '/project')

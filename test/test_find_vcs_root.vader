@@ -1,0 +1,87 @@
+Before:
+  Save g:ale_vcs_root
+  Save b:ale_vcs_root
+
+  call ale#test#SetDirectory('/testplugin/test')
+
+  let g:vcs_root_temp_dir = ale#path#Simplify(tempname())
+  call mkdir(g:vcs_root_temp_dir, 'p')
+  let g:ale_vcs_root = ['git', 'got', 'hg']
+
+After:
+  call ale#test#RestoreDirectory()
+  call delete(g:vcs_root_temp_dir, 'rf')
+  unlet! g:vcs_root_temp_dir
+
+  Restore
+
+Execute(FindVCSRoot should find a simple git directory):
+  call mkdir(g:vcs_root_temp_dir . '/simple/project/src', 'p')
+  call mkdir(g:vcs_root_temp_dir . '/simple/project/.git')
+  call writefile([], g:vcs_root_temp_dir . '/simple/project/src/file.toml')
+  call ale#test#SetFilename(g:vcs_root_temp_dir . '/simple/project/src/file.toml')
+
+  AssertEqual
+  \ ale#path#Simplify(g:vcs_root_temp_dir . '/simple/project'),
+  \ ale#path#FindVCSRoot(bufnr(''))
+
+Execute(FindVCSRoot should find git worktree files):
+  call mkdir(g:vcs_root_temp_dir . '/with-worktree/project/src', 'p')
+  call mkdir(g:vcs_root_temp_dir . '/with-worktree/project/.git')
+  call mkdir(g:vcs_root_temp_dir . '/with-worktree/project/wt/src', 'p')
+  call writefile([], g:vcs_root_temp_dir . '/with-worktree/project/wt/.git')
+  call writefile([], g:vcs_root_temp_dir . '/with-worktree/project/wt/src/file.toml')
+  call ale#test#SetFilename(g:vcs_root_temp_dir . '/with-worktree/project/wt/src/file.toml')
+
+  AssertEqual
+  \ ale#path#Simplify(g:vcs_root_temp_dir . '/with-worktree/project/wt'),
+  \ ale#path#FindVCSRoot(bufnr(''))
+
+Execute(FindVCSRoot should choose the deepest root with the same marker):
+  call mkdir(g:vcs_root_temp_dir . '/nested_same/outer/inner/src', 'p')
+  call mkdir(g:vcs_root_temp_dir . '/nested_same/outer/.git')
+  call mkdir(g:vcs_root_temp_dir . '/nested_same/outer/inner/.git')
+  call writefile([], g:vcs_root_temp_dir . '/nested_same/outer/inner/src/file.toml')
+  call ale#test#SetFilename(g:vcs_root_temp_dir . '/nested_same/outer/inner/src/file.toml')
+
+  AssertEqual
+  \ ale#path#Simplify(g:vcs_root_temp_dir . '/nested_same/outer/inner'),
+  \ ale#path#FindVCSRoot(bufnr(''))
+
+Execute(FindVCSRoot should choose the deepest root with different markers):
+  call mkdir(g:vcs_root_temp_dir . '/nested_different/project/module/src', 'p')
+  call mkdir(g:vcs_root_temp_dir . '/nested_different/project/.got')
+  call mkdir(g:vcs_root_temp_dir . '/nested_different/project/module/.hg')
+  call writefile([], g:vcs_root_temp_dir . '/nested_different/project/module/src/file.toml')
+  call ale#test#SetFilename(g:vcs_root_temp_dir . '/nested_different/project/module/src/file.toml')
+
+  AssertEqual
+  \ ale#path#Simplify(g:vcs_root_temp_dir . '/nested_different/project/module'),
+  \ ale#path#FindVCSRoot(bufnr(''))
+
+Execute(FindVCSRoot should obey the global marker selector):
+  let g:ale_vcs_root = ['git']
+
+  call mkdir(g:vcs_root_temp_dir . '/global_selector/outer/inner/src', 'p')
+  call mkdir(g:vcs_root_temp_dir . '/global_selector/outer/.git')
+  call mkdir(g:vcs_root_temp_dir . '/global_selector/outer/inner/.hg')
+  call writefile([], g:vcs_root_temp_dir . '/global_selector/outer/inner/src/file.toml')
+  call ale#test#SetFilename(g:vcs_root_temp_dir . '/global_selector/outer/inner/src/file.toml')
+
+  AssertEqual
+  \ ale#path#Simplify(g:vcs_root_temp_dir . '/global_selector/outer'),
+  \ ale#path#FindVCSRoot(bufnr(''))
+
+Execute(FindVCSRoot should let buffer marker selectors override globals):
+  let g:ale_vcs_root = ['git']
+  let b:ale_vcs_root = ['hg']
+
+  call mkdir(g:vcs_root_temp_dir . '/buffer_selector/outer/inner/src', 'p')
+  call mkdir(g:vcs_root_temp_dir . '/buffer_selector/outer/.git')
+  call mkdir(g:vcs_root_temp_dir . '/buffer_selector/outer/inner/.hg')
+  call writefile([], g:vcs_root_temp_dir . '/buffer_selector/outer/inner/src/file.toml')
+  call ale#test#SetFilename(g:vcs_root_temp_dir . '/buffer_selector/outer/inner/src/file.toml')
+
+  AssertEqual
+  \ ale#path#Simplify(g:vcs_root_temp_dir . '/buffer_selector/outer/inner'),
+  \ ale#path#FindVCSRoot(bufnr(''))

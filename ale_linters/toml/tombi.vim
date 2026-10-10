@@ -32,11 +32,11 @@ function! ale_linters#toml#tombi#GetProjectRoot(buffer) abort
         return fnamemodify(l:pyproject_file . '/', ':p:h:h')
     endif
 
-    " Try to find nearest `git` directory
-    let l:gitdir = ale#path#FindNearestFile(a:buffer, '.git')
+    " Try to find the nearest VCS root.
+    let l:vcs_root = ale#path#FindVCSRoot(a:buffer)
 
-    if !empty(l:gitdir)
-        return fnamemodify(l:gitdir . '/', ':p:h:h')
+    if !empty(l:vcs_root)
+        return l:vcs_root
     endif
 
     return ''
