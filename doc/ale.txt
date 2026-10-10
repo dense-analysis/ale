@@ -2355,6 +2355,17 @@ g:ale_root
   detect a project root. If this, too, yields no result, and the linter is an
   LSP linter, it will not run.
 
+                                                         *ale-options.vcs_root*
+                                                               *g:ale_vcs_root*
+                                                               *b:ale_vcs_root*
+vcs_root
+g:ale_vcs_root
+  Type: |List|
+  Default: `['git', 'got', 'hg']`
+
+  This option configures which version control systems ALE will check when
+  looking for project roots. Supported values are `'git'`, `'got'`, and `'hg'`.
+
                                                       *ale-options.save_hidden*
                                                             *g:ale_save_hidden*
 save_hidden
