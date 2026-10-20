@@ -240,7 +240,7 @@ Execute(tsserver definition requests should be sent):
   \   [0, 'ts@definition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(tsserver type definition requests should be sent):
   runtime ale_linters/typescript/tsserver.vim
@@ -264,7 +264,7 @@ Execute(tsserver type definition requests should be sent):
   \   [0, 'ts@typeDefinition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(tsserver implementation requests should be sent):
   runtime ale_linters/typescript/tsserver.vim
@@ -288,7 +288,7 @@ Execute(tsserver implementation requests should be sent):
   \   [0, 'ts@implementation', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(tsserver tab definition requests should be sent):
   runtime ale_linters/typescript/tsserver.vim
@@ -312,7 +312,7 @@ Execute(tsserver tab definition requests should be sent):
   \   [0, 'ts@definition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(The default navigation type should be used):
   runtime ale_linters/typescript/tsserver.vim
@@ -337,7 +337,7 @@ Execute(The default navigation type should be used):
   \   [0, 'ts@definition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Given python(Some Python file):
   foo
@@ -502,7 +502,7 @@ Execute(LSP definition requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(LSP type definition requests should be sent):
   runtime ale_linters/python/pylsp.vim
@@ -538,7 +538,7 @@ Execute(LSP type definition requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(LSP implementation requests should be sent):
   runtime ale_linters/python/pylsp.vim
@@ -574,7 +574,7 @@ Execute(LSP implementation requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(LSP tab definition requests should be sent):
   runtime ale_linters/python/pylsp.vim
@@ -610,7 +610,7 @@ Execute(LSP tab definition requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(LSP tab type definition requests should be sent):
   runtime ale_linters/python/pylsp.vim
@@ -646,7 +646,7 @@ Execute(LSP tab type definition requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#definition#GetMap()
 
 Execute(LSP tab implementation requests should be sent):
   runtime ale_linters/python/pylsp.vim
@@ -682,4 +682,4 @@ Execute(LSP tab implementation requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
+  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#definition#GetMap()
