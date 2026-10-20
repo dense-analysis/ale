@@ -21,9 +21,13 @@ function! ale_linters#fortran#fortitude#Handle(buffer, lines) abort
         let l:prefix = matchstr(l:error['code'], '^\a\+')
         let l:type = get(s:severity_map, l:prefix, 'I')
 
+        " Fortitude renamed `row` to `line` (PlasmaFAIR/fortitude@0eda11975096517b16bf30bf683011f83a24e55e)
+        let l:line = get(l:error['location'], 'line', get(l:error['location'], 'row'))
+        let l:end_line = get(l:error['end_location'], 'line', get(l:error['end_location'], 'row'))
+
         call add(l:output, {
-        \   'lnum': l:error['location']['row'],
-        \   'end_lnum': l:error['end_location']['row'],
+        \   'lnum': l:line,
+        \   'end_lnum': l:end_line,
         \   'col': l:error['location']['column'],
         \   'end_col': l:error['end_location']['column'],
         \   'text': l:error['message'],
