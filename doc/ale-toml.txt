@@ -9,6 +9,12 @@ See |ale-dprint-options| and https://dprint.dev/plugins/toml/.
 
 
 ===============================================================================
+oxfmt                                                    *ale-typescript-oxfmt*
+
+See |ale-javascript-oxfmt| for information about the available options.
+
+
+===============================================================================
 tombi                                                          *ale-toml-tombi*
 
   `'tombi'` is a TOML formatter, linter, and language server.

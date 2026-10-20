@@ -43,6 +43,12 @@ g:ale_less_lessc_use_global
 
 
 ===============================================================================
+oxfmt                                                    *ale-typescript-oxfmt*
+
+See |ale-javascript-oxfmt| for information about the available options.
+
+
+===============================================================================
 prettier                                                    *ale-less-prettier*
 
 See |ale-javascript-prettier| for information about the available options.

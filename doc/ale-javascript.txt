@@ -256,6 +256,64 @@ g:ale_javascript_jshint_use_global
 
 
 ===============================================================================
+oxfmt                                                  *ale-javascript-oxfmt*
+
+                                     *ale-options.javascript_oxfmt_executable*
+                                           *g:ale_javascript_oxfmt_executable*
+                                           *b:ale_javascript_oxfmt_executable*
+javascript_oxfmt_executable
+g:ale_javascript_oxfmt_executable
+  Type: |String|
+  Default: `'oxfmt'`
+
+  See |ale-integrations-local-executables|
+
+                                        *ale-options.javascript_oxfmt_options*
+                                              *g:ale_javascript_oxfmt_options*
+                                              *b:ale_javascript_oxfmt_options*
+javascript_oxfmt_options
+g:ale_javascript_oxfmt_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to oxfmt.
+
+
+===============================================================================
+oxlint                                                  *ale-javascript-oxlint*
+
+                                     *ale-options.javascript_oxlint_executable*
+                                           *g:ale_javascript_oxlint_executable*
+                                           *b:ale_javascript_oxlint_executable*
+javascript_oxlint_executable
+g:ale_javascript_oxlint_executable
+  Type: |String|
+  Default: `'oxlint'`
+
+  See |ale-integrations-local-executables|
+
+                                        *ale-options.javascript_oxlint_options*
+                                              *g:ale_javascript_oxlint_options*
+                                              *b:ale_javascript_oxlint_options*
+javascript_oxlint_options
+g:ale_javascript_oxlint_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to oxlint.
+
+                                     *ale-options.javascript_oxlint_use_global*
+                                           *g:ale_javascript_oxlint_use_global*
+                                           *b:ale_javascript_oxlint_use_global*
+javascript_oxlint_use_global
+g:ale_javascript_oxlint_use_global
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 prettier                                              *ale-javascript-prettier*
 
                                    *ale-options.javascript_prettier_executable*

@@ -176,6 +176,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript', 'astro'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
+\   'oxfmt': {
+\       'function': 'ale#fixers#oxfmt#Fix',
+\       'suggested_filetypes': ['javascript', 'typescript', 'typescriptreact', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'toml', 'yaml'],
+\       'description': 'Apply oxfmt to a file.',
+\   },
 \   'mix_format': {
 \       'function': 'ale#fixers#mix_format#Fix',
 \       'suggested_filetypes': ['elixir'],

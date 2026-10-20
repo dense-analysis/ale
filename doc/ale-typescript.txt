@@ -138,6 +138,18 @@ options for `eslint` too. See: |ale-javascript-eslint|.
 
 
 ===============================================================================
+oxfmt                                                    *ale-typescript-oxfmt*
+
+See |ale-javascript-oxfmt| for information about the available options.
+
+
+===============================================================================
+oxlint                                                  *ale-typescript-oxlint*
+
+See |ale-javascript-oxlint| for information about the available options.
+
+
+===============================================================================
 prettier                                              *ale-typescript-prettier*
 
 See |ale-javascript-prettier| for information about the available options.

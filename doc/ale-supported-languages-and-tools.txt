@@ -143,6 +143,7 @@ Notes:
   * `csslint`
   * dprint
   * `fecs`
+  * `oxfmt`
   * `prettier`
   * `stylelint`
 * Cucumber
@@ -265,6 +266,7 @@ Notes:
   * dprint
   * `eslint`
   * `gqlint`
+  * `oxfmt`
   * `prettier`
 * Groovy
   * `npm-groovy-lint`
@@ -354,6 +356,8 @@ Notes:
   * `flow`
   * `jscs`
   * `jshint`
+  * `oxfmt`
+  * `oxlint`
   * `prettier`
   * `prettier-eslint`
   * `prettier-standard`
@@ -375,6 +379,7 @@ Notes:
   * `jq`
   * `json.tool`
   * `jsonlint`
+  * `oxfmt`
   * `prettier`
   * `spectral`
 * JSON5
@@ -409,6 +414,7 @@ Notes:
 * Less
   * dprint
   * `lessc`
+  * `oxfmt`
   * `prettier`
   * `stylelint`
 * LilyPond
@@ -687,6 +693,7 @@ Notes:
   * `scalastyle`
 * SCSS
   * dprint
+  * `oxfmt`
   * `prettier`
   * `sass-lint`
   * `scss-lint`
@@ -754,6 +761,7 @@ Notes:
   * `thriftcheck`
 * TOML
   * `dprint`
+  * `oxfmt`
   * `tombi`
 * Twig
   * `dprint`
@@ -764,6 +772,8 @@ Notes:
   * `dprint`
   * `eslint`
   * `fecs`
+  * `oxfmt`
+  * `oxlint`
   * `prettier`
   * `standard`
   * `tslint`
@@ -820,6 +830,7 @@ Notes:
   * `circleci`!!
   * `dprint`
   * `gitlablint`
+  * `oxfmt`
   * `prettier`
   * `spectral`
   * `swaglint`

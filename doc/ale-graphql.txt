@@ -20,6 +20,12 @@ You will need the GraphQL ESLint plugin installed for this to work.
 gqlint                                                     *ale-graphql-gqlint*
 
 ===============================================================================
+oxfmt                                                    *ale-typescript-oxfmt*
+
+See |ale-javascript-oxfmt| for information about the available options.
+
+
+===============================================================================
 prettier                                                 *ale-graphql-prettier*
 
 See |ale-javascript-prettier| for information about the available options.

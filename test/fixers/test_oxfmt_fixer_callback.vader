@@ -1,0 +1,25 @@
+Before:
+  Save g:ale_sql_oxfmt_executable
+  Save g:ale_sql_oxfmt_options
+
+After:
+  Restore
+
+Execute(The oxfmt callback should return the correct default values):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('oxfmt')
+  \ },
+  \ ale#fixers#oxfmt#Fix(bufnr(''))
+
+Execute(The oxfmt executable and options should be configurable):
+  let g:ale_sql_oxfmt_executable = '/path/to/sqlfmt'
+  let g:ale_sql_oxfmt_options = '--write'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/oxfmt')
+  \     . ' -w'
+  \     . ' -write',
+  \ },
+  \ ale#fixers#oxfmt#Fix(bufnr(''))

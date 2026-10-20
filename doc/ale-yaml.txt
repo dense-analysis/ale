@@ -80,6 +80,12 @@ See |ale-dprint-options| and https://dprint.dev/plugins/pretty_yaml/.
 
 
 ===============================================================================
+oxfmt                                                    *ale-typescript-oxfmt*
+
+See |ale-javascript-oxfmt| for information about the available options.
+
+
+===============================================================================
 prettier                                                    *ale-yaml-prettier*
 
 Website: https://github.com/prettier/prettier
