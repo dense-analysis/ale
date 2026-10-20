@@ -835,6 +835,11 @@ or |g:ale_floating_preview| is set to `true` or `1`, the hover information
 will show in a floating window. The borders of the floating preview window can
 be customized by setting |g:ale_floating_window_border|.
 
+In Vim, <Esc> closes a floating preview. If it has more text than fits, then
+|CTRL-E|, |CTRL-Y|, |CTRL-D|, |CTRL-U|, |CTRL-F|, and |CTRL-B| scroll the
+preview instead of the buffer. Set `filter` in
+|g:ale_floating_preview_popup_opts| to change this. See |popup-filter|.
+
 For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
 |balloonexpr| commands in terminals can cause scrolling issues in terminals,
 so ALE will not attempt to show balloons unless |g:ale_set_balloons| is set to
