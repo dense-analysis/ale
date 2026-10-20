@@ -33,6 +33,7 @@ class Source(Base):
             'typescript': r'(\.|\'|")\w*$',
             'cpp': r'(\.|::|->)\w*$',
             'c': r'(\.|->)\w*$',
+            'php': r'(::|->)\w*$',
         }
 
     # Returns an integer for the start position, as with omnifunc.
