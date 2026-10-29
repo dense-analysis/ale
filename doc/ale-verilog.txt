@@ -14,6 +14,9 @@ ALE can use eight different linters for Verilog HDL:
   slang:
     Using `slang -Weverything`
 
+  slang_server:
+    Using `slang-server`
+
   verible_ls
     Using `verible-verilog-ls`
 
@@ -88,6 +91,39 @@ g:ale_verilog_slang_options
   Default: `''`
 
   This variable can be changed to modify 'slang' command arguments.
+
+===============================================================================
+slang_server                                         *ale-verilog-slang-server*
+
+                                   *ale-config.verilog_slang_server_executable*
+                                        *g:ale_verilog_slang_server_executable*
+                                        *b:ale_verilog_slang_server_executable*
+verilog_slang_server_executable
+g:ale_verilog_slang_server_executable
+  Type: |String|
+  Default: `'slang-server'`
+
+  This variable can be modifies to change the executable path for `slang_server`
+
+                                       *ale-config.verilog_slang_server_config*
+                                            *g:ale_verilog_slang_server_config*
+                                            *b:ale_verilog_slang_server_config*
+verilog_slang_server_config
+g:ale_verilog_slang_server_config
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary with configuration settings for `slang_server`
+
+                                      *ale-config.verilog_slang_server_options*
+                                           *g:ale_verilog_slang_server_options*
+                                           *b:ale_verilog_slang_server_options*
+verilog_slang_server_options
+g:ale_verilog_slang_server_options
+  Type: |String|
+  Default: `''`
+
+  Additional flags for `slang_server`
 
 ===============================================================================
 verible_ls                                             *ale-verilog-verible-ls*
