@@ -24,6 +24,7 @@ Execute(We should handle basic output of ruff correctly):
   \   {
   \     'lnum': 2,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'F821',
   \     'type': 'W',
   \     'end_col': 7,
@@ -44,6 +45,7 @@ Execute(We should handle mixed error lines and JSON output from ruff):
   \   {
   \     'lnum': 2,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'F821',
   \     'type': 'W',
   \     'end_col': 7,
@@ -62,6 +64,7 @@ Execute(Warnings about trailing whitespace should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'end_lnum': 6,
   \     'end_col': 1,
   \     'code': 'W291',
@@ -71,6 +74,7 @@ Execute(Warnings about trailing whitespace should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'end_lnum': 6,
   \     'end_col': 1,
   \     'code': 'W293',
@@ -99,6 +103,7 @@ Execute(Warnings about trailing blank lines should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'end_lnum': 6,
   \     'end_col': 1,
   \     'code': 'W391',
@@ -127,6 +132,7 @@ Execute(python_ruff_human_readable should use rule names instead of codes):
   \   {
   \     'lnum': 2,
   \     'col': 1,
+  \     'vcol': 1,
   \     'end_lnum': 2,
   \     'end_col': 7,
   \     'code': 'undefined-name',

@@ -62,6 +62,7 @@ function! ale_linters#python#pycodestyle#Handle(buffer, lines) abort
         let l:item = {
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
+        \   'vcol': 1,
         \   'type': l:match[4][0],
         \   'sub_type': 'style',
         \   'text': l:match[5],

@@ -112,6 +112,7 @@ function! ale_linters#python#ruff#Handle(buffer, lines) abort
         call add(l:output, {
         \   'lnum': l:item.location.row,
         \   'col': l:item.location.column,
+        \   'vcol': 1,
         \   'end_lnum': l:item.end_location.row,
         \   'end_col': l:item.end_location.column - 1,
         \   'code': ale#Var(a:buffer, 'python_ruff_human_readable') ? l:item.name : l:item.code,

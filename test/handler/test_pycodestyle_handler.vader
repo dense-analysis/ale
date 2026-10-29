@@ -21,6 +21,7 @@ Execute(The pycodestyle handler should parse output):
   \   {
   \     'lnum': 8,
   \     'col': 3,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'text': 'SyntaxError: invalid syntax',
   \     'code': 'E999',
@@ -28,6 +29,7 @@ Execute(The pycodestyle handler should parse output):
   \   {
   \     'lnum': 69,
   \     'col': 11,
+  \     'vcol': 1,
   \     'text': 'multiple imports on one line',
   \     'code': 'E401',
   \     'type': 'E',
@@ -36,6 +38,7 @@ Execute(The pycodestyle handler should parse output):
   \   {
   \     'lnum': 77,
   \     'col': 1,
+  \     'vcol': 1,
   \     'text': 'expected 2 blank lines, found 1',
   \     'code': 'E302',
   \     'type': 'E',
@@ -44,6 +47,7 @@ Execute(The pycodestyle handler should parse output):
   \   {
   \     'lnum': 88,
   \     'col': 5,
+  \     'vcol': 1,
   \     'text': 'expected 1 blank line, found 0',
   \     'code': 'E301',
   \     'type': 'E',
@@ -52,6 +56,7 @@ Execute(The pycodestyle handler should parse output):
   \   {
   \     'lnum': 222,
   \     'col': 34,
+  \     'vcol': 1,
   \     'text': 'deprecated form of raising exception',
   \     'code': 'W602',
   \     'type': 'W',
@@ -60,6 +65,7 @@ Execute(The pycodestyle handler should parse output):
   \   {
   \     'lnum': 544,
   \     'col': 21,
+  \     'vcol': 1,
   \     'text': '.has_key() is deprecated, use ''in''',
   \     'code': 'W601',
   \     'type': 'W',
@@ -81,6 +87,7 @@ Execute(Warnings about trailing whitespace should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'W291',
   \     'type': 'W',
   \     'sub_type': 'style',
@@ -89,6 +96,7 @@ Execute(Warnings about trailing whitespace should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'W293',
   \     'type': 'W',
   \     'sub_type': 'style',
@@ -117,6 +125,7 @@ Execute(Warnings about trailing blank lines should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'W391',
   \     'type': 'W',
   \     'sub_type': 'style',
@@ -143,6 +152,7 @@ Execute(E112 should be a syntax error):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'E112',
   \     'type': 'E',
   \     'text': 'expected an indented block',
