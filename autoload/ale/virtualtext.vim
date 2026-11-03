@@ -210,12 +210,18 @@ function! ale#virtualtext#ShowMessage(buffer, item) abort
             call add(s:hl_list, l:hl_group)
         endif
 
+        let l:align = "after"
+        if !empty(prop_list(l:line, { 'bufnr': a:buffer, 'types': s:hl_list }))
+            let l:align = "below"
+        endif
+
         " We ignore all errors from prop_add.
         silent! call prop_add(l:line, 0, {
         \   'type': l:hl_group,
         \   'text': ' ' . l:msg,
         \   'bufnr': a:buffer,
         \   'text_padding_left': l:col_pad,
+        \   'text_align': l:align,
         \})
     endif
 endfunction
@@ -317,6 +323,10 @@ function! ale#virtualtext#SetTexts(buffer, loclist) abort
         \   sort(l:buffer_list, function('ale#virtualtext#CompareSeverityPerLine')),
         \   {a, b -> a.lnum - b.lnum}
         \)
+    else
+        " l:buffer_list is sorted in the wrong order from some reason. the
+        " maintiner doesn't know why...
+        call reverse(l:buffer_list)
     endif
 
     for l:item in l:buffer_list
