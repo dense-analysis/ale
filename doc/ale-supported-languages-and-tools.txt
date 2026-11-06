@@ -389,6 +389,7 @@ Notes:
   * `fatou`
   * `languageserver`
 * Kotlin
+  * `kotlin-lsp`
   * `kotlinc`!!
   * `ktlint`
   * `languageserver`

@@ -1,0 +1,28 @@
+Before:
+  call ale#assert#SetUpLinterTest('kotlin', 'kotlin_lsp')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'kotlin-lsp', ale#Escape('kotlin-lsp') . ' --stdio'
+
+Execute(The executable should be configurable):
+  let b:ale_kotlin_kotlin_lsp_executable = 'foobar'
+
+  AssertLinter 'foobar', ale#Escape('foobar') . ' --stdio'
+
+Execute(Gradle project roots with build.gradle should be detected correctly):
+  call ale#test#SetFilename('../test-files/gradle/build-gradle-project/src/main/kotlin/dummy.kt')
+
+  AssertLSPProject ale#test#GetFilename('../test-files/gradle/build-gradle-project')
+
+Execute(Maven project roots with pom.xml should be detected correctly):
+  call ale#test#SetFilename('../test-files/maven/maven-kotlin-project/src/main/kotlin/dummy.kt')
+
+  AssertLSPProject ale#test#GetFilename('../test-files/maven/maven-kotlin-project')
+
+Execute(No root should be detected if configuration files can't be found):
+  call ale#test#SetFilename('../test-files/gradle/non-gradle-project/src/main/kotlin/dummy.kt')
+
+  AssertLSPProject ''

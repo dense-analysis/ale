@@ -399,6 +399,7 @@ formatting.
   * [fatou](https://github.com/jolars/fatou) :speech_balloon:
   * [languageserver](https://github.com/JuliaEditorSupport/LanguageServer.jl)
 * Kotlin
+  * [kotlin-lsp](https://github.com/Kotlin/kotlin-lsp)
   * [kotlinc](https://kotlinlang.org) :floppy_disk:
   * [ktlint](https://ktlint.github.io)
   * [languageserver](https://github.com/fwcd/KotlinLanguageServer) see `:help ale-integration-kotlin` for configuration instructions

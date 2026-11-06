@@ -3747,6 +3747,7 @@ documented in additional help files.
     fatou.................................|ale-julia-fatou|
     languageserver........................|ale-julia-languageserver|
   kotlin..................................|ale-kotlin-options|
+    kotlin_lsp............................|ale-kotlin-kotlin-lsp|
     kotlinc...............................|ale-kotlin-kotlinc|
     ktlint................................|ale-kotlin-ktlint|
     languageserver........................|ale-kotlin-languageserver|
