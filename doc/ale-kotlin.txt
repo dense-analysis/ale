@@ -13,6 +13,23 @@ Integration Information
 
 
 ===============================================================================
+kotlin_lsp                                              *ale-kotlin-kotlin-lsp*
+
+                                     *ale-options.kotlin_kotlin_lsp_executable*
+                                           *g:ale_kotlin_kotlin_lsp_executable*
+                                           *b:ale_kotlin_kotlin_lsp_executable*
+kotlin_kotlin_lsp_executable
+g:ale_kotlin_kotlin_lsp_executable
+  Type: |String|
+  Default: `'kotlin-lsp'`
+
+  The executable for the official Kotlin language server by JetBrains.
+  See: https://github.com/Kotlin/kotlin-lsp
+
+  The server is only started for Gradle or Maven projects.
+
+
+===============================================================================
 kotlinc                                                    *ale-kotlin-kotlinc*
 
                                            *ale-options.kotlin_kotlinc_options*
