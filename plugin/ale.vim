@@ -111,6 +111,13 @@ let g:ale_filename_mappings = get(g:, 'ale_filename_mappings', {})
 " This Dictionary configures the default project roots for various linters.
 let g:ale_root = get(g:, 'ale_root', {})
 
+" A List of VCS root markers to use for project root detection.
+let g:ale_vcs_root = get(g:, 'ale_vcs_root', [
+\   'git',
+\   'got',
+\   'hg',
+\])
+
 " These flags dictates if ale uses the quickfix or the loclist (loclist is the
 " default, quickfix overrides loclist).
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', v:true)

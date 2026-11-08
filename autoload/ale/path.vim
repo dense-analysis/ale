@@ -3,6 +3,12 @@
 
 let s:is_windows = has('win32') || has('win64') || has('win32unix')
 
+let s:vcs_root_marker_map = {
+\   'git': {'directories': ['.git'], 'files': ['.git']},
+\   'got': {'directories': ['.got']},
+\   'hg': {'directories': ['.hg']},
+\}
+
 " simplify a path, and fix annoying issues with paths on Windows.
 "
 " Forward slashes are changed to back slashes so path equality works better
@@ -92,6 +98,44 @@ function! ale#path#FindNearestFileOrDirectory(buffer, filename) abort
     endif
 
     return ''
+endfunction
+
+function! s:NearestVCSRoot(nearest_root, marker_path) abort
+    if empty(a:marker_path)
+        return a:nearest_root
+    endif
+
+    let l:root = ale#path#Simplify(ale#path#Dirname(a:marker_path))
+
+    return empty(a:nearest_root) || strlen(l:root) > strlen(a:nearest_root)
+    \   ? l:root
+    \   : a:nearest_root
+endfunction
+
+" Given a buffer, find the nearest root directory for selected version control
+" systems by searching for VCS marker files and directories.
+function! ale#path#FindVCSRoot(buffer) abort
+    let l:nearest_root = ''
+
+    for l:vcs in ale#Var(a:buffer, 'vcs_root')
+        let l:config = get(s:vcs_root_marker_map, l:vcs, {})
+
+        for l:directory in get(l:config, 'directories', [])
+            let l:nearest_root = s:NearestVCSRoot(
+            \   l:nearest_root,
+            \   ale#path#FindNearestDirectory(a:buffer, l:directory)
+            \)
+        endfor
+
+        for l:file in get(l:config, 'files', [])
+            let l:nearest_root = s:NearestVCSRoot(
+            \   l:nearest_root,
+            \   ale#path#FindNearestFile(a:buffer, l:file)
+            \)
+        endfor
+    endfor
+
+    return l:nearest_root
 endfunction
 
 " Given a buffer, a string to search for, and a global fallback for when
