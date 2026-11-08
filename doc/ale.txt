@@ -2348,7 +2348,7 @@ g:ale_root
   This option is used to determine the project root for a linter. If the value
   is a |Dictionary|, it maps a linter to either a |String| containing the
   project root or a |Funcref| to call to look up the root. The |Funcref| is
-  provided the buffer number as its argument. If the the value is a string, it
+  provided the buffer number as its argument. If the value is a string, it
   will be interpreted as the project root itself.
 
   If neither variable yields a result, a linter-specific function is invoked to
@@ -4470,8 +4470,8 @@ documented in additional help files.
     warning and to not style error or warning. They also are mutually
     exclusive and nostyle has priority over style.
 
-  Flags can be combined to create create custom jumping. Thus you can use
-  ":ALENext -wrap -error -nosyle" to jump to the next error which is not a
+  Flags can be combined to create custom jumping. Thus you can use
+  ":ALENext -wrap -error -nostyle" to jump to the next error which is not a
   style error while going back to the beginning of the file if needed.
 
   `:ALEFirst` goes to the first error or warning in the buffer, while `:ALELast`

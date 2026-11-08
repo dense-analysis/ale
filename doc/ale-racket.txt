@@ -27,7 +27,7 @@ g:ale_racket_raco_fmt_executable
   Type: |String|
   Default: `'raco'`
 
-  If the `raco` excutable is not in the `$PATH` environment variable, or you
+  If the `raco` executable is not in the `$PATH` environment variable, or you
   prefer to use one installed in a custom location, set this option to the
   path to the specific `raco` executable.
 
