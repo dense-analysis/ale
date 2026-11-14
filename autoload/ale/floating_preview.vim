@@ -92,6 +92,7 @@ function! s:VimShow(lines, options) abort
     endfor
 
     call popup_settext(w:preview['id'], a:lines)
+    call s:VimPinWidth(w:preview['id'], a:lines)
 
     if g:ale_close_preview_on_insert
         augroup ale_floating_preview_window
@@ -144,6 +145,56 @@ function! s:NvimCreate(options) abort
     let w:preview = {'id': l:winid, 'buffer': l:buffer}
 endfunction
 
+" Before 9.2.0419 Vim sizes popups by the lines in view, so the width changes
+" while scrolling. Size the popup by all of the lines instead.
+function! s:VimPinWidth(winid, lines) abort
+    let l:user_opts = s:GetPopupOpts()
+
+    if has('patch-9.2.0419')
+    \|| has_key(l:user_opts, 'minwidth')
+    \|| has_key(l:user_opts, 'maxwidth')
+        return
+    endif
+
+    call popup_setoptions(a:winid, {
+    \   'minwidth': max(map(copy(a:lines), 'strdisplaywidth(v:val)')),
+    \})
+endfunction
+
+" Vim's scroll keys scroll the popup while it is open and has more to show.
+" Every key runs as CTRL-D or CTRL-U, which stop at the edges of the text, so
+" the popup never scrolls into blank space or shrinks.
+function! s:VimFilter(winid, key) abort
+    if a:key is# "\<Esc>"
+        call popup_close(a:winid)
+
+        return 1
+    endif
+
+    let l:pos = popup_getpos(a:winid)
+    let l:half = max([1, l:pos.core_height / 2])
+    let l:command = get({
+    \   "\<C-e>": "1\<C-d>",
+    \   "\<C-y>": "1\<C-u>",
+    \   "\<C-d>": l:half . "\<C-d>",
+    \   "\<C-u>": l:half . "\<C-u>",
+    \   "\<C-f>": l:pos.core_height . "\<C-d>",
+    \   "\<C-b>": l:pos.core_height . "\<C-u>",
+    \}, a:key, '')
+
+    " Let keys through if everything is already visible.
+    if empty(l:command)
+    \|| (l:pos.firstline is# 1 && l:pos.lastline >= line('$', a:winid))
+        return 0
+    endif
+
+    call win_execute(a:winid, 'normal! ' . l:command)
+    " Vim 8.2 can scroll wrapped text too far if keys arrive faster than redraws.
+    redraw
+
+    return 1
+endfunction
+
 function! s:VimCreate(options) abort
     " default options
     let l:popup_opts = extend({
@@ -164,6 +215,8 @@ function! s:VimCreate(options) abort
     \        get(g:ale_floating_window_border, 4, '+'),
     \        get(g:ale_floating_window_border, 5, '+'),
     \    ],
+    \    'filter': function('s:VimFilter'),
+    \    'filtermode': 'n',
     \    'moved': 'any',
     \ }, s:GetPopupOpts())
 
