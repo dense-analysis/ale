@@ -143,7 +143,6 @@ function! ale_linters#java#eclipselsp#Command(buffer, version) abort
     \ '-Dosgi.bundles.defaultStartLevel=4',
     \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
     \ '-Dlog.level=ALL',
-    \ '-noverify',
     \ '-Xmx1G',
     \ '-jar',
     \ ale#Escape(ale_linters#java#eclipselsp#JarPath(a:buffer)),
