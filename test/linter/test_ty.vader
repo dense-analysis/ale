@@ -22,6 +22,18 @@ Execute(The ty executable should be configurable):
   AssertLinter '~/.local/bin/ty',
   \ ale#Escape('~/.local/bin/ty') . ' server'
 
+Execute(The ty command should include additional options):
+  let g:ale_python_ty_options = '--some-option'
+
+  AssertLinter 'ty', ale#Escape('ty') . ' --some-option server'
+
+Execute(Additional options should be included for wrapped executables):
+  let g:ale_python_ty_executable = 'path/to/uv'
+  let g:ale_python_ty_options = '--some-option'
+
+  AssertLinter 'path/to/uv',
+  \ ale#Escape('path/to/uv') . ' run ty --some-option server'
+
 Execute(The cwd and project root should be detected correctly):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
