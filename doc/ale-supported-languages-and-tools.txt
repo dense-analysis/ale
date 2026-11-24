@@ -215,8 +215,8 @@ Notes:
 * Erlang
   * `SyntaxErl`
   * `dialyzer`!!
-  * `elvis`!!
   * `elp`
+  * `elvis`!!
   * `erlang-mode` (The Erlang mode for Emacs)
   * `erlang_ls`
   * `erlc`
