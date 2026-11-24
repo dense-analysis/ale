@@ -2,6 +2,7 @@
 " Description: LSP linter for Erlang files using erlang-language-platform
 
 call ale#Set('erlang_elp_executable', 'elp')
+call ale#Set('erlang_elp_options', '')
 
 function! s:FindProjectRoot(buffer) abort
     let l:markers = [
@@ -31,6 +32,6 @@ call ale#linter#Define('erlang', {
 \   'name': 'elp',
 \   'lsp': 'stdio',
 \   'executable': {b -> ale#Var(b, 'erlang_elp_executable')},
-\   'command': '%e server',
+\   'command': {b -> '%e server' . ale#Pad(ale#Var(b, 'erlang_elp_options'))},
 \   'project_root': function('s:FindProjectRoot'),
 \})

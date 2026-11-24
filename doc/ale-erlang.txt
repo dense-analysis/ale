@@ -65,17 +65,28 @@ g:ale_erlang_elvis_executable
 
 
 ===============================================================================
-elp                                                          *ale-erlang-elp*
+elp                                                            *ale-erlang-elp*
 
-                                          *ale-options.erlang_elp_executable*
-                                                *g:ale_erlang_elp_executable*
-                                                *b:ale_erlang_elp_executable*
+                                            *ale-options.erlang_elp_executable*
+                                                  *g:ale_erlang_elp_executable*
+                                                  *b:ale_erlang_elp_executable*
 erlang_elp_executable
 g:ale_erlang_elp_executable
   Type: |String|
   Default: `'elp'`
 
   This variable can be changed to specify the elp executable.
+
+                                               *ale-options.erlang_elp_options*
+                                                     *g:ale_erlang_elp_options*
+                                                     *b:ale_erlang_elp_options*
+erlang_elp_options
+g:ale_erlang_elp_options
+  Type: |String|
+  Default: `''`
+
+  This variable controls additional parameters passed to `elp`, such as
+  `--log-file=/tmp/elp.log`.
 
 
 ===============================================================================

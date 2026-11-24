@@ -14,6 +14,11 @@ Execute(Executable should be configurable):
 
   AssertLinter '/path/to/elp', ale#Escape('/path/to/elp') . ' server'
 
+Execute(Options should be appended to the command):
+  let b:ale_erlang_elp_options = '--log-file=/tmp/elp.log'
+
+  AssertLinter 'elp', ale#Escape('elp') . ' server --log-file=/tmp/elp.log'
+
 Execute(Root of Rebar3 project should be detected):
   let b:root = '../test-files/erlang/rebar3_app'
 
