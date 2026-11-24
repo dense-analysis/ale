@@ -2,6 +2,7 @@
 " Description: Astral's Python type checker and language server
 
 call ale#Set('python_ty_executable', 'ty')
+call ale#Set('python_ty_options', '')
 call ale#Set('python_ty_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_ty_auto_pipenv', 0)
 call ale#Set('python_ty_auto_poetry', 0)
@@ -40,15 +41,13 @@ endfunction
 
 function! ale_linters#python#ty#GetCommand(buffer) abort
     let l:executable = ale_linters#python#ty#GetExecutable(a:buffer)
-    let l:exec_args = [
-    \   ale#Escape(l:executable),
-    \]
-    \ + (l:executable =~? '\(pipenv\|poetry\|uv\)$' ? ['run', 'ty'] : [])
-    \ + [
-    \   'server',
-    \]
+    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
+    \   ? ' run ty'
+    \   : ''
 
-    return join(l:exec_args, ' ')
+    return ale#Escape(l:executable) . l:exec_args
+    \   . ale#Pad(ale#Var(a:buffer, 'python_ty_options'))
+    \   . ' server'
 endfunction
 
 call ale#linter#Define('python', {

@@ -2189,6 +2189,24 @@ g:ale_python_ty_executable
   Set this to `'poetry'` to invoke `'poetry` `run` `ty'`.
   Set this to `'uv'` to invoke `'uv` `run` `ty'`.
 
+                                                *ale-options.python_ty_options*
+                                                      *g:ale_python_ty_options*
+                                                      *b:ale_python_ty_options*
+python_ty_options
+g:ale_python_ty_options
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the ty
+  invocation, which are inserted before the `server` subcommand. Note that
+  this is not the same thing as ale_python_ty_config, which allows
+  configuration of how ty functions; this is intended to provide flexibility
+  in how the ty command is invoked.
+
+  For example, to run `ty` via `uvx` with some additional packages available:
+  let g:ale_python_ty_executable = 'uvx'
+  let g:ale_python_ty_options = '--with rich ty'
+
                                              *ale-options.python_ty_use_global*
                                                    *g:ale_python_ty_use_global*
                                                    *b:ale_python_ty_use_global*
