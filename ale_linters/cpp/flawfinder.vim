@@ -11,7 +11,7 @@ function! ale_linters#cpp#flawfinder#GetCommand(buffer) abort
     let l:minlevel = ' --minlevel=' . ale#Var(a:buffer, 'cpp_flawfinder_minlevel')
 
     return '%e -CDQS'
-    \  . ale#Var(a:buffer, 'cpp_flawfinder_options')
+    \  . ale#Pad(ale#Var(a:buffer, 'cpp_flawfinder_options'))
     \  . l:minlevel
     \  . ' %t'
 endfunction
