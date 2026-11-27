@@ -99,7 +99,7 @@ function! s:HandleExit(job_info, buffer, job_output, data) abort
 
     if a:job_info.read_temporary_file
         let l:output = !empty(a:data.temporary_file)
-        \   ?  readfile(a:data.temporary_file)
+        \   ?  ale#util#Readfile(a:buffer, a:data.temporary_file)
         \   : []
     else
         let l:output = a:job_output

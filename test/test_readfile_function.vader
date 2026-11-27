@@ -1,0 +1,31 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+
+  let g:read_test_file = tempname()
+
+After:
+  if filereadable(g:read_test_file)
+    call delete(g:read_test_file)
+  endif
+
+  unlet! g:read_test_file
+
+  setlocal fileencoding=
+
+  call ale#test#RestoreDirectory()
+
+Execute(Lines should be converted from the buffer's file encoding):
+  call writefile([iconv('中文', 'utf-8', 'gb18030')], g:read_test_file)
+  setlocal fileencoding=gb18030
+
+  AssertEqual
+  \ ['中文'],
+  \ ale#util#Readfile(bufnr(''), g:read_test_file)
+
+Execute(No conversion should be done when fileencoding is empty):
+  call writefile(['中文'], g:read_test_file)
+  setlocal fileencoding=
+
+  AssertEqual
+  \ ['中文'],
+  \ ale#util#Readfile(bufnr(''), g:read_test_file)

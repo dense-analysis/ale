@@ -425,6 +425,16 @@ function! ale#util#FuzzyJSONDecode(data, default) abort
     endtry
 endfunction
 
+function! s:ConvertEncodings(lines, from_encoding, to_encoding) abort
+    let l:converted_lines = []
+
+    for l:line in a:lines
+        call add(l:converted_lines, iconv(l:line, a:from_encoding, a:to_encoding))
+    endfor
+
+    return l:converted_lines
+endfunction
+
 " Write a file, including carriage return characters for DOS files.
 "
 " The buffer number is required for determining the fileformat setting for
@@ -434,10 +444,38 @@ function! ale#util#Writefile(buffer, lines, filename) abort
     \   ? map(copy(a:lines), 'substitute(v:val, ''\r*$'', ''\r'', '''')')
     \   : a:lines
 
+    " Write the lines in the file's encoding, so that tools reading the
+    " temporary file receive the same bytes as the file on disk.
+    let l:fileencoding = getbufvar(a:buffer, '&fileencoding')
+
+    if exists('*iconv') && !empty(l:fileencoding) && l:fileencoding isnot# &encoding
+        let l:corrected_lines = s:ConvertEncodings(
+        \   l:corrected_lines,
+        \   &encoding,
+        \   l:fileencoding,
+        \)
+    endif
+
     " Set binary flag if buffer doesn't have eol and nofixeol to avoid appending newline
     let l:flags = !getbufvar(a:buffer, '&eol') && exists('+fixeol') && !&fixeol ? 'bS' : 'S'
 
     call writefile(l:corrected_lines, a:filename, l:flags) " no-custom-checks
+endfunction
+
+" Read a file written by ale#util#Writefile, converting the lines back to
+" Vim's internal encoding.
+"
+" The buffer number is required for determining the fileencoding setting for
+" the buffer.
+function! ale#util#Readfile(buffer, filename) abort
+    let l:lines = readfile(a:filename)
+    let l:fileencoding = getbufvar(a:buffer, '&fileencoding')
+
+    if exists('*iconv') && !empty(l:fileencoding) && l:fileencoding isnot# &encoding
+        let l:lines = s:ConvertEncodings(l:lines, l:fileencoding, &encoding)
+    endif
+
+    return l:lines
 endfunction
 
 if !exists('s:patial_timers')

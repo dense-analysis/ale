@@ -118,3 +118,31 @@ Execute(Newline should be appended on write when noeol and fixeol):
   \ ['first', 'second', 'third', ''],
   \ readfile(g:new_line_test_file, 'b')
 
+Given(A file with a non-UTF-8 file encoding):
+  中文
+
+Execute(Lines should be written in the buffer's file encoding):
+  call ale#test#SetFilename(g:new_line_test_file)
+
+  setlocal buftype=
+  setlocal fileencoding=gb18030
+  noautocmd :w
+  noautocmd :e! ++enc=gb18030
+
+  call ale#util#Writefile(bufnr(''), getline(1, '$'), g:new_line_test_file)
+
+  AssertEqual
+  \ [iconv('中文', 'utf-8', 'gb18030'), ''],
+  \ readfile(g:new_line_test_file, 'b')
+
+Execute(No conversion should be done when fileencoding is empty):
+  call ale#test#SetFilename(g:new_line_test_file)
+
+  setlocal buftype=
+  setlocal fileencoding=
+
+  call ale#util#Writefile(bufnr(''), getline(1, '$'), g:new_line_test_file)
+
+  AssertEqual
+  \ ['中文', ''],
+  \ readfile(g:new_line_test_file, 'b')
