@@ -74,6 +74,11 @@ Before:
     return {'command': 'cat %t <(echo d)'}
   endfunction
 
+  " Write the character 中 in the GB18030 encoding to the temporary file.
+  function WriteEncodedTempFile(buffer, lines) abort
+    return {'command': 'printf ''\326\320\n'' > %t', 'read_temporary_file': 1}
+  endfunction
+
   function EchoFilename(buffer, lines) abort
     return {'command': 'echo %s'}
   endfunction
@@ -161,6 +166,7 @@ After:
   delfunction CatLineDeferred
   delfunction ReplaceWithTempFile
   delfunction CatWithTempFile
+  delfunction WriteEncodedTempFile
   delfunction EchoFilename
   delfunction RemoveLastLine
   delfunction RemoveLastLineOneArg
@@ -882,3 +888,16 @@ Expect(The extra line should be added):
   b
   c
   d
+
+Given testft (A file in a non-UTF-8 encoding):
+  中
+
+Execute(Temporary files should be read in the buffer's file encoding):
+  if !has('win32')
+    setlocal fileencoding=gb18030
+    let g:ale_fixers.testft = ['WriteEncodedTempFile']
+    ALEFix
+    call ale#test#FlushJobs()
+
+    AssertEqual ['中'], getline(1, '$')
+  endif
